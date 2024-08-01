@@ -8,7 +8,7 @@
                 <div class="d-flex justify-content-between align-items-center">
                     <h2 style="font-weight: 700;">តារាងលេខកូដគណនី</h2>
 
-                    <a class="btn btn-success" href="{{route('accounts.create')}}"> បញ្ចូលទិន្នន័យ</a>
+                    <a class="btn btn-success" href="{{route('accounts.create')}}">បញ្ចូលទិន្នន័យ</a>
                 </div>
 
                 <form class="max-w-md mx-auto mt-3" method="GET" action="">

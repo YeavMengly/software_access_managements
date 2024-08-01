@@ -52,7 +52,6 @@
                 <!-- End of Topbar -->
 
 
-
                 <!-- Begin Page Content -->
                 <div class="container-fluid">
 
@@ -63,11 +62,15 @@
                     @yield('content-key')
                     @yield('content-account')
                     @yield('content-sub-account')
+                    @yield('content-mission')
+                    @yield('content-table-mission-cambodia')
                    
                         @yield('form-report-upload')
                         @yield('form-key-upload')
                         @yield('form-account-upload')
                         @yield('form-sub-account-upload')
+                       
+                        @yield('form-form-mission')
 
                         <div class="container-fluid">
                         @yield('user-data')
