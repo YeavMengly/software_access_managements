@@ -3,10 +3,12 @@
 use App\Http\Controllers\Code\AccountKeyController;
 use App\Http\Controllers\Code\CodeController;
 use App\Http\Controllers\Code\SubAccountKeyController;
+use App\Http\Controllers\MissionCambodiaController;
 use App\Http\Controllers\Report\ReportController;
 use App\Http\Controllers\Result\ResultController;
 use App\Http\Controllers\Result\ResultGeneralController;
 use App\Http\Controllers\Result\ResultTotalController;
+use App\Http\Controllers\ResultMissionController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -24,23 +26,29 @@ use Illuminate\Support\Facades\Route;
 //     return view('welcome');
 // });
 
-Route::get('/', function (){
+Route::get('/', function () {
     return view('layouts.table.result');
 });
 
 
 //  route report
-Route::resource('codes',ReportController::class);
+Route::resource('codes', ReportController::class);
 
-Route::resource('keys',CodeController::class);
+Route::resource('keys', CodeController::class);
 
-Route::resource('accounts',AccountKeyController::class);
+Route::resource('accounts', AccountKeyController::class);
 
-Route::resource('sub-account',SubAccountKeyController::class);
+Route::resource('sub-account', SubAccountKeyController::class);
 
+Route::resource('missions', ResultMissionController::class);
 
 Route::get('/', [ResultController::class, 'index'])->name('result');
 
 Route::get('/result-total', [ResultTotalController::class, 'index'])->name('result-total-table');
 
 Route::get('/result-total-general', [ResultGeneralController::class, 'index'])->name('result-total-general-table');
+
+Route::get('/mission-cam', [MissionCambodiaController::class, 'index'])->name('table-mission-cambodia');
+
+Route::get('/mission-cambodia/export', [MissionCambodiaController::class, 'export'])->name('table-mission-cambodia');
+
