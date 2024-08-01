@@ -63,6 +63,10 @@
                     @yield('content-key')
                     @yield('content-account')
                     @yield('content-sub-account')
+                    @yield('result-success')
+                    @yield('result-general-pay')
+                    @yield('result-administrative-plan')
+                    @yield('result-total-summaries')
                    
                         @yield('form-report-upload')
                         @yield('form-key-upload')
