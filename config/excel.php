@@ -50,7 +50,11 @@ return [
             'excel_compatibility'    => false,
             'output_encoding'        => '',
             'test_auto_detect'       => true,
+            'escape'     => '\\',
+            'limit'      => null,
+            'encoding'   => 'UTF-8',
         ],
+
 
         /*
         |--------------------------------------------------------------------------
@@ -129,6 +133,7 @@ return [
             'contiguous'       => false,
             'input_encoding'   => 'UTF-8',
         ],
+        
 
         /*
         |--------------------------------------------------------------------------

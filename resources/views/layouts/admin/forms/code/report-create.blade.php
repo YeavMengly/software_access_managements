@@ -32,64 +32,59 @@
         @endif
         <div class="border-wrapper">
             <div class="form-container">
-                <form action="" method="POST" enctype="multipart/form-data">
+                <form action="{{ route('codes.store') }}" method="POST" enctype="multipart/form-data">
                     @csrf
 
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
                                 <strong>លេខអនុគណនី:</strong>
-                                <select name="location_id" class="form-control">
-                                    {{-- @foreach ($locations as $location)
-                                    <option value="{{ $location->id }}">{{ $location->location }}</option>
-                                    
-                                @endforeach --}}
-                                    <option value="">3250104</option>
-                                    <option value="">3250105</option>
+                                <select name="sub_account_key_id" class="form-control">
+                                    @foreach ($subAccountKeys as $subAccountKey)
+                                        <option value="{{ $subAccountKey->id }}">
+                                            {{ $subAccountKey->accountKey->key->code }} - {{ $subAccountKey->accountKey->account_key }} - {{ $subAccountKey->sub_account_key }} 
+                                        </option>
+                                    @endforeach
                                 </select>
                             </div>
+                            
 
                             <div class="form-group">
-                                <label for="destination">លេខកូដកម្មវិធី:</label>
-                                <input type="text" name="destination" id="destination"
+                                <label for="report_key">លេខកូដកម្មវិធី:</label>
+                                <input type="text" name="report_key" id="report_key"
                                     class="form-control @error('destination') is-invalid @enderror">
-                                @error('destination')
+                                @error('report_key')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
                             </div>
 
                             <div class="form-group">
-                                <label for="destination">ចំណាត់ថ្នាក់:</label>
-                                <input type="text" name="destination" id="destination"
-                                    class="form-control @error('destination') is-invalid @enderror">
-                                @error('destination')
+                                <label for="name_report_key">ចំណាត់ថ្នាក់:</label>
+                                <input type="text" name="name_report_key" id="name_report_key"
+                                    class="form-control @error('name_report_key') is-invalid @enderror">
+                                @error('name_report_key')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
                             </div>
 
-                            {{-- <div class="form-group">
-                                <label for="date">ច្បាប់ហិរញ្ញវត្ថុ:</label>
-                                <input type="date" name="date" id="date"
-                                    class="form-control @error('date') is-invalid @enderror">
-                                @error('date')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                @enderror
-                            </div> --}}
-
+                  
                             <div class="form-group">
-                                <label for="address">ច្បាប់ហិរញ្ញវត្ថុ:</label>
-                                <input type="text" name="address" id="address"
-                                    class="form-control @error('address') is-invalid @enderror">
-                                @error('address')
+                                <label for="fin_law">ច្បាប់ហិរញ្ញវត្ថុ:</label>
+                                <input type="number" name="fin_law" id="fin_law"
+                                    class="form-control @error('fin_law') is-invalid @enderror"
+                                    oninput="formatNumber(this)">
+                                @error('fin_law')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
                             </div>
 
                             <div class="form-group">
-                                <label for="address">ឥណទានបច្ចុប្បន្ន:</label>
-                                <input type="text" name="address" id="address"
-                                    class="form-control @error('address') is-invalid @enderror">
-                                @error('address')
+                                <label for="current_loan">ឥណទានបច្ចុប្បន្ន:</label>
+                                <input type="number" name="current_loan" id="current_loan"
+                                    class="form-control @error('current_loan') is-invalid @enderror"
+                                    oninput="formatNumber(this)">
+
+                                @error('current_loan')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
                             </div>
@@ -98,8 +93,9 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label for="internal_increase">កើនផ្ទៃក្នុង:</label>
-                                <input type="text" name="internal_increase" id="internal_increase"
-                                    class="form-control @error('internal_increase') is-invalid @enderror">
+                                <input type="number" name="internal_increase" id="internal_increase"
+                                    class="form-control @error('internal_increase') is-invalid @enderror"
+                                    oninput="formatNumber(this)">
                                 @error('internal_increase')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
@@ -107,8 +103,9 @@
 
                             <div class="form-group">
                                 <label for="unexpected_increase">មិនបានគ្រោងទុក:</label>
-                                <input type="text" name="unexpected_increase" id="unexpected_increase"
-                                    class="form-control @error('unexpected_increase') is-invalid @enderror">
+                                <input type="number" name="unexpected_increase" id="unexpected_increase"
+                                    class="form-control @error('unexpected_increase') is-invalid @enderror" 
+                                    oninput="formatNumber(this)">
                                 @error('unexpected_increase')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
@@ -116,8 +113,9 @@
 
                             <div class="form-group">
                                 <label for="additional_increase">បំពេញបន្ថែម:</label>
-                                <input type="text" name="additional_increase" id="additional_increase"
-                                    class="form-control @error('additional_increase') is-invalid @enderror">
+                                <input type="number" name="additional_increase" id="additional_increase"
+                                    class="form-control @error('additional_increase') is-invalid @enderror"
+                                    oninput="formatNumber(this)">
                                 @error('additional_increase')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
@@ -125,8 +123,9 @@
 
                             <div class="form-group">
                                 <label for="decrease">ថយ:</label>
-                                <input type="text" name="decrease" id="decrease"
-                                    class="form-control @error('decrease') is-invalid @enderror">
+                                <input type="number" name="decrease" id="decrease"
+                                    class="form-control @error('decrease') is-invalid @enderror"
+                                    oninput="formatNumber(this)">
                                 @error('decrease')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
@@ -213,4 +212,17 @@
 
         })(jQuery); // End of use strict
     </script>
+
+    {{-- <script>
+        function formatNumber(input) {
+            // Remove all non-numeric characters
+            let value = input.value.replace(/\D/g, '');
+
+            // Add spaces every three digits
+            value = value.replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
+
+            // Update the input value
+            input.value = value;
+        }
+    </script> --}}
 @endsection
