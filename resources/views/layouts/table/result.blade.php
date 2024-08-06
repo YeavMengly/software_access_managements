@@ -20,7 +20,8 @@
                     placeholder="កូដកម្មវិធី">
             </div>
             <div class="col-md-3">
-                <input type="date" name="date" id="date" class="form-control" placeholder="Filter by Date (MM/DD/YYYY)">
+                <input type="date" name="date" id="date" class="form-control"
+                    placeholder="Filter by Date (MM/DD/YYYY)">
             </div>
             <div class="col-md-12">
                 <div class="input-group my-3">
@@ -53,6 +54,7 @@
                             <th rowspan="3">ច្បាប់ហិ.វ</th>
                             <th rowspan="3">ឥណទានបច្ចុប្បន្ន</th>
                             <th colspan="5">ចលនាឥណទាន</th>
+                            <th rowspan="3">វិចារណកម្ម</th>
                             <th rowspan="3">ស្ថានភាពឥណទានថ្មី</th>
                             <th rowspan="3">ស.ម.ដើមគ្រា</th>
                             <th rowspan="3">អនុវត្ត</th>
@@ -100,22 +102,28 @@
                                 </td>
                                 <td
                                     style="border: 1px solid black; max-width: 200px; text-align: center; overflow-y: auto; white-space: nowrap;">
-                                    {{ $report->name_report_key }}</td>
-                                <td> {{ $report->fin_law }}</td>
-                                <td>{{ $report->current_loan }}</td>
-                                <td> {{ $report->internal_increase }}</td>
-                                <td> {{ $report->unexpected_increase }}</td>
-                                <td>{{ $report->additional_increase }}</td>
-                                <td> {{ $report->internal_increase + $report->unexpected_increase + $report->additional_increase }}
+                                    {{ $report->name_report_key }}
                                 </td>
-                                <td> {{ $report->decrease }}</td>
-                                <td>503 600 000</td>
-                                <td>387 694 100</td>
-                                <td> </td>
-                                <td>387 694 100</td>
-                                <td>115 905 900</td>
-                                <td>77.54%</td>
-                                <td>76.98%</td>
+                                <td>{{ $report->fin_law }}</td>
+                                <td>{{ $report->current_loan }}</td>
+                                <td>{{ $report->internal_increase }}</td>
+                                <td>{{ $report->unexpected_increase }}</td>
+                                <td>{{ $report->additional_increase }}</td>
+                                <td>{{ $report->total_increase }}</td>
+                                <td>{{ $report->decrease }}</td>
+                                <td>{{ $report->editorial }}</td>
+                                <td>{{ $report->new_credit_status }}</td>
+                                <td>{{ $report->early_balance }}</td>
+                                <td>{{ $report->apply }}</td>
+                                <td>{{ $report->deadline_balance }}</td>
+                                <td>{{ $report->credit }}</td>
+                                {{-- <td>{{ $report->law_average }}</td>
+                                <td>{{ $report->law_correction }}</td> --}}
+                                <td style="border: 1px solid black; text-align: center">
+                                    {{ ($report->earlyBalance + $report->apply) / $report->fin_law }}%</td>
+                                <td style="border: 1px solid black; text-align: center">
+                                    {{ ($report->earlyBalance + $report->apply) / ($report->current_loan - ($report->internal_increase + $report->unexpected_increase + $report->additional_increase)) }}%
+                                </td>
                             </tr>
                             @php
                                 $previousKeyCode = $currentKeyCode;
@@ -126,12 +134,14 @@
                         @endforeach
                     </tbody>
                 </table>
+
             </div>
         </div>
         <div class="d-flex justify-content-end mt-3">
-            <button type="submit" class="btn btn-danger btn-width mr-2">Export</button>
-            <button type="submit" class="btn btn-primary btn-width">Print</button>
+            <a href="{{ route('result.export') }}" class="btn btn-danger btn-width mr-2">Export</a>
+            <button type="button" class="btn btn-primary btn-width">Print</button>
         </div>
+        
     </div>
 @endsection
 
@@ -143,7 +153,8 @@
         }
 
         .result-total-table-container {
-            max-height: 100vh;
+            max-height: 600px;
+            /* Adjust height as needed */
             overflow-y: auto;
         }
 

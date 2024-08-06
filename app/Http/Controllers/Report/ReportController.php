@@ -11,12 +11,12 @@ class ReportController extends Controller
 {
     public function index(Request $request)
     {
+        // Create varriable
         $search = $request->input('search');
         $section = $request->input('code_id');
         $account = $request->input('account_key_id');
         $subAccount = $request->input('sub_account_key_id');
         $programCode = $request->input('report_key');
-
         $query = Report::query();
 
         // Apply filters
@@ -57,17 +57,17 @@ class ReportController extends Controller
     }
 
 
-    // // Show the form for creating a new resource
+    // Show the form for creating a new resource
     public function create()
     {
         $subAccountKeys = SubAccountKey::all();
         return view('layouts.admin.forms.code.report-create', compact('subAccountKeys'));
     }
 
-    // // Store a newly created resource in storage
+    // Store a newly created resource in storage
     public function store(Request $request)
     {
-        $request->validate([
+        $validatedData = $request->validate([
             'sub_account_key_id' => 'required|exists:sub_account_keys,id',
             'report_key' => 'required|string|max:255',
             'name_report_key' => 'required|string|max:255',
@@ -76,65 +76,51 @@ class ReportController extends Controller
             'internal_increase' => 'required|numeric',
             'unexpected_increase' => 'required|numeric',
             'additional_increase' => 'required|numeric',
+            // 'total_increase', get value
             'decrease' => 'required|numeric',
+            // 'editorial' => 'required|numeric',
+            // 'new_credit_status'  get value
+            // 'early_balance' => 'required|numeric',
+            // 'apply' => 'required|numeric',
+            // 'deadline_balance',
+            // 'credit',
+            // 'law_average',
+            // 'law_correction'
         ]);
 
-        // Calculate the total increase and total balance
-        $totalIncrease = $request->input('internal_increase') + $request->input('unexpected_increase') + $request->input('additional_increase');
-        $totalBalance = $totalIncrease - $request->input('decrease');
+        // Calculate totals
+        $total_increase = $validatedData['internal_increase'] + $validatedData['unexpected_increase'] + $validatedData['additional_increase'];
 
+        // $editorial = $validatedData['editorial'];
+
+        $new_credit_status = $validatedData['current_loan'] + $total_increase - $validatedData['decrease'];
+
+        $apply = 10;
+
+        // $deadline_balance = $validatedData['early_balance'] + $validatedData['apply'];
+
+        // $credit =  $new_credit_status -  $deadline_balance;
+
+        // Find value of average
+        // $lawAverage = $validatedData['fin_law'] /  $deadline_balance;
+        // $lawCorrection =  $new_credit_status / $deadline_balance;
+
+        // Create the report
         Report::create([
-            'sub_account_key_id' => $request->input('sub_account_key_id'),
-            'report_key' => $request->input('report_key'),
-            'name_report_key' => $request->input('name_report_key'),
-            'fin_law' => $request->input('fin_law'),
-            'current_loan' => $request->input('current_loan'),
-            'internal_increase' => $request->input('internal_increase'),
-            'unexpected_increase' => $request->input('unexpected_increase'),
-            'additional_increase' => $request->input('additional_increase'),
-            'decrease' => $request->input('decrease'),
-            'total_increase' => $totalIncrease,
-            'total_balance' => $totalBalance,
+            ...$validatedData,
+            'total_increase' => $total_increase,
+            // 'editorial' => $editorial,
+            'new_credit_status' => $new_credit_status,
+            // 'early_balance' => $earlyBalance,
+            'apply' => $apply,
+            // 'deadline_balance' => $deadline_balance,
+            // 'credit' => $credit,
+            // 'law_average' => $lawAverage,
+            // 'law_correction' => $lawCorrection
         ]);
 
         return redirect()->route('codes.index')->with('success', 'Report Key created successfully.');
     }
-
-    // // Display the specified resource
-    // public function show($id)
-    // {
-    //     $reportKey = Report::findOrFail($id);
-    //     return view('report_keys.show', compact('reportKey'));
-    // }
-
-    // // Show the form for editing the specified resource
-    // public function edit($id)
-    // {
-    //     $reportKey = Report::findOrFail($id);
-    //     $subAccountKeys = SubAccountKey::all();
-    //     return view('report_keys.edit', compact('reportKey', 'subAccountKeys'));
-    // }
-
-    // // Update the specified resource in storage
-    // public function update(Request $request, $id)
-    // {
-    //     $request->validate([
-    //         'sub_account_key_id' => 'required|exists:sub_account_keys,id',
-    //         'report_key' => 'required|string|max:255',
-    //         'name_report_key' => 'required|string|max:255',
-    //         'fin_law' => 'required|numeric',
-    //         'current_loan' => 'required|numeric',
-    //         'internal_increase' => 'required|numeric',
-    //         'unexpected_increase' => 'required|numeric',
-    //         'additional_increase' => 'required|numeric',
-    //         'decrease' => 'required|numeric',
-    //     ]);
-
-    //     $reportKey = Report::findOrFail($id);
-    //     $reportKey->update($request->all());
-
-    //     return redirect()->route('report_keys.index')->with('success', 'Report Key updated successfully.');
-    // }
 
     // // Remove the specified resource from storage
     public function destroy($id)

@@ -28,6 +28,11 @@
     {{-- <link rel="stylesheet" href="{{ asset('css/custom.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"> --}}
 
+    {{-- Font Style By --}}
+    <link href="https://fonts.googleapis.com/css2?family=Siemreap&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Khmer+OS+Muol+Light&display=swap" rel="stylesheet">
+  
+
     @yield('styles')
 
 </head>
@@ -52,7 +57,6 @@
                 <!-- End of Topbar -->
 
 
-
                 <!-- Begin Page Content -->
                 <div class="container-fluid">
 
@@ -67,11 +71,17 @@
                     @yield('result-general-pay')
                     @yield('result-administrative-plan')
                     @yield('result-total-summaries')
+
+                    @yield('content-mission')
+                    @yield('content-table-mission-cambodia')
+
                    
                         @yield('form-report-upload')
                         @yield('form-key-upload')
                         @yield('form-account-upload')
                         @yield('form-sub-account-upload')
+                       
+                        @yield('form-form-mission')
 
                         <div class="container-fluid">
                         @yield('user-data')
