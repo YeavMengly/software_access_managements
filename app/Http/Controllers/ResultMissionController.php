@@ -1,10 +1,11 @@
 <?php
+
 namespace App\Http\Controllers;
 
-use App\Export\MissionExport\MissionsExport;
+use App\Models\Result\AbroadMission;
+use App\Models\Result\CambodiaMission;
 use App\Models\Result\ResultMission;
 use Illuminate\Http\Request;
-use Maatwebsite\Excel\Facades\Excel;
 
 class ResultMissionController extends Controller
 {
@@ -18,7 +19,6 @@ class ResultMissionController extends Controller
 
     // Define the locations array as a class property
     protected $locations = [
-        'none' => 0,
         'កំពង់ធំ' => 268800,
         'តាកែវ' => 123200,
         'សៀមរាប' => 499200,
@@ -45,15 +45,43 @@ class ResultMissionController extends Controller
         'កំពង់ឆ្នាំង' => 145600
     ];
 
-    public function index()
-    {
-        // Retrieve all missions from the database
-        $resultMission  = ResultMission::all();
+    protected $country = [
+        'អាមេរិក',
+        'កាណាដា',
+        'ឡាវ',
+        'វៀតណាម',
+        'ថៃ',
+        'ចិន',
+        'កូរ៉េ',
+        'ជប៉ុន',
+        'អូស្រ្តាលី',
+        'ទួកគី',
+        'ម៉ាឡេស៊ី',
+        'សិង្ហបុរី',
+        'មីយ៉ាន់ម៉ា',
+        'អឺរ៉ុប',
+    ];
 
-        // Pass the missions and locations data to the view
+    public function index(Request $request)
+    {
+        // Retrieve search query
+        $search = $request->input('search');
+
+        // Fetch missions based on search query
+        if ($search) {
+            $missions = ResultMission::where('name', 'like', '%' . $search . '%')
+                ->orWhere('role', 'like', '%' . $search . '%')
+                ->orWhere('position_type', 'like', '%' . $search . '%')
+                ->orWhere('mission_objective', 'like', '%' . $search . '%')
+                ->orWhere('location', 'like', '%' . $search . '%')
+                ->get();
+        } else {
+            $missions = ResultMission::all();
+        }
+
+        // Pass the missions to the view
         return view('layouts.admin.forms.form-mission.form-mission-index', [
-            'missions' => $resultMission,
-            'locations' => $this->locations,
+            'missions' => $missions,
         ]);
     }
 
@@ -65,7 +93,7 @@ class ResultMissionController extends Controller
     public function store(Request $request)
     {
         // Define possible roles
-        $roles = ['អគ្កាធិការរង', 'អគ្គនាយករង', 'អគ្គលេខាធិការរង', 'រដ្ឋលេខាធិការ','រដ្ឋលេខាធិការ','អនុរដ្ឋលេខាធិការ','ប្រ.ការិយាល័យ','អនុ.ការិយាល័យ','អនុប្រធានផ្នែក','មន្ត្រី','ជំនួយការ'];
+        $roles = ['អគ្កាធិការរង', 'អគ្គនាយករង', 'អគ្គលេខាធិការរង', 'រដ្ឋលេខាធិការ', 'រដ្ឋលេខាធិការ', 'អនុរដ្ឋលេខាធិការ', 'ប្រ.ការិយាល័យ', 'អនុ.ការិយាល័យ', 'អនុប្រធានផ្នែក', 'មន្ត្រី', 'ជំនួយការ'];
 
         // Define possible position types
         $positionTypes = [
@@ -85,10 +113,22 @@ class ResultMissionController extends Controller
             'letter_number' => 'required|string|max:255',
             'letter_date' => 'required|date',
             'mission_objective' => 'required|string',
-            'location' => ['required', 'string', 'in:' . implode(',', array_keys($this->locations))],
+            'place' => 'required|string|in:within_country,abroad',
+            'location' => ['nullable', 'string'],
+            'country' => ['nullable', 'string'],
+            'mission_start_date' => 'required|date',
             'mission_start_date' => 'required|date',
             'mission_end_date' => 'required|date|after_or_equal:mission_start_date',
         ]);
+
+        // Ensure that either location or country is provided
+        if ($validatedData['place'] === 'within_country' && empty($validatedData['location'])) {
+            return back()->withErrors(['location' => 'A valid location must be selected.'])->withInput();
+        }
+
+        if ($validatedData['place'] === 'abroad' && empty($validatedData['location'])) {
+            return back()->withErrors(['country' => 'A valid country must be selected.'])->withInput();
+        }
 
         // Calculate the duration of the mission
         $missionStartDate = new \DateTime($request->mission_start_date);
@@ -101,8 +141,7 @@ class ResultMissionController extends Controller
         $pocketMoneyPerDay = $positionTypes[$positionType]['pocket_money'];
         $mealMoneyPerDay = $positionTypes[$positionType]['meal_money'];
         $accommodationMoneyPerNight = $positionTypes[$positionType]['accommodation_money'];
-        $location = $validatedData['location'];
-        // $travelAllowancePerDay = $this->locations[$location];
+        $locations = $validatedData['location'];
 
         // Calculate total values
         $totalPocketMoney = $pocketMoneyPerDay * $daysCount;
@@ -124,7 +163,13 @@ class ResultMissionController extends Controller
         $validatedData['total_accommodation_money'] = $totalAccommodationMoney;
         $validatedData['final_total'] = $finalTotal;
 
+
         // Create a new Mission
+        if ($validatedData['place'] === 'within_country') {
+            CambodiaMission::create($validatedData);
+        } else {
+            AbroadMission::create($validatedData);
+        }
         ResultMission::create($validatedData);
 
         // Redirect or return a response

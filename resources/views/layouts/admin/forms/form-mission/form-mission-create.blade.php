@@ -95,28 +95,6 @@
                                 </div>
                             </div>
 
-                            {{-- <div class="form-group">
-                                <label for="mission_letter">ប្រាក់ហោប៉ៅ:</label>
-                                <div class="form-subgroup">
-                                    <label for="letter_number">របប:</label>
-                                    <input type="text" name="pocket_money" id="letter_number" class="form-control form-number @error('letter_number') is-invalid @enderror">
-                                    @error('letter_number')
-                                        <div class="invalid-feedback">{{ $message }}</div>
-                                    @enderror
-                                </div>
-                            </div> --}}
-
-                            {{-- <div class="form-group">
-                                <label for="mission_letter">ប្រាក់ហូបចុក:</label>
-                                <div class="form-subgroup">
-                                    <label for="letter_number">របប:</label>
-                                    <input type="text" name="meal_money" id="letter_number" class="form-control form-number @error('letter_number') is-invalid @enderror">
-                                    @error('letter_number')
-                                        <div class="invalid-feedback">{{ $message }}</div>
-                                    @enderror
-                                </div>
-                            </div> --}}
-
                         </div>
 
                         <div class="col-md-6">
@@ -128,39 +106,24 @@
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
                             </div>
+
                             <div class="form-group">
-                                <label for="location">ទីកន្លែង:</label>
-                                <select name="location" id="location" class="form-control centered-text">
+                                <label for="place">ទីកន្លែង:</label>
+                                <select name="place" id="place" class="form-control centered-text">
                                     <option value="">ជ្រើសរើសទីកន្លែង</option>
-                                    <option value="កំពង់ធំ">កំពង់ធំ</option>
-                                    <option value="តាកែវ">តាកែវ</option>
-                                    <option value="សៀមរាប">សៀមរាប</option>
-                                    <option value="កំពង់ចាម">កំពង់ចាម</option>
-                                    <option value="បាត់ដំបង">បាត់ដំបង</option>
-                                    <option value="ប៉ៃលិន">ប៉ៃលិន</option>
-                                    <option value="បន្ទាយមានជ័យ">បន្ទាយមានជ័យ</option>
-                                    <option value="ពោធិ៍សាត់">ពោធិ៍សាត់</option>
-                                    <option value="ព្រះសីហនុ">ព្រះសីហនុ</option>
-                                    <option value="កំពត">កំពត</option>
-                                    <option value="កែប">កែប</option>
-                                    <option value="ឧត្តរមានជ័យ">ឧត្តរមានជ័យ</option>
-                                    <option value="ព្រៃវែង">ព្រៃវែង</option>
-                                    <option value="ស្វាយរៀង">ស្វាយរៀង</option>
-                                    <option value="ត្បូងឃ្មុំ">ត្បូងឃ្មុំ</option>
-                                    <option value="ក្រចេះ">ក្រចេះ</option>
-                                    <option value="មណ្ឌលគីរី">មណ្ឌលគីរី</option>
-                                    <option value="រតនគីរី">រតនគីរី</option>
-                                    <option value="កណ្ដាល">កណ្ដាល</option>
-                                    <option value="កោះកុង">កោះកុង</option>
-                                    <option value="កំពង់ស្ពី">កំពង់ស្ពី</option>
-                                    <option value="ស្ទឹងត្រែង">ស្ទឹងត្រែង</option>
-                                    <option value="ព្រះវិហារ">ព្រះវិហារ</option>
-                                    <option value="កំពង់ឆ្នាំង">កំពង់ឆ្នាំង</option>
+                                    <option value="within_country">ក្នុងប្រទេស</option>
+                                    <option value="abroad">ក្រៅប្រទេស</option>
                                 </select>
                             </div>
-                            
-                            
+                        
                             <div class="form-group">
+                                <label for="location">ជ្រើសរើសខេត្ត ឬ ប្រទេស:</label>
+                                <select name="location" id="location" class="form-control centered-text">
+                                    <option value="">ជ្រើសរើសខេត្ត ឬ ប្រទេស</option>
+                                </select>
+                            </div>
+                             
+                           <div class="form-group">
                                 <label for="mission_letter">កាលបរិច្ឆេទចុះបេសកកម្ម:</label>
                                 <div class="form-subgroup">
                                     <label for="letter_date">ចាប់ផ្ដើម:</label>
@@ -178,25 +141,6 @@
                                 </div>
                             </div>
 
-                            {{-- <div class="form-group">
-                                <label for="address">សោហ៊ុយធ្វើដំណើរ:</label>
-                                <input type="text" name="travel_allowance" id="address"
-                                    class="form-control @error('address') is-invalid @enderror">
-                                @error('address')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                @enderror
-                            </div>
-                             --}}
-                            {{-- <div class="form-group">
-                                <label for="mission_letter">ប្រាក់ស្នាក់នៅ:</label>
-                                <div class="form-subgroup">
-                                    <label for="letter_number">របប:</label>
-                                    <input type="text" name="accommodation_money" id="letter_number" class="form-control form-number @error('letter_number') is-invalid @enderror">
-                                    @error('letter_number')
-                                        <div class="invalid-feedback">{{ $message }}</div>
-                                    @enderror
-                                </div>
-                            </div> --}}
                         </div>
                     </div>
 
@@ -237,7 +181,6 @@
             display: flex;
             justify-content: center;
             align-items: center;
-
         }
         .centered-text {
             appearance: none;
@@ -257,16 +200,50 @@
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script>
+
+const locations = {
+        'កំពង់ធំ': 268800, 'តាកែវ': 123200, 'សៀមរាប': 499200, // Add other provinces
+    };
+
+    const countries = [
+        'អាមេរិក', 'កាណាដា', 'ឡាវ', 'វៀតណាម', 'ថៃ', // Add other countries
+    ];
+
+    function updateLocationOptions() {
+        const placeSelect = document.getElementById('place');
+        const locationSelect = document.getElementById('location');
+        const placeValue = placeSelect.value;
+
+        // Clear previous options
+        locationSelect.innerHTML = '<option value="">ជ្រើសរើសខេត្ត ឬ ប្រទេស</option>';
+
+        if (placeValue === 'within_country') {
+            Object.keys(locations).forEach(location => {
+                const option = document.createElement('option');
+                option.value = location;
+                option.textContent = location;
+                locationSelect.appendChild(option);
+            });
+        } else if (placeValue === 'abroad') {
+            countries.forEach(country => {
+                const option = document.createElement('option');
+                option.value = country;
+                option.textContent = country;
+                locationSelect.appendChild(option);
+            });
+        }
+    }
+    
         $(function() {
             $("#letter_date").datepicker({
-                dateFormat: "yy-mm-dd" // Adjust the date format as needed
+                dateFormat: "yy-mm-dd" 
             });
         });
 
         (function($) {
             "use strict";
 
-            // Toggle the side navigation
+            //Troggle the side navigation
             $("#sidebarToggle, #sidebarToggleTop").on('click', function(e) {
                 $("body").toggleClass("sidebar-toggled");
                 $(".sidebar").toggleClass("toggled");
@@ -298,7 +275,6 @@
                     e.preventDefault();
                 }
             });
-
             // Scroll to top button appear
             $(document).on('scroll', function() {
                 var scrollDistance = $(this).scrollTop();
@@ -319,6 +295,57 @@
             });
 
         })(jQuery);
+
+        $(function() {
+            // Populate location dropdown based on place selection
+            $("#place").change(function() {
+                var place = $(this).val();
+                var locationSelect = $("#location");
+                locationSelect.empty(); // Clear existing options
+
+                if (place === "within_country") {
+                    locationSelect.append('<option value="">ជ្រើសរើសខេត្ត</option>');
+                    locationSelect.append('<option value="កំពង់ធំ">កំពង់ធំ</option>');
+                    locationSelect.append('<option value="តាកែវ">តាកែវ</option>');
+                    locationSelect.append('<option value="សៀមរាប">សៀមរាប</option>');
+                    locationSelect.append('<option value="កំពង់ចាម">កំពង់ចាម</option>');
+                    locationSelect.append('<option value="បាត់ដំបង">បាត់ដំបង</option>');
+                    locationSelect.append('<option value="ប៉ៃលិន">ប៉ៃលិន</option>');
+                    locationSelect.append('<option value="បន្ទាយមានជ័យ">បន្ទាយមានជ័យ</option>');
+                    locationSelect.append('<option value="ពោធិ៍សាត់">ពោធិ៍សាត់</option>');
+                    locationSelect.append('<option value="ព្រះសីហនុ">ព្រះសីហនុ</option>');
+                    locationSelect.append('<option value="កំពត">កំពត</option>');
+                    locationSelect.append('<option value="កែប">កែប</option>');
+                    locationSelect.append('<option value="ឧត្តរមានជ័យ">ឧត្តរមានជ័យ</option>');
+                    locationSelect.append('<option value="ព្រៃវែង">ព្រៃវែង</option>');
+                    locationSelect.append('<option value="ស្វាយរៀង">ស្វាយរៀង</option>');
+                    locationSelect.append('<option value="ត្បូងឃ្មុំ">ត្បូងឃ្មុំ</option>');
+                    locationSelect.append('<option value="ក្រចេះ">ក្រចេះ</option>');
+                    locationSelect.append('<option value="មណ្ឌលគីរី">មណ្ឌលគីរី</option>');
+                    locationSelect.append('<option value="រតនគីរី">រតនគីរី</option>');
+                    locationSelect.append('<option value="កណ្ដាល">កណ្ដាល</option>');
+                    locationSelect.append('<option value="កោះកុង">កោះកុង</option>');
+                    locationSelect.append('<option value="កំពង់ស្ពី">កំពង់ស្ពី</option>');
+                    locationSelect.append('<option value="ស្ទឹងត្រែង">ស្ទឹងត្រែង</option>');
+                    locationSelect.append('<option value="ព្រះវិហារ">ព្រះវិហារ</option>');
+                    locationSelect.append('<option value="កំពង់ឆ្នាំង">កំពង់ឆ្នាំង</option>');
+                } else if (place === "abroad") {
+                    locationSelect.append('<option value="">ជ្រើសរើសប្រទេស</option>');
+                    locationSelect.append('<option value="អាមេរិក">អាមេរិក</option>');
+                    locationSelect.append('<option value="កាណាដា">កាណាដា</option>');
+                    locationSelect.append('<option value="ឡាវ">ឡាវ</option>');
+                    locationSelect.append('<option value="វៀតណាម">វៀតណាម</option>');
+                    locationSelect.append('<option value="ថៃ">ថៃ</option>');
+                    locationSelect.append('<option value="ចិន">ចិន</option>');
+                    locationSelect.append('<option value="កូរ៉េ">កូរ៉េ</option>');
+                    locationSelect.append('<option value="ជប៉ុន">ជប៉ុន</option>');
+                    locationSelect.append('<option value="មីយ៉ាន់ម៉ា">មីយ៉ាន់ម៉ា</option>');
+                    locationSelect.append('<option value="អឺរ៉ុប">អឺរ៉ុប</option>');
+                } else{
+                    locationSelect.append('<option value="">ជ្រើសរើសខេត្ត ឬ ប្រទេស</option>');
+                } 
+            });
+        });
     </script>
 
 @endsection

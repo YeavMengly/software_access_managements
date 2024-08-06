@@ -109,10 +109,7 @@
                 <h6 class="collapse-header">ចំណាយបេសកកម្ម</h6>
                 <a class="collapse-item" href="{{route('missions.index')}}">ទម្រង់បញ្ចូល</a>
                 <a class="collapse-item" href="{{url('/mission-cam')}}">បេសកម្មក្នុងប្រទេស</a>
-                <a class="collapse-item" href=" ">បេសកម្មក្រៅប្រទេស</a>
-                {{-- <a class="collapse-item" href=" ">Forgot Password</a>
-                <div class="collapse-divider"></div>
-                <h6 class="collapse-header">Other Pages:</h6> --}}
+                <a class="collapse-item" href="{{url('/mission-abroad')}}">បេសកម្មក្រៅប្រទេស</a>
             </div>
         </div>
     </li>

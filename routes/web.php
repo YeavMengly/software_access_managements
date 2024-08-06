@@ -3,6 +3,7 @@
 use App\Http\Controllers\Code\AccountKeyController;
 use App\Http\Controllers\Code\CodeController;
 use App\Http\Controllers\Code\SubAccountKeyController;
+use App\Http\Controllers\MissionAbroadController;
 use App\Http\Controllers\MissionCambodiaController;
 use App\Http\Controllers\Report\ReportController;
 use App\Http\Controllers\Result\ResultController;
@@ -52,3 +53,6 @@ Route::get('/mission-cam', [MissionCambodiaController::class, 'index'])->name('t
 
 Route::get('/mission-cambodia/export', [MissionCambodiaController::class, 'export'])->name('table-mission-cambodia');
 
+Route::get('/mission-abroad', [MissionAbroadController::class, 'index'])->name('table-mission-abroad');
+
+Route::get('mission-abroad/export', [MissionAbroadController::class, 'export'])->name('table-mission-abroad');
