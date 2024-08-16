@@ -8,64 +8,48 @@ use Illuminate\Http\Request;
 
 class KeyController extends Controller
 {
-    //
-
     public function index(Request $request)
     {
         $search = $request->input('search');
         $sortBy = $request->input('sort_by', 'code');
         $sortOrder = $request->input('sort_order', 'asc');
-    
+
         $query = Key::query();
-    
+
         // Apply search filter
         if ($search) {
             $query->where('code', 'LIKE', "%{$search}%")
-                  ->orWhere('name', 'LIKE', "%{$search}%");
+                ->orWhere('name', 'LIKE', "%{$search}%");
         }
-    
+
         // Apply sorting
         if ($sortBy === 'code') {
             $query->orderBy('code', $sortOrder);
-        } else if ($sortBy === 'name') {
+        } elseif ($sortBy === 'name') {
             $query->orderBy('name', $sortOrder);
         }
-    
-        $keys = $query->paginate(10);
-    
+
+        $keys = $query->paginate();
+
         return view('layouts.admin.forms.keys.key-index', compact('keys', 'sortBy', 'sortOrder', 'search'));
     }
-    
-
 
     public function create()
     {
-        $keys = Key::all();
-        return view('layouts.admin.forms.keys.key-create', compact('keys'));
+        return view('layouts.admin.forms.keys.key-create');
     }
-
 
     public function store(Request $request)
     {
         $request->validate([
-            'code' => 'required',
-            'name' => 'required'
+            'code' => 'required|unique:keys,code',
+            'name' => 'required|unique:keys,name',
         ]);
 
-        // Check if the code already exists
-        $existingCode = Key::where('code', $request->code)->first();
-
-        if ($existingCode) {
-            // If the code already exists, redirect back with an error message
-            return redirect()->back()->withErrors(['code' => 'The code has already been inputted.'])->withInput();
-        }
-
-        // Create the new record if the code does not exist
         Key::create($request->only('code', 'name'));
 
-        return redirect()->route('keys.index')->with('success', 'Code created successfully.');
+        return redirect()->route('keys.index')->with('success', 'លេខជំពូកបានបង្កើតដោយជោគជ័យ។');
     }
-
 
     public function show($id)
     {
@@ -81,12 +65,13 @@ class KeyController extends Controller
 
     public function update(Request $request, $id)
     {
+        $key = Key::findOrFail($id);
+
         $request->validate([
-            'code' => 'required',
-            'name' => 'required'
+            'code' => 'required|unique:keys,code,' . $key->id,
+            'name' => 'required|unique:keys,name,' . $key->id,
         ]);
 
-        $key = Key::findOrFail($id);
         $key->update($request->only('code', 'name'));
 
         return redirect()->route('keys.index')->with('success', 'Code updated successfully.');

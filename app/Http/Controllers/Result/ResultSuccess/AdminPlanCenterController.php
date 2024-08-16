@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Result\ResultSuccess;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
-class ResultAdministrativePlanController extends Controller
+class AdminPlanCenterController extends Controller
 {
     //
     public function index (){

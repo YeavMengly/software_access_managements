@@ -2,7 +2,6 @@
 <html lang="{{ app()->getLocale() }}">
 
 <head>
-
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -10,6 +9,9 @@
     <meta name="author" content="">
 
     <title>Software Access Management</title>
+
+
+    <!-- Custom fonts for this template -->
 
     <!-- Custom fonts for this template-->
     <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
@@ -28,12 +30,26 @@
 
 
     {{-- Font Style By --}}
+
     <link href="https://fonts.googleapis.com/css2?family=Siemreap&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Khmer+OS+Muol+Light&display=swap" rel="stylesheet">
-  
+
+    <!-- Custom styles for this template -->
+    <link href="/css/sb-admin-2.min.css" rel="stylesheet">
+
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- FontAwesome CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" rel="stylesheet">
+
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+    <!-- SweetAlert2 CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.1/dist/sweetalert2.min.css">
 
     @yield('styles')
-
 </head>
 
 <body id="page-top">
@@ -75,15 +91,8 @@
                     @yield('content-table-mission-cambodia')
 
 
-                   
-                        @yield('form-report-upload')
-                        @yield('form-key-upload')
-                        @yield('form-account-upload')
-                        @yield('form-sub-account-upload')
-                       
-                        @yield('form-form-mission')
 
-                        <div class="container-fluid">
+
 
                     @yield('form-report-upload')
                     @yield('form-key-upload')
@@ -99,7 +108,24 @@
                         @yield('location-index')
                         @yield('location-update')
                         @yield('form-location-upload')
+
                     </div>
+
+                    {{--                        Start Certificate                          --}}
+                    @yield('content-certificate')
+                    @yield('form-certificate-upload')
+                    @yield('content-certificate-data')
+                    @yield('form-certificate-data-upload')
+                    @yield('content-certificate-amount')
+                    {{--                        End Certificate                          --}}
+
+                    {{--                        Start Loans Total                         --}}
+                    @yield('result-new-loan')
+                    @yield('result-remain')
+                    @yield('result-sum-refer')
+                    {{--                        End Loans Total                         --}}
+
+
                 </div>
 
             </div>
@@ -179,6 +205,8 @@
     @yield('scripts')
 
     {{-- <script src="{{ asset('js/custom.js') }}"></script> --}}
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.1/dist/sweetalert2.min.js"></script>
 
 
 

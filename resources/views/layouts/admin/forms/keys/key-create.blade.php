@@ -35,18 +35,9 @@
                 <form action="{{ route('keys.store') }}" method="POST" enctype="multipart/form-data">
                     @csrf
 
-                    {{-- <div class="form-group">
-                        <strong>លេខកូដកម្មវិធី:</strong>
-                        <select name="code_id" class="form-control">
-                            @foreach ($keys as $key)
-                                <option value="{{ $key->id }}">{{ $key->code }}</option>
-                            @endforeach
-                        </select>
-                    </div> --}}
-
                     <div class="form-group">
                         <label for="code">លេខជំពូក:</label>
-                        <input type="text" name="code" id="code"
+                        <input type="number" name="code" id="code"
                             class="form-control @error('code') is-invalid @enderror">
                         @error('code')
                             <div class="invalid-feedback">{{ $message }}</div>
@@ -142,4 +133,3 @@
         })(jQuery); // End of use strict
     </script>
 @endsection
-

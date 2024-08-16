@@ -33,7 +33,7 @@ class AccountKeyController extends Controller
             $query->orderBy($sortBy, $sortOrder);
         }
 
-        $accountKeys = $query->paginate(10);
+        $accountKeys = $query->paginate();
 
         return view('layouts.admin.forms.accounts.account-index', compact('accountKeys', 'sortBy', 'sortOrder'));
     }
@@ -49,28 +49,29 @@ class AccountKeyController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'code_id' => 'required|exists:keys,id',
+            'code' => 'required|exists:keys,id',
             'account_key' => 'required',
-            'name_account_key' => 'required'
+            'name_account_key' => 'required',
         ]);
 
-        $existingAccountKey = AccountKey::where('code_id', $request->input('code_id'))
-            ->where('account_key', $request->input('account_key'))
-            ->where('name_account_key', $request->input('name_account_key'))
+        // Check if the combination of code_id and account_key already exists
+        $existingRecord = AccountKey::where('code', $request->code)
+            ->where('account_key', $request->account_key)
             ->first();
 
-        if ($existingAccountKey) {
-            return redirect()->back()->with('error', 'The account key already exists.');
+        if ($existingRecord) {
+            // If the combination of code_id and account_key exists, return with an error
+            return redirect()->back()->withErrors([
+                'account_key' => 'The combination of code and account key already exists.'
+            ])->withInput();
         }
 
-        AccountKey::create([
-            'code_id' => $request->input('code_id'),
-            'account_key' => $request->input('account_key'),
-            'name_account_key' => $request->input('name_account_key')
-        ]);
+        // Create the new record if the combination is unique
+        AccountKey::create($request->only('code', 'account_key', 'name_account_key'));
 
-        return redirect()->route('accounts.index')->with('success', 'Account Key created successfully.');
+        return redirect()->route('accounts.index')->with('success', 'លេខគណនីបានបង្កើតដោយជោគជ័យ។');
     }
+
 
 
 
