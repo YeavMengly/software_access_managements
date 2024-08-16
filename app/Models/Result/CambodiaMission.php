@@ -1,16 +1,13 @@
 <?php
-
 namespace App\Models\Result;
 
-use App\Models\ResultPerson;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Person;
 
-class ResultMission extends Model
+class CambodiaMission extends Model
 {
     use HasFactory;
-    protected $table = 'missions';
+    protected $table = 'cam_missions';
     protected $fillable = [
         'name',
         'role',
@@ -25,18 +22,14 @@ class ResultMission extends Model
         'mission_end_date',
         'days_count',
         'nights_count',
-        'pocket_money',
-        'meal_money',
-        'accommodation_money',
-        'total_pocket_money',
-        'total_meal_money',
+        'pocket_money', 
+        'meal_money', 
+        'accommodation_money', 
+        'total_pocket_money', 
+        'total_meal_money', 
         'total_accommodation_money',
         'travel_allowance',
         'other_allowances',
         'final_total',
     ];
-    public function people()
-    {
-        return $this->hasMany(ResultPerson::class);
-    }
 }

@@ -2,15 +2,13 @@
 
 namespace App\Models\Result;
 
-use App\Models\ResultPerson;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Person;
 
-class ResultMission extends Model
+class AbroadMission extends Model
 {
     use HasFactory;
-    protected $table = 'missions';
+    protected $table = 'abroad_missions';
     protected $fillable = [
         'name',
         'role',
@@ -35,8 +33,4 @@ class ResultMission extends Model
         'other_allowances',
         'final_total',
     ];
-    public function people()
-    {
-        return $this->hasMany(ResultPerson::class);
-    }
 }
