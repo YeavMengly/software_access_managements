@@ -2,7 +2,7 @@
 
 namespace App\Exports;
 
-use App\Models\Result\ResultMission;
+use App\Models\Result\CambodiaMission;
 use Maatwebsite\Excel\Concerns\FromQuery;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithMapping;
@@ -10,7 +10,7 @@ use Maatwebsite\Excel\Concerns\WithStyles;
 use Maatwebsite\Excel\Concerns\WithTitle;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 
-class MissionExport implements FromQuery, WithHeadings, WithMapping, WithStyles, WithTitle
+class CambodiaExport implements FromQuery, WithHeadings, WithMapping, WithStyles, WithTitle
 {
     protected $search;
 
@@ -21,13 +21,14 @@ class MissionExport implements FromQuery, WithHeadings, WithMapping, WithStyles,
 
     public function query()
     {
-        return ResultMission::query()
+        return CambodiaMission::query()
             ->when($this->search, function ($query, $search) {
                 return $query->where('name', 'like', "%{$search}%")
                     ->orWhere('location', 'like', "%{$search}%")
                     ->select(
                         'id',
                         'name',
+                        'role',
                         'position_type',
                         'letter_number',
                         'letter_date',
@@ -39,11 +40,11 @@ class MissionExport implements FromQuery, WithHeadings, WithMapping, WithStyles,
                         'mission_end_date',
                         'days_count',
                         'nights_count',
-                        'pocket_money', 
-                        'meal_money', 
-                        'accommodation_money', 
-                        'total_pocket_money', 
-                        'total_meal_money', 
+                        'pocket_money',
+                        'meal_money',
+                        'accommodation_money',
+                        'total_pocket_money',
+                        'total_meal_money',
                         'total_accommodation_money',
                         'travel_allowance',
                         'final_total'
@@ -155,6 +156,8 @@ class MissionExport implements FromQuery, WithHeadings, WithMapping, WithStyles,
                 number_format($mission->final_total, 0, '.', ','),
             ];
         }
+
+        
     }
 
     public function styles(Worksheet $sheet)
@@ -166,6 +169,6 @@ class MissionExport implements FromQuery, WithHeadings, WithMapping, WithStyles,
 
     public function title(): string
     {
-        return 'Mission Export';
+        return 'Cambodia Export';
     }
 }
