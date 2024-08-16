@@ -30,6 +30,6 @@ class CambodiaMission extends Model
         'total_accommodation_money',
         'travel_allowance',
         'other_allowances',
-        'final_total'
+        'final_total',
     ];
 }

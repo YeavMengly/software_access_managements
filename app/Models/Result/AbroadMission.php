@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Models\Result;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -22,14 +23,14 @@ class AbroadMission extends Model
         'mission_end_date',
         'days_count',
         'nights_count',
-        'pocket_money', 
-        'meal_money', 
-        'accommodation_money', 
-        'total_pocket_money', 
-        'total_meal_money', 
+        'pocket_money',
+        'meal_money',
+        'accommodation_money',
+        'total_pocket_money',
+        'total_meal_money',
         'total_accommodation_money',
         'travel_allowance',
         'other_allowances',
-        'final_total'
+        'final_total',
     ];
 }

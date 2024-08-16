@@ -13,6 +13,9 @@ class CreateCambodiaMissionsTable extends Migration
      */
     public function up()
     {
+        if (!Schema::hasTable('cam_missions')) {
+            # code...
+       
         Schema::create('cam_missions', function (Blueprint $table) {
             $table->id();
             $table->string('name');
@@ -36,6 +39,7 @@ class CreateCambodiaMissionsTable extends Migration
             $table->decimal('final_total', 12, 2)->default(0);
             $table->timestamps();
         });
+    }
     }
     
     /**

@@ -1,4 +1,5 @@
 <?php 
+
 namespace App\Http\Controllers;
 
 use App\Exports\CambodiaExport;
@@ -40,7 +41,7 @@ class MissionCambodiaController extends Controller
     public function index(Request $request)
     {
         $missions = CambodiaMission::all();
-        // Retrieve all missions from the database
+
         $search = $request->input('search');
 
         // Filter missions based on predefined locations and search term
@@ -48,12 +49,21 @@ class MissionCambodiaController extends Controller
             ->whereIn('location', $this->locations)
             ->when($search, function ($query, $search) {
                 return $query->where('name', 'like', "%{$search}%")
-                    ->orWhere('location', 'like', "%{$search}%");
+                            ->orWhere('location', 'like', "%{$search}%");
             })
             ->get();
 
-        // Pass the missions data to the view
-        return view('layouts.table.table-mission.table-mission-cambodia', compact('missions'));
+        // Calculate totals
+        $totals = [
+            'travel_allowance' => $missions->sum('travel_allowance'),
+            'total_pocket_money' => $missions->sum('total_pocket_money'),
+            'total_meal_money' => $missions->sum('total_meal_money'),
+            'total_accommodation_money' => $missions->sum('total_accommodation_money'),
+            'final_total' => $missions->sum('final_total'),
+        ];
+
+        // Pass the missions data and totals to the view
+        return view('layouts.table.table-mission.table-mission-cambodia', compact('missions', 'totals'));
     }
 
     // Export data to excel file

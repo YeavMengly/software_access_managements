@@ -28,6 +28,7 @@ class CambodiaExport implements FromQuery, WithHeadings, WithMapping, WithStyles
                     ->select(
                         'id',
                         'name',
+                        'role',
                         'position_type',
                         'letter_number',
                         'letter_date',
@@ -39,11 +40,11 @@ class CambodiaExport implements FromQuery, WithHeadings, WithMapping, WithStyles
                         'mission_end_date',
                         'days_count',
                         'nights_count',
-                        'pocket_money', 
-                        'meal_money', 
-                        'accommodation_money', 
-                        'total_pocket_money', 
-                        'total_meal_money', 
+                        'pocket_money',
+                        'meal_money',
+                        'accommodation_money',
+                        'total_pocket_money',
+                        'total_meal_money',
                         'total_accommodation_money',
                         'travel_allowance',
                         'final_total'
@@ -155,6 +156,8 @@ class CambodiaExport implements FromQuery, WithHeadings, WithMapping, WithStyles
                 number_format($mission->final_total, 0, '.', ','),
             ];
         }
+
+        
     }
 
     public function styles(Worksheet $sheet)
