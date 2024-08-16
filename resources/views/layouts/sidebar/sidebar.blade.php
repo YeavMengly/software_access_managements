@@ -37,8 +37,8 @@
                 <h6 class="collapse-header">គ្រប់គ្រងរបាយការណ៍</h6>
                 <a class="collapse-item" href="{{route('result-total-table')}}">របាយការណ៍ចំណាយថវិកា</a>
                 <a class="collapse-item" href="{{route('result-total-general-table')}}">របាយការណ៍សកម្មភាព</a>
-                <a class="collapse-item" href="">របាយការណ៍អនុវត្ត</a>
-                <a class="collapse-item" href="">របាយការណ៍សង្ខេប</a>
+                <a class="collapse-item" href="{{route('result-total-operation-table')}}">របាយការណ៍អនុវត្ត</a>
+                <a class="collapse-item" href="{{route('result-total-summaries-table')}}">របាយការណ៍សង្ខេប</a>
             </div>
         </div>
     </li>
@@ -71,9 +71,9 @@
         <div id="collapseTwoCopy" class="collapse" aria-labelledby="headingTwoCopy" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
                 <h6 class="collapse-header">លទ្ធផលសម្រេចបាន</h6>
-                <a class="collapse-item" href="">ប្រៀបធៀបធានាចំណាយ</a>
-                <a class="collapse-item" href="">ផែនការថវិការដ្ឋ</a>
-                <a class="collapse-item" href="">អនុវត្តចំណាយ</a>
+                <a class="collapse-item" href="{{ route('result-success') }}">ប្រៀបធៀបធានាចំណាយ</a>
+                <a class="collapse-item" href="{{ route('result-administrative-plan') }}">ផែនការថវិការដ្ឋ</a>
+                <a class="collapse-item" href="{{ route('result-general-pay') }}">អនុវត្តចំណាយ</a>
             </div>
         </div>
     </li>

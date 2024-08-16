@@ -93,6 +93,9 @@ class ResultMissionController extends Controller
     public function store(Request $request)
     {
         // Define possible roles
+
+        $roles = ['អគ្កាធិការរង', 'អគ្គនាយករង', 'អគ្គលេខាធិការរង', 'រដ្ឋលេខាធិការ', 'រដ្ឋលេខាធិការ', 'អនុរដ្ឋលេខាធិការ', 'ប្រ.ការិយាល័យ', 'អនុ.ការិយាល័យ', 'អនុប្រធានផ្នែក', 'មន្ត្រី', 'ជំនួយការ'];
+      
         $roles = [
             'អគ្កាធិការរង',
             'អគ្គនាយករង',

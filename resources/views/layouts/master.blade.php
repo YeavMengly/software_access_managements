@@ -27,6 +27,11 @@
     {{-- <link rel="stylesheet" href="{{ asset('missions/vendor/fontawesome-free/css/all.min.css') }}"> --}}
 
 
+    {{-- Font Style By --}}
+    <link href="https://fonts.googleapis.com/css2?family=Siemreap&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Khmer+OS+Muol+Light&display=swap" rel="stylesheet">
+  
+
     @yield('styles')
 
 </head>
@@ -61,8 +66,24 @@
                     @yield('content-key')
                     @yield('content-account')
                     @yield('content-sub-account')
+                    @yield('result-success')
+                    @yield('result-general-pay')
+                    @yield('result-administrative-plan')
+                    @yield('result-total-summaries')
+
                     @yield('content-mission')
                     @yield('content-table-mission-cambodia')
+
+
+                   
+                        @yield('form-report-upload')
+                        @yield('form-key-upload')
+                        @yield('form-account-upload')
+                        @yield('form-sub-account-upload')
+                       
+                        @yield('form-form-mission')
+
+                        <div class="container-fluid">
 
                     @yield('form-report-upload')
                     @yield('form-key-upload')
@@ -72,6 +93,7 @@
                     @yield('form-form-mission')
 
                     <div class="container-fluid">
+
                         @yield('user-data')
                         @yield('user-create')
                         @yield('location-index')
