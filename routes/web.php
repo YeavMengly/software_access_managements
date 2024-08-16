@@ -6,6 +6,7 @@ use App\Http\Controllers\Certificates\CertificateDataController;
 use App\Http\Controllers\Code\AccountKeyController;
 use App\Http\Controllers\Code\KeyController;
 use App\Http\Controllers\Code\SubAccountKeyController;
+use App\Http\Controllers\MissionAbroadController;
 use App\Http\Controllers\MissionCambodiaController;
 use App\Http\Controllers\Loans\NewLoanController;
 use App\Http\Controllers\Loans\RemainController;
@@ -92,8 +93,15 @@ Route::get('/mission-cam', [MissionCambodiaController::class, 'index'])->name('t
 
 Route::get('/mission-cambodia/export', [MissionCambodiaController::class, 'export'])->name('table-mission-cambodia');
 
+
 Route::get('/export', [ResultController::class, 'export'])->name('result.export');
 
 
 //===============================>> Manage Pdf Print
 Route::get('/results/pdf', [ResultController::class, 'exportPdf'])->name('result.exportPdf');
+
+
+Route::get('/mission-abroad', [MissionAbroadController::class, 'index'])->name('table-mission-abroad');
+
+Route::get('mission-abroad/export', [MissionAbroadController::class, 'export'])->name('table-mission-abroad');
+

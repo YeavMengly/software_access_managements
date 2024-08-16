@@ -10,7 +10,27 @@
 
     <title>Software Access Management</title>
 
+
     <!-- Custom fonts for this template -->
+
+    <!-- Custom fonts for this template-->
+    <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+    <link
+        href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+        rel="stylesheet">
+
+    <!-- Custom styles for this template-->
+    <link href="/css/sb-admin-2.min.css" rel="stylesheet">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Include FontAwesome CSS (optional) -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" rel="stylesheet">
+
+    {{-- <link rel="stylesheet" href="{{ asset('missions/vendor/fontawesome-free/css/all.min.css') }}"> --}}
+
+
+    {{-- Font Style By --}}
+
     <link href="https://fonts.googleapis.com/css2?family=Siemreap&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Khmer+OS+Muol+Light&display=swap" rel="stylesheet">
 
@@ -71,6 +91,18 @@
                     @yield('content-table-mission-cambodia')
 
 
+
+
+                   
+                        @yield('form-report-upload')
+                        @yield('form-key-upload')
+                        @yield('form-account-upload')
+                        @yield('form-sub-account-upload')
+                       
+                        @yield('form-form-mission')
+
+                        <div class="container-fluid">
+
                     @yield('form-report-upload')
                     @yield('form-key-upload')
                     @yield('form-account-upload')
@@ -79,6 +111,8 @@
                     @yield('form-form-mission')
 
                     <div class="container-fluid">
+
+
                         @yield('user-data')
                         @yield('user-create')
                         @yield('location-index')
@@ -183,6 +217,7 @@
     {{-- <script src="{{ asset('js/custom.js') }}"></script> --}}
 
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.1/dist/sweetalert2.min.js"></script>
+
 
 
 

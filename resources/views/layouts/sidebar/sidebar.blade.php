@@ -54,9 +54,9 @@
             data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
                 <h6 class="collapse-header">សលាកប័ត្រ</h6>
-                <a class="collapse-item" href="{{route('certificate.index')}}">ឈ្មោះសលាកប័ត្រ</a>
-                <a class="collapse-item" href="{{route('certificate-data.index')}}">តារាងតម្លៃសលាកបត្រ</a>
-                <a class="collapse-item" href="{{route('certificate-amount')}}">តារាងចំនួនសរុប</a>
+                <a class="collapse-item" href="{{ route('certificate.index') }}">ឈ្មោះសលាកប័ត្រ</a>
+                <a class="collapse-item" href="{{ route('certificate-data.index') }}">តារាងតម្លៃសលាកបត្រ</a>
+                <a class="collapse-item" href="{{ route('certificate-amount') }}">តារាងចំនួនសរុប</a>
             </div>
         </div>
     </li>
@@ -128,12 +128,18 @@
         <div id="collapseFour" class="collapse" aria-labelledby="headingFour" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
                 <h6 class="collapse-header">ចំណាយបេសកកម្ម</h6>
+
                 <a class="collapse-item" href="{{ route('missions.index') }}">ទម្រង់បញ្ចូល</a>
                 <a class="collapse-item" href="{{ url('/mission-cam') }}">បេសកម្មក្នុងប្រទេស</a>
                 <a class="collapse-item" href=" ">បេសកម្មក្រៅប្រទេស</a>
                 {{-- <a class="collapse-item" href=" ">Forgot Password</a>
                 <div class="collapse-divider"></div>
                 <h6 class="collapse-header">Other Pages:</h6> --}}
+
+                <a class="collapse-item" href="{{ route('missions.index') }}">ទម្រង់បញ្ចូល</a>
+                <a class="collapse-item" href="{{ url('/mission-cam') }}">បេសកម្មក្នុងប្រទេស</a>
+                <a class="collapse-item" href="{{ url('/mission-abroad') }}">បេសកម្មក្រៅប្រទេស</a>
+
             </div>
         </div>
     </li>
