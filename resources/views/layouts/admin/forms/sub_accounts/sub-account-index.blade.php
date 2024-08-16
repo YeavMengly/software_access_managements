@@ -75,11 +75,17 @@
                     <td style="border: 1px solid black; text-align: center;">{{ $subAccountKey->name_sub_account_key }}</td>
                     <td style="border: 1px solid black; width: 120px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
                         <form action="{{ route('sub-account.destroy', $subAccountKey->id) }}" method="POST">
-                            <a class="btn btn-info" href="{{ route('sub-account.show', $subAccountKey->id) }}">Show</a>
-                            <a class="btn btn-primary" href="{{ route('sub-account.edit', $subAccountKey->id) }}">Edit</a>
+                            <a class="btn btn-info" href="{{ route('sub-account.show', $subAccountKey->id) }}">
+                                <i class="fas fa-eye"></i>
+                            </a>
+                            <a class="btn btn-primary" href="{{ route('sub-account.edit', $subAccountKey->id) }}">
+                                <i class="fas fa-pencil-alt"></i>
+                            </a>
                             @csrf
                             @method('DELETE')
-                            <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this sub-account key?')">Delete</button>
+                            <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this sub-account key?')">
+                                <i class="fas fa-trash"></i>
+                            </button>
                         </form>
                     </td>
                 </tr>
@@ -89,7 +95,7 @@
 
     <!-- Pagination Links -->
     <div class="d-flex justify-content-end mt-3">
-        {{ $subAccountKeys->links() }}
+        {{-- {{ $subAccountKeys->links() }} --}}
     </div>
 @endsection
 

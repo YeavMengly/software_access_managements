@@ -12,6 +12,8 @@
             <h3>របាយការណ៍ធានាចំណាយថវិកាក្រសួងការងារ និងបណ្តុះបណ្តាលវិជ្ជាជីវៈ</h3>
             <h5>ប្រចាំខែមិថុនា ឆ្នាំ២០២៤</h5>
             <div class="table-container">
+
+                {{--            Table           --}}
                 <table class="table-border">
                     <thead class="header-border">
                         <tr>
@@ -51,6 +53,7 @@
 
                         @endphp
 
+                        {{-- start import data --}}
                         @foreach ($reports as $index => $report)
                             @php
                                 $currentKeyCode = $report->subAccountKey->accountKey->key->code;
@@ -133,42 +136,45 @@
                                 </td>
                                 <td
                                     style="border: 1px solid black; max-width: 120px; text-align: center; overflow-y: auto; white-space: normal;">
-                                    {{ $report->fin_law }}
+                                    {{ number_format($report->fin_law, 0, ' ', ' ') }}
                                 </td>
                                 <td
                                     style="border: 1px solid black; max-width: 120px; text-align: center; overflow-y: auto; white-space: normal;">
-                                    {{ $report->current_loan }}
+                                    {{ number_format($report->current_loan, 0, ' ', ' ') }}
                                 </td>
                                 <td
                                     style="border: 1px solid black; max-width: 120px; text-align: center; overflow-y: auto; white-space: normal;">
-                                    {{ $report->internal_increase }}
+                                    {{ number_format($report->internal_increase, 0, ' ', ' ') }}
                                 </td>
                                 <td
                                     style="border: 1px solid black; max-width: 120px; text-align: center; overflow-y: auto; white-space: normal;">
-                                    {{ $report->unexpected_increase }}
+                                    {{ number_format($report->unexpected_increase, 0, ' ', ' ') }}
                                 </td>
                                 <td
                                     style="border: 1px solid black; max-width: 120px; text-align: center; overflow-y: auto; white-space: normal;">
-                                    {{ $report->additional_increase }}
+                                    {{ number_format($report->additional_increase, 0, ' ', ' ') }}
                                 </td>
                                 <td style="border: 1px solid black; max-width: 160px; text-align: center;">
-                                    {{ $report->total_increase }}
+                                    {{ number_format($report->total_increase, 0, ' ', ' ') }}
                                 </td>
                                 <td style="border: 1px solid black; text-align: center">
-                                    {{ $report->decrease }}
+                                    {{ number_format($report->decrease, 0, ' ', ' ') }}
                                 </td>
                                 {{-- <td style="border: 1px solid black; text-align: center;">
                                     {{ $report->editorial }}
                                 </td> --}}
                                 <td style="border: 1px solid black; text-align: center;">
-                                    {{ $report->new_credit_status }}
-                                </td>
-                                <td style="border: 1px solid black; text-align: center">{{ $report->early_balance }}</td>
-                                <td style="border: 1px solid black; text-align: center">{{ $report->apply }}</td>
-                                <td style="border: 1px solid black; text-align: center"> {{ $report->deadline_balance }}
+                                    {{ number_format($report->new_credit_status, 0, ' ', ' ') }}
                                 </td>
                                 <td style="border: 1px solid black; text-align: center">
-                                    {{ $report->credit }} </td>
+                                    {{ number_format($report->early_balance, 0, ' ', ' ') }}</td>
+                                <td style="border: 1px solid black; text-align: center">
+                                    {{ number_format($report->apply, 0, ' ', ' ') }}</td>
+                                <td style="border: 1px solid black; text-align: center">
+                                    {{ number_format($report->deadline_balance, 0, ' ', ' ') }}
+                                </td>
+                                <td style="border: 1px solid black; text-align: center">
+                                    {{ number_format($report->credit, 0, ' ', ' ') }} </td>
                                 <td style="border: 1px solid black; text-align: center">
                                     {{ $report->law_average }}%
                                 </td>
@@ -182,6 +188,8 @@
                                 $previousSubAccountKeyCode = $currentSubAccountKeyCode;
                             @endphp
                         @endforeach
+
+                        {{-- End import data --}}
 
                         <!-- Total Row -->
                         <tr>
@@ -212,6 +220,8 @@
                         <!-- End Total Row -->
                     </tbody>
                 </table>
+                {{--            Table           --}}
+
             </div>
         </div>
     </div>

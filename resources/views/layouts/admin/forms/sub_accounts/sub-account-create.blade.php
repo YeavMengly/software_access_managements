@@ -37,7 +37,7 @@
 
                     <div class="form-group">
                         <strong>លេខគណនី:</strong>
-                        <select name="account_key_id" class="form-control">
+                        <select name="account_key" class="form-control">
                             @foreach ($accountKeys as $accountKey)
                                 <option value="{{ $accountKey->id }}">
                                     {{ $accountKey->key->code }} < {{ $accountKey->account_key }} </option>
@@ -47,7 +47,7 @@
 
                     <div class="form-group">
                         <label for="sub_account_key">លេខអនុគណនី:</label>
-                        <input type="text" name="sub_account_key" id="sub_account_key"
+                        <input type="number" name="sub_account_key" id="sub_account_key"
                             class="form-control @error('sub_account_key') is-invalid @enderror">
                         @error('sub_account_key')
                             <div class="invalid-feedback">{{ $message }}</div>
