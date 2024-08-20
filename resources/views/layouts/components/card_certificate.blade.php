@@ -53,10 +53,6 @@
             max-width: 70%;
         }
 
-        a {
-            font-size: 28px;
-        }
-
         .btn-custom {
             display: flex;
             justify-content: center;

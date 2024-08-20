@@ -1,8 +1,13 @@
 @extends('layouts.master')
 
 @section('content-certificate-amount')
-    <div class="row">
+    <div class="row mt-4 ml-2">
         <div class="col-lg-12 margin-tb mb-4">
+
+            <div class="d-flex justify-content-between align-items-center">
+                <a class="btn btn-danger" href="{{ url('/card_certificate') }}"> <i class="fas fa-arrow-left"></i>
+                    ត្រឡប់ក្រោយ</a>
+            </div>
             <form class="max-w-md mx-auto mt-3" method="GET" action="{{ route('certificate-amount') }}">
                 <div class="row">
                     <div class="col-md-6">
@@ -106,7 +111,7 @@
         }
 
         .result-total-table-container {
-            max-height: 600px;
+            max-height: 100vh;
             overflow-y: auto;
         }
 

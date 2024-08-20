@@ -62,8 +62,6 @@
             max-width: 70%;
         }
 
-        
-
         .btn-custom {
             display: flex;
             justify-content: center;

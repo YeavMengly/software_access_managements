@@ -2,8 +2,6 @@
 
 @section('result')
     <div class="border-wrapper">
-
-
         <div class="container-fluid">
 
             <div class="row">
@@ -45,8 +43,8 @@
 
                     {{-- Filter Date --}}
                     <div class="col-md-3">
-                        <input type="date" name="date" id="date" value="{{ request('date') }}" class="form-control"
-                            placeholder="Filter by Date (MM/DD/YYYY)">
+                        <input type="date" name="date" id="date" value="{{ request('date') }}"
+                            class="form-control" placeholder="Filter by Date (MM/DD/YYYY)">
                     </div>
 
                     {{--        Start btn search and reset       --}}
@@ -248,62 +246,6 @@
 @endsection
 
 @section('scripts')
-    {{-- <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const table = document.getElementById('reportTable');
-            const rows = Array.from(table.querySelectorAll('tbody tr'));
-            const filterableCells = table.querySelectorAll('.filterable');
-
-            function showFilteredRows(filterValue) {
-                rows.forEach(row => {
-                    row.classList.add('hidden-row');
-                });
-
-                rows.forEach(row => {
-                    const cellValue = row.querySelector(`td.filterable[data-filter="${filterValue}"]`);
-                    if (cellValue) {
-                        row.classList.remove('hidden-row');
-                    }
-                });
-            }
-
-            filterableCells.forEach(cell => {
-                cell.addEventListener('click', function() {
-                    const filterValue = this.getAttribute('data-filter');
-                    showFilteredRows(filterValue);
-                });
-
-                cell.addEventListener('dblclick', function() {
-                    rows.forEach(row => {
-                        row.classList.remove('hidden-row');
-                    });
-                });
-            });
-        });
-
-        document.getElementById('date').addEventListener('input', function() {
-            const filterValue = this.value;
-            const tableBody = document.getElementById('tableBody');
-            const rows = tableBody.querySelectorAll('tr');
-
-            const formattedFilterValue = moment(filterValue, 'MM/DD/YYYY').format('YYYY-MM-DD'); // Use Moment.js
-
-            rows.forEach(row => {
-                const dateCell = row.querySelector(
-                    'td.date'); // Assuming you have a `date` class for date cells
-                if (dateCell) {
-                    const rowDate = dateCell.textContent.trim();
-                    const formattedRowDate = moment(rowDate, 'MM/DD/YYYY').format('YYYY-MM-DD');
-                    if (formattedRowDate.includes(formattedFilterValue)) {
-                        row.style.display = '';
-                    } else {
-                        row.style.display = 'none';
-                    }
-                }
-            });
-        });
-    </script> --}}
-
     {{--            Start action for filter search                --}}
     <script>
         document.addEventListener('DOMContentLoaded', function() {
@@ -338,28 +280,4 @@
         });
     </script>
     {{--            End action for btn reset                --}}
-
-    {{-- <script>
-        // Add event listener for reset button
-        document.getElementById('resetBtn').addEventListener('click', function() {
-            document.querySelectorAll('input').forEach(input => input.value = '');
-        });
-
-        // Add filtering logic for live updates
-        document.querySelectorAll('input').forEach(input => {
-            input.addEventListener('input', function() {
-                const form = document.getElementById('filterForm');
-                const formData = new FormData(form);
-                fetch(form.action + '?' + new URLSearchParams(formData), {
-                        method: 'GET',
-                    })
-                    .then(response => response.text())
-                    .then(html => {
-                        const newDoc = new DOMParser().parseFromString(html, 'text/html');
-                        const newTableBody = newDoc.querySelector('#reportTable tbody');
-                        document.querySelector('#reportTable tbody').innerHTML = newTableBody.innerHTML;
-                    });
-            });
-        });
-    </script> --}}
 @endsection

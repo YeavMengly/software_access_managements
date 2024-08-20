@@ -60,7 +60,7 @@
             </div>
         </div>
         <!-- Footer content -->
-        
+
     </div>
 
     {{-- <div class="footer-section text-center mt-5">
@@ -69,8 +69,6 @@
 @endsection
 @section('styles')
     <style>
-        /* @import url('https://fonts.googleapis.com/css2?family=Khmer+OS+Siemreap&display=swap'); */
-
 
         html,
         body {
@@ -90,7 +88,7 @@
             bottom: 0;
             width: 100%;
             margin-top: auto;
-        
+
         }
 
 
@@ -244,12 +242,12 @@
         }
 
         /* .footer-section {
-            background-color: #3987ee;
-            padding: 10px;
-            color: white;
-            animation: fadeInUp 1s ease-out;
-            justify-content: center;
-        } */
+                    background-color: #3987ee;
+                    padding: 10px;
+                    color: white;
+                    animation: fadeInUp 1s ease-out;
+                    justify-content: center;
+                } */
 
         .first-header.text-right h4,
         .first-header.text-right h3 {
@@ -378,22 +376,7 @@
 
 
 @section('scripts')
-    {{-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script>
-        function navigateTo(url) {
-            $.ajax({
-                url: url,
-                type: 'GET',
-                success: function(response) {
-                    // Assuming you are updating a specific part of the page
-                    document.querySelector('.main-content').innerHTML = response;
-                },
-                error: function(xhr) {
-                    console.error('Request failed with status:', xhr.status);
-                }
-            });
-        }
-    </script> --}}
+    {{-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> --}}
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const fullscreenButton = document.getElementById('fullscreen-btn');
@@ -426,4 +409,5 @@
             document.addEventListener('MSFullscreenChange', updateButtonText);
         });
     </script>
+
 @endsection

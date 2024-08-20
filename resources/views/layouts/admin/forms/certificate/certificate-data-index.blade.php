@@ -1,8 +1,14 @@
 @extends('layouts.master')
 
 @section('content-certificate-data')
-    <div class="row">
-        <div class="col-lg-12 margin-tb mb-4">
+    <div class="row mt-4">
+        <div class="col-lg-12 margin-tb">
+
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <a class="btn btn-danger" href="{{ url('/card_certificate') }}"> <i class="fas fa-arrow-left"></i>
+                    ត្រឡប់ក្រោយ</a>
+            </div>
+
             <div class="d-flex justify-content-between align-items-center">
                 <h2 style="font-weight: 700;">តារាងទិន្នន័យសលាកបត្រ</h2>
                 <a class="btn btn-success" href="{{ route('certificate-data.create') }}">បញ្ចូលទិន្នន័យ</a>
@@ -35,7 +41,7 @@
         </div>
     @endif
 
-    <table class="table table-striped table-hover">
+    <table class="table table-striped table-hover ">
         <thead>
             <tr>
                 <th style="border: 1px solid black; font-size: 14px; width: 180px;">លេខរៀង</th>
@@ -96,7 +102,6 @@
     </table>
 
     {{-- {{ $certificatesData->appends(request()->query())->links() }} --}}
-
 @endsection
 
 @section('scripts')
