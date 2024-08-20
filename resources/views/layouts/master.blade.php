@@ -10,27 +10,12 @@
 
     <title>Software Access Management</title>
 
-
-    <!-- Custom fonts for this template -->
-
     <!-- Custom fonts for this template-->
-    <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
     <link
         href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
         rel="stylesheet">
 
-    <!-- Custom styles for this template-->
-    <link href="/css/sb-admin-2.min.css" rel="stylesheet">
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-
-    <!-- Include FontAwesome CSS (optional) -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" rel="stylesheet">
-
-    {{-- <link rel="stylesheet" href="{{ asset('missions/vendor/fontawesome-free/css/all.min.css') }}"> --}}
-
-
-    {{-- Font Style By --}}
-
+    <!-- Custom Khmer Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Siemreap&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Khmer+OS+Muol+Light&display=swap" rel="stylesheet">
 
@@ -43,23 +28,17 @@
     <!-- FontAwesome CSS -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" rel="stylesheet">
 
-    <!-- Font Awesome Icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-
     <!-- SweetAlert2 CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.1/dist/sweetalert2.min.css">
 
     @yield('styles')
 </head>
 
+
 <body id="page-top">
 
     <!-- Page Wrapper -->
     <div id="wrapper">
-
-        <!-- Sidebar -->
-        @include('layouts.sidebar.sidebar')
-        <!-- End of Sidebar -->
 
         <!-- Content Wrapper -->
         <div id="content-wrapper" class="d-flex flex-column">
@@ -71,9 +50,15 @@
                 @include('layouts.navigation.navigation')
                 <!-- End of Topbar -->
 
-
                 <!-- Begin Page Content -->
-                <div class="container-fluid">
+                <div class="container-fluid ">
+
+                    {{-- Component Button --}}
+
+                    @yield('dashboardui')
+                    @yield('programs')
+                    @yield('card_certificate')
+                    @yield('total_card')
 
                     @yield('result')
                     @yield('result-total-table')
@@ -89,9 +74,6 @@
 
                     @yield('content-mission')
                     @yield('content-table-mission-cambodia')
-
-
-
 
 
                     @yield('form-report-upload')
@@ -125,26 +107,12 @@
                     @yield('result-sum-refer')
                     {{--                        End Loans Total                         --}}
 
-
                 </div>
 
             </div>
             <!-- /.container-fluid -->
-
-
         </div>
         <!-- End of Main Content -->
-
-        <!-- Footer -->
-        {{-- <footer class="sticky-footer bg-white">
-                <div class="container my-auto">
-                    <div class="copyright text-center my-auto">
-                        <span>Copyright &copy; Your Website 2021</span>
-                    </div>
-                </div>
-            </footer> --}}
-        <!-- End of Footer -->
-
     </div>
     <!-- End of Content Wrapper -->
 
@@ -207,9 +175,6 @@
     {{-- <script src="{{ asset('js/custom.js') }}"></script> --}}
 
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.1/dist/sweetalert2.min.js"></script>
-
-
-
 
 </body>
 

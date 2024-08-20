@@ -6,6 +6,9 @@ use App\Http\Controllers\Certificates\CertificateDataController;
 use App\Http\Controllers\Code\AccountKeyController;
 use App\Http\Controllers\Code\KeyController;
 use App\Http\Controllers\Code\SubAccountKeyController;
+use App\Http\Controllers\Components\CertificateCardController;
+use App\Http\Controllers\Components\TotalCardController;
+use App\Http\Controllers\Components\TotalProgramsController;
 use App\Http\Controllers\MissionAbroadController;
 use App\Http\Controllers\MissionCambodiaController;
 use App\Http\Controllers\Loans\NewLoanController;
@@ -21,6 +24,7 @@ use App\Http\Controllers\Result\ResultSummariesController;
 use App\Http\Controllers\Result\ResultTotalController;
 use App\Http\Controllers\ResultMissionController;
 use App\Http\Controllers\Loans\SumReferController;
+use App\Models\Totals\Total;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -39,8 +43,17 @@ use Illuminate\Support\Facades\Route;
 // });
 
 Route::get('/', function () {
-    return view('layouts.table.result');
+    return view('dashboard.dashboardui');
 });
+
+// Route::get('/', function () {
+//     return view('layouts.master');
+// });
+
+// Route Components Grid
+Route::get('/programs', [TotalProgramsController::class, 'index'])->name('programs');
+Route::get('/card_certificate', [CertificateCardController::class, 'index'])->name('card_certificate');
+Route::get('/total_card', [TotalCardController::class, 'index'])->name('total_card');
 
 
 //===============================>> Manage Resource
@@ -63,7 +76,7 @@ Route::get('/certificate-amount', [AmountCertificateController::class, 'index'])
 Route::resource('missions', ResultMissionController::class);
 
 //===============================>> Manage Result Operation
-Route::get('/', [ResultController::class, 'index'])->name('result');
+// Route::get('/', [ResultController::class, 'index'])->name('result');
 Route::get('/results', [ResultController::class, 'index'])->name('result.index');
 Route::get('/result-total', [ResultTotalController::class, 'index'])->name('result-total-table');
 Route::get('/result-total-general', [ResultGeneralController::class, 'index'])->name('result-total-general-table');

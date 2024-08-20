@@ -13,7 +13,7 @@
 
     <!-- Nav Item - Dashboard -->
     <li class="nav-item active">
-        <a class="nav-link" href="{{ route('result') }}">
+        <a class="nav-link" href="{{ route('result.index') }}">
             <span>របាយការណ៍សរុបប្រតិបត្តិការណ៍</span></a>
     </li>
 
