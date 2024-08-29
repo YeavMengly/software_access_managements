@@ -2,7 +2,6 @@
 
 @section('content-sub-account')
     <div class="border-wrapper">
-
         <div class="result-total-table-container">
             <div class="row">
                 <div class="col-lg-12 margin-tb mb-4">
@@ -14,7 +13,7 @@
                         <a class="btn btn-success" href="{{ route('sub-account.create') }}">
                             បញ្ចូលទិន្នន័យ <i class="fas fa-plus" style="margin-left: 8px;"></i>
                         </a>
-                        
+
                     </div>
 
                     <form class="max-w-md mx-auto mt-3" method="GET" action="">
@@ -81,7 +80,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach ($subAccountKeys as $subAccountKey)
+                    @forelse ($subAccountKeys as $subAccountKey)
                         <tr>
                             <td style="border: 1px solid black; text-align: center;">{{ $loop->iteration }}</td>
                             <td style="border: 1px solid black; text-align: center;">
@@ -92,12 +91,11 @@
                             </td>
                             <td style="border: 1px solid black; text-align: center;">
                                 {{ $subAccountKey->name_sub_account_key }}</td>
-                            <td
-                                style="border: 1px solid black; width: 120px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
+                            <td style="border: 1px solid black; text-align: center; justify-content: center">
                                 <form action="{{ route('sub-account.destroy', $subAccountKey->id) }}" method="POST">
-                                    <a class="btn btn-info" href="{{ route('sub-account.show', $subAccountKey->id) }}">
+                                    {{-- <a class="btn btn-info" href="{{ route('sub-account.show', $subAccountKey->id) }}">
                                         <i class="fas fa-eye"></i>
-                                    </a>
+                                    </a> --}}
                                     <a class="btn btn-primary" href="{{ route('sub-account.edit', $subAccountKey->id) }}">
                                         <i class="fas fa-pencil-alt"></i>
                                     </a>
@@ -110,17 +108,61 @@
                                 </form>
                             </td>
                         </tr>
-                    @endforeach
+                    @empty
+                        <tr>
+                            <td colspan="13" style="text-align: center;">គ្មានទិន្នន័យ</td>
+                        </tr>
+                    @endforelse
                 </tbody>
             </table>
 
-            <!-- Pagination Links -->
-            <div class="d-flex justify-content-end mt-3">
-                {{-- {{ $subAccountKeys->links() }} --}}
-            </div>
+            <!-- Custom Pagination Links -->
+            <nav aria-label="Page navigation example">
+                <ul class="pagination">
+                    @if ($subAccountKeys->onFirstPage())
+                        <li class="page-item disabled">
+                            <a class="page-link" href="#" aria-label="Previous">
+                                <span aria-hidden="true">&laquo;</span>
+                                <span class="sr-only">Previous</span>
+                            </a>
+                        </li>
+                    @else
+                        <li class="page-item">
+                            <a class="page-link" href="{{ $subAccountKeys->previousPageUrl() }}" aria-label="Previous">
+                                <span aria-hidden="true">&laquo;</span>
+                                <span class="sr-only">Previous</span>
+                            </a>
+                        </li>
+                    @endif
+
+                    @for ($i = 1; $i <= $subAccountKeys->lastPage(); $i++)
+                        <li class="page-item {{ $i == $subAccountKeys->currentPage() ? 'active' : '' }}">
+                            <a class="page-link" href="{{ $subAccountKeys->url($i) }}">{{ $i }}</a>
+                        </li>
+                    @endfor
+
+                    @if ($subAccountKeys->hasMorePages())
+                        <li class="page-item">
+                            <a class="page-link" href="{{ $subAccountKeys->nextPageUrl() }}" aria-label="Next">
+                                <span aria-hidden="true">&raquo;</span>
+                                <span class="sr-only">Next</span>
+                            </a>
+                        </li>
+                    @else
+                        <li class="page-item disabled">
+                            <a class="page-link" href="#" aria-label="Next">
+                                <span aria-hidden="true">&raquo;</span>
+                                <span class="sr-only">Next</span>
+                            </a>
+                        </li>
+                    @endif
+                </ul>
+            </nav>
+
         </div>
     </div>
 @endsection
+
 
 @section('styles')
     <style>

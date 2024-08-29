@@ -16,7 +16,6 @@
                         <a class="btn btn-success" href="{{ route('accounts.create') }}">
                             បញ្ចូលទិន្នន័យ <i class="fas fa-plus" style="margin-left: 8px;"></i>
                         </a>
-
                     </div>
 
                     <form class="max-w-md mx-auto mt-3" method="GET" action="{{ route('accounts.index') }}">
@@ -37,6 +36,7 @@
                             </div>
                         </div>
                     </form>
+
                 </div>
             </div>
 
@@ -94,20 +94,19 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach ($accountKeys as $accountKey)
+                    @forelse ($accountKeys as $accountKey)
                         <tr>
                             <td style="border: 1px solid black; text-align: center;">{{ $loop->iteration }}</td>
                             <td style="border: 1px solid black; text-align: center;">{{ $accountKey->key->code }}</td>
                             <td style="border: 1px solid black; text-align: center;">{{ $accountKey->account_key }}</td>
                             <td style="border: 1px solid black; text-align: center;">{{ $accountKey->name_account_key }}
                             </td>
-                            <td
-                                style="border: 1px solid black; width: 120px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
+                            <td style="border: 1px solid black; text-align: center; justify-content: center">
                                 <form action="{{ route('accounts.destroy', $accountKey->id) }}" method="POST">
-                                    <a class="btn btn-info" href="{{ route('accounts.show', $accountKey->id) }}"
+                                    {{-- <a class="btn btn-info" href="{{ route('accounts.show', $accountKey->id) }}"
                                         title="Show">
                                         <i class="fas fa-eye"></i>
-                                    </a>
+                                    </a> --}}
                                     <a class="btn btn-primary" href="{{ route('accounts.edit', $accountKey->id) }}"
                                         title="Edit">
                                         <i class="fas fa-edit"></i>
@@ -121,11 +120,45 @@
                                 </form>
                             </td>
                         </tr>
-                    @endforeach
+                    @empty
+                        <tr>
+                            <td colspan="13" style="text-align: center;">គ្មានទិន្នន័យ</td>
+                        </tr>
+                    @endforelse
                 </tbody>
             </table>
 
-            {{ $accountKeys->appends(request()->query())->links() }}
+            <div class="d-flex justify-content-between align-items-center mt-4">
+                <div>
+                    <!-- Custom Pagination -->
+                    <nav aria-label="Page navigation example">
+                        <ul class="pagination">
+                            <li class="page-item{{ $accountKeys->onFirstPage() ? ' disabled' : '' }}">
+                                <a class="page-link" href="{{ $accountKeys->previousPageUrl() }}" aria-label="Previous">
+                                    <span aria-hidden="true">&laquo;</span>
+                                    <span class="sr-only">Previous</span>
+                                </a>
+                            </li>
+                            @for ($i = 1; $i <= $accountKeys->lastPage(); $i++)
+                                <li class="page-item{{ $accountKeys->currentPage() == $i ? ' active' : '' }}">
+                                    <a class="page-link" href="{{ $accountKeys->url($i) }}">{{ $i }}</a>
+                                </li>
+                            @endfor
+                            <li class="page-item{{ !$accountKeys->hasMorePages() ? ' disabled' : '' }}">
+                                <a class="page-link" href="{{ $accountKeys->nextPageUrl() }}" aria-label="Next">
+                                    <span aria-hidden="true">&raquo;</span>
+                                    <span class="sr-only">Next</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+                <div>
+                    <p class="text-muted">Showing {{ $accountKeys->firstItem() }} to {{ $accountKeys->lastItem() }} of
+                        {{ $accountKeys->total() }} results</p>
+                </div>
+            </div>
+
         </div>
     </div>
 @endsection
@@ -133,10 +166,59 @@
 @section('styles')
     <style>
         .border-wrapper {
-            /* border: 2px solid black; */
             padding: 32px;
         }
 
-        
+        .pagination {
+            justify-content: flex-end;
+        }
+
+        .pagination .page-item.active .page-link {
+            background-color: #007bff;
+            border-color: #007bff;
+            color: white;
+        }
+
+        .pagination .page-item.disabled .page-link {
+            color: #6c757d;
+            pointer-events: none;
+            background-color: #fff;
+            border-color: #dee2e6;
+        }
+
+        .pagination .page-link {
+            color: #007bff;
+        }
+
+        .pagination .page-link:hover {
+            color: #0056b3;
+            text-decoration: none;
+        }
+
+        .results-info {
+            margin-left: 16px;
+            font-size: 14px;
+            color: #555;
+        }
+
+        .pagination a {
+            padding: 8px 12px;
+            border-radius: 4px;
+            margin-right: 4px;
+            border: 1px solid #ddd;
+            color: #007bff;
+            text-decoration: none;
+        }
+
+        .pagination a:hover {
+            background-color: #007bff;
+            color: white;
+        }
+
+        .pagination .active {
+            background-color: #007bff;
+            color: white;
+            border-color: #007bff;
+        }
     </style>
-    </section>
+@endsection

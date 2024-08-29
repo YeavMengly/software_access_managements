@@ -1,24 +1,22 @@
 @extends('layouts.master')
 
 @section('content-key')
-
-
     <div class="border-wrapper">
-
         <div class="result-total-table-container">
             <div class="row">
-
                 <div class="col-lg-12 margin-tb mb-4">
                     <div class="d-flex justify-content-between align-items-center">
                         <a class="btn btn-danger" href="{{ route('programs') }}">
                             <i class="fas fa-arrow-left"></i> ត្រឡប់ក្រោយ
                         </a>
-
                         <h2 style="font-weight: 700;">តារាងលេខជំពូក</h2>
-                        <a class="btn btn-success" href="{{ route('keys.create') }}">
-                            បញ្ចូលទិន្នន័យ <i class="fas fa-plus" style="margin-left: 8px;"></i>
+
+                        <a id="submit-button" class="btn btn-success" href="{{ route('keys.create') }}">
+                            បញ្ចូលទិន្ន័យ
+                            <i id="plus-icon" class="fas fa-plus" style="margin-left: 0px;"></i>
+                            <div id="loader" class="loader" style="display: none;"></div>
                         </a>
-                        
+
                     </div>
 
                     <form class="max-w-md mx-auto mt-3" method="GET" action="{{ route('keys.index') }}">
@@ -28,7 +26,6 @@
                                     <input type="search" name="search" value="{{ request('search') }}"
                                         class="form-control" placeholder="ស្វែងរកទិន្នន័យ" aria-label="Search Address">
                                     <button type="submit" class="btn btn-primary">
-                                        <!-- SVG for search icon -->
                                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
                                             viewBox="0 0 50 50">
                                             <path
@@ -84,45 +81,90 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @php
-                        $count = 1; // Initialize the count variable
-                    @endphp
-                    @foreach ($keys as $key)
+                    @if ($keys->isEmpty())
                         <tr>
-                            <td style="border: 1px solid black; text-align: center;">{{ $count }}</td>
-                            <td style="border: 1px solid black; text-align: center;">{{ $key->code }}</td>
-                            <td style="border: 1px solid black; text-align: center;">{{ $key->name }}</td>
-                            <td
-                                style="border: 1px solid black; width: 120px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
-                                <form action="{{ route('keys.destroy', $key->id) }}" method="POST">
-                                    <a class="btn btn-info" href="{{ route('keys.show', $key->id) }}">
-                                        <i class="fas fa-eye"></i>
-                                    </a>
-                                    <a class="btn btn-primary" href="{{ route('keys.edit', $key->id) }}">
-                                        <i class="fas fa-edit"></i>
-                                    </a>
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="btn btn-danger"
-                                        onclick="return confirm('Are you sure you want to delete this location?')">
-                                        <i class="fas fa-trash"></i>
-                                    </button>
-                                </form>
-                            </td>
+                            <td colspan="4" style="text-align: center; border: 1px solid black;">គ្មានទិន្នន័យ</td>
                         </tr>
+                    @else
                         @php
-                            $count++; // Increment count after each row
+                            $count = 1; // Initialize the count variable
                         @endphp
-                    @endforeach
+                        @forelse ($keys as $key)
+                            <tr>
+                                <td style="border: 1px solid black; text-align: center;">{{ $count }}</td>
+                                <td style="border: 1px solid black; text-align: center;">{{ $key->code }}</td>
+                                <td style="border: 1px solid black; text-align: center;">{{ $key->name }}</td>
+                                <td style="border: 1px solid black; text-align: center; justify-content: center">
+                                    <form action="{{ route('keys.destroy', $key->id) }}" method="POST">
+                                        {{-- <a class="btn btn-info" href="{{ route('keys.show', $key->id) }}">
+                                            <i class="fas fa-eye"></i>
+                                        </a> --}}
+                                        <a class="btn btn-primary" href="{{ route('keys.edit', $key->id) }}">
+                                            <i class="fas fa-edit"></i>
+                                        </a>
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="btn btn-danger"
+                                            onclick="return confirm('Are you sure you want to delete this location?')">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                            @php
+                                $count++; // Increment count after each row
+                            @endphp
+                        @empty
+                            <tr>
+                                <td colspan="13" style="text-align: center;">គ្មានទិន្នន័យ</td>
+                            </tr>
+                        @endforelse
+                    @endif
                 </tbody>
             </table>
 
-            <!-- Pagination links -->
-            <div class="demo">
-                <nav class="pagination-outer" aria-label="Page navigation">
-                    {{-- {{ $keys->links('vendor.pagination.custom') }} --}}
-                </nav>
-            </div>
+            <!-- Custom Pagination Links -->
+            <nav aria-label="Page navigation example">
+                <ul class="pagination">
+                    @if ($keys->onFirstPage())
+                        <li class="page-item disabled">
+                            <a class="page-link" href="#" aria-label="Previous">
+                                <span aria-hidden="true">&laquo;</span>
+                                <span class="sr-only">Previous</span>
+                            </a>
+                        </li>
+                    @else
+                        <li class="page-item">
+                            <a class="page-link" href="{{ $keys->previousPageUrl() }}" aria-label="Previous">
+                                <span aria-hidden="true">&laquo;</span>
+                                <span class="sr-only">Previous</span>
+                            </a>
+                        </li>
+                    @endif
+
+                    @for ($i = 1; $i <= $keys->lastPage(); $i++)
+                        <li class="page-item {{ $i == $keys->currentPage() ? 'active' : '' }}">
+                            <a class="page-link" href="{{ $keys->url($i) }}">{{ $i }}</a>
+                        </li>
+                    @endfor
+
+                    @if ($keys->hasMorePages())
+                        <li class="page-item">
+                            <a class="page-link" href="{{ $keys->nextPageUrl() }}" aria-label="Next">
+                                <span aria-hidden="true">&raquo;</span>
+                                <span class="sr-only">Next</span>
+                            </a>
+                        </li>
+                    @else
+                        <li class="page-item disabled">
+                            <a class="page-link" href="#" aria-label="Next">
+                                <span aria-hidden="true">&raquo;</span>
+                                <span class="sr-only">Next</span>
+                            </a>
+                        </li>
+                    @endif
+                </ul>
+            </nav>
         </div>
     </div>
 @endsection
@@ -134,112 +176,56 @@
             padding: 32px;
         }
 
-        /* .result-total-table-container {
-                                max-height: 600px;
-                               
-                                overflow-y: auto;
-                            } */
-
-        .pagination-outer {
-            text-align: center;
-        }
-
-        .pagination {
-            font-family: 'Manrope', sans-serif;
-            display: inline-flex;
+        .btn-container {
             position: relative;
+            display: inline-block;
         }
 
-        .pagination li a.page-link {
-            color: #555;
-            background: #eee;
-            font-size: 16px;
-            font-weight: 700;
-            text-align: center;
-            line-height: 32px;
-            height: 32px;
-            width: 32px;
-            padding: 0;
-            margin: 0 6px;
-            border: none;
-            border-radius: 0;
-            display: block;
+        #submit-button {
             position: relative;
-            z-index: 1;
-            transition: all 0.5s ease 0s;
+            padding-right: 50px; /* Make space for the loader */
         }
 
-        .pagination li:first-child a.page-link,
-        .pagination li:last-child a.page-link {
-            font-size: 23px;
-            line-height: 28px;
+        #plus-icon {
+            margin-left: 16px;
         }
 
-        .pagination li a.page-link:hover,
-        .pagination li a.page-link:focus,
-        .pagination li.active a.page-link:hover,
-        .pagination li.active a.page-link {
-            color: #c31db3;
-            background: transparent;
-            box-shadow: 0 0 0 1px #c31db3;
-            border-radius: 5px;
-        }
-
-        .pagination li a.page-link:before,
-        .pagination li a.page-link:after {
-            content: '';
-            background-color: #c31db3;
-            height: 10px;
-            width: 10px;
-            opacity: 0;
+        #loader {
             position: absolute;
-            left: 0;
-            top: 0;
-            z-index: -2;
-            transition: all 0.3s ease 0s;
+            top: 50%;
+            right: 10px;
+            transform: translateY(-50%);
+            width: 24px;
+            height: 24px;
+            border: 3px solid #f3f3f3; /* Light grey */
+            border-top: 3px solid #3498db; /* Blue */
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
         }
 
-        .pagination li a.page-link:after {
-            right: 0;
-            bottom: 0;
-            top: auto;
-            left: auto;
-        }
-
-        .pagination li a.page-link:hover:before,
-        .pagination li a.page-link:focus:before,
-        .pagination li.active a.page-link:hover:before,
-        .pagination li.active a.page-link:before,
-        .pagination li a.page-link:hover:after,
-        .pagination li a.page-link:focus:after,
-        .pagination li.active a.page-link:hover:after,
-        .pagination li.active a.page-link:after {
-            opacity: 1;
-        }
-
-        .pagination li a.page-link:hover:before,
-        .pagination li a.page-link:focus:before,
-        .pagination li.active a.page-link:hover:before,
-        .pagination li.active a.page-link:before {
-            left: -3px;
-            top: -3px;
-        }
-
-        .pagination li a.page-link:hover:after,
-        .pagination li a.page-link:focus:after,
-        .pagination li.active a.page-link:hover:after,
-        .pagination li.active a.page-link:after {
-            right: -3px;
-            bottom: -3px;
-        }
-
-        @media only screen and (max-width: 767px) {
-
-            .pagination li:first-child a.page-link,
-            .pagination li:last-child a.page-link {
-                font-size: 16px;
-                line-height: 28px;
-            }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
     </style>
+@endsection
+
+@section('scripts')
+<script>
+    document.getElementById('submit-button').addEventListener('click', function() {
+        var loader = document.getElementById('loader');
+        var plusIcon = document.getElementById('plus-icon');
+
+        // Show loader and hide plus icon
+        loader.style.display = 'inline-block';
+        plusIcon.style.display = 'none';
+
+        // Simulate form submission delay
+        setTimeout(function() {
+            // Hide loader and show plus icon again
+            loader.style.display = 'none';
+            plusIcon.style.display = 'inline-block';
+        }, 2000); // Change 2000 to match your form submission time
+    });
+</script>
 @endsection

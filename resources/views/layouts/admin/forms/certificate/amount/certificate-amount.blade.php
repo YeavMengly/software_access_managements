@@ -1,12 +1,12 @@
 @extends('layouts.master')
 
 @section('content-certificate-amount')
-    <div class="row mt-4 ml-2">
+    <div class="row mt-4 ml-4">
         <div class="col-lg-12 margin-tb mb-4">
-
             <div class="d-flex justify-content-between align-items-center">
-                <a class="btn btn-danger" href="{{ url('/card_certificate') }}"> <i class="fas fa-arrow-left"></i>
-                    ត្រឡប់ក្រោយ</a>
+                <a class="btn btn-danger" href="{{ url('/card_certificate') }}">
+                    <i class="fas fa-arrow-left"></i> ត្រឡប់ក្រោយ
+                </a>
             </div>
             <form class="max-w-md mx-auto mt-3" method="GET" action="{{ route('certificate-amount') }}">
                 <div class="row">
@@ -35,49 +35,66 @@
         </div>
     @endif
 
-    <div class="border-wrapper">
+    <div class="border-wrapper ml-4 mr-4">
         <div class="result-total-table-container">
             <h3>តារាងទិន្នន័យសលាកបត្រសរុប</h3>
             <div class="table-container">
                 <table class="table table-striped table-hover">
                     <thead>
                         <tr>
-                            <th style="border: 1px solid black; font-size: 14px; max-width: 120px;">លេខរៀង</th>
-                            <th style="border: 1px solid black; font-size: 14px; max-width: 120px;">
+                            <th style="border: 1px solid black; font-size: 14px;">លេខរៀង</th>
+                            <th style="border: 1px solid black; font-size: 14px;">
                                 <a
                                     href="{{ route('certificate-amount', ['sort_field' => 'report_key', 'sort_direction' => request('sort_direction') === 'asc' ? 'desc' : 'asc']) }}">
                                     លេខសម្គាល់កម្មវិធី
                                 </a>
                             </th>
-                            <th style="border: 1px solid black; font-size: 14px; max-width:260px;">ឈ្មោះសលាកបត្រ</th>
-                            <th style="border: 1px solid black; font-size: 14px; max-width:260px;">ចំនួនទឹកប្រាក់</th>
+                            <th style="border: 1px solid black; font-size: 14px;">ឈ្មោះសលាកបត្រ</th>
+                            <th style="border: 1px solid black; font-size: 14px;">ចំនួនទឹកប្រាក់</th>
                         </tr>
                     </thead>
                     <tbody>
                         @foreach ($certificatesData as $certificateData)
                             <tr>
+                                <td style="border: 1px solid black; text-align: center;">{{ $loop->iteration }}</td>
                                 <td style="border: 1px solid black; text-align: center;">
-                                    {{ $loop->iteration }}</td>
-                                <td style="border: 1px solid black; text-align: center;">
-                                    {{ $certificateData->report->subAccountKey->accountKey->key->code }} >
-                                    {{ $certificateData->report->subAccountKey->accountKey->account_key }} >
-                                    {{ $certificateData->report->subAccountKey ? $certificateData->report->subAccountKey->sub_account_key : 'N/A' }}>
+                                    {{ $certificateData->report && $certificateData->report->subAccountKey ? $certificateData->report->subAccountKey->accountKey->key->code : 'N/A' }}
+                                    >
+                                    {{ $certificateData->report && $certificateData->report->subAccountKey ? $certificateData->report->subAccountKey->accountKey->account_key : 'N/A' }}
+                                    >
+                                    {{ $certificateData->report && $certificateData->report->subAccountKey ? $certificateData->report->subAccountKey->sub_account_key : 'N/A' }}
+                                    >
                                     {{ $certificateData->report ? $certificateData->report->report_key : 'N/A' }}
                                 </td>
                                 <td style="border: 1px solid black; text-align: center;">
-                                    {{ $certificateData->certificate ? $certificateData->certificate->name_certificate : 'N/A' }}
+                                    {{ $certificateData->certificate->name_certificate ?? 'N/A' }}
                                 </td>
                                 <td style="border: 1px solid black; text-align: center;">
                                     {{ number_format($certificateData->value_certificate, 0, ' ', ' ') }}
                                 </td>
                             </tr>
                         @endforeach
+                        
 
-                        @foreach ($totals['total_amount_by_group'] as $groupKey => $subAccountTotals)
+                        {{-- Sum Report-Key --}}
+                        @foreach ($totals['total_amount_by_report_key'] as $reportKey => $total)
+                            <tr>
+                                <td colspan="3" style="border: 1px solid black; text-align: center;">
+                                    <strong>សរុប</strong>: ការរាយការណ៍ ({{ $reportKey }})
+                                </td>
+                                <td style="border: 1px solid black; text-align: center;">
+                                    {{ number_format($total, 0, ' ', ' ') }}
+                                </td>
+                            </tr>
+                        @endforeach
+
+
+                        {{-- Sum Sub-Account-Key --}}
+                        @foreach ($totals['total_amount_by_group'] as $groupSubAccountKey => $subAccountTotals)
                             @foreach ($subAccountTotals as $subAccountKey => $total)
                                 <tr>
                                     <td colspan="3" style="border: 1px solid black; text-align: center;">
-                                        <strong>សរុប</strong> ({{ $groupKey }} - {{ $subAccountKey }})
+                                        <strong>សរុប</strong> អនុគណនី({{ $groupSubAccountKey }} - {{ $subAccountKey }})
                                     </td>
                                     <td style="border: 1px solid black; text-align: center;">
                                         {{ number_format($total, 0, ' ', ' ') }}
@@ -86,6 +103,33 @@
                             @endforeach
                         @endforeach
 
+                        {{-- Sum Account-Key --}}
+                        @foreach ($totals['total_amount_by_account_key'] as $groupAccountKey => $accountTotals)
+                            @foreach ($accountTotals as $accountKey => $total)
+                                <tr>
+                                    <td colspan="3" style="border: 1px solid black; text-align: center;">
+                                        <strong>សរុប</strong> គណនី({{ $groupAccountKey }} - {{ $accountKey }})
+                                    </td>
+                                    <td style="border: 1px solid black; text-align: center;">
+                                        {{ number_format($total, 0, ' ', ' ') }}
+                                    </td>
+                                </tr>
+                            @endforeach
+                        @endforeach
+
+                        {{-- Sum Key --}}
+                        @foreach ($totals['total_amount_by_key'] as $key => $total)
+                            <tr>
+                                <td colspan="3" style="border: 1px solid black; text-align: center;">
+                                    <strong>សរុប</strong>: ជំពូក{{ $key }}
+                                </td>
+                                <td style="border: 1px solid black; text-align: center;">
+                                    {{ number_format($total, 0, ' ', ' ') }}
+                                </td>
+                            </tr>
+                        @endforeach
+
+                        {{-- Sum Total --}}
                         <tr>
                             <td colspan="3" style="border: 1px solid black; text-align: center;">
                                 <strong>សរុបទាំងអស់</strong>
@@ -99,8 +143,6 @@
             </div>
         </div>
     </div>
-
-    {{-- {{ $certificatesData->appends(request()->query())->links() }} --}}
 @endsection
 
 @section('styles')
@@ -111,8 +153,7 @@
         }
 
         .result-total-table-container {
-            max-height: 100vh;
-            overflow-y: auto;
+            margin-top: 20px;
         }
 
         .table-container {
@@ -156,5 +197,41 @@
                 }
             });
         }
+    </script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const fullscreenButton = document.getElementById('fullscreen-btn');
+            const container = document.querySelector('.fullscreen-container');
+
+            function toggleFullscreen() {
+                if (document.fullscreenElement) {
+                    document.exitFullscreen();
+                } else {
+                    document.documentElement.requestFullscreen();
+                }
+            }
+
+            function updateButtonIcon() {
+                if (document.fullscreenElement) {
+                    fullscreenButton.innerHTML = '<i class="fas fa-compress"></i>'; // Zoom Out icon
+                } else {
+                    fullscreenButton.innerHTML = '<i class="fas fa-expand"></i>'; // Zoom In icon
+                }
+            }
+
+            fullscreenButton.addEventListener('click', function() {
+                toggleFullscreen();
+            });
+
+            // Listen for fullscreen change events to update the button icon
+            document.addEventListener('fullscreenchange', updateButtonIcon);
+            document.addEventListener('webkitfullscreenchange', updateButtonIcon);
+            document.addEventListener('mozfullscreenchange', updateButtonIcon);
+            document.addEventListener('MSFullscreenChange', updateButtonIcon);
+
+            // Set initial icon based on fullscreen state
+            updateButtonIcon();
+        });
     </script>
 @endsection

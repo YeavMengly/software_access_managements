@@ -31,8 +31,7 @@ class AmountCertificateController extends Controller
             }, function ($query) use ($sortField, $sortDirection) {
                 // Default sorting
                 return $query->orderBy($sortField, $sortDirection);
-            })
-            ->paginate(10);
+            })->paginate(10);
 
         // Calculate totals
         $totals = $this->calculateTotals($certificatesData);
@@ -46,37 +45,77 @@ class AmountCertificateController extends Controller
     // Funtion calculateTotals 
     private function calculateTotals($certificatesData)
     {
-        // initialize
+        // Initialize totals
         $totalAmountByGroup = [];
+        $totalAmountByKey = [];
+        $totalAmountByAccountKey = [];
+        $totalAmountByReportKey = []; // New array for totals by report_key
         $totalAmountOverall = 0;
 
-        // use foeach loop 
+        // Loop through each certificate data entry
         foreach ($certificatesData as $certificateData) {
-            $code = $certificateData->report->subAccountKey->accountKey->key->code;
-            $accountKey = $certificateData->report->subAccountKey->accountKey->account_key;
-            $subAccountKey = $certificateData->report->subAccountKey->sub_account_key;
+            // Safely access related models using optional()
+            $report = optional($certificateData->report);
+            $subAccountKey = optional($report->subAccountKey);
+            $accountKey = optional($subAccountKey->accountKey);
 
-            // Define a unique key for grouping by code and account_key
-            $groupKey = $code . '-' . $accountKey;
+            // Safely extract values or default to 'N/A'
+            $code = optional($accountKey->key)->code ?? 'N/A';
+            $accountKeyValue = $accountKey->account_key ?? 'N/A';
+            $subAccountKeyValue = $subAccountKey->sub_account_key ?? 'N/A';
+            $reportKey = $report->report_key ?? 'N/A'; // Extract the report_key
+
+            // Define unique keys for grouping
+            $groupAccountKey = $code;
+            $groupSubAccountKey = $code . '-' . $accountKeyValue;
 
             // Initialize the group if not already present
-            if (!isset($totalAmountByGroup[$groupKey])) {
-                $totalAmountByGroup[$groupKey] = [];
+            if (!isset($totalAmountByGroup[$groupSubAccountKey])) {
+                $totalAmountByGroup[$groupSubAccountKey] = [];
+            }
+
+            // Initialize the total for this key if not already set
+            if (!isset($totalAmountByKey[$code])) {
+                $totalAmountByKey[$code] = 0;
+            }
+
+            // Initialize the total for this accountKey if not already set
+            if (!isset($totalAmountByAccountKey[$groupAccountKey][$accountKeyValue])) {
+                $totalAmountByAccountKey[$groupAccountKey][$accountKeyValue] = 0;
+            }
+
+            // Initialize the total for this report_key if not already set
+            if (!isset($totalAmountByReportKey[$reportKey])) {
+                $totalAmountByReportKey[$reportKey] = 0;
             }
 
             // Sum the value_certificate for this sub_account_key within the group
-            if (!isset($totalAmountByGroup[$groupKey][$subAccountKey])) {
-                $totalAmountByGroup[$groupKey][$subAccountKey] = 0;
+            if (!isset($totalAmountByGroup[$groupSubAccountKey][$subAccountKeyValue])) {
+                $totalAmountByGroup[$groupSubAccountKey][$subAccountKeyValue] = 0;
             }
 
-            $totalAmountByGroup[$groupKey][$subAccountKey] += $certificateData->value_certificate;
+            // Add the value_certificate to the total for this key
+            $totalAmountByKey[$code] += $certificateData->value_certificate;
+
+            // Add the value_certificate to the total for this accountKey
+            $totalAmountByAccountKey[$groupAccountKey][$accountKeyValue] += $certificateData->value_certificate;
+
+            // Add the value_certificate to the total for this sub_account_key within the group
+            $totalAmountByGroup[$groupSubAccountKey][$subAccountKeyValue] += $certificateData->value_certificate;
+
+            // Add the value_certificate to the total for this report_key
+            $totalAmountByReportKey[$reportKey] += $certificateData->value_certificate;
 
             // Add to overall total
             $totalAmountOverall += $certificateData->value_certificate;
         }
 
+        // Return the calculated totals after the loop
         return [
+            'total_amount_by_key' => $totalAmountByKey,
+            'total_amount_by_account_key' => $totalAmountByAccountKey,
             'total_amount_by_group' => $totalAmountByGroup,
+            'total_amount_by_report_key' => $totalAmountByReportKey, // Include the new total
             'total_amount_overall' => $totalAmountOverall,
         ];
     }

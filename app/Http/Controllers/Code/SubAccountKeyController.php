@@ -47,7 +47,7 @@ class SubAccountKeyController extends Controller
             $query->orderBy('sub_account_keys.sub_account_key', $direction);
         }
 
-        $subAccountKeys = $query->paginate(); // Adjust pagination as needed
+        $subAccountKeys = $query->paginate(10); // Adjust pagination as needed
 
         return view('layouts.admin.forms.sub_accounts.sub-account-index', compact('subAccountKeys'));
     }
@@ -63,16 +63,6 @@ class SubAccountKeyController extends Controller
         return view('layouts.admin.forms.sub_accounts.sub-account-create', compact('accountKeys', 'subAccountKeys'));
     }
 
-
-    public function show($id)
-    {
-        $subAccountKey = SubAccountKey::with('accountKey.key')->findOrFail($id);
-
-        return view('layouts.admin.forms.sub_accounts.sub-account-show', compact('subAccountKey'));
-    }
-
-
-
     public function store(Request $request)
     {
         $request->validate([
@@ -80,30 +70,36 @@ class SubAccountKeyController extends Controller
             'sub_account_key' => 'required',
             'name_sub_account_key' => 'required'
         ]);
-    
+
         // Check if the combination of account_key_id and sub_account_key already exists
         $existingRecord = SubAccountKey::where('account_key', $request->input('account_key'))
-                                       ->where('sub_account_key', $request->input('sub_account_key'))
-                                       ->first();
-    
+            ->where('sub_account_key', $request->input('sub_account_key'))
+            ->first();
+
         if ($existingRecord) {
             // If the combination exists, return with an error message
             return redirect()->back()->withErrors([
                 'sub_account_key' => 'The combination of Account Key and Sub-Account Key already exists.'
             ])->withInput();
         }
-    
+
         // Create the new record if the combination is unique
         SubAccountKey::create([
             'account_key' => $request->input('account_key'),
             'sub_account_key' => $request->input('sub_account_key'),
             'name_sub_account_key' => $request->input('name_sub_account_key')
         ]);
-    
+
         return redirect()->route('sub-account.index')->with('success', 'លេខអនុគណនីបានបង្កើតដោយជោគជ័យ។');
     }
-    
 
+    public function show($id)
+    {
+        $subAccountKey = SubAccountKey::with('accountKey.key')->findOrFail($id);
+
+        return view('layouts.admin.forms.sub_accounts.sub-account-show', compact('subAccountKey'));
+    }
+    
     public function edit($id)
     {
         $subAccountKey = SubAccountKey::findOrFail($id);
@@ -119,6 +115,19 @@ class SubAccountKeyController extends Controller
             'sub_account_key' => 'required',
             'name_sub_account_key' => 'required'
         ]);
+
+        // Check if the combination of account_key_id and sub_account_key already exists
+        $existingRecord = SubAccountKey::where('account_key', $request->input('account_key'))
+            ->where('sub_account_key', $request->input('sub_account_key'))
+            ->where('id', '<>', $id) // Exclude the current record
+            ->first();
+
+        if ($existingRecord) {
+            // If the combination exists, return with an error message
+            return redirect()->back()->withErrors([
+                'sub_account_key' => 'The combination of Account Key and Sub-Account Key already exists.'
+            ])->withInput();
+        }
 
         $subAccountKey = SubAccountKey::findOrFail($id);
         $subAccountKey->update([

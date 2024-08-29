@@ -1,20 +1,19 @@
 @extends('layouts.master')
 
 @section('result')
-    <div class="border-wrapper">
+    <div class="row mt-4 mr-4 ml-2">
+        <div class="col-lg-12 margin-tb mb-4">
+            <div class="d-flex justify-content-between align-items-center">
+                <a class="btn btn-danger" href="{{ url('/') }}"> <i class="fas fa-arrow-left"></i>
+                    ត្រឡប់ក្រោយ</a>
+            </div>
+        </div>
+    </div>
+    <div class="border-wrapper mt-4 mr-4 ml-4">
         <div class="container-fluid">
 
-            <div class="row">
-                <div class="col-lg-12 margin-tb mb-4">
-                    <div class="d-flex justify-content-between align-items-center">
-                        <a class="btn btn-danger" href="{{ url('/') }}"> <i class="fas fa-arrow-left"></i>
-                            ត្រឡប់ក្រោយ</a>
-                    </div>
-                </div>
-            </div>
-
             {{--                    Start Form Search                      --}}
-            <form id="filterForm" class="max-w-md mx-auto mt-3" method="GET" action="{{ route('result.index') }}">
+            <form id="filterForm" class="max-w-md mx-auto mt-3" method="GET" action="{{ route('result.index') }}" onsubmit="return validateDateField()">
                 <div class="row mb-3">
 
                     {{-- Filter Code --}}
@@ -43,9 +42,10 @@
 
                     {{-- Filter Date --}}
                     <div class="col-md-3">
-                        <input type="date" name="date" id="date" value="{{ request('date') }}"
-                            class="form-control" placeholder="Filter by Date (MM/DD/YYYY)">
+                        <input type="date" name="date" value="{{ request('date') }}"
+                            class="form-control mb-2" placeholder="Date (YYYY-MM-DD or YYYY-MM-DD - YYYY-MM-DD)">
                     </div>
+  
 
                     {{--        Start btn search and reset       --}}
                     <div class="col-md-12">
@@ -121,52 +121,50 @@
                                     $previousKeyCode = $previousAccountKeyCode = $previousSubAccountKeyCode = $previousReportKeyCode = null;
                                 @endphp
                                 {{-- start import data --}}
-                                @foreach ($reports as $report)
+                                @forelse ($results as $result)
                                     @php
-                                        $currentKeyCode = $report->subAccountKey->accountKey->key->code;
-                                        $currentAccountKeyCode = $report->subAccountKey->accountKey->account_key;
-                                        $currentSubAccountKeyCode = $report->subAccountKey->sub_account_key;
-                                        $currentReportKey = $report->report_key;
+                                        $currentKeyCode = $result->subAccountKey->accountKey->key->code;
+                                        $currentAccountKeyCode = $result->subAccountKey->accountKey->account_key;
+                                        $currentSubAccountKeyCode = $result->subAccountKey->sub_account_key;
+                                        $currentReportKey = $result->report_key;
                                     @endphp
                                     <tr>
                                         <td class="filterable" data-filter="6001">{{ $loop->iteration }}</td>
                                         <td class="filterable"
-                                            data-filter="{{ $report->subAccountKey->accountKey->key->code }}">
-                                            {{ $report->subAccountKey->accountKey->key->code }}
+                                            data-filter="{{ $result->subAccountKey->accountKey->key->code }}">
+                                            {{ $result->subAccountKey->accountKey->key->code }}
                                         </td>
                                         <td class="filterable"
-                                            data-filter="{{ $report->subAccountKey->accountKey->account_key }}">
-                                            {{ $report->subAccountKey->accountKey->account_key }}
+                                            data-filter="{{ $result->subAccountKey->accountKey->account_key }}">
+                                            {{ $result->subAccountKey->accountKey->account_key }}
                                         </td>
-                                        <td class="filterable" data-filter="{{ $report->subAccountKey->sub_account_key }}">
-                                            {{ $report->subAccountKey->sub_account_key }}
+                                        <td class="filterable" data-filter="{{ $result->subAccountKey->sub_account_key }}">
+                                            {{ $result->subAccountKey->sub_account_key }}
                                         </td>
-                                        <td class="filterable" data-filter="{{ $report->report_key }}">
-                                            {{ $report->report_key }}
+                                        <td class="filterable" data-filter="{{ $result->report_key }}">
+                                            {{ $result->report_key }}
                                         </td>
                                         <td
                                             style="border: 1px solid black; max-width: 200px; text-align: center; overflow-y: auto; white-space: nowrap;">
-                                            {{ $report->name_report_key }}
+                                            {{ $result->name_report_key }}
                                         </td>
-                                        <td>{{ number_format($report->fin_law, 0, ' ', ' ') }}</td>
-                                        <td>{{ number_format($report->current_loan, 0, ' ', ' ') }}</td>
-                                        <td>{{ number_format($report->internal_increase, 0, ' ', ' ') }}</td>
-                                        <td>{{ number_format($report->unexpected_increase, 0, ' ', ' ') }}</td>
-                                        <td>{{ number_format($report->additional_increase, 0, ' ', ' ') }}</td>
-                                        <td>{{ number_format($report->total_increase, 0, ' ', ' ') }}</td>
-                                        <td>{{ number_format($report->decrease, 0, ' ', ' ') }}</td>
-                                        <td>{{ number_format($report->editorial, 0, ' ', ' ') }}</td>
-                                        <td>{{ number_format($report->new_credit_status, 0, ' ', ' ') }}</td>
-                                        <td>{{ number_format($report->early_balance, 0, ' ', ' ') }}</td>
-                                        <td>{{ number_format($report->apply, 0, ' ', ' ') }}</td>
-                                        <td>{{ number_format($report->deadline_balance, 0, ' ', ' ') }}</td>
-                                        <td>{{ number_format($report->credit, 0, ' ', ' ') }}</td>
-                                        {{-- <td>{{ $report->law_average }}</td>
-                                <td>{{ $report->law_correction }}</td> --}}
+                                        <td>{{ number_format($result->fin_law, 0, ' ', ' ') }}</td>
+                                        <td>{{ number_format($result->current_loan, 0, ' ', ' ') }}</td>
+                                        <td>{{ number_format($result->internal_increase, 0, ' ', ' ') }}</td>
+                                        <td>{{ number_format($result->unexpected_increase, 0, ' ', ' ') }}</td>
+                                        <td>{{ number_format($result->additional_increase, 0, ' ', ' ') }}</td>
+                                        <td>{{ number_format($result->total_increase, 0, ' ', ' ') }}</td>
+                                        <td>{{ number_format($result->decrease, 0, ' ', ' ') }}</td>
+                                        <td>{{ number_format($result->editorial, 0, ' ', ' ') }}</td>
+                                        <td>{{ number_format($result->new_credit_status, 0, ' ', ' ') }}</td>
+                                        <td>{{ number_format($result->early_balance, 0, ' ', ' ') }}</td>
+                                        <td>{{ number_format($result->apply, 0, ' ', ' ') }}</td>
+                                        <td>{{ number_format($result->deadline_balance, 0, ' ', ' ') }}</td>
+                                        <td>{{ number_format($result->credit, 0, ' ', ' ') }}</td>
                                         <td style="border: 1px solid black; text-align: center">
-                                            {{ ($report->earlyBalance + $report->apply) / $report->fin_law }}%</td>
+                                            {{ $result->law_average }}%</td>
                                         <td style="border: 1px solid black; text-align: center">
-                                            {{ $report->law_correction }}%
+                                            {{ $result->law_correction }}%
                                         </td>
                                     </tr>
                                     @php
@@ -175,7 +173,53 @@
                                         $previousSubAccountKeyCode = $currentSubAccountKeyCode;
                                         $previousReportKeyCode = $currentReportKey;
                                     @endphp
-                                @endforeach
+                                @empty
+                                    <tr>
+                                        <td colspan="21" style="text-align: center;">គ្មានទិន្នន័យ</td>
+                                    </tr>
+                                @endforelse
+
+                                {{--                  Total                  --}}
+                                <tr>
+                                    <td colspan="6" style="border: 1px solid black; text-align: center;">
+                                        <strong>សរុប</strong>: ការរាយការណ៍
+                                    </td>
+                                    <td colspan="1" style="border: 1px solid black; text-align: center; color: red">
+                                        {{ number_format($totals['fin_law'], 0, ' ', ' ') }}</td>
+                                    <td colspan="1" style="border: 1px solid black; text-align: center;">
+                                        {{ number_format($totals['current_loan'], 0, ' ', ' ') }}</td>
+                                    <td colspan="1" style="border: 1px solid black; text-align: center;">
+                                        {{ number_format($totals['internal_increase'], 0, ' ', ' ') }}</td>
+                                    <td colspan="1" style="border: 1px solid black; text-align: center;">
+                                        {{ number_format($totals['unexpected_increase'], 0, ' ', ' ') }}
+                                    </td>
+                                    <td colspan="1" style="border: 1px solid black; text-align: center;">
+                                        {{ number_format($totals['additional_increase'], 0, ' ', ' ') }} </td>
+                                    <td colspan="1" style="border: 1px solid black; text-align: center;">
+                                        {{ number_format($totals['total_increase'], 0, ' ', ' ') }} </td>
+                                    <td colspan="1" style="border: 1px solid black; text-align: center;">
+                                        {{ number_format($totals['decrease'], 0, ' ', ' ') }} </td>
+                                    <td colspan="1" style="border: 1px solid black; text-align: center;">
+                                        {{ number_format($totals['editorial'], 0, ' ', ' ') }}
+                                    </td>
+                                    <td colspan="1" style="border: 1px solid black; text-align: center;">
+                                        {{ number_format($totals['new_credit_status'], 0, ' ', ' ') }}
+                                    </td>
+                                    <td colspan="1" style="border: 1px solid black; text-align: center;">
+                                        {{ number_format($totals['early_balance'], 0, ' ', ' ') }}
+                                    </td>
+                                    <td colspan="1" style="border: 1px solid black; text-align: center;">
+                                        {{ number_format($totals['apply'], 0, ' ', ' ') }} </td>
+                                    <td colspan="1" style="border: 1px solid black; text-align: center;">
+                                        {{ number_format($totals['deadline_balance'], 0, ' ', ' ') }} </td>
+                                    <td colspan="1" style="border: 1px solid black; text-align: center;">
+                                        {{ number_format($totals['credit'], 0, ' ', ' ') }} </td>
+                                    <td colspan="1" style="border: 1px solid black; text-align: center;">
+                                        {{ $totals['law_average'] }}% </td>
+                                    <td colspan="1" style="border: 1px solid black; text-align: center;">
+                                        {{ $totals['law_correction'] }}% </td>
+                                </tr>
+
                                 {{-- End import data --}}
                             </tbody>
                         </table>
@@ -185,10 +229,11 @@
                 </div>
 
                 {{--        Start action btn export and print        --}}
-                <div class="d-flex justify-content-end mt-3">
-                    <a href="{{ route('result.export') }}" class="btn btn-danger btn-width mr-2">Export</a>
-                    <a href="{{ route('result.exportPdf') }}" class="btn btn-primary btn-width mr-2">Print</a>
+                <div class="d-flex justify-content-end mt-3 mb-3 mr-2">
+                    <a href="{{ route('result.export', request()->query()) }}" class="btn btn-danger btn-width mr-2">Export</a>
+                    <a href="{{ route('result.exportPdf', request()->query()) }}" class="btn btn-primary btn-width mr-2">Print</a>
                 </div>
+                
                 {{--        Start action btn export and print        --}}
 
             </div>
@@ -203,9 +248,13 @@
 
         }
 
+        .result-total-table-container {
+            padding: 16px;
+        }
+
         .container-fluid {
             padding: 16px;
-            max-height: 100vh;
+            /* max-height: 100vh; */
         }
 
         .table-container {
@@ -280,4 +329,26 @@
         });
     </script>
     {{--            End action for btn reset                --}}
+
+    <script>
+        function validateDateField() {
+            const dateField = document.getElementById('dateField').value;
+            const codeId = document.querySelector('input[name="code_id"]').value;
+            const accountKeyId = document.querySelector('input[name="account_key_id"]').value;
+            const subAccountKeyId = document.querySelector('input[name="sub_account_key_id"]').value;
+            const reportKey = document.querySelector('input[name="report_key"]').value;
+    
+            // If any of the fields are filled and date is empty, prevent form submission
+            if ((codeId || accountKeyId || subAccountKeyId || reportKey) && !dateField) {
+                alert('Please provide a date when applying any of the filters.');
+                return false;
+            }
+    
+            return true;
+        }
+    
+        function resetForm() {
+            document.getElementById('filterForm').reset();
+        }
+    </script>
 @endsection

@@ -1,4 +1,4 @@
-<nav class="navbar sticky navbar-expand navbar-light bg-white topbar static-top shadow ", style="height: 90px">
+<nav class="navbar d-flex sticky navbar-expand navbar-light bg-white topbar static-top shadow ", style="height: 90px;">
 
 
     <!-- Sidebar Toggle (Topbar) -->
@@ -57,6 +57,13 @@
                 </form>
             </div>
         </li>
+
+        <!-- Centered Fullscreen Button -->
+        <a id="fullscreen-btn" class="btn btn-dark d-flex justify-content-center align-items-center mr-2 mt-2"
+            style="height: 50px; width: 50px;">
+            <i class="fas fa-expand"></i>
+        </a>
+
 
         <li class="nav-item dropdown no-arrow mx-1">
             <a class="nav-link dropdown-toggle" href="#" id="alertsDropdown" role="button" data-toggle="dropdown"
@@ -182,3 +189,4 @@
     </ul>
 
 </nav>
+

@@ -1,7 +1,7 @@
 @extends('layouts.master')
 
 @section('content-certificate')
-    <div class="row  mt-4 ml-2 mr-4">
+    <div class="row  mt-4 ml-4 mr-4">
         <div class="col-lg-12 margin-tb mb-4">
 
             <div class="d-flex justify-content-between align-items-center mb-4">
@@ -10,8 +10,13 @@
             </div>
 
             <div class="d-flex justify-content-between align-items-center">
-                <h2 style="font-weight: 700;">តារាងទិន្នន័យសលាកបត្រ</h2>
-                <a class="btn btn-success" href="{{ route('certificate.create') }}">បញ្ចូលទិន្នន័យ</a>
+                <h2 style="font-weight: 700;">តារាងឈ្មោះសលាកបត្រ</h2>
+                <div class="btn-container">
+                    <a id="submit-button" class="btn btn-success" href="{{ route('certificate.create') }}">
+                        បញ្ចូលទិន្នន័យ
+                    </a>
+                    <div id="loader" class="loader m-2"></div>
+                </div>
             </div>
 
             <form class="max-w-md mx-auto mt-3" method="GET" action="">
@@ -34,50 +39,149 @@
         </div>
     </div>
 
-    @if ($message)
-        <div class="alert alert-info alert-dismissible fade show" role="alert">
+    @if ($message = Session::get('success'))
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
             <p>{{ $message }}</p>
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
     @endif
 
-    @if ($certificates->count() > 0)
-        <table class="table table-striped table-hover">
-            <thead>
-                <tr>
-                    <th style="border: 1px solid black; font-size: 14px; width: 180px;">លេខរៀង</th>
-                    <th style="border: 1px solid black; font-size: 14px; width:260px;">ឈ្មោះសលាកបត្រ</th>
-                    <th style="border: 1px solid black;" width="200px">សកម្មភាព</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach ($certificates as $certificate)
+    {{-- @if ($certificates->count() > 0) --}}
+    <div class="border-wrapper ml-4 mr-4">
+        <div class="result-total-table-container">
+            <table class="table table-striped table-hover">
+                <thead>
                     <tr>
-                        <td style="border: 1px solid black; text-align: center;">{{ $loop->iteration }}</td>
-                        <td style="border: 1px solid black; text-align: center;">{{ $certificate->name_certificate }}</td>
-                        <td style="border: 1px solid black; text-align: center;">
-                            <form id="delete-form-{{ $certificate->id }}"
-                                action="{{ route('certificate.destroy', $certificate->id) }}" method="POST"
-                                style="display: none;">
-                                @csrf
-                                @method('DELETE')
-                            </form>
-                            <a class="btn btn-info" href="{{ route('certificate.show', $certificate->id) }}">
-                                <i class="fas fa-eye"></i>
-                            </a>
-                            <a class="btn btn-primary" href="{{ route('certificate.edit', $certificate->id) }}">
-                                <i class="fas fa-edit"></i>
-                            </a>
-                            <button type="button" class="btn btn-danger" onclick="confirmDelete({{ $certificate->id }})">
-                                <i class="fas fa-trash"></i>
-                            </button>
-                        </td>
+                        <th style="border: 1px solid black; font-size: 14px; width: 180px;">លេខរៀង</th>
+                        <th style="border: 1px solid black; font-size: 14px; width:260px;">ឈ្មោះសលាកបត្រ</th>
+                        <th style="border: 1px solid black;" width="200px">សកម្មភាព</th>
                     </tr>
-                @endforeach
-            </tbody>
-        </table>
-        {{-- {{ $certificates->appends(request()->query())->links() }} --}}
-    @endif
+                </thead>
+                <tbody>
+                    @forelse ($certificates as $certificate)
+                        <tr>
+                            <td style="border: 1px solid black; text-align: center;">{{ $loop->iteration }}</td>
+                            <td style="border: 1px solid black; text-align: center;">
+                                {{ $certificate->name_certificate }}</td>
+                            <td style="border: 1px solid black; text-align: center; justify-content: center;">
+                                <form id="delete-form-{{ $certificate->id }}"
+                                    action="{{ route('certificate.destroy', $certificate->id) }}" method="POST"
+                                    style="display: none;">
+                                    @csrf
+                                    @method('DELETE')
+                                </form>
+                                {{-- <a class="btn btn-info" href="{{ route('certificate.show', $certificate->id) }}">
+                                <i class="fas fa-eye"></i>
+                            </a> --}}
+                                <a class="btn btn-primary" href="{{ route('certificate.edit', $certificate->id) }}">
+                                    <i class="fas fa-edit"></i>
+                                </a>
+                                <button type="button" class="btn btn-danger"
+                                    onclick="confirmDelete({{ $certificate->id }})">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    @empty
+                        <tr>
+                            <td colspan="13" style="text-align: center;">គ្មានទិន្នន័យ</td>
+                        </tr>
+                    @endforelse
+                </tbody>
+            </table>
+
+            <!-- Custom Pagination Links -->
+            <nav aria-label="Page navigation example">
+                <ul class="pagination">
+                    @if ($certificates->onFirstPage())
+                        <li class="page-item disabled">
+                            <a class="page-link" href="#" aria-label="Previous">
+                                <span aria-hidden="true">&laquo;</span>
+                                <span class="sr-only">Previous</span>
+                            </a>
+                        </li>
+                    @else
+                        <li class="page-item">
+                            <a class="page-link" href="{{ $certificates->previousPageUrl() }}" aria-label="Previous">
+                                <span aria-hidden="true">&laquo;</span>
+                                <span class="sr-only">Previous</span>
+                            </a>
+                        </li>
+                    @endif
+
+                    @for ($i = 1; $i <= $certificates->lastPage(); $i++)
+                        <li class="page-item {{ $i == $certificates->currentPage() ? 'active' : '' }}">
+                            <a class="page-link" href="{{ $certificates->url($i) }}">{{ $i }}</a>
+                        </li>
+                    @endfor
+
+                    @if ($certificates->hasMorePages())
+                        <li class="page-item">
+                            <a class="page-link" href="{{ $certificates->nextPageUrl() }}" aria-label="Next">
+                                <span aria-hidden="true">&raquo;</span>
+                                <span class="sr-only">Next</span>
+                            </a>
+                        </li>
+                    @else
+                        <li class="page-item disabled">
+                            <a class="page-link" href="#" aria-label="Next">
+                                <span aria-hidden="true">&raquo;</span>
+                                <span class="sr-only">Next</span>
+                            </a>
+                        </li>
+                    @endif
+                </ul>
+            </nav>
+        </div>
+    </div>
+@endsection
+
+
+@section('styles')
+    <style>
+        .border-wrapper {
+            /* border: 2px solid black; */
+            padding: 10px;
+        }
+
+        .result-total-table-container {
+            max-height: 100vh;
+            overflow-y: auto;
+        }
+
+        .btn-container {
+            position: relative;
+            display: inline-block;
+        }
+
+        #submit-button {
+            position: relative;
+            padding-right: 50px;
+           
+
+
+            /* Make space for the loader */
+        }
+
+        #loader {
+            display: none;
+            /* Hide loader by default */
+            position: absolute;
+            justify-content: center;
+            align-content: center;
+            top: 25%;
+            right: 10px;
+            /* Adjust position as needed */
+            transform: translateY(-50%);
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(0, 0, 0, 0.1);
+            border-radius: 50%;
+            border-top: 3px solid #fff;
+            /* Adjust loader color if needed */
+            animation: spin 1s linear infinite;
+        }
+    </style>
 @endsection
 
 @section('scripts')
@@ -102,5 +206,35 @@
                 }
             });
         }
+    </script>
+
+    {{-- Request process  --}}
+    <script>
+        // Confirm Delete
+        document.getElementById('submit-button').addEventListener('click', function() {
+            const loader = document.getElementById('loader');
+            loader.style.display = 'block'; // Show the loader
+            this.innerHTML = 'កំពុងដំណើរការ... <div id="loader" class="loader"></div>'; // Change button text
+
+            // Optionally, you can handle the redirect or form submission here
+            setTimeout(() => {
+                // Redirect or handle form submission
+                window.location.href = this.getAttribute('href'); // Example redirect
+            }, 1000); // Adjust the delay as needed
+        });
+
+        function handleLongRequest() {
+            setTimeout(() => {
+                const loader = document.getElementById('loader');
+                if (loader.style.display === 'block') {
+                    alert('The request is taking too long. Please try again later.');
+                    window.location.href = '/404'; // Redirect to a 404 page or another error page
+                }
+            }, 10000); // 10 seconds timeout
+        }
+
+        document.getElementById('submit-button').addEventListener('click', function() {
+            handleLongRequest();
+        });
     </script>
 @endsection

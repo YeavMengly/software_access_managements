@@ -6,37 +6,44 @@
             <div class="row">
                 <div class="col-md-4 mb-3">
                     <a href="{{ route('result.index') }}" class="btn btn-custom btn-block animate-button">
-                        <i class="fas fa-money-bill-wave"></i> ធានាចំណាយ
+                        <i class="fas fa-money-bill-wave"></i> របាយការណ៍សរុបធានាចំណាយ
+                    </a>
+                </div>
+            
+                <div class="col-md-4 mb-3">
+                    <a href="{{ route('result-total-table') }}" class="btn btn-custom btn-block animate-button">
+                        <i class="fas fa-file-alt"></i> របាយការណ៍សកម្មភាព
+                    </a>
+                </div>
+            
+                <div class="col-md-4 mb-3">
+                    <a href="{{ route('result-total-summaries-table') }}" class="btn btn-custom btn-block animate-button">
+                        <i class="fas fa-book"></i> របាយការណ៍សង្ខេប
                     </a>
                 </div>
             
                 <div class="col-md-4 mb-3">
                     <a href="" class="btn btn-custom btn-block animate-button">
-                        <i class="fas fa-file-alt"></i> ធានាចំណាយលម្អិតតាមអនុកម្មវិធី
+                        <i class="fas fa-list"></i> របាយការណ៍អនុវត្ត
                     </a>
                 </div>
-            
+
+                <div class="col-md-4 mb-3">
+                    <a href="#" class="btn btn-custom btn-block animate-button">
+                        <i class="fas fa-calendar-alt"></i> ផែនការថវិការដ្ឋ
+                    </a>
+                </div>
+
                 <div class="col-md-4 mb-3">
                     <a href="" class="btn btn-custom btn-block animate-button">
-                        <i class="fas fa-list"></i> បញ្ជីលម្អិតនៃសលាកប័ត្រ
+                        <i class="fas fa-calendar-alt"></i> អនុវត្តចំណាយ
                     </a>
                 </div>
             
+          
                 <div class="col-md-4 mb-3">
-                    <a href="" class="btn btn-custom btn-block animate-button">
-                        <i class="fas fa-book"></i> លម្អិតសលាកប័ត្រតាមអនុគណនី
-                    </a>
-                </div>
-            
-                <div class="col-md-4 mb-3">
-                    <a href="" class="btn btn-custom btn-block animate-button">
-                        <i class="fas fa-calendar-alt"></i> លម្អិតសលាកប័ត្រតាមខែ
-                    </a>
-                </div>
-            
-                <div class="col-md-4 mb-3">
-                    <a href="{{ route('missions.index') }}" class="btn btn-custom btn-block animate-button">
-                        <i class="fas fa-briefcase"></i> តារាងបេសកម្ម
+                    <a href="{{ route('result-new-loan') }}" class="btn btn-custom btn-block animate-button">
+                        <i class="fas fa-briefcase"></i> ឥណទានសុប
                     </a>
                 </div>
             

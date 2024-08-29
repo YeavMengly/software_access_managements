@@ -2,7 +2,10 @@
 
 namespace App\Models\Certificates;
 
+use App\Models\Code\AccountKey;
+use App\Models\Code\Key;
 use App\Models\Code\Report;
+use App\Models\Code\SubAccountKey;
 use Illuminate\Database\Eloquent\Model;
 
 class CertificateData extends Model
@@ -25,6 +28,19 @@ class CertificateData extends Model
     public function report()
     {
         return $this->belongsTo(Report::class, 'report_key');
+    }
+
+    public function accountKey(){
+        return $this->belongsTo(AccountKey::class, 'account_key');
+        
+    }
+
+    public function subAccountKey(){
+        return $this->belongsTo(SubAccountKey::class, 'sub_account_key');
+    }
+
+    public function key(){
+        return $this->belongsTo(Key::class, 'code');
     }
 
 }

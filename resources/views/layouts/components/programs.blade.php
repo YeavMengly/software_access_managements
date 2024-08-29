@@ -23,7 +23,7 @@
                     
                 </div>
                 <div class="col-md-4 mb-3">
-                    <a href="{{ route('codes.index') }}" class="btn btn-custom btn-block animate-button">
+                    <a href="" class="btn btn-custom btn-block animate-button">
                         <i class="fas fa-cogs"></i> បញ្ចូលទិន្ន័យកម្មវិធី
                     </a>
                 </div>
