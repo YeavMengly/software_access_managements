@@ -13,43 +13,56 @@ use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 class CambodiaExport implements FromQuery, WithHeadings, WithMapping, WithStyles, WithTitle
 {
     protected $search;
+    protected $searchDate;
 
-    public function __construct($search = null)
+    public function __construct($search = null, $searchDate = null)
     {
         $this->search = $search;
+        $this->searchDate = $searchDate;
     }
 
     public function query()
     {
-        return CambodiaMission::query()
-            ->when($this->search, function ($query, $search) {
-                return $query->where('name', 'like', "%{$search}%")
-                    ->orWhere('location', 'like', "%{$search}%")
-                    ->select(
-                        'id',
-                        'name',
-                        'role',
-                        'position_type',
-                        'letter_number',
-                        'letter_date',
-                        'pocket_money',
-                        'meal_money',
-                        'mission_objective',
-                        'location',
-                        'mission_start_date',
-                        'mission_end_date',
-                        'days_count',
-                        'nights_count',
-                        'pocket_money',
-                        'meal_money',
-                        'accommodation_money',
-                        'total_pocket_money',
-                        'total_meal_money',
-                        'total_accommodation_money',
-                        'travel_allowance',
-                        'final_total'
-                    );
+        $query = CambodiaMission::query();
+
+        // Apply search filter if provided
+        if ($this->search) {
+            $query->where(function ($q) {
+                $q->where('name', 'like', "%{$this->search}%")
+                    ->orWhere('location', 'like', "%{$this->search}%");
             });
+        }
+
+        // Apply date filter if provided
+        if ($this->searchDate) {
+            $query->whereDate('mission_start_date', $this->searchDate);
+        }
+
+        // Select the columns you want
+        return $query->select(
+            'id',
+            'name',
+            'role',
+            'position_type',
+            'letter_number',
+            'letter_date',
+            'pocket_money',
+            'meal_money',
+            'mission_objective',
+            'location',
+            'mission_start_date',
+            'mission_end_date',
+            'days_count',
+            'nights_count',
+            'pocket_money',
+            'meal_money',
+            'accommodation_money',
+            'total_pocket_money',
+            'total_meal_money',
+            'total_accommodation_money',
+            'travel_allowance',
+            'final_total'
+        );
     }
 
     public function headings(): array
@@ -156,9 +169,7 @@ class CambodiaExport implements FromQuery, WithHeadings, WithMapping, WithStyles
                 number_format($mission->final_total, 0, '.', ','),
             ];
         }
-
-        
-    }
+    } 
 
     public function styles(Worksheet $sheet)
     {

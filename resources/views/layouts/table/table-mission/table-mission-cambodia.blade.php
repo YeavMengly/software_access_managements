@@ -1,7 +1,7 @@
 @extends('layouts.master')
 
 @section('content-table-mission-cambodia')
-    <form class="max-w-md mx-auto mt-3" method="GET" action="">
+    <form class="max-w-md mx-auto mt-3 table-header" method="GET" action="">
         <div class="row">
             <div class="col-md-6">
                 <div class="input-group my-3" style="width: 70%; font-family: 'Khmer OS Siemreap', sans-serif">
@@ -15,14 +15,26 @@
                         </svg>
                     </button>
                 </div>
+                <!-- Search by date -->
+                <div class="input-group my-3" style="width: 70%; font-family: 'Khmer OS Siemreap', sans-serif">
+                    <input type="date" name="search_date" value="{{ request('search_date') }}" class="form-control"
+                        placeholder="Start Date" aria-label="Start Date">
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="d-flex align-items-center justify-content-end py-3">
+                    <a class="btn btn-success" href="{{ route('mission-cam.create') }}"
+                        style="font-family: 'Khmer OS Siemreap', sans-serif;">បញ្ចូលទិន្នន័យ</a>
+                </div>
             </div>
         </div>
     </form>
+
     <div class="border-wrapper">
         <div class="result-total-table-container">
             <div class="first-header">
                 <h4>ព្រះរាជាណាចក្រកម្ពុជា</h4>
-                <h3>ជាតិ​ សាសនា ព្រះមហាក្សត្រ</h3>
+                <h3>ជាតិ សាសនា ព្រះមហាក្សត្រ</h3>
             </div>
             <div class="second-header">
                 <h4>ក្រសួងការងារ និងបណ្តុះបណ្តាលវិជ្ជាជីវៈ</h4>
@@ -87,6 +99,9 @@
                             <th rowspan="2"
                                 style="border: 2px solid black; font-family: 'Khmer OS Siemreap', sans-serif; font-weight: bold;">
                                 ទឹកប្រាក់សរុប</th>
+                            <th rowspan="2"
+                                style="border: 2px solid black; font-family: 'Khmer OS Siemreap', sans-serif; font-weight: bold;">
+                                សកម្មភាព</th>
                         </tr>
 
                         <tr>
@@ -159,6 +174,24 @@
                                     {{ number_format($mission->other_allowances, 0, '.', ',') }}</td>
                                 <td style="border: 2px solid black; font-family: 'Khmer OS Siemreap', sans-serif">
                                     {{ number_format($mission->final_total, 0, '.', ',') }}</td>
+                                <td style="border: 2px solid black;">
+                                    <div style="display: flex; gap: 5px;">
+                                        <a href="{{ route('missions.edit', $mission->id) }}"
+                                            class="btn btn-primary btn-sm">
+                                            <i class="fas fa-edit"></i>
+                                        </a>
+                                        <form id="delete-form-{{ $mission->id }}"
+                                            action="{{ route('missions.delete', $mission->id) }}" method="POST"
+                                            style="display:inline;">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="button" class="btn btn-danger btn-sm"
+                                                onclick="confirmDelete({{ $mission->id }})">
+                                                <i class="fas fa-trash-alt"></i>
+                                            </button>
+                                        </form>
+                                    </div>
+                                </td>
                             </tr>
                         @endforeach
                         <tr>
@@ -195,13 +228,20 @@
 
 @section('styles')
     <style>
+        .table-header {
+            position: relative;
+            /* or absolute, depending on your layout */
+            z-index: 1000;
+            /* Higher values bring the element to the front */
+        }
+
         .border-wrapper {
             border: 2px solid black;
             padding: 10px;
         }
 
         .result-total-table-container {
-            max-height: 100vh;
+            max-height: 200vh;
             overflow-y: auto;
         }
 
@@ -257,6 +297,22 @@
 
 @section('scripts')
     <script>
+        function confirmDelete(missionId) {
+            Swal.fire({
+                title: 'ពិតជាចង់លុបទិន្នន័យមែនឬទេ?',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'ត្រឡប់ក្រោយ',
+                cancelButtonText: 'លុបទិន្នន័យ!',
+                reverseButtons: true,
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    document.getElementById('delete-form-' + missionId).submit();
+                }
+            });
+        }
         document.addEventListener('DOMContentLoaded', function() {
             const table = document.getElementById('reportTable');
             const rows = Array.from(table.querySelectorAll('tbody tr'));
