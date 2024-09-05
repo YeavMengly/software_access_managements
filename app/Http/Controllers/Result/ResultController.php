@@ -8,53 +8,66 @@ use App\Models\Code\Report;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Log;
 use Maatwebsite\Excel\Facades\Excel;
 
 class ResultController extends Controller
 {
     public function index(Request $request)
-{
-    $query = Report::query();
+    {
+        $query = Report::query();
 
-    // Date filtering with error handling
-    $date = $request->input('date');
-    if ($date) {
-        try {
-            $formattedDate = Carbon::createFromFormat('m/d/Y', $date)->format('Y-m-d');
-            $query->whereDate('date', $formattedDate);
-        } catch (\Exception $e) {
-            return back()->withErrors(['date' => 'Invalid date format. Please use MM/DD/YYYY.']);
+        // Date filtering with error handling
+        // $this->applyDateFilter($query, $request->date('date'));
+
+        // Apply filters
+        $this->applyFilters($query, $request);
+
+        // $reports = $query->get();
+
+        // Get filtered results
+        $results = $query->get();
+
+        // Check if the user clicked the export button
+        if ($request->has('export')) {
+            return Excel::download(new ResultExport($query->get()), 'results.xlsx');
         }
+
+        // Calculate the totals
+        $totals = $this->calculateTotals($results);
+
+        return view('layouts.table.result', compact('totals', 'results'));
     }
-
-    // Apply filters
-    $this->applyFilters($query, $request);
-
-    $reports = $query->get();
-
-    // Calculate the totals
-    $totals = $this->calculateTotals($reports);
-
-    return view('layouts.table.result', [
-        'reports' => $reports,
-        'totals' => $totals,
-    ]);
-}
-
 
     public function export(Request $request)
     {
         $query = Report::query();
 
         // Apply filters
-        $this->applyFilters($query, $request);
+        // $this->applyFilters($query, $request);
+        // Apply filters based on the search form inputs
+        if ($request->filled('code_id')) {
+            $query->where('code_id', 'LIKE', $request->input('code_id') . '%');
+        }
+        if ($request->filled('account_key_id')) {
+            $query->where('account_key_id', 'LIKE', $request->input('account_key_id') . '%');
+        }
+        if ($request->filled('sub_account_key_id')) {
+            $query->where('sub_account_key_id', 'LIKE', $request->input('sub_account_key_id') . '%');
+        }
+        if ($request->filled('report_key')) {
+            $query->where('report_key', 'LIKE', $request->input('report_key') . '%');
+        }
+        if ($request->filled('date')) {
+            $query->whereDate('created_at', '=', $request->input('date')); // Use the correct column name
+        }
 
-        // Get the filtered reports
-        $reports = $query->get();
-        return Excel::download(new ResultExport($reports), 'results.xlsx');
+        $results = $query->get();
+
+        // Export data
+        return Excel::download(new ResultExport($query->get()), 'reports.xlsx');
     }
 
-    // PDF Print
     public function exportPdf(Request $request)
     {
         try {
@@ -63,17 +76,12 @@ class ResultController extends Controller
             // Apply filters
             $this->applyFilters($query, $request);
 
-            // Get the filtered reports
-            $reports = $query->get();
-
+            // Generate PDF
             $pdf = Pdf::loadView('layouts.pdf.result_pdf', [
-                'reports' => $reports,
-                'totals' => $this->calculateTotals($reports),
-            ]);
-
-            // Set the PDF orientation to landscape with A4 size and custom margins
-            $pdf->setPaper('a2', 'landscape')
-                ->setOption('zoom', '85%')
+                'reports' => $query->get(),
+                'totals' => $this->calculateTotals($query->get()),
+            ])->setPaper('a2', 'landscape')
+                ->setOption('zoom', '100%')
                 ->setOptions([
                     'margin-top' => 5,
                     'margin-bottom' => 5,
@@ -81,61 +89,136 @@ class ResultController extends Controller
                     'margin-right' => 5,
                 ]);
 
-            // Return the generated PDF
             return $pdf->download('results.pdf');
         } catch (\Exception $e) {
-            // Log or display the error
             return response()->json(['error' => $e->getMessage()], 500);
         }
     }
 
+    private function applyDateFilter($query, $date)
+    {
+        // Apply date filter
+        if ($date) {
+            try {
+                if (strpos($date, ' - ') !== false) {
+                    // Date range
+                    list($startDate, $endDate) = explode(' - ', $date);
+                    $startDate = Carbon::createFromFormat('Y-m-d', $startDate)->startOfDay()->toDateTimeString();
+                    $endDate = Carbon::createFromFormat('Y-m-d', $endDate)->endOfDay()->toDateTimeString();
+                    $query->whereBetween('created_at', [$startDate, $endDate]);
+                } else {
+                    // Single date
+                    $formattedDate = Carbon::createFromFormat('Y-m-d', $date)->format('Y-m-d');
+                    $query->whereDate('created_at', $formattedDate);
+                }
+            } catch (\Exception $e) {
+                // Handle invalid date format error
+                Log::error('Invalid date format: ' . $e->getMessage());
+                return redirect()->back()->withErrors(['date' => 'Invalid date format. Please use YYYY-MM-DD format or YYYY-MM-DD - YYYY-MM-DD for ranges.']);
+            }
+        }
+    }
+    private function applyFilters($query, Request $request)
+    {
 
-    private function applyFilters($query, $request)
-{
-    if ($request->has('code_id') && $request->input('code_id') !== '') {
-        $firstTwoDigits = substr($request->input('code_id'), 0, 2);
-        $query->whereHas('subAccountKey.accountKey.key', function ($q) use ($firstTwoDigits) {
-            $q->where('code', 'like', $firstTwoDigits . '%');
-        });
+        $codeId = $request->input('code_id');
+        $accountKeyId = $request->input('account_key_id');
+        $subAccountKeyId = $request->input('sub_account_key_id');
+        $reportKey = $request->input('report_key');
+        $date = $request->input('date');
+
+        $this->applyCodeFilter($query, $request->input('code_id'), 'code', 2, 'subAccountKey.accountKey.key');
+        $this->applyCodeFilter($query, $request->input('account_key_id'), 'account_key', 4, 'subAccountKey.accountKey');
+        $this->applyCodeFilter($query, $request->input('sub_account_key_id'), 'sub_account_key', 5, 'subAccountKey');
+        $this->applyCodeFilter($query, $request->input('report_key'), 'report_key', 7);
+
+        // Apply date filter
+        $this->applyDateFilter($query, $request->input('date'));
+        // Check if any filter input is present and apply date filter
+        if ($codeId || $accountKeyId || $subAccountKeyId || $reportKey) {
+            $this->applyDateFilter($query, $date);
+        }
     }
 
-    if ($request->has('account_key_id') && $request->input('account_key_id') !== '') {
-        $firstFourDigits = substr($request->input('account_key_id'), 0, 4);
-        $query->whereHas('subAccountKey.accountKey', function ($q) use ($firstFourDigits) {
-            $q->where('account_key', 'like', $firstFourDigits . '%');
-        });
+    private function applyCodeFilter($query, $input, $column, $length, $relation = null)
+    {
+        if ($input) {
+            $firstDigits = substr($input, 0, $length);
+            $condition = function ($q) use ($firstDigits, $column) {
+                $q->where($column, 'like', $firstDigits . '%');
+            };
+
+            if ($relation) {
+                $query->whereHas($relation, $condition);
+            } else {
+                $query->where($column, 'like', $firstDigits . '%');
+            }
+        }
     }
-
-    if ($request->has('sub_account_key_id') && $request->input('sub_account_key_id') !== '') {
-        $firstFiveDigits = substr($request->input('sub_account_key_id'), 0, 5);
-        $query->whereHas('subAccountKey', function ($q) use ($firstFiveDigits) {
-            $q->where('sub_account_key', 'like', $firstFiveDigits . '%');
-        });
-    }
-
-    if ($request->has('report_key') && $request->input('report_key') !== '') {
-        $firstSevenDigits = substr($request->input('report_key'), 0, 7);
-        $query->where('report_key', 'like', $firstSevenDigits . '%');
-    }
-
-    return $query; // Ensure the modified query is returned
-}
-
 
     private function calculateTotals($reports)
     {
-        return [
-            'internal_increase' => $reports->sum('internal_increase'),
-            'unexpected_increase' => $reports->sum('unexpected_increase'),
-            'additional_increase' => $reports->sum('additional_increase'),
-            'decrease' => $reports->sum('decrease'),
-            'apply' => $reports->sum('apply'),
-            'total_increase' => $reports->sum(function ($report) {
-                return $report->internal_increase + $report->unexpected_increase + $report->additional_increase;
-            }),
-            'total_balance' => $reports->sum(function ($report) {
-                return ($report->internal_increase + $report->unexpected_increase + $report->additional_increase) - $report->decrease;
-            }),
+        $totals = [
+            'fin_law' => 0,
+            'current_loan' => 0,
+            'internal_increase' => 0,
+            'unexpected_increase' => 0,
+            'additional_increase' => 0,
+            'decrease' => 0,
+            'editorial' => 0,
+            'new_credit_status' => 0,
+            'early_balance' => 0,
+            'apply' => 0,
+            'deadline_balance' => 0,
+            'credit' => 0,
+            'law_average' => 0,
+            'law_correction' => 0,
+            'total_increase' => 0,
+            'total_balance' => 0,
+            'sub_account_amount' => 0, // Total for subAccountKey amounts
+            'account_amount' => 0, // Total for accountKey amounts
+            'fin_law_by_code' => [] // Total of fin_law grouped by code
         ];
+
+        // Group reports by code
+        $groupedReports = $reports->groupBy('code');
+
+        foreach ($groupedReports as $code => $group) {
+            $finLawTotal = $group->sum('fin_law');
+            $totals['fin_law_by_code'][$code] = $finLawTotal;
+        }
+
+        foreach ($reports as $report) {
+            $totals['fin_law'] += $report->fin_law;
+            $totals['current_loan'] += $report->current_loan;
+            $totals['internal_increase'] += $report->internal_increase;
+            $totals['unexpected_increase'] += $report->unexpected_increase;
+            $totals['additional_increase'] += $report->additional_increase;
+            $totals['decrease'] += $report->decrease;
+            $totals['editorial'] += $report->editorial;
+            $totals['new_credit_status'] += $report->new_credit_status;
+            $totals['early_balance'] += $report->early_balance;
+            $totals['apply'] += $report->apply;
+            $totals['deadline_balance'] += $report->deadline_balance;
+            $totals['credit'] += $report->credit;
+            $totals['law_average'] += $report->law_average;
+            $totals['law_correction'] += $report->law_correction;
+
+            $totalIncrease = $report->internal_increase + $report->unexpected_increase + $report->additional_increase;
+            $totals['total_increase'] += $totalIncrease;
+            $totals['total_balance'] += ($totalIncrease - $report->decrease);
+
+            // Sum subAccountKey amounts
+            if ($report->subAccountKey) {
+                $totals['sub_account_amount'] += $report->subAccountKey->amount ?? 0;
+            }
+
+            // Sum accountKey amounts
+            if ($report->subAccountKey && $report->subAccountKey->accountKey) {
+                $totals['account_amount'] += $report->subAccountKey->accountKey->amount ?? 0;
+            }
+        }
+
+        return $totals;
     }
 }

@@ -30,7 +30,7 @@ class Report extends Model
         'deadline_balance',
         'credit',
         'law_average',
-        'law_correction'
+        'law_correction',
     ];
 
     // belong table to subAccount class

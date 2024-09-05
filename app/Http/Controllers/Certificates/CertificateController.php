@@ -16,9 +16,9 @@ class CertificateController extends Controller
         })->paginate(10);
 
         // Pass the message if no certificates are found
-        $message = $certificates->isEmpty() ? 'គ្មានទិន្ន័យសលាកបត្រ.' : null;
+        // $message = $certificates->isEmpty() ? 'គ្មានទិន្ន័យសលាកបត្រ.' : null;
 
-        return view('layouts.admin.forms.certificate.certificate-index', compact('certificates', 'message'));
+        return view('layouts.admin.forms.certificate.certificate-index', compact('certificates', ));
     }
 
     public function create()
@@ -40,15 +40,15 @@ class CertificateController extends Controller
 
     public function edit($id)
     {
-        $certificate = Certificate::findOrFail($id);
-        return view('certificate.edit', compact('certificate'));
+        $certificates = Certificate::findOrFail($id);
+        return view('layouts.admin.forms.certificate.certificate-edit', compact('certificates'));
     }
 
     public function update(Request $request, $id)
     {
         $validated = $request->validate(['name_certificate' => 'required']);
-        $certificate = Certificate::findOrFail($id);
-        $certificate->update($validated);
+        $certificates = Certificate::findOrFail($id);
+        $certificates->update($validated);
         return redirect()->route('certificate.index')->with('success', 'Certificate updated successfully.');
     }
 
