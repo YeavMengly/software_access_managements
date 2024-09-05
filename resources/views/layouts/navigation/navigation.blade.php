@@ -6,7 +6,7 @@
     </button>
 
     <!-- Topbar Search -->
-    <form class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
+    {{-- <form class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
         <div class="input-group">
             <input type="text" class="form-control bg-light border-0 small" placeholder="ស្វែងរក"
                 aria-label="Search" aria-describedby="basic-addon2">
@@ -16,11 +16,10 @@
                 </button>
             </div>
         </div>
-    </form>
+    </form> --}}
 
     <!-- Topbar Navbar -->
     <ul class="navbar-nav ml-auto">
-
         <!-- Nav Item - Search Dropdown (Visible Only XS) -->
         <li class="nav-item dropdown no-arrow d-sm-none">
             <a class="nav-link dropdown-toggle" href="#" id="searchDropdown" role="button" data-toggle="dropdown"
@@ -97,7 +96,8 @@
             </div>
         </li> --}}
         <li class="nav-item dropdown no-arrow mx-1">
-            <a class="nav-link dropdown-toggle" href="#" id="alertsDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <a class="nav-link dropdown-toggle" href="#" id="alertsDropdown" role="button" data-toggle="dropdown"
+                aria-haspopup="true" aria-expanded="false">
                 <i class="fa fa-language text-danger" aria-hidden="true"></i> <!-- Using text-danger for red color -->
                 <!-- Counter - Alerts -->
                 <span class="mr-2 d-none d-lg-inline text-dark small">Language</span>
@@ -117,9 +117,9 @@
                 </a>
             </div>
         </li>
-        
-        
-        
+
+
+
         <!-- Nav Item - Messages -->
         {{-- <li class="nav-item dropdown no-arrow mx-1">
             <a class="nav-link dropdown-toggle" href="#" id="messagesDropdown" role="button"

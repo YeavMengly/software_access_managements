@@ -15,6 +15,16 @@
                         </svg>
                     </button>
                 </div>
+                <!-- Search by date -->
+                <div class="input-group my-3" style="width: 70%; font-family: 'Khmer OS Siemreap', sans-serif">
+                    <input type="date" name="search_date" value="{{ request('search_date') }}" class="form-control"
+                        placeholder="Start Date" aria-label="Start Date">
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="d-flex align-items-center justify-content-end py-3">
+                    <a class="btn btn-success" href="{{ route('mission-cam.create') }}" style="font-family: 'Khmer OS Siemreap', sans-serif;">បញ្ចូលទិន្នន័យ</a>
+                </div>
             </div>
         </div>
     </form>

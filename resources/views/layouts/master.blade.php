@@ -24,15 +24,14 @@
     <!-- Include FontAwesome CSS (optional) -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" rel="stylesheet">
 
-    {{-- <link rel="stylesheet" href="{{ asset('missions/vendor/fontawesome-free/css/all.min.css') }}"> --}}
-
+    <!-- Include SweetAlert CSS and JS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     @yield('styles')
 
 </head>
-
 <body id="page-top">
-
     <!-- Page Wrapper -->
     <div id="wrapper">
 
@@ -49,7 +48,6 @@
                 <!-- Topbar -->
                 @include('layouts.navigation.navigation')
                 <!-- End of Topbar -->
-
 
                 <!-- Begin Page Content -->
                 <div class="container-fluid">
@@ -82,7 +80,6 @@
 
             </div>
             <!-- /.container-fluid -->
-
 
         </div>
         <!-- End of Main Content -->

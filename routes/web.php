@@ -41,18 +41,21 @@ Route::resource('accounts', AccountKeyController::class);
 
 Route::resource('sub-account', SubAccountKeyController::class);
 
-Route::resource('missions', ResultMissionController::class);
-
 Route::get('/', [ResultController::class, 'index'])->name('result');
 
 Route::get('/result-total', [ResultTotalController::class, 'index'])->name('result-total-table');
 
 Route::get('/result-total-general', [ResultGeneralController::class, 'index'])->name('result-total-general-table');
 
-Route::get('/mission-cam', [MissionCambodiaController::class, 'index'])->name('table-mission-cambodia');
+// Route::resource('missions', ResultMissionController::class);
 
+Route::resource('/mission-cam', MissionCambodiaController::class);
+Route::get('/mission-cam/{id}/edit', [MissionCambodiaController::class, 'edit'])->name('missions.edit');
+Route::put('/mission-cam/{id}', [MissionCambodiaController::class, 'update'])->name('missions.update');
+Route::delete('/mission-cam/{mission}', [MissionCambodiaController::class, 'delete'])->name('missions.delete');
 Route::get('/mission-cambodia/export', [MissionCambodiaController::class, 'export'])->name('table-mission-cambodia');
 
 Route::get('/mission-abroad', [MissionAbroadController::class, 'index'])->name('table-mission-abroad');
+// Route::get('mission-abroad/export', [MissionAbroadController::class, 'export'])->name('table-mission-abroad');
 
-Route::get('mission-abroad/export', [MissionAbroadController::class, 'export'])->name('table-mission-abroad');
+
