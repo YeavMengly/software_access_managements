@@ -13,10 +13,10 @@
         <table class="table-border">
             <thead class="header-border">
                 <tr>
-                    <th rowspan="3">លេខសម្គាល់</th>
-                    <th rowspan="3">កម្មវិធី</th>
-                    <th rowspan="3">សកម្មភាព</th>
-                    <th rowspan="3">អត្ថន័យចំណាយ</th>
+                    <th rowspan="3" style="border: 1px solid black; font-size: 14px; max-width: 40px;" >ល.រ</th>
+                    <th rowspan="3" style="border: 1px solid black; font-size: 14px; max-width: 60px;" >កម្មវិធី</th>
+                    <th rowspan="3" style="border: 1px solid black; max-width: 120px; text-align: center">សកម្មភាព</th>
+                    <th rowspan="3" style="border: 1px solid black; max-width: 620px; text-align: center">អត្ថន័យចំណាយ</th>
                     <th rowspan="3">ច្បាប់ហិ.វ</th>
                     <th rowspan="3">ឥណទានបច្ចុប្បន្ន</th>
                     <th colspan="5">ចលនាឥណទាន</th>
@@ -65,7 +65,7 @@
                     <td>សកម្មភាព A</td>
                     <td>សកម្មភាព A</td>
                 </tr>
-                <tr>
+                {{-- <tr>
                     <td>១</td>
                   
                     <td>ភូមិ A</td>
@@ -87,32 +87,7 @@
                     <td>សកម្មភាព A</td>
                     <td>សកម្មភាព A</td>
               
-                </tr>
-                <tr>
-                    <td>១</td>
-                   
-                    <td>ភូមិ A</td>
-                    <td>ឈ្មោះ A</td>
-                    <td>30</td>
-                    <td>ប្រុស</td>
-                    <td>ម្តាយ A</td>
-                    <td>ឪពុក A</td>
-                    <td>អាស័យដ្ឋាន A</td>
-                    <td>ស្ថានភាព A</td>
-                    <td>មូលហេតុ 1</td>
-                    <td>សកម្មភាព 1</td>
-                    <td>ស្ថានភាព 1</td>
-                    <td>សារអារាបេត A</td>
-                    <td>មូលហេតុ A</td>
-                    <td>សកម្មភាព A</td>
-                    <td>សកម្មភាព A</td>
-                    <td>សកម្មភាព A</td>
-                    <td>សកម្មភាព A</td>
-                    <td>សកម្មភាព A</td>
-                 
-                   
-                </tr>
-                
+                </tr> --}}
                 <!-- Repeat rows as needed -->
             </tbody>
         </table>

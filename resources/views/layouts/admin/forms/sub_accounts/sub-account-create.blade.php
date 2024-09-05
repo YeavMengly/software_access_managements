@@ -1,70 +1,66 @@
 @extends('layouts.master')
 
 @section('form-sub-account-upload')
-        <div class="container-fluid">
-            <div class="row">
-                <div class="col-lg-12 margin-tb mb-4">
-                    <div class="d-flex justify-content-between align-items-center">
-                        <h3 class="card-title">បង្កើតលេខកូដអនុគណនី</h3>
-                        <a class="btn btn-primary" href="{{ route('sub-account.index') }}">ត្រឡប់ក្រោយ</a>
-                    </div>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-12 margin-tb mb-4">
+                <div class="d-flex justify-content-between align-items-center">
+                    <h3 class="card-title">បង្កើតលេខកូដអនុគណនី</h3>
+                    <a class="btn btn-primary" href="{{ route('sub-account.index') }}">ត្រឡប់ក្រោយ</a>
                 </div>
             </div>
+        </div>
 
-            @if (session('success'))
-                <div class="alert alert-success alert-dismissible fade show" role="alert">
-                    {{ session('success') }}
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                </div>
-            @endif
+        @if (session('success'))
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                {{ session('success') }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        @endif
 
-            @if ($errors->any())
-                <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                    <strong>Whoops!</strong> There were some problems with your input.<br><br>
-                    <ul>
-                        @foreach ($errors->all() as $error)
-                            <li>{{ $error }}</li>
-                        @endforeach
-                    </ul>
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                </div>
-            @endif
+        @if ($errors->any())
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                <strong>Whoops!</strong> There were some problems with your input.<br><br>
+                <ul>
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        @endif
 
-            <div class="border-wrapper">
+        <div class="border-wrapper">
             <div class="form-container">
-                <form action="" method="POST" enctype="multipart/form-data">
+                <form action="{{ route('sub-account.store') }}" method="POST" enctype="multipart/form-data">
                     @csrf
 
                     <div class="form-group">
                         <strong>លេខគណនី:</strong>
-                        <select name="location_id" class="form-control">
-                            {{-- @foreach ($locations as $location)
-                            <option value="{{ $location->id }}">{{ $location->location }}</option>
-                            
-                        @endforeach --}}
-                        <option value="">6001</option>
-                        <option value="">6002</option>
+                        <select name="account_key" class="form-control">
+                            @foreach ($accountKeys as $accountKey)
+                                <option value="{{ $accountKey->id }}">
+                                    {{ $accountKey->key->code }} < {{ $accountKey->account_key }} </option>
+                            @endforeach
                         </select>
                     </div>
 
                     <div class="form-group">
-                        <label for="destination">ចំណាត់ថ្នាក់:</label>
-                        <input type="text" name="destination" id="destination"
-                            class="form-control @error('destination') is-invalid @enderror">
-                        @error('destination')
+                        <label for="sub_account_key">លេខអនុគណនី:</label>
+                        <input type="number" name="sub_account_key" id="sub_account_key"
+                            class="form-control @error('sub_account_key') is-invalid @enderror">
+                        @error('sub_account_key')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>
-
-                    {{-- <div class="form-group">
-                        <label for="date">ច្បាប់ហិរញ្ញវត្ថុ:</label>
-                        <input type="date" name="date" id="date"
-                            class="form-control @error('date') is-invalid @enderror">
-                        @error('date')
+                    <div class="form-group">
+                        <label for="name_sub_account_key">ចំណាត់ថ្នាក់:</label>
+                        <input type="text" name="name_sub_account_key" id="name_sub_account_key"
+                            class="form-control @error('name_sub_account_key') is-invalid @enderror">
+                        @error('name_sub_account_key')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
-                    </div> --}}
-
+                    </div>
 
                     <div class="d-flex align-items-center">
                         <button type="submit" class="btn btn-primary ml-auto">បានរក្សាទុក</button>

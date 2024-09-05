@@ -8,8 +8,8 @@
     <!-- Topbar Search -->
     {{-- <form class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
         <div class="input-group">
-            <input type="text" class="form-control bg-light border-0 small" placeholder="ស្វែងរក"
-                aria-label="Search" aria-describedby="basic-addon2">
+            <input type="text" class="form-control bg-light border-0 small" placeholder="ស្វែងរក" aria-label="Search"
+                aria-describedby="basic-addon2">
             <div class="input-group-append">
                 <button class="btn btn-primary" type="button">
                     <i class="fas fa-search fa-sm"></i>
@@ -18,6 +18,20 @@
         </div>
     </form> --}}
 
+    {{-- <form class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search" method="GET" action="{{ route('result.index') }}">
+        <div class="input-group">
+            <input type="text" name="code_id" value="{{ request('code_id') }}" class="form-control bg-light border-0 small" placeholder="ជំពូក" aria-label="Code ID" aria-describedby="basic-addon2">
+            <input type="text" name="account_key_id" value="{{ request('account_key_id') }}" class="form-control bg-light border-0 small" placeholder="គណនី" aria-label="Account Key ID" aria-describedby="basic-addon2">
+            <input type="text" name="sub_account_key_id" value="{{ request('sub_account_key_id') }}" class="form-control bg-light border-0 small" placeholder="អនុគណនី" aria-label="Sub Account Key ID" aria-describedby="basic-addon2">
+            <input type="text" name="report_key" value="{{ request('report_key') }}" class="form-control bg-light border-0 small" placeholder="កូដកម្មវិធី" aria-label="Report Key" aria-describedby="basic-addon2">
+            <div class="input-group-append">
+                <button class="btn btn-primary" type="submit">
+                    <i class="fas fa-search fa-sm"></i> ស្វែងរក
+                </button>
+            </div>
+        </div>
+    </form>
+     --}}
     <!-- Topbar Navbar -->
     <ul class="navbar-nav ml-auto">
         <!-- Nav Item - Search Dropdown (Visible Only XS) -->
@@ -42,6 +56,17 @@
                 </form>
             </div>
         </li>
+        {{-- <li class="nav-item mx-1">
+            <div class="filter-container" style="display: flex; justify-content: center; align-items: center; height: 80px;">
+                <form method="GET" action="{{ route('reports.index') }}" class="d-flex justify-content-center align-items-center" style="width: 100%;">
+                    <input type="text" name="code" id="code" placeholder="Filter by Section" class="form-control mr-2" value="{{ request()->section }}" />
+                    <input type="text" name="account_key" id="account_key" placeholder="Filter by Account" class="form-control mr-2" value="{{ request()->account }}" />
+                    <input type="text" name="sub_account_key" id="sub_account_key" placeholder="Filter by Sub-Account" class="form-control mr-2" value="{{ request()->sub_account }}" />
+                    <input type="text" name="report_key" id="report_key" placeholder="Filter by Program Code" class="form-control" value="{{ request()->program_code }}" />
+                    <button type="submit" class="btn btn-primary ml-2">Filter</button>
+                </form>
+            </div>
+        </li> --}}
 
         <!-- Nav Item - Alerts -->
         {{-- <li class="nav-item dropdown no-arrow mx-1">
