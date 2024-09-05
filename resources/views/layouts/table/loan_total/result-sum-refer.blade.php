@@ -1,7 +1,7 @@
-@extends('layouts.master')
+{{-- @extends('layouts.master')
 
-@section('result-sum-refer')
-<div class="border-wrapper">
+@section('result-sum-refer') --}}
+<div class="border-wrapper mt-4 mr-4 ml-4">
     <div class="result-total-table-container">
 
     <h3>របាយការណ៍សរុបបូកយោង</h3>
@@ -44,6 +44,75 @@
                     <td>សកម្មភាព A</td>
 
                 </tr>
+                <tr>
+                    <td>១</td>
+                    <td>ស្ថានភាព A</td>
+                    <td>មូលហេតុ 1</td>
+                    <td>សកម្មភាព 1</td>
+                    <td>ស្ថានភាព 1</td>
+                    <td>សារអារាបេត A</td>
+                    <td>មូលហេតុ A</td>
+                    <td>សកម្មភាព A</td>
+
+                </tr>
+                <tr>
+                    <td>១</td>
+                    <td>ស្ថានភាព A</td>
+                    <td>មូលហេតុ 1</td>
+                    <td>សកម្មភាព 1</td>
+                    <td>ស្ថានភាព 1</td>
+                    <td>សារអារាបេត A</td>
+                    <td>មូលហេតុ A</td>
+                    <td>សកម្មភាព A</td>
+
+                </tr>
+                <tr>
+                    <td>១</td>
+                    <td>ស្ថានភាព A</td>
+                    <td>មូលហេតុ 1</td>
+                    <td>សកម្មភាព 1</td>
+                    <td>ស្ថានភាព 1</td>
+                    <td>សារអារាបេត A</td>
+                    <td>មូលហេតុ A</td>
+                    <td>សកម្មភាព A</td>
+
+                </tr>
+                <tr>
+                    <td>១</td>
+                    <td>ស្ថានភាព A</td>
+                    <td>មូលហេតុ 1</td>
+                    <td>សកម្មភាព 1</td>
+                    <td>ស្ថានភាព 1</td>
+                    <td>សារអារាបេត A</td>
+                    <td>មូលហេតុ A</td>
+                    <td>សកម្មភាព A</td>
+
+                </tr>
+                <tr>
+                    <td>១</td>
+                    <td>ស្ថានភាព A</td>
+                    <td>មូលហេតុ 1</td>
+                    <td>សកម្មភាព 1</td>
+                    <td>ស្ថានភាព 1</td>
+                    <td>សារអារាបេត A</td>
+                    <td>មូលហេតុ A</td>
+                    <td>សកម្មភាព A</td>
+
+                </tr>
+
+
+                <tr>
+                    <td>១</td>
+                    <td>ស្ថានភាព A</td>
+                    <td>មូលហេតុ 1</td>
+                    <td>សកម្មភាព 1</td>
+                    <td>ស្ថានភាព 1</td>
+                    <td>សារអារាបេត A</td>
+                    <td>មូលហេតុ A</td>
+                    <td>សកម្មភាព A</td>
+
+                </tr>
+
 
                 <!-- Repeat rows as needed -->
             </tbody>
@@ -55,7 +124,7 @@
     <button type="button" class="btn btn-primary btn-width">Print</button>
 </div>
 </div>
-@endsection
+{{-- @endsection --}}
 
 
 @section('styles')

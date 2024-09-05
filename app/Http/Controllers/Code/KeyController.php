@@ -29,7 +29,7 @@ class KeyController extends Controller
             $query->orderBy('name', $sortOrder);
         }
 
-        $keys = $query->paginate();
+        $keys = $query->paginate(10);
 
         return view('layouts.admin.forms.keys.key-index', compact('keys', 'sortBy', 'sortOrder', 'search'));
     }

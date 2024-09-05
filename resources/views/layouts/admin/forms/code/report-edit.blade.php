@@ -1,14 +1,13 @@
 @extends('layouts.master')
 
-@section('form-report-upload')
+@section('form-report-edit')
     <div class="border-wrapper">
-
         <div class="result-total-table-container">
             <div class="container-fluid">
                 <div class="row">
                     <div class="col-lg-12 margin-tb mb-4">
                         <div class="d-flex justify-content-between align-items-center">
-                            <h3 class="card-title">បង្កើតទិន្នន័យ</h3>
+                            <h3 class="card-title">កែប្រែទិន្នន័យ</h3>
                             <a class="btn btn-danger" href="{{ route('codes.index') }}"> <i class="fas fa-arrow-left"></i>
                                 ត្រឡប់ក្រោយ</a>
                         </div>
@@ -33,10 +32,13 @@
                         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                     </div>
                 @endif
+
                 <div class="border-wrapper">
                     <div class="form-container">
-                        <form action="{{ route('codes.store') }}" method="POST" enctype="multipart/form-data">
+                        <form action="{{ route('codes.update', $report->id) }}" method="POST"
+                            enctype="multipart/form-data">
                             @csrf
+                            @method('PUT')
 
                             <div class="row">
                                 <div class="col-md-6">
@@ -45,7 +47,8 @@
                                         <strong>លេខអនុគណនី:</strong>
                                         <select name="sub_account_key" class="form-control">
                                             @foreach ($subAccountKeys as $subAccountKey)
-                                                <option value="{{ $subAccountKey->id }}">
+                                                <option value="{{ $subAccountKey->id }}"
+                                                    {{ $subAccountKey->id == $report->sub_account_key ? 'selected' : '' }}>
                                                     {{ $subAccountKey->accountKey->key->code }} -
                                                     {{ $subAccountKey->accountKey->account_key }} -
                                                     {{ $subAccountKey->sub_account_key }}
@@ -58,7 +61,8 @@
                                     <div class="form-group">
                                         <label for="report_key">លេខកូដកម្មវិធី:</label>
                                         <input type="number" name="report_key" id="report_key"
-                                            class="form-control @error('destination') is-invalid @enderror">
+                                            value="{{ old('report_key', $report->report_key) }}"
+                                            class="form-control @error('report_key') is-invalid @enderror">
                                         @error('report_key')
                                             <div class="invalid-feedback">{{ $message }}</div>
                                         @enderror
@@ -68,6 +72,7 @@
                                     <div class="form-group">
                                         <label for="name_report_key">ចំណាត់ថ្នាក់:</label>
                                         <input type="text" name="name_report_key" id="name_report_key"
+                                            value="{{ old('name_report_key', $report->name_report_key) }}"
                                             class="form-control @error('name_report_key') is-invalid @enderror">
                                         @error('name_report_key')
                                             <div class="invalid-feedback">{{ $message }}</div>
@@ -78,6 +83,7 @@
                                     <div class="form-group">
                                         <label for="fin_law">ច្បាប់ហិរញ្ញវត្ថុ:</label>
                                         <input type="number" name="fin_law" id="fin_law"
+                                            value="{{ old('fin_law', $report->fin_law) }}"
                                             class="form-control @error('fin_law') is-invalid @enderror"
                                             oninput="updateCurrentLoan(this)">
                                         @error('fin_law')
@@ -89,6 +95,7 @@
                                     <div class="form-group">
                                         <label for="current_loan">ឥណទានបច្ចុប្បន្ន:</label>
                                         <input type="number" name="current_loan" id="current_loan"
+                                            value="{{ old('current_loan', $report->current_loan) }}"
                                             class="form-control @error('current_loan') is-invalid @enderror" readonly>
                                         @error('current_loan')
                                             <div class="invalid-feedback">{{ $message }}</div>
@@ -101,6 +108,7 @@
                                     <div class="form-group">
                                         <label for="internal_increase">កើនផ្ទៃក្នុង:</label>
                                         <input type="number" name="internal_increase" id="internal_increase"
+                                            value="{{ old('internal_increase', $report->internal_increase) }}"
                                             class="form-control @error('internal_increase') is-invalid @enderror"
                                             oninput="formatNumber(this)">
                                         @error('internal_increase')
@@ -112,6 +120,7 @@
                                     <div class="form-group">
                                         <label for="unexpected_increase">មិនបានគ្រោងទុក:</label>
                                         <input type="number" name="unexpected_increase" id="unexpected_increase"
+                                            value="{{ old('unexpected_increase', $report->unexpected_increase) }}"
                                             class="form-control @error('unexpected_increase') is-invalid @enderror"
                                             oninput="formatNumber(this)">
                                         @error('unexpected_increase')
@@ -123,6 +132,7 @@
                                     <div class="form-group">
                                         <label for="additional_increase">បំពេញបន្ថែម:</label>
                                         <input type="number" name="additional_increase" id="additional_increase"
+                                            value="{{ old('additional_increase', $report->additional_increase) }}"
                                             class="form-control @error('additional_increase') is-invalid @enderror"
                                             oninput="formatNumber(this)">
                                         @error('additional_increase')
@@ -134,6 +144,7 @@
                                     <div class="form-group">
                                         <label for="decrease">ថយ:</label>
                                         <input type="number" name="decrease" id="decrease"
+                                            value="{{ old('decrease', $report->decrease) }}"
                                             class="form-control @error('decrease') is-invalid @enderror"
                                             oninput="formatNumber(this)">
                                         @error('decrease')
@@ -151,7 +162,6 @@
                     </div>
                 </div>
             </div>
-
         </div>
     </div>
 @endsection
@@ -199,47 +209,26 @@
                 }
             });
 
-            // Prevent the content wrapper from scrolling when the fixed side navigation hovered over
-            $('body.fixed-nav .sidebar').on('mousewheel DOMMouseScroll wheel', function(e) {
-                if ($(window).width() > 768) {
-                    var e0 = e.originalEvent,
-                        delta = e0.wheelDelta || -e0.detail;
-                    this.scrollTop += (delta < 0 ? 1 : -1) * 30;
-                    e.preventDefault();
+            // Update the current loan field based on fin_law input
+            function updateCurrentLoan(input) {
+                var finLawValue = parseFloat(input.value.replace(/,/g, ''));
+                console.log('finLawValue:', finLawValue); // Debugging statement
+                if (isNaN(finLawValue)) {
+                    finLawValue = 0;
                 }
-            });
+                document.getElementById('current_loan').value = finLawValue.toFixed(2);
+            }
 
-            // Scroll to top button appear
-            $(document).on('scroll', function() {
-                var scrollDistance = $(this).scrollTop();
-                if (scrollDistance > 100) {
-                    $('.scroll-to-top').fadeIn();
-                } else {
-                    $('.scroll-to-top').fadeOut();
+            // Format number input to include commas
+            function formatNumber(input) {
+                var value = input.value.replace(/,/g, '');
+                if (!isNaN(value) && value !== '') {
+                    input.value = Number(value).toLocaleString('en-US', {
+                        minimumFractionDigits: 2
+                    });
                 }
-            });
-
-            // Smooth scrolling using jQuery easing
-            $(document).on('click', 'a.scroll-to-top', function(e) {
-                var $anchor = $(this);
-                $('html, body').stop().animate({
-                    scrollTop: ($($anchor.attr('href')).offset().top)
-                }, 1000, 'easeInOutExpo');
-                e.preventDefault();
-            });
+            }
 
         })(jQuery); // End of use strict
-    </script>
-
-    <script>
-        function updateCurrentLoan(finLawInput) {
-            const finLaw = parseFloat(finLawInput.value);
-            const currentLoanInput = document.getElementById('current_loan');
-            if (!isNaN(finLaw)) {
-                currentLoanInput.value = finLaw;
-            } else {
-                currentLoanInput.value = '';
-            }
-        }
     </script>
 @endsection

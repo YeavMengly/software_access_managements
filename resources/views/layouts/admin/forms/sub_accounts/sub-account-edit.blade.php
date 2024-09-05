@@ -1,56 +1,78 @@
 @extends('layouts.master')
 
-@section('form-certificate-upload')
+@section('form-sub-account-edit')
     <div class="border-wrapper">
         <div class="result-total-table-container">
             <div class="container-fluid">
                 <div class="row">
                     <div class="col-lg-12 margin-tb mb-4">
                         <div class="d-flex justify-content-between align-items-center">
-                            <h3 class="card-title">បង្កើតសលាកបត្រ</h3>
-                            <a class="btn btn-primary" href="{{ route('certificate.index') }}">ត្រឡប់ក្រោយ</a>
+                            <h3 class="card-title">កែប្រែលេខអនុគណនី</h3>
+                            <a class="btn btn-danger" href="{{ route('sub-account.index') }}">
+                                <i class="fas fa-arrow-left"></i> ត្រឡប់ក្រោយ
+                            </a>
                         </div>
                     </div>
                 </div>
 
-                <div id="alerts-container">
-                    @if (session('success'))
-                        <div class="alert alert-success alert-popup show" id="success-alert">
-                            {{ session('success') }}
-                            <button type="button" class="btn-close" aria-label="Close"></button>
-                        </div>
-                    @endif
+                @if (session('success'))
+                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                        {{ session('success') }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                @endif
 
-                    @if ($errors->any())
-                        <div class="alert alert-danger alert-popup show" id="error-alert">
-                            <strong>Whoops!</strong> There were some problems with your input.<br><br>
-                            <ul>
-                                @foreach ($errors->all() as $error)
-                                    <li>{{ $error }}</li>
-                                @endforeach
-                            </ul>
-                            <button type="button" class="btn-close" aria-label="Close"></button>
-                        </div>
-                    @endif
-                </div>
+                @if ($errors->any())
+                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                        <strong>Whoops!</strong> There were some problems with your input.<br><br>
+                        <ul>
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                @endif
 
                 <div class="border-wrapper">
-
                     <div class="form-container">
-                        <form action="{{ route('certificate.store') }}" method="POST" enctype="multipart/form-data">
+                        <form action="{{ route('sub-account.update', $subAccountKey->id) }}" method="POST">
                             @csrf
+                            @method('PUT')
 
                             <div class="form-group">
-                                <label for="report_key">ឈ្មោះសលាកបត្រ:</label>
-                                <input type="text" name="name_certificate" id="name_certificate"
-                                    class="form-control @error('name_certificate') is-invalid @enderror">
-                                @error('name_certificate')
+                                <strong>លេខគណនី:</strong>
+                                <select name="account_key" class="form-control">
+                                    @foreach ($accountKeys as $accountKey)
+                                        <option value="{{ $accountKey->id }}" {{ $accountKey->id == $subAccountKey->account_key ? 'selected' : '' }}>
+                                            {{ $accountKey->key->code }} < {{ $accountKey->account_key }} 
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="sub_account_key">លេខអនុគណនី:</label>
+                                <input type="number" name="sub_account_key" id="sub_account_key"
+                                    class="form-control @error('sub_account_key') is-invalid @enderror"
+                                    value="{{ old('sub_account_key', $subAccountKey->sub_account_key) }}">
+                                @error('sub_account_key')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+
+                            <div class="form-group">
+                                <label for="name_sub_account_key">ចំណាត់ថ្នាក់:</label>
+                                <input type="text" name="name_sub_account_key" id="name_sub_account_key"
+                                    class="form-control @error('name_sub_account_key') is-invalid @enderror"
+                                    value="{{ old('name_sub_account_key', $subAccountKey->name_sub_account_key) }}">
+                                @error('name_sub_account_key')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
                             </div>
 
                             <div class="d-flex align-items-center">
-                                <button type="submit" class="btn btn-primary ml-auto">បានរក្សាទុក</button>
+                                <button type="submit" class="btn btn-primary ml-auto">បញ្ចូល</button>
                             </div>
                         </form>
                     </div>
@@ -60,7 +82,6 @@
     </div>
 @endsection
 
-
 @section('styles')
     <style>
         .border-wrapper {
@@ -68,37 +89,11 @@
             padding: 10px;
         }
 
-        .alert-popup {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            z-index: 1050;
-            width: 300px;
-            border-radius: 5px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            opacity: 0;
-            transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
-            transform: translateY(-20px);
-        }
-
-        .result-total-table-container {
-            max-height: 100vh;
-            overflow-y: auto;
-        }
-
-        .alert-popup.show {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        .alert-popup .btn-close {
-            position: absolute;
-            top: 10px;
-            right: 10px;
+        .container-fluid {
+            padding: 16px;
         }
     </style>
 @endsection
-
 
 @section('scripts')
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
@@ -157,20 +152,6 @@
                     scrollTop: ($($anchor.attr('href')).offset().top)
                 }, 1000, 'easeInOutExpo');
                 e.preventDefault();
-            });
-
-            // Show and hide alerts
-            $(document).ready(function() {
-                $('.alert-popup').each(function() {
-                    $(this).addClass('show');
-                    setTimeout(() => {
-                        $(this).removeClass('show');
-                    }, 5000); // Hide after 5 seconds
-                });
-
-                $('.alert-popup .btn-close').on('click', function() {
-                    $(this).parent().removeClass('show');
-                });
             });
 
         })(jQuery); // End of use strict
