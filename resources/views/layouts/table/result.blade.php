@@ -150,10 +150,7 @@
                                         <td class="filterable" data-filter="{{ $currentSubAccountKeyCode }}">
                                             {{ $currentSubAccountKeyCode }}
                                         </td>
-                                        {{-- <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td> --}}
+
                                         <td class="filterable" data-filter="{{ $currentReportKey }}">
                                             {{ $currentReportKey }}
                                         </td>
@@ -169,11 +166,22 @@
                                         <td>{{ number_format($result->total_increase, 0, ' ', ' ') }}</td>
                                         <td>{{ number_format($result->decrease, 0, ' ', ' ') }}</td>
                                         <td>{{ number_format($result->editorial, 0, ' ', ' ') }}</td>
-                                        <td>{{ number_format($result->new_credit_status, 0, ' ', ' ') }}</td>
-                                        <td>{{ number_format($result->early_balance, 0, ' ', ' ') }}</td>
-                                        <td>{{ number_format($result->apply, 0, ' ', ' ') }}</td>
-                                        <td>{{ number_format($result->deadline_balance, 0, ' ', ' ') }}</td>
-                                        <td>{{ number_format($result->credit, 0, ' ', ' ') }}</td>
+                                        <td style="color: {{ $result->new_credit_status < 0 ? 'red' : 'black' }};">
+                                            {{ number_format($result->new_credit_status, 0, ' ', ' ') }}
+                                        </td>
+                                        <td style="color: {{ $result->early_balance < 0 ? 'red' : 'black' }};">
+                                            {{ number_format($result->early_balance, 0, ' ', ' ') }}
+                                        </td>
+                                        <td style="color: {{ $result->apply < 0 ? 'red' : 'black' }};">
+                                            {{ number_format($result->apply, 0, ' ', ' ') }}
+                                        </td>
+                                        <td style="color: {{ $result->deadline_balance < 0 ? 'red' : 'black' }};">
+                                            {{ number_format($result->deadline_balance, 0, ' ', ' ') }}
+                                        </td>
+                                        <td style="color: {{ $result->credit < 0 ? 'red' : 'black' }};">
+                                            {{ number_format($result->credit, 0, ' ', ' ') }}
+                                        </td>
+
                                         <td style="border: 1px solid black; text-align: center">
                                             {{ $result->law_average }}%</td>
                                         <td style="border: 1px solid black; text-align: center">
@@ -205,13 +213,28 @@
                                         <td>{{ number_format($totalsByCode['unexpected_increase'], 0, ' ', ' ') }}</td>
                                         <td>{{ number_format($totalsByCode['additional_increase'], 0, ' ', ' ') }}</td>
                                         <td></td>
-                                        <td>{{ number_format($totalsByCode['decrease'], 0, ' ', ' ') }}</td>
-                                        <td>{{ number_format($totalsByCode['editorial'], 0, ' ', ' ') }}</td>
-                                        <td>{{ number_format($totalsByCode['new_credit_status'], 0, ' ', ' ') }}</td>
-                                        <td>{{ number_format($totalsByCode['early_balance'], 0, ' ', ' ') }}</td>
-                                        <td>{{ number_format($totalsByCode['apply'], 0, ' ', ' ') }}</td>
-                                        <td>{{ number_format($totalsByCode['deadline_balance'], 0, ' ', ' ') }}</td>
-                                        <td>{{ number_format($totalsByCode['credit'], 0, ' ', ' ') }}</td>
+                                        <td style="color: {{ $totalsByCode['decrease'] < 0 ? 'red' : 'black' }};">
+                                            {{ number_format($totalsByCode['decrease'], 0, ' ', ' ') }}
+                                        </td>
+                                        <td style="color: {{ $totalsByCode['editorial'] < 0 ? 'red' : 'black' }};">
+                                            {{ number_format($totalsByCode['editorial'], 0, ' ', ' ') }}
+                                        </td>
+                                        <td
+                                            style="color: {{ $totalsByCode['new_credit_status'] < 0 ? 'red' : 'black' }};">
+                                            {{ number_format($totalsByCode['new_credit_status'], 0, ' ', ' ') }}
+                                        </td>
+                                        <td style="color: {{ $totalsByCode['early_balance'] < 0 ? 'red' : 'black' }};">
+                                            {{ number_format($totalsByCode['early_balance'], 0, ' ', ' ') }}
+                                        </td>
+                                        <td style="color: {{ $totalsByCode['apply'] < 0 ? 'red' : 'black' }};">
+                                            {{ number_format($totalsByCode['apply'], 0, ' ', ' ') }}
+                                        </td>
+                                        <td style="color: {{ $totalsByCode['deadline_balance'] < 0 ? 'red' : 'black' }};">
+                                            {{ number_format($totalsByCode['deadline_balance'], 0, ' ', ' ') }}
+                                        </td>
+                                        <td style="color: {{ $totalsByCode['credit'] < 0 ? 'red' : 'black' }};">
+                                            {{ number_format($totalsByCode['credit'], 0, ' ', ' ') }}
+                                        </td>
                                         <td>{{ number_format($totalsByCode['law_average'], 0, ' ', ' ') }} %</td>
                                         <td>{{ number_format($totalsByCode['law_correction'], 0, ' ', ' ') }} %</td>
                                     </tr>
@@ -234,15 +257,32 @@
                                             <td>{{ number_format($totalsByAccountKey['additional_increase'], 0, ' ', ' ') }}
                                             </td>
                                             <td></td>
-                                            <td>{{ number_format($totalsByAccountKey['decrease'], 0, ' ', ' ') }}</td>
-                                            <td>{{ number_format($totalsByAccountKey['editorial'], 0, ' ', ' ') }}</td>
-                                            <td>{{ number_format($totalsByAccountKey['new_credit_status'], 0, ' ', ' ') }}
+                                            <td
+                                                style="color: {{ $totalsByAccountKey['decrease'] < 0 ? 'red' : 'black' }};">
+                                                {{ number_format($totalsByAccountKey['decrease'], 0, ' ', ' ') }}
                                             </td>
-                                            <td>{{ number_format($totalsByAccountKey['early_balance'], 0, ' ', ' ') }}</td>
-                                            <td>{{ number_format($totalsByAccountKey['apply'], 0, ' ', ' ') }}</td>
-                                            <td>{{ number_format($totalsByAccountKey['deadline_balance'], 0, ' ', ' ') }}
+                                            <td
+                                                style="color: {{ $totalsByAccountKey['editorial'] < 0 ? 'red' : 'black' }};">
+                                                {{ number_format($totalsByAccountKey['editorial'], 0, ' ', ' ') }}
                                             </td>
-                                            <td>{{ number_format($totalsByAccountKey['credit'], 0, ' ', ' ') }}</td>
+                                            <td
+                                                style="color: {{ $totalsByAccountKey['new_credit_status'] < 0 ? 'red' : 'black' }};">
+                                                {{ number_format($totalsByAccountKey['new_credit_status'], 0, ' ', ' ') }}
+                                            </td>
+                                            <td
+                                                style="color: {{ $totalsByAccountKey['early_balance'] < 0 ? 'red' : 'black' }};">
+                                                {{ number_format($totalsByAccountKey['early_balance'], 0, ' ', ' ') }}
+                                            </td>
+                                            <td style="color: {{ $totalsByAccountKey['apply'] < 0 ? 'red' : 'black' }};">
+                                                {{ number_format($totalsByAccountKey['apply'], 0, ' ', ' ') }}
+                                            </td>
+                                            <td
+                                                style="color: {{ $totalsByAccountKey['deadline_balance'] < 0 ? 'red' : 'black' }};">
+                                                {{ number_format($totalsByAccountKey['deadline_balance'], 0, ' ', ' ') }}
+                                            </td>
+                                            <td style="color: {{ $totalsByAccountKey['credit'] < 0 ? 'red' : 'black' }};">
+                                                {{ number_format($totalsByAccountKey['credit'], 0, ' ', ' ') }}
+                                            </td>
                                             <td>{{ number_format($totalsByAccountKey['law_average'], 0, ' ', ' ') }} %</td>
                                             <td>{{ number_format($totalsByAccountKey['law_correction'], 0, ' ', ' ') }}%
                                             </td>
@@ -269,28 +309,45 @@
                                                 <td>{{ number_format($totalsBySubAccountKey['additional_increase'], 0, ' ', ' ') }}
                                                 </td>
                                                 <td></td>
-                                                <td>{{ number_format($totalsBySubAccountKey['decrease'], 0, ' ', ' ') }}
+                                                <td
+                                                    style="color: {{ $totalsBySubAccountKey['decrease'] < 0 ? 'red' : 'black' }};">
+                                                    {{ number_format($totalsBySubAccountKey['decrease'], 0, ' ', ' ') }}
                                                 </td>
-                                                <td>{{ number_format($totalsBySubAccountKey['editorial'], 0, ' ', ' ') }}
+                                                <td
+                                                    style="color: {{ $totalsBySubAccountKey['editorial'] < 0 ? 'red' : 'black' }};">
+                                                    {{ number_format($totalsBySubAccountKey['editorial'], 0, ' ', ' ') }}
                                                 </td>
-                                                <td>{{ number_format($totalsBySubAccountKey['new_credit_status'], 0, ' ', ' ') }}
+                                                <td
+                                                    style="color: {{ $totalsBySubAccountKey['new_credit_status'] < 0 ? 'red' : 'black' }};">
+                                                    {{ number_format($totalsBySubAccountKey['new_credit_status'], 0, ' ', ' ') }}
                                                 </td>
-                                                <td>{{ number_format($totalsBySubAccountKey['early_balance'], 0, ' ', ' ') }}
+                                                <td
+                                                    style="color: {{ $totalsBySubAccountKey['early_balance'] < 0 ? 'red' : 'black' }};">
+                                                    {{ number_format($totalsBySubAccountKey['early_balance'], 0, ' ', ' ') }}
                                                 </td>
-                                                <td>{{ number_format($totalsBySubAccountKey['apply'], 0, ' ', ' ') }}</td>
-                                                <td>{{ number_format($totalsBySubAccountKey['deadline_balance'], 0, ' ', ' ') }}
+                                                <td
+                                                    style="color: {{ $totalsBySubAccountKey['apply'] < 0 ? 'red' : 'black' }};">
+                                                    {{ number_format($totalsBySubAccountKey['apply'], 0, ' ', ' ') }}
                                                 </td>
-                                                <td>{{ number_format($totalsBySubAccountKey['credit'], 0, ' ', ' ') }}</td>
+                                                <td
+                                                    style="color: {{ $totalsBySubAccountKey['deadline_balance'] < 0 ? 'red' : 'black' }};">
+                                                    {{ number_format($totalsBySubAccountKey['deadline_balance'], 0, ' ', ' ') }}
+                                                </td>
+                                                <td
+                                                    style="color: {{ $totalsBySubAccountKey['credit'] < 0 ? 'red' : 'black' }};">
+                                                    {{ number_format($totalsBySubAccountKey['credit'], 0, ' ', ' ') }}
+                                                </td>
                                                 <td>{{ number_format($totalsBySubAccountKey['law_average'], 0, ' ', ' ') }}%
                                                 </td>
                                                 <td>{{ number_format($totalsBySubAccountKey['law_correction'], 0, ' ', ' ') }}
                                                     %
                                                 </td>
                                             </tr>
-                                           
+                                            
                                         @endforeach
                                     @endforeach
                                 @endforeach
+
 
 
                                 {{--                  Total                  --}}

@@ -289,17 +289,6 @@ class ResultController extends Controller
 
             $totalIncrease = $report->internal_increase + $report->unexpected_increase + $report->additional_increase;
             $totals['total_increase'] += $totalIncrease;
-            // $totals['total_balance'] += ($totalIncrease - $report->decrease);
-
-            // Sum subAccountKey amounts
-            // if ($report->subAccountKey) {
-            //     $totals['sub_account_amount'] += $report->subAccountKey->amount ?? 0;
-            // }
-
-            // Sum accountKey amounts
-            // if ($report->subAccountKey && $report->subAccountKey->accountKey) {
-            //     $totals['account_amount'] += $report->subAccountKey->accountKey->amount ?? 0;
-            // }
         }
 
         // Group reports by code
@@ -330,7 +319,6 @@ class ResultController extends Controller
                 foreach ($groupedBySubAccountKey as $subAccountKeyId => $reportsBySubAccountKey) {
                     $totals['subAccountKey'][$codeId][$accountKeyId][$subAccountKeyId] = $this->calculateSumFields($reportsBySubAccountKey);
                     $totals['subAccountKey'][$codeId][$accountKeyId][$subAccountKeyId]['name_sub_account_key'] = $reportsBySubAccountKey->first()->subAccountKey->name_sub_account_key ?? 'Unknown';
-          
                 }
             }
         }
