@@ -15,7 +15,23 @@
         href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
         rel="stylesheet">
 
+<<<<<<< HEAD
+    <!-- Custom styles for this template-->
+    <link href="/css/sb-admin-2.min.css" rel="stylesheet">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Include FontAwesome CSS (optional) -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" rel="stylesheet">
+
+    <!-- Include SweetAlert CSS and JS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    {{-- Font Style By --}}
+
+=======
     <!-- Custom Khmer Fonts -->
+>>>>>>> bc0498dfa73999e5613696a664f5ef6fcd73b499
     <link href="https://fonts.googleapis.com/css2?family=Siemreap&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Khmer+OS+Muol+Light&display=swap" rel="stylesheet">
 
@@ -33,10 +49,12 @@
 
     @yield('styles')
 </head>
+<<<<<<< HEAD
+=======
 
 
+>>>>>>> bc0498dfa73999e5613696a664f5ef6fcd73b499
 <body id="page-top">
-
     <!-- Page Wrapper -->
     <div id="wrapper">
 
@@ -139,6 +157,10 @@
 
             </div>
             <!-- /.container-fluid -->
+<<<<<<< HEAD
+
+=======
+>>>>>>> bc0498dfa73999e5613696a664f5ef6fcd73b499
         </div>
         <!-- End of Main Content -->
     </div>
