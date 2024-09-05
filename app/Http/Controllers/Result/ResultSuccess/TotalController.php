@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Result\ResultSuccess;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
-class ResultSuccessController extends Controller
+class TotalController extends Controller
 {
     //
     public function index (){
