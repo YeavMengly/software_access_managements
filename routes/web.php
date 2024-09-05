@@ -102,8 +102,7 @@ Route::get('/mission-cam', [MissionCambodiaController::class, 'index'])->name('t
 //===============================>> Manage Exports
 // Route::get('/import-data',[ReportController::class, 'import'])->name('import-data');
 // Route::get('/import', [ReportController::class, 'import'])->name('import.form');
-Route::post('/reports/import', [ReportController::class, 'importExcelData'])->name('reports.import');
-
+Route::post('/import-excel', [ReportController::class, 'import'])->name('reports.import');
 
 //===============================>> Manage Exports
 

@@ -83,13 +83,6 @@
                         </div>
                     </div>
 
-                    <!-- Your existing search form -->
-                    <form class="max-w-md mx-auto mt-4" method="GET" action="{{ url()->current() }}">
-                        <!-- Existing search form fields -->
-                    </form>
-
-
-
                     <form class="max-w-md mx-auto mt-4" method="GET" action="{{ url()->current() }}">
                         <div class="row">
                             <div class="col-md-3">
@@ -142,11 +135,22 @@
                 </div>
             </div>
 
-            @if ($message = Session::get('success'))
-                <div class="alert alert-success alert-dismissible fade show" role="alert">
-                    <p>{{ $message }}</p>
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                </div>
+            @if (Session::has('success'))
+                <script>
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Success!',
+                        text: '{{ Session::get('success') }}',
+                    });
+                </script>
+            @elseif (Session::has('error'))
+                <script>
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error!',
+                        text: '{{ Session::get('error') }}',
+                    });
+                </script>
             @endif
 
             <div class="table-container mt-4">
@@ -197,27 +201,24 @@
                                     {{ number_format($report->decrease, 0, ' ', ' ') }}</td>
 
                                 <td style="border: 1px solid black; text-align: center; justify-content: center">
-                                    <div class="form-container">
-                                        <form action="{{ route('codes.destroy', $report->id) }}" method="POST">
-                                            {{-- <a class="btn btn-info" href="{{ route('codes.show', $report->id) }}">
-                                                <i class="fas fa-eye"></i>
-                                            </a> --}}
-                                            <a class="btn btn-primary" href="{{ route('codes.edit', $report->id) }}">
-                                                <i class="fas fa-edit"></i>
-                                            </a>
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit" class="btn btn-danger"
-                                                onclick="return confirm('Are you sure you want to delete this item?');">
-                                                <i class="fas fa-trash-alt"></i>
-                                            </button>
-                                        </form>
-                                    </div>
+                                    <form id="delete-form-{{ $report->id }}"
+                                        action="{{ route('codes.destroy', $report->id) }}" method="POST"
+                                        style="display: none;">
+                                        @csrf
+                                        @method('DELETE')
+                                    </form>
+                                    <a class="btn btn-primary" href="{{ route('codes.edit', $report->id) }}">
+                                        <i class="fas fa-edit" title="Edit"></i>
+                                    </a>
+                                    <button type="button" class="btn btn-danger"
+                                        onclick="confirmDelete({{ $report->id }})">
+                                        <i class="fas fa-trash-alt" title="Delete"></i>
+                                    </button>
                                 </td>
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="12" style="text-align: center;">No data available</td>
+                                <td colspan="13" style="text-align: center;">No data available</td>
                             </tr>
                         @endforelse
                     </tbody>
@@ -455,5 +456,37 @@
             // Submit the form to reset filters
             document.querySelector('form').submit();
         });
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    @if (Session::has('success'))
+        <script>
+            Swal.fire({
+                icon: 'success',
+                title: 'ជោគជ័យ',
+                text: '{{ Session::get('success') }}',
+                showConfirmButton: false,
+                timer: 2000
+            });
+        </script>
+    @endif
+
+    <script>
+        function confirmDelete(id) {
+            Swal.fire({
+                title: 'តើអ្នកពិតជាចង់លុបមែនទេ?',
+                text: 'មិនអាចត្រឡប់វិញបានទេ!',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'បាទ/ចាស, លុបវា!',
+                cancelButtonText: 'បោះបង់',
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    document.getElementById('delete-form-' + id).submit();
+                }
+            });
+        }
     </script>
 @endsection

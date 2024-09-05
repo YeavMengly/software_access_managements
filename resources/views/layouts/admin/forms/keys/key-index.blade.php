@@ -40,13 +40,6 @@
                 </div>
             </div>
 
-            @if ($message = Session::get('success'))
-                <div class="alert alert-success alert-dismissible fade show" role="alert">
-                    <p>{{ $message }}</p>
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                </div>
-            @endif
-
             <table class="table table-striped table-hover">
                 <thead>
                     <tr>
@@ -83,7 +76,7 @@
                 <tbody>
                     @if ($keys->isEmpty())
                         <tr>
-                            <td colspan="4" style="text-align: center; border: 1px solid black;">គ្មានទិន្នន័យ</td>
+                            <td colspan="4" style="text-align: center; border: 1px solid black;">គ្មានទិន្ន័យ</td>
                         </tr>
                     @else
                         @php
@@ -95,20 +88,19 @@
                                 <td style="border: 1px solid black; text-align: center;">{{ $key->code }}</td>
                                 <td style="border: 1px solid black; text-align: center;">{{ $key->name }}</td>
                                 <td style="border: 1px solid black; text-align: center; justify-content: center">
-                                    <form action="{{ route('keys.destroy', $key->id) }}" method="POST">
-                                        {{-- <a class="btn btn-info" href="{{ route('keys.show', $key->id) }}">
-                                            <i class="fas fa-eye"></i>
-                                        </a> --}}
-                                        <a class="btn btn-primary" href="{{ route('keys.edit', $key->id) }}">
-                                            <i class="fas fa-edit"></i>
-                                        </a>
+                                    <form id="delete-form-{{ $key->id }}"
+                                        action="{{ route('keys.destroy', $key->id) }}" method="POST"
+                                        style="display: none;">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="submit" class="btn btn-danger"
-                                            onclick="return confirm('Are you sure you want to delete this location?')">
-                                            <i class="fas fa-trash"></i>
-                                        </button>
                                     </form>
+                                    <a class="btn btn-primary" href="{{ route('keys.edit', $key->id) }}">
+                                        <i class="fas fa-edit" title="Edit"></i>
+                                    </a>
+                                    <button type="button" class="btn btn-danger"
+                                        onclick="confirmDelete({{ $key->id }})">
+                                        <i class="fas fa-trash-alt" title="Delete"></i>
+                                    </button>
                                 </td>
                             </tr>
                             @php
@@ -116,7 +108,7 @@
                             @endphp
                         @empty
                             <tr>
-                                <td colspan="13" style="text-align: center;">គ្មានទិន្នន័យ</td>
+                                <td colspan="13" style="text-align: center;">គ្មានទិន្ន័យ</td>
                             </tr>
                         @endforelse
                     @endif
@@ -170,6 +162,7 @@
 @endsection
 
 @section('styles')
+    <!-- Include any additional styles here -->
     <style>
         .border-wrapper {
             /* border: 2px solid black; */
@@ -183,7 +176,7 @@
 
         #submit-button {
             position: relative;
-            padding-right: 50px; /* Make space for the loader */
+            padding-right: 50px;
         }
 
         #plus-icon {
@@ -197,35 +190,58 @@
             transform: translateY(-50%);
             width: 24px;
             height: 24px;
-            border: 3px solid #f3f3f3; /* Light grey */
-            border-top: 3px solid #3498db; /* Blue */
+            border: 3px solid #f3f3f3;
+            /* Light grey */
+            border-top: 3px solid #3498db;
+            /* Blue */
             border-radius: 50%;
             animation: spin 1s linear infinite;
         }
 
         @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
         }
     </style>
 @endsection
 
 @section('scripts')
-<script>
-    document.getElementById('submit-button').addEventListener('click', function() {
-        var loader = document.getElementById('loader');
-        var plusIcon = document.getElementById('plus-icon');
+    <!-- Include SweetAlert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-        // Show loader and hide plus icon
-        loader.style.display = 'inline-block';
-        plusIcon.style.display = 'none';
+    @if (Session::has('success'))
+        <script>
+            Swal.fire({
+                icon: 'success',
+                title: 'ជោគជ័យ',
+                text: '{{ Session::get('success') }}',
+                showConfirmButton: false,
+                timer: 2000
+            });
+        </script>
+    @endif
 
-        // Simulate form submission delay
-        setTimeout(function() {
-            // Hide loader and show plus icon again
-            loader.style.display = 'none';
-            plusIcon.style.display = 'inline-block';
-        }, 2000); // Change 2000 to match your form submission time
-    });
-</script>
+    <script>
+        function confirmDelete(id) {
+            Swal.fire({
+                title: 'តើអ្នកពិតជាចង់លុបមែនទេ?',
+                text: 'មិនអាចត្រឡប់វិញបានទេ!',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'បាទ/ចាស, លុបវា!',
+                cancelButtonText: 'បោះបង់',
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    document.getElementById('delete-form-' + id).submit();
+                }
+            });
+        }
+    </script>
 @endsection

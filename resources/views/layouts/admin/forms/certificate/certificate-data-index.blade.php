@@ -10,9 +10,10 @@
                 </a>
                 <h2 style="font-weight: 700;">តារាងទិន្នន័យសលាកបត្រ</h2>
 
-                <a id="submit-button" class="btn btn-success justify-content-between" href="{{ route('certificate-data.create') }}">
+                <a id="submit-button" class="btn btn-success justify-content-between"
+                    href="{{ route('certificate-data.create') }}">
                     បញ្ចូលទិន្ន័យ
-                    <i id="plus-icon" class="fas fa-plus" ></i>
+                    <i id="plus-icon" class="fas fa-plus"></i>
                     <div id="loader" class="loader" style="display: none;"></div>
                 </a>
 
@@ -37,13 +38,7 @@
             </form>
         </div>
     </div>
-
-    @if ($message = Session::get('success'))
-        <div class="alert alert-success alert-dismissible fade show" role="alert">
-            <p>{{ $message }}</p>
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
-    @endif
+    
     <div class="border-wrapper ml-4 mr-4">
         <div class="result-total-table-container">
             <table class="table table-striped table-hover ">
@@ -96,10 +91,6 @@
                                         @csrf
                                         @method('DELETE')
                                     </form>
-                                    {{-- <a class="btn btn-info"
-                                        href="{{ route('certificate-data.show', $certificateData->id) }}">
-                                        <i class="fas fa-eye" title="Show"></i>
-                                    </a> --}}
                                     <a class="btn btn-primary"
                                         href="{{ route('certificate-data.edit', $certificateData->id) }}">
                                         <i class="fas fa-edit" title="Edit"></i>
@@ -220,19 +211,34 @@
 @endsection
 @section('scripts')
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.1/dist/sweetalert2.min.js"></script>
-    <script type="text/javascript">
+    <!-- Include SweetAlert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    @if (Session::has('success'))
+        <script>
+            Swal.fire({
+                icon: 'success',
+                title: 'ជោគជ័យ',
+                text: '{{ Session::get('success') }}',
+                showConfirmButton: false,
+                timer: 2000
+            });
+        </script>
+    @endif
+
+    <script>
         function confirmDelete(id) {
             Swal.fire({
-                title: 'Are you sure?',
-                text: "You won't be able to revert this!",
+                title: 'តើអ្នកពិតជាចង់លុបមែនទេ?',
+                text: 'មិនអាចត្រឡប់វិញបានទេ!',
                 icon: 'warning',
                 showCancelButton: true,
                 confirmButtonColor: '#3085d6',
                 cancelButtonColor: '#d33',
-                confirmButtonText: 'Yes, delete it!'
+                confirmButtonText: 'បាទ/ចាស, លុបវា!',
+                cancelButtonText: 'បោះបង់',
             }).then((result) => {
                 if (result.isConfirmed) {
-                    // Submit the form corresponding to the certificate ID
                     document.getElementById('delete-form-' + id).submit();
                 }
             });

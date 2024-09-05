@@ -12,10 +12,13 @@
             <div class="d-flex justify-content-between align-items-center">
                 <h2 style="font-weight: 700;">តារាងឈ្មោះសលាកបត្រ</h2>
                 <div class="btn-container">
-                    <a id="submit-button" class="btn btn-success" href="{{ route('certificate.create') }}">
-                        បញ្ចូលទិន្នន័យ
+                    <a id="submit-button" class="btn btn-success justify-content-between"
+                        href="{{ route('certificate.create') }}">
+                        បញ្ចូលទិន្ន័យ
+                        <i id="plus-icon" class="fas fa-plus"></i>
+                        <div id="loader" class="loader" style="display: none;"></div>
                     </a>
-                    <div id="loader" class="loader m-2"></div>
+
                 </div>
             </div>
 
@@ -39,14 +42,6 @@
         </div>
     </div>
 
-    @if ($message = Session::get('success'))
-        <div class="alert alert-success alert-dismissible fade show" role="alert">
-            <p>{{ $message }}</p>
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
-    @endif
-
-    {{-- @if ($certificates->count() > 0) --}}
     <div class="border-wrapper ml-4 mr-4">
         <div class="result-total-table-container">
             <table class="table table-striped table-hover">
@@ -70,9 +65,6 @@
                                     @csrf
                                     @method('DELETE')
                                 </form>
-                                {{-- <a class="btn btn-info" href="{{ route('certificate.show', $certificate->id) }}">
-                                <i class="fas fa-eye"></i>
-                            </a> --}}
                                 <a class="btn btn-primary" href="{{ route('certificate.edit', $certificate->id) }}">
                                     <i class="fas fa-edit"></i>
                                 </a>
@@ -156,12 +148,11 @@
 
         #submit-button {
             position: relative;
-            padding-right: 50px;
-           
-
-
+            padding-right: 48px;
             /* Make space for the loader */
         }
+
+
 
         #loader {
             display: none;
@@ -181,6 +172,16 @@
             /* Adjust loader color if needed */
             animation: spin 1s linear infinite;
         }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
     </style>
 @endsection
 
@@ -189,19 +190,34 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/js/all.min.js"
         integrity="sha512-nh8KkfWJZK0C0H8z8Z0z8W3R7ZFl8k5Hq9O1O7s9O0P8+Hybz5VQ1cDUNUr+M+4H0ttD5F5lsS4uRUmxT1b4g=="
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <script type="text/javascript">
+    <!-- Include SweetAlert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    @if (Session::has('success'))
+        <script>
+            Swal.fire({
+                icon: 'success',
+                title: 'ជោគជ័យ',
+                text: '{{ Session::get('success') }}',
+                showConfirmButton: false,
+                timer: 2000
+            });
+        </script>
+    @endif
+
+    <script>
         function confirmDelete(id) {
             Swal.fire({
-                title: 'Are you sure?',
-                text: "You won't be able to revert this!",
+                title: 'តើអ្នកពិតជាចង់លុបមែនទេ?',
+                text: 'មិនអាចត្រឡប់វិញបានទេ!',
                 icon: 'warning',
                 showCancelButton: true,
                 confirmButtonColor: '#3085d6',
                 cancelButtonColor: '#d33',
-                confirmButtonText: 'Yes, delete it!'
+                confirmButtonText: 'បាទ/ចាស, លុបវា!',
+                cancelButtonText: 'បោះបង់',
             }).then((result) => {
                 if (result.isConfirmed) {
-                    // Submit the form corresponding to the certificate ID
                     document.getElementById('delete-form-' + id).submit();
                 }
             });
@@ -212,15 +228,19 @@
     <script>
         // Confirm Delete
         document.getElementById('submit-button').addEventListener('click', function() {
-            const loader = document.getElementById('loader');
-            loader.style.display = 'block'; // Show the loader
-            this.innerHTML = 'កំពុងដំណើរការ... <div id="loader" class="loader"></div>'; // Change button text
+            var loader = document.getElementById('loader');
+            var plusIcon = document.getElementById('plus-icon');
 
-            // Optionally, you can handle the redirect or form submission here
-            setTimeout(() => {
-                // Redirect or handle form submission
-                window.location.href = this.getAttribute('href'); // Example redirect
-            }, 1000); // Adjust the delay as needed
+            // Show loader and hide plus icon
+            loader.style.display = 'inline-block';
+            plusIcon.style.display = 'none';
+
+            // Simulate form submission delay
+            setTimeout(function() {
+                // Hide loader and show plus icon again
+                loader.style.display = 'none';
+                plusIcon.style.display = 'inline-block';
+            }, 2000); // Change 2000 to match your form submission time
         });
 
         function handleLongRequest() {

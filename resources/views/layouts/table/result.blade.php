@@ -13,7 +13,8 @@
         <div class="container-fluid">
 
             {{--                    Start Form Search                      --}}
-            <form id="filterForm" class="max-w-md mx-auto mt-3" method="GET" action="{{ route('result.index') }}" onsubmit="return validateDateField()">
+            <form id="filterForm" class="max-w-md mx-auto mt-3" method="GET" action="{{ route('result.index') }}"
+                onsubmit="return validateDateField()">
                 <div class="row mb-3">
 
                     {{-- Filter Code --}}
@@ -42,10 +43,10 @@
 
                     {{-- Filter Date --}}
                     <div class="col-md-3">
-                        <input type="date" name="date" value="{{ request('date') }}"
-                            class="form-control mb-2" placeholder="Date (YYYY-MM-DD or YYYY-MM-DD - YYYY-MM-DD)">
+                        <input type="date" name="date" value="{{ request('date') }}" class="form-control mb-2"
+                            placeholder="Date (YYYY-MM-DD or YYYY-MM-DD - YYYY-MM-DD)">
                     </div>
-  
+
 
                     {{--        Start btn search and reset       --}}
                     <div class="col-md-12">
@@ -77,13 +78,18 @@
 
 
             <div class="border-wrapper">
-                <div class="result-total-table-container">
-                    <h3>របាយការណ៍ធានាចំណាយថវិកាក្រសួងការងារ និងបណ្តុះបណ្តាលវិជ្ជាជីវៈ</h3>
-                    <h5>ប្រចាំខែមិថុនា ឆ្នាំ២០២៤</h5>
+                <div class="result-total-table-container mt-4">
+                    <div class="first-header text-center">
+                        <h3>របាយការណ៍ធានាចំណាយថវិកាក្រសួងការងារ និងបណ្តុះបណ្តាលវិជ្ជាជីវៈ</h3>
+
+                    </div>
+                    <div class="second-header text-center">
+                        <h4>ប្រចាំខែមិថុនា ឆ្នាំ២០២៤</h4>
+                    </div>
                     <div class="table-container">
 
                         {{--            Table           --}}
-                        <table id="reportTable" class="table-border">
+                        <table id="reportTable" class="table-border mt-4">
                             <thead class="header-border">
                                 <tr>
                                     <th rowspan="3">លេខ</th>
@@ -117,35 +123,42 @@
                                 </tr>
                             </thead>
                             <tbody class="cell-border">
+
                                 @php
                                     $previousKeyCode = $previousAccountKeyCode = $previousSubAccountKeyCode = $previousReportKeyCode = null;
                                 @endphp
                                 {{-- start import data --}}
                                 @forelse ($results as $result)
                                     @php
-                                        $currentKeyCode = $result->subAccountKey->accountKey->key->code;
-                                        $currentAccountKeyCode = $result->subAccountKey->accountKey->account_key;
-                                        $currentSubAccountKeyCode = $result->subAccountKey->sub_account_key;
+                                        $subAccountKey = $result->subAccountKey;
+                                        $accountKey = $subAccountKey ? $subAccountKey->accountKey : null;
+                                        $currentKeyCode = $accountKey ? $accountKey->key->code : null;
+                                        $currentAccountKeyCode = $accountKey ? $accountKey->account_key : null;
+                                        $currentSubAccountKeyCode = $subAccountKey
+                                            ? $subAccountKey->sub_account_key
+                                            : null;
                                         $currentReportKey = $result->report_key;
                                     @endphp
                                     <tr>
-                                        <td class="filterable" data-filter="6001">{{ $loop->iteration }}</td>
-                                        <td class="filterable"
-                                            data-filter="{{ $result->subAccountKey->accountKey->key->code }}">
-                                            {{ $result->subAccountKey->accountKey->key->code }}
+                                        <td class="filterable" data-filter="6001"></td>
+                                        <td class="filterable" data-filter="{{ $currentKeyCode }}">
+                                            {{ $currentKeyCode }}
                                         </td>
-                                        <td class="filterable"
-                                            data-filter="{{ $result->subAccountKey->accountKey->account_key }}">
-                                            {{ $result->subAccountKey->accountKey->account_key }}
+                                        <td class="filterable" data-filter="{{ $currentAccountKeyCode }}">
+                                            {{ $currentAccountKeyCode }}
                                         </td>
-                                        <td class="filterable" data-filter="{{ $result->subAccountKey->sub_account_key }}">
-                                            {{ $result->subAccountKey->sub_account_key }}
+                                        <td class="filterable" data-filter="{{ $currentSubAccountKeyCode }}">
+                                            {{ $currentSubAccountKeyCode }}
                                         </td>
-                                        <td class="filterable" data-filter="{{ $result->report_key }}">
-                                            {{ $result->report_key }}
+                                        {{-- <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td> --}}
+                                        <td class="filterable" data-filter="{{ $currentReportKey }}">
+                                            {{ $currentReportKey }}
                                         </td>
                                         <td
-                                            style="border: 1px solid black; max-width: 200px; text-align: center; overflow-y: auto; white-space: nowrap;">
+                                            style="border: 1px solid black; max-width: 200px; text-align: center; overflow-y: auto; white-space: nowrap; text-align: start;">
                                             {{ $result->name_report_key }}
                                         </td>
                                         <td>{{ number_format($result->fin_law, 0, ' ', ' ') }}</td>
@@ -178,6 +191,107 @@
                                         <td colspan="21" style="text-align: center;">គ្មានទិន្នន័យ</td>
                                     </tr>
                                 @endforelse
+                                @foreach ($totals['code'] as $codeId => $totalsByCode)
+                                    <tr>
+                                        <td>{{ $loop->iteration }}</td>
+                                        <td colspan="1"> {{ $codeId }} </td>
+                                        <td colspan="1"></td>
+                                        <td colspan="1"></td>
+                                        <td colspan="1"></td>
+                                        <td colspan="1" style="text-align: start;">{{ $totalsByCode['name'] }}</td>
+                                        <td>{{ number_format($totalsByCode['fin_law'], 0, ' ', ' ') }}</td>
+                                        <td>{{ number_format($totalsByCode['current_loan'], 0, ' ', ' ') }}</td>
+                                        <td>{{ number_format($totalsByCode['internal_increase'], 0, ' ', ' ') }}</td>
+                                        <td>{{ number_format($totalsByCode['unexpected_increase'], 0, ' ', ' ') }}</td>
+                                        <td>{{ number_format($totalsByCode['additional_increase'], 0, ' ', ' ') }}</td>
+                                        <td></td>
+                                        <td>{{ number_format($totalsByCode['decrease'], 0, ' ', ' ') }}</td>
+                                        <td>{{ number_format($totalsByCode['editorial'], 0, ' ', ' ') }}</td>
+                                        <td>{{ number_format($totalsByCode['new_credit_status'], 0, ' ', ' ') }}</td>
+                                        <td>{{ number_format($totalsByCode['early_balance'], 0, ' ', ' ') }}</td>
+                                        <td>{{ number_format($totalsByCode['apply'], 0, ' ', ' ') }}</td>
+                                        <td>{{ number_format($totalsByCode['deadline_balance'], 0, ' ', ' ') }}</td>
+                                        <td>{{ number_format($totalsByCode['credit'], 0, ' ', ' ') }}</td>
+                                        <td>{{ number_format($totalsByCode['law_average'], 0, ' ', ' ') }} %</td>
+                                        <td>{{ number_format($totalsByCode['law_correction'], 0, ' ', ' ') }} %</td>
+                                    </tr>
+
+                                    @foreach ($totals['accountKey'][$codeId] as $accountKeyId => $totalsByAccountKey)
+                                        <tr>
+                                            <td></td>
+                                            <td></td>
+                                            <td colspan="1">{{ $accountKeyId }}</td>
+                                            <td></td>
+                                            <td></td>
+                                            <td colspan="1" style="text-align: start;">
+                                                {{ $totalsByAccountKey['name_account_key'] }}</td>
+                                            <td>{{ number_format($totalsByAccountKey['fin_law'], 0, ' ', ' ') }}</td>
+                                            <td>{{ number_format($totalsByAccountKey['current_loan'], 0, ' ', ' ') }}</td>
+                                            <td>{{ number_format($totalsByAccountKey['internal_increase'], 0, ' ', ' ') }}
+                                            </td>
+                                            <td>{{ number_format($totalsByAccountKey['unexpected_increase'], 0, ' ', ' ') }}
+                                            </td>
+                                            <td>{{ number_format($totalsByAccountKey['additional_increase'], 0, ' ', ' ') }}
+                                            </td>
+                                            <td></td>
+                                            <td>{{ number_format($totalsByAccountKey['decrease'], 0, ' ', ' ') }}</td>
+                                            <td>{{ number_format($totalsByAccountKey['editorial'], 0, ' ', ' ') }}</td>
+                                            <td>{{ number_format($totalsByAccountKey['new_credit_status'], 0, ' ', ' ') }}
+                                            </td>
+                                            <td>{{ number_format($totalsByAccountKey['early_balance'], 0, ' ', ' ') }}</td>
+                                            <td>{{ number_format($totalsByAccountKey['apply'], 0, ' ', ' ') }}</td>
+                                            <td>{{ number_format($totalsByAccountKey['deadline_balance'], 0, ' ', ' ') }}
+                                            </td>
+                                            <td>{{ number_format($totalsByAccountKey['credit'], 0, ' ', ' ') }}</td>
+                                            <td>{{ number_format($totalsByAccountKey['law_average'], 0, ' ', ' ') }} %</td>
+                                            <td>{{ number_format($totalsByAccountKey['law_correction'], 0, ' ', ' ') }}%
+                                            </td>
+                                        </tr>
+
+                                        @foreach ($totals['subAccountKey'][$codeId][$accountKeyId] as $subAccountKeyId => $totalsBySubAccountKey)
+                                            <tr>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td colspan="1">
+                                                    {{ $subAccountKeyId }}</td>
+                                                <td></td>
+                                                <td colspan="1" style="text-align: start;">
+                                                    {{ $totalsBySubAccountKey['name_sub_account_key'] }}</td>
+                                                <td>{{ number_format($totalsBySubAccountKey['fin_law'], 0, ' ', ' ') }}
+                                                </td>
+                                                <td>{{ number_format($totalsBySubAccountKey['current_loan'], 0, ' ', ' ') }}
+                                                </td>
+                                                <td>{{ number_format($totalsBySubAccountKey['internal_increase'], 0, ' ', ' ') }}
+                                                </td>
+                                                <td>{{ number_format($totalsBySubAccountKey['unexpected_increase'], 0, ' ', ' ') }}
+                                                </td>
+                                                <td>{{ number_format($totalsBySubAccountKey['additional_increase'], 0, ' ', ' ') }}
+                                                </td>
+                                                <td></td>
+                                                <td>{{ number_format($totalsBySubAccountKey['decrease'], 0, ' ', ' ') }}
+                                                </td>
+                                                <td>{{ number_format($totalsBySubAccountKey['editorial'], 0, ' ', ' ') }}
+                                                </td>
+                                                <td>{{ number_format($totalsBySubAccountKey['new_credit_status'], 0, ' ', ' ') }}
+                                                </td>
+                                                <td>{{ number_format($totalsBySubAccountKey['early_balance'], 0, ' ', ' ') }}
+                                                </td>
+                                                <td>{{ number_format($totalsBySubAccountKey['apply'], 0, ' ', ' ') }}</td>
+                                                <td>{{ number_format($totalsBySubAccountKey['deadline_balance'], 0, ' ', ' ') }}
+                                                </td>
+                                                <td>{{ number_format($totalsBySubAccountKey['credit'], 0, ' ', ' ') }}</td>
+                                                <td>{{ number_format($totalsBySubAccountKey['law_average'], 0, ' ', ' ') }}%
+                                                </td>
+                                                <td>{{ number_format($totalsBySubAccountKey['law_correction'], 0, ' ', ' ') }}
+                                                    %
+                                                </td>
+                                            </tr>
+                                           
+                                        @endforeach
+                                    @endforeach
+                                @endforeach
+
 
                                 {{--                  Total                  --}}
                                 <tr>
@@ -220,6 +334,118 @@
                                         {{ $totals['law_correction'] }}% </td>
                                 </tr>
 
+                                {{-- @foreach ($totals['code'] as $codeId => $totalsByCode)
+                                    <tr>
+                                        <td colspan="2"> &emsp;&emsp;ជំពូក: {{ $codeId }} </td>
+                                        <td colspan="4">&emsp;&emsp;{{ $totalsByCode['name'] }}</td>
+                                        <td>{{ number_format($totalsByCode['fin_law'], 0, ' ', ' ') }}</td>
+                                        <td>{{ number_format($totalsByCode['current_loan'], 0, ' ', ' ') }}</td>
+                                        <td>{{ number_format($totalsByCode['internal_increase'], 0, ' ', ' ') }}</td>
+                                        <td>{{ number_format($totalsByCode['unexpected_increase'], 0, ' ', ' ') }}</td>
+                                        <td>{{ number_format($totalsByCode['additional_increase'], 0, ' ', ' ') }}</td>
+                                        <td></td>
+                                        <td>{{ number_format($totalsByCode['decrease'], 0, ' ', ' ') }}</td>
+                                        <td>{{ number_format($totalsByCode['editorial'], 0, ' ', ' ') }}</td>
+                                        <td>{{ number_format($totalsByCode['new_credit_status'], 0, ' ', ' ') }}</td>
+                                        <td>{{ number_format($totalsByCode['early_balance'], 0, ' ', ' ') }}</td>
+                                        <td>{{ number_format($totalsByCode['apply'], 0, ' ', ' ') }}</td>
+                                        <td>{{ number_format($totalsByCode['deadline_balance'], 0, ' ', ' ') }}</td>
+                                        <td>{{ number_format($totalsByCode['credit'], 0, ' ', ' ') }}</td>
+                                        <td>{{ number_format($totalsByCode['law_average'], 0, ' ', ' ') }} %</td>
+                                        <td>{{ number_format($totalsByCode['law_correction'], 0, ' ', ' ') }} %</td>
+                                    </tr>
+
+                                    @foreach ($totals['accountKey'][$codeId] as $accountKeyId => $totalsByAccountKey)
+                                        <tr>
+                                            <td colspan="3">&emsp;គណនី: {{ $accountKeyId }}</td>
+                                            <td colspan="3">&emsp;{{ $totalsByAccountKey['name_account_key'] }}</td>
+                                            <td>{{ number_format($totalsByAccountKey['fin_law'], 0, ' ', ' ') }}</td>
+                                            <td>{{ number_format($totalsByAccountKey['current_loan'], 0, ' ', ' ') }}</td>
+                                            <td>{{ number_format($totalsByAccountKey['internal_increase'], 0, ' ', ' ') }}
+                                            </td>
+                                            <td>{{ number_format($totalsByAccountKey['unexpected_increase'], 0, ' ', ' ') }}
+                                            </td>
+                                            <td>{{ number_format($totalsByAccountKey['additional_increase'], 0, ' ', ' ') }}
+                                            </td>
+                                            <td></td>
+                                            <td>{{ number_format($totalsByAccountKey['decrease'], 0, ' ', ' ') }}</td>
+                                            <td>{{ number_format($totalsByAccountKey['editorial'], 0, ' ', ' ') }}</td>
+                                            <td>{{ number_format($totalsByAccountKey['new_credit_status'], 0, ' ', ' ') }}
+                                            </td>
+                                            <td>{{ number_format($totalsByAccountKey['early_balance'], 0, ' ', ' ') }}
+                                            </td>
+                                            <td>{{ number_format($totalsByAccountKey['apply'], 0, ' ', ' ') }}</td>
+                                            <td>{{ number_format($totalsByAccountKey['deadline_balance'], 0, ' ', ' ') }}
+                                            </td>
+                                            <td>{{ number_format($totalsByAccountKey['credit'], 0, ' ', ' ') }}</td>
+                                            <td>{{ number_format($totalsByAccountKey['law_average'], 0, ' ', ' ') }} %
+                                            </td>
+                                            <td>{{ number_format($totalsByAccountKey['law_correction'], 0, ' ', ' ') }}%
+                                            </td>
+                                        </tr>
+
+                                        @foreach ($totals['subAccountKey'][$codeId][$accountKeyId] as $subAccountKeyId => $totalsBySubAccountKey)
+                                            <tr>
+                                                <td colspan="4">&emsp;&emsp;អនុគណនី:
+                                                    {{ $subAccountKeyId }}</td>
+                                                <td colspan="2">
+                                                    &emsp;{{ $totalsBySubAccountKey['name_sub_account_key'] }}</td>
+                                                <td>{{ number_format($totalsBySubAccountKey['fin_law'], 0, ' ', ' ') }}
+                                                </td>
+                                                <td>{{ number_format($totalsBySubAccountKey['current_loan'], 0, ' ', ' ') }}
+                                                </td>
+                                                <td>{{ number_format($totalsBySubAccountKey['internal_increase'], 0, ' ', ' ') }}
+                                                </td>
+                                                <td>{{ number_format($totalsBySubAccountKey['unexpected_increase'], 0, ' ', ' ') }}
+                                                </td>
+                                                <td>{{ number_format($totalsBySubAccountKey['additional_increase'], 0, ' ', ' ') }}
+                                                </td>
+                                                <td></td>
+                                                <td>{{ number_format($totalsBySubAccountKey['decrease'], 0, ' ', ' ') }}
+                                                </td>
+                                                <td>{{ number_format($totalsBySubAccountKey['editorial'], 0, ' ', ' ') }}
+                                                </td>
+                                                <td>{{ number_format($totalsBySubAccountKey['new_credit_status'], 0, ' ', ' ') }}
+                                                </td>
+                                                <td>{{ number_format($totalsBySubAccountKey['early_balance'], 0, ' ', ' ') }}
+                                                </td>
+                                                <td>{{ number_format($totalsBySubAccountKey['apply'], 0, ' ', ' ') }}</td>
+                                                <td>{{ number_format($totalsBySubAccountKey['deadline_balance'], 0, ' ', ' ') }}
+                                                </td>
+                                                <td>{{ number_format($totalsBySubAccountKey['credit'], 0, ' ', ' ') }}
+                                                </td>
+                                                <td>{{ number_format($totalsBySubAccountKey['law_average'], 0, ' ', ' ') }}%
+                                                </td>
+                                                <td>{{ number_format($totalsBySubAccountKey['law_correction'], 0, ' ', ' ') }}
+                                                    %
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                    @endforeach
+                                @endforeach --}}
+
+
+                                {{-- @foreach ($totals['code'] as $codeId => $amount)
+                                    <tr>
+                                        <td colspan="6"> &emsp;&emsp;ជំពូក: {{ $codeId }} </td>
+                                        <td>{{ number_format($amount, 0, ' ', ' ') }}</td>
+                                    </tr>
+
+                                    @foreach ($totals['accountKey'] as $accountKeyId => $accountAmount)
+                                        <tr>
+                                            <td colspan="6">&emsp;គណនី: {{ $codeId }} > {{ $accountKeyId }}</td>
+                                            <td>{{ number_format($accountAmount, 0, ' ', ' ') }}</td>
+
+                                            @foreach ($totals['subAccountKey'] as $subAccountKeyId => $subAccountAmount)
+                                        <tr>
+                                            <td colspan="6">&emsp;&emsp;អនុគណនី: {{ $codeId }} > {{ $accountKeyId }} > {{ $subAccountKeyId }}</td>
+                                            <td>{{ number_format($subAccountAmount, 0, ' ', ' ') }}</td>
+                                        </tr>
+                                    @endforeach
+                                    </tr>
+                                @endforeach
+                                @endforeach --}}
+
                                 {{-- End import data --}}
                             </tbody>
                         </table>
@@ -230,10 +456,12 @@
 
                 {{--        Start action btn export and print        --}}
                 <div class="d-flex justify-content-end mt-3 mb-3 mr-2">
-                    <a href="{{ route('result.export', request()->query()) }}" class="btn btn-danger btn-width mr-2">Export</a>
-                    <a href="{{ route('result.exportPdf', request()->query()) }}" class="btn btn-primary btn-width mr-2">Print</a>
+                    <a href="{{ route('result.export', request()->query()) }}"
+                        class="btn btn-danger btn-width mr-2">Export</a>
+                    <a href="{{ route('result.exportPdf', request()->query()) }}"
+                        class="btn btn-primary btn-width mr-2">Print</a>
                 </div>
-                
+
                 {{--        Start action btn export and print        --}}
 
             </div>
@@ -250,6 +478,7 @@
 
         .result-total-table-container {
             padding: 16px;
+
         }
 
         .container-fluid {
@@ -273,10 +502,15 @@
             padding: 5px;
         }
 
-        h3,
-        h5 {
-            text-align: center;
-            font-family: 'OS Moul', sans-serif;
+
+        h3 {
+            font-family: 'Khmer OS Muol Light', sans-serif;
+            font-size: 25px;
+        }
+
+        h4 {
+            font-family: 'Khmer OS Siemreap', sans-serif;
+            font-size: 25px;
         }
 
         .btn-width {
@@ -337,16 +571,16 @@
             const accountKeyId = document.querySelector('input[name="account_key_id"]').value;
             const subAccountKeyId = document.querySelector('input[name="sub_account_key_id"]').value;
             const reportKey = document.querySelector('input[name="report_key"]').value;
-    
+
             // If any of the fields are filled and date is empty, prevent form submission
             if ((codeId || accountKeyId || subAccountKeyId || reportKey) && !dateField) {
                 alert('Please provide a date when applying any of the filters.');
                 return false;
             }
-    
+
             return true;
         }
-    
+
         function resetForm() {
             document.getElementById('filterForm').reset();
         }

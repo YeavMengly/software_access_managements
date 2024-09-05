@@ -17,13 +17,8 @@ class ResultController extends Controller
     {
         $query = Report::query();
 
-        // Date filtering with error handling
-        // $this->applyDateFilter($query, $request->date('date'));
-
         // Apply filters
         $this->applyFilters($query, $request);
-
-        // $reports = $query->get();
 
         // Get filtered results
         $results = $query->get();
@@ -41,31 +36,20 @@ class ResultController extends Controller
 
     public function export(Request $request)
     {
-        $query = Report::query();
+        try {
+            $query = Report::query();
 
-        // Apply filters
-        // $this->applyFilters($query, $request);
-        // Apply filters based on the search form inputs
-        if ($request->filled('code_id')) {
-            $query->where('code_id', 'LIKE', $request->input('code_id') . '%');
-        }
-        if ($request->filled('account_key_id')) {
-            $query->where('account_key_id', 'LIKE', $request->input('account_key_id') . '%');
-        }
-        if ($request->filled('sub_account_key_id')) {
-            $query->where('sub_account_key_id', 'LIKE', $request->input('sub_account_key_id') . '%');
-        }
-        if ($request->filled('report_key')) {
-            $query->where('report_key', 'LIKE', $request->input('report_key') . '%');
-        }
-        if ($request->filled('date')) {
-            $query->whereDate('created_at', '=', $request->input('date')); // Use the correct column name
-        }
+            // Apply filters
+            $this->applyFilters($query, $request);
 
-        $results = $query->get();
+            // Retrieve the filtered data
+            $results = $query->get();
 
-        // Export data
-        return Excel::download(new ResultExport($query->get()), 'reports.xlsx');
+            // Export the filtered data
+            return Excel::download(new ResultExport($results), 'reports.xlsx');
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
     }
 
     public function exportPdf(Request $request)
@@ -156,8 +140,116 @@ class ResultController extends Controller
         }
     }
 
+    // private function calculateTotals($reports)
+    // {
+    //     $totals = [
+    //         'fin_law' => 0,
+    //         'current_loan' => 0,
+    //         'internal_increase' => 0,
+    //         'unexpected_increase' => 0,
+    //         'additional_increase' => 0,
+    //         'decrease' => 0,
+    //         'editorial' => 0,
+    //         'new_credit_status' => 0,
+    //         'early_balance' => 0,
+    //         'apply' => 0,
+    //         'deadline_balance' => 0,
+    //         'credit' => 0,
+    //         'law_average' => 0,
+    //         'law_correction' => 0,
+    //         'total_increase' => 0,
+    //         'total_balance' => 0,
+    //         'sub_account_amount' => 0, // Total for subAccountKey amounts
+    //         'account_amount' => 0, // Total for accountKey amounts
+    //         'fin_law_by_code' => [], // Total of fin_law grouped by code
+    //         'code' => [],
+    //         'accountKey' => [],
+    //         'subAccountKey' => [],
+
+
+    //         'total_by_code' => [],
+    //         'total_by_account_key' => [],
+    //         'total_by_sub_account_key' => [],
+    //         'total_by_report_key' => [],
+    //     ];
+
+    //     // Group reports by code
+    //     // $groupedReports = $reports->groupBy('code');
+
+    //     // foreach ($groupedReports as $code => $group) {
+    //     //     $finLawTotal = $group->sum('fin_law');
+    //     //     $amountTotal = $group->sum('amount');
+    //     //     $totals['fin_law_by_code'][$code] = $finLawTotal;
+
+    //     //     $totals['fin_law_by_code'][$code] = $finLawTotal;
+    //     //     $totals['amount_by_code'][$code] = $amountTotal;
+    //     // }
+
+    //     foreach ($reports as $report) {
+    //         $totals['fin_law'] += $report->fin_law;
+    //         $totals['current_loan'] += $report->current_loan;
+    //         $totals['internal_increase'] += $report->internal_increase;
+    //         $totals['unexpected_increase'] += $report->unexpected_increase;
+    //         $totals['additional_increase'] += $report->additional_increase;
+    //         $totals['decrease'] += $report->decrease;
+    //         $totals['editorial'] += $report->editorial;
+    //         $totals['new_credit_status'] += $report->new_credit_status;
+    //         $totals['early_balance'] += $report->early_balance;
+    //         $totals['apply'] += $report->apply;
+    //         $totals['deadline_balance'] += $report->deadline_balance;
+    //         $totals['credit'] += $report->credit;
+    //         $totals['law_average'] += $report->law_average;
+    //         $totals['law_correction'] += $report->law_correction;
+
+    //         $totalIncrease = $report->internal_increase + $report->unexpected_increase + $report->additional_increase;
+    //         $totals['total_increase'] += $totalIncrease;
+    //         // $totals['total_balance'] += ($totalIncrease - $report->decrease);
+
+    //         // Sum subAccountKey amounts
+    //         // if ($report->subAccountKey) {
+    //         //     $totals['sub_account_amount'] += $report->subAccountKey->amount ?? 0;
+    //         // }
+
+    //         // Sum accountKey amounts
+    //         // if ($report->subAccountKey && $report->subAccountKey->accountKey) {
+    //         //     $totals['account_amount'] += $report->subAccountKey->accountKey->amount ?? 0;
+    //         // }
+    //     }
+
+
+    //     // Group reports by code_id
+    //     $groupedByCode = $reports->groupBy(function ($report) {
+    //         return $report->subAccountKey->accountKey->key->code ?? 'Unknown';
+    //     });
+
+    //     foreach ($groupedByCode as $codeId => $reportsByCode) {
+    //         $totals['code'][$codeId] = $reportsByCode->sum('fin_law'); // Adjust 'amount' as necessary
+
+    //         // Group by accountKey within each codeId
+    //         $groupedByAccountKey = $reportsByCode->groupBy(function ($report) {
+    //             return $report->subAccountKey->accountKey->account_key ?? 'Unknown';
+    //         });
+
+    //         foreach ($groupedByAccountKey as $accountKeyId => $reportsByAccountKey) {
+    //             $totals['accountKey'][$accountKeyId] = $reportsByAccountKey->sum('fin_law'); // Adjust 'amount' as necessary
+
+    //             // Group by subAccountKey within each accountKey
+    //             $groupedBySubAccountKey = $reportsByAccountKey->groupBy(function ($report) {
+    //                 return $report->subAccountKey->sub_account_key ?? 'Unknown';
+    //             });
+
+    //             foreach ($groupedBySubAccountKey as $subAccountKeyId => $reportsBySubAccountKey) {
+    //                 $totals['subAccountKey'][$subAccountKeyId] = $reportsBySubAccountKey->sum('fin_law'); // Adjust 'amount' as necessary
+    //             }
+    //         }
+    //     }
+
+    //     return $totals;
+    // }
+
     private function calculateTotals($reports)
     {
+        // Initialize the totals array with all fields set to 0
         $totals = [
             'fin_law' => 0,
             'current_loan' => 0,
@@ -174,19 +266,10 @@ class ResultController extends Controller
             'law_average' => 0,
             'law_correction' => 0,
             'total_increase' => 0,
-            'total_balance' => 0,
-            'sub_account_amount' => 0, // Total for subAccountKey amounts
-            'account_amount' => 0, // Total for accountKey amounts
-            'fin_law_by_code' => [] // Total of fin_law grouped by code
+            'code' => [],
+            'accountKey' => [],
+            'subAccountKey' => [],
         ];
-
-        // Group reports by code
-        $groupedReports = $reports->groupBy('code');
-
-        foreach ($groupedReports as $code => $group) {
-            $finLawTotal = $group->sum('fin_law');
-            $totals['fin_law_by_code'][$code] = $finLawTotal;
-        }
 
         foreach ($reports as $report) {
             $totals['fin_law'] += $report->fin_law;
@@ -206,19 +289,72 @@ class ResultController extends Controller
 
             $totalIncrease = $report->internal_increase + $report->unexpected_increase + $report->additional_increase;
             $totals['total_increase'] += $totalIncrease;
-            $totals['total_balance'] += ($totalIncrease - $report->decrease);
+            // $totals['total_balance'] += ($totalIncrease - $report->decrease);
 
             // Sum subAccountKey amounts
-            if ($report->subAccountKey) {
-                $totals['sub_account_amount'] += $report->subAccountKey->amount ?? 0;
-            }
+            // if ($report->subAccountKey) {
+            //     $totals['sub_account_amount'] += $report->subAccountKey->amount ?? 0;
+            // }
 
             // Sum accountKey amounts
-            if ($report->subAccountKey && $report->subAccountKey->accountKey) {
-                $totals['account_amount'] += $report->subAccountKey->accountKey->amount ?? 0;
+            // if ($report->subAccountKey && $report->subAccountKey->accountKey) {
+            //     $totals['account_amount'] += $report->subAccountKey->accountKey->amount ?? 0;
+            // }
+        }
+
+        // Group reports by code
+        $groupedByCode = $reports->groupBy(function ($report) {
+            return $report->subAccountKey->accountKey->key->code ?? 'Unknown';
+        });
+
+        foreach ($groupedByCode as $codeId => $reportsByCode) {
+            $totals['code'][$codeId] = $this->calculateSumFields($reportsByCode);
+            $totals['code'][$codeId]['name'] = $reportsByCode->first()->subAccountKey->accountKey->key->name ?? 'Unknown';
+
+
+            // Group by accountKey within each codeId
+            $groupedByAccountKey = $reportsByCode->groupBy(function ($report) {
+                return $report->subAccountKey->accountKey->account_key ?? 'Unknown';
+            });
+
+            foreach ($groupedByAccountKey as $accountKeyId => $reportsByAccountKey) {
+                $totals['accountKey'][$codeId][$accountKeyId] = $this->calculateSumFields($reportsByAccountKey);
+                $totals['accountKey'][$codeId][$accountKeyId]['name_account_key'] = $reportsByAccountKey->first()->subAccountKey->accountKey->name_account_key ?? 'Unknown';
+
+
+                // Group by subAccountKey within each accountKey
+                $groupedBySubAccountKey = $reportsByAccountKey->groupBy(function ($report) {
+                    return $report->subAccountKey->sub_account_key ?? 'Unknown';
+                });
+
+                foreach ($groupedBySubAccountKey as $subAccountKeyId => $reportsBySubAccountKey) {
+                    $totals['subAccountKey'][$codeId][$accountKeyId][$subAccountKeyId] = $this->calculateSumFields($reportsBySubAccountKey);
+                    $totals['subAccountKey'][$codeId][$accountKeyId][$subAccountKeyId]['name_sub_account_key'] = $reportsBySubAccountKey->first()->subAccountKey->name_sub_account_key ?? 'Unknown';
+          
+                }
             }
         }
 
         return $totals;
+    }
+
+    private function calculateSumFields($reports)
+    {
+        return [
+            'fin_law' => $reports->sum('fin_law'),
+            'current_loan' => $reports->sum('current_loan'),
+            'internal_increase' => $reports->sum('internal_increase'),
+            'unexpected_increase' => $reports->sum('unexpected_increase'),
+            'additional_increase' => $reports->sum('additional_increase'),
+            'decrease' => $reports->sum('decrease'),
+            'editorial' => $reports->sum('editorial'),
+            'new_credit_status' => $reports->sum('new_credit_status'),
+            'early_balance' => $reports->sum('early_balance'),
+            'apply' => $reports->sum('apply'),
+            'deadline_balance' => $reports->sum('deadline_balance'),
+            'credit' => $reports->sum('credit'),
+            'law_average' => $reports->sum('law_average'),
+            'law_correction' => $reports->sum('law_correction'),
+        ];
     }
 }

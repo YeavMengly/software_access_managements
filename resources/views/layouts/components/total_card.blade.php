@@ -35,11 +35,10 @@
                 </div>
 
                 <div class="col-md-4 mb-3">
-                    <a href="" class="btn btn-custom btn-block animate-button">
-                        <i class="fas fa-calendar-alt"></i> អនុវត្តចំណាយ
+                    <a href="{{ route('result-success') }}" class="btn btn-custom btn-block animate-button">
+                        <i class="fas fa-check"></i> លទ្ធផលសម្រេចបាន
                     </a>
                 </div>
-            
           
                 <div class="col-md-4 mb-3">
                     <a href="{{ route('result-new-loan') }}" class="btn btn-custom btn-block animate-button">

@@ -40,13 +40,6 @@
                 </div>
             </div>
 
-            @if ($message = Session::get('success'))
-                <div class="alert alert-success alert-dismissible fade show" role="alert">
-                    <p>{{ $message }}</p>
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                </div>
-            @endif
-
             <table class="table table-striped table-hover">
                 <thead>
                     <tr>
@@ -102,22 +95,19 @@
                             <td style="border: 1px solid black; text-align: center;">{{ $accountKey->name_account_key }}
                             </td>
                             <td style="border: 1px solid black; text-align: center; justify-content: center">
-                                <form action="{{ route('accounts.destroy', $accountKey->id) }}" method="POST">
-                                    {{-- <a class="btn btn-info" href="{{ route('accounts.show', $accountKey->id) }}"
-                                        title="Show">
-                                        <i class="fas fa-eye"></i>
-                                    </a> --}}
-                                    <a class="btn btn-primary" href="{{ route('accounts.edit', $accountKey->id) }}"
-                                        title="Edit">
-                                        <i class="fas fa-edit"></i>
-                                    </a>
+                                <form id="delete-form-{{ $accountKey->id }}"
+                                    action="{{ route('accounts.destroy', $accountKey->id) }}" method="POST"
+                                    style="display: none;">
                                     @csrf
                                     @method('DELETE')
-                                    <button type="submit" class="btn btn-danger" title="Delete"
-                                        onclick="return confirm('Are you sure you want to delete this account key?')">
-                                        <i class="fas fa-trash"></i>
-                                    </button>
                                 </form>
+                                <a class="btn btn-primary" href="{{ route('accounts.edit', $accountKey->id) }}">
+                                    <i class="fas fa-edit" title="Edit"></i>
+                                </a>
+                                <button type="button" class="btn btn-danger"
+                                    onclick="confirmDelete({{ $accountKey->id }})">
+                                    <i class="fas fa-trash-alt" title="Delete"></i>
+                                </button>
                             </td>
                         </tr>
                     @empty
@@ -221,4 +211,67 @@
             border-color: #007bff;
         }
     </style>
+@endsection
+
+
+@section('scripts')
+    {{-- <script type="text/javascript">
+        function confirmDelete(id) {
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "You won't be able to revert this!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, delete it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // Submit the form corresponding to the certificate ID
+                    document.getElementById('delete-form-' + id).submit();
+
+                    // Show success message with blue text and a custom icon
+                    Swal.fire({
+                        icon: 'success',
+                        title: '<span style="color: blue;">Deleted!</span>',
+                        text: 'The record has been successfully deleted.',
+                        showConfirmButton: false,
+                        timer: 6000
+                    });
+                }
+            });
+        }
+    </script> --}}
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    @if (Session::has('success'))
+        <script>
+            Swal.fire({
+                icon: 'success',
+                title: 'ជោគជ័យ',
+                text: '{{ Session::get('success') }}',
+                showConfirmButton: false,
+                timer: 2000
+            });
+        </script>
+    @endif
+
+    <script>
+        function confirmDelete(id) {
+            Swal.fire({
+                title: 'តើអ្នកពិតជាចង់លុបមែនទេ?',
+                text: 'មិនអាចត្រឡប់វិញបានទេ!',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'បាទ/ចាស, លុបវា!',
+                cancelButtonText: 'បោះបង់',
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    document.getElementById('delete-form-' + id).submit();
+                }
+            });
+        }
+    </script>
 @endsection

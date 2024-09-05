@@ -3,88 +3,18 @@
 namespace App\Http\Controllers\Report;
 
 use App\Http\Controllers\Controller;
+use App\Imports\ReportsImport;
 use App\Models\Certificates\CertificateData;
 use App\Models\Code\Report;
 use App\Models\Code\SubAccountKey;
 use Illuminate\Http\Request;
-use App\Imports\ReportImport;
 use Illuminate\Support\Facades\Log;
 use Maatwebsite\Excel\Facades\Excel;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 
 class ReportController extends Controller
 {
-
-
-    // public function index(Request $request)
-    // {
-    //     // Create variables
-    //     $search = $request->input('search');
-    //     $section = $request->input('code');
-    //     $account = $request->input('account_key');
-    //     $subAccount = $request->input('sub_account_key');
-    //     $programCode = $request->input('report_key');
-    //     $date = $request->input('date'); // Date filter input
-    //     $query = Report::query();
-
-    //     // Apply filters
-    //     if ($section) {
-    //         $query->whereHas('subAccountKey.accountKey.key', function ($q) use ($section) {
-    //             $q->where('code', 'like', "%$section%");
-    //         });
-    //     }
-
-    //     if ($account) {
-    //         $query->whereHas('subAccountKey.accountKey', function ($q) use ($account) {
-    //             $q->where('account_key', 'like', "%$account%");
-    //         });
-    //     }
-
-    //     if ($subAccount) {
-    //         $query->whereHas('subAccountKey', function ($q) use ($subAccount) {
-    //             $q->where('sub_account_key', 'like', "%$subAccount%");
-    //         });
-    //     }
-
-    //     if ($programCode) {
-    //         $query->where('report_key', 'like', "%$programCode%");
-    //     }
-
-    //     // Apply search condition
-    //     if ($search) {
-    //         $query->where(function ($q) use ($search) {
-    //             $q->where('report_key', 'like', "%$search%")
-    //                 ->orWhere('name_report_key', 'like', "%$search%");
-    //         });
-    //     }
-
-    //     // Apply date filter
-    //     if ($date) {
-    //         try {
-    //             if (strpos($date, ' - ') !== false) {
-    //                 // Date range
-    //                 list($startDate, $endDate) = explode(' - ', $date);
-    //                 $startDate = Carbon::createFromFormat('Y-m-d', $startDate)->startOfDay()->toDateTimeString();
-    //                 $endDate = Carbon::createFromFormat('Y-m-d', $endDate)->endOfDay()->toDateTimeString();
-    //                 $query->whereBetween('created_at', [$startDate, $endDate]);
-    //             } else {
-    //                 // Single date
-    //                 $formattedDate = Carbon::createFromFormat('Y-m-d', $date)->format('Y-m-d');
-    //                 $query->whereDate('created_at', $formattedDate);
-    //             }
-    //         } catch (\Exception $e) {
-    //             // Handle invalid date format error
-    //             Log::error('Invalid date format: ' . $e->getMessage());
-    //             return redirect()->back()->withErrors(['date' => 'Invalid date format. Please use YYYY-MM-DD format or YYYY-MM-DD - YYYY-MM-DD for ranges.']);
-    //         }
-    //     }
-
-    //     // Fetch the filtered and sorted data
-    //     $reports = $query->paginate(10);
-
-    //     return view('layouts.admin.forms.code.report-index', compact('reports'));
-    // }
-
     public function index(Request $request)
     {
         // Retrieve the inputs
@@ -93,33 +23,33 @@ class ReportController extends Controller
         $subAccountKeyId = $request->input('sub_account_key_id');
         $reportKey = $request->input('report_key');
         $date = $request->input('date'); // Date filter input
-    
+
         // Start building the query
         $query = Report::query();
-    
+
         // Apply filters
         if ($codeId) {
             $query->whereHas('subAccountKey.accountKey.key', function ($q) use ($codeId) {
                 $q->where('code', 'like', "%$codeId%");
             });
         }
-    
+
         if ($accountKeyId) {
             $query->whereHas('subAccountKey.accountKey', function ($q) use ($accountKeyId) {
                 $q->where('account_key', 'like', "%$accountKeyId%");
             });
         }
-    
+
         if ($subAccountKeyId) {
             $query->whereHas('subAccountKey', function ($q) use ($subAccountKeyId) {
                 $q->where('sub_account_key', 'like', "%$subAccountKeyId%");
             });
         }
-    
+
         if ($reportKey) {
             $query->where('report_key', 'like', "%$reportKey%");
         }
-    
+
         // Apply date filter if provided
         if ($date) {
             try {
@@ -140,13 +70,13 @@ class ReportController extends Controller
                 return redirect()->back()->withErrors(['date' => 'Invalid date format. Please use YYYY-MM-DD format or YYYY-MM-DD - YYYY-MM-DD for ranges.']);
             }
         }
-    
+
         // Fetch the filtered and sorted data
         $reports = $query->paginate(10);
-    
+
         return view('layouts.admin.forms.code.report-index', compact('reports'));
     }
-    
+
 
     public function create()
     {
@@ -311,22 +241,14 @@ class ReportController extends Controller
         return redirect()->route('codes.index')->with('success', 'Report Key deleted successfully.');
     }
 
-    public function importExcelData(Request $request)
+    public function import(Request $request)
     {
-        // Validate the file input
         $request->validate([
-            'excel_file' => 'required|file|mimes:xlsx,xls|max:5120',
+            'excel_file' => 'required|file|mimes:xlsx,xls|max:2048',
         ]);
-
-        try {
-            // Import the data using the ReportImport class
-            Excel::import(new ReportImport, $request->file('excel_file'));
-
-            // Redirect with success message
-            return redirect()->route('reports.index')->with('success', 'Data imported successfully!');
-        } catch (\Exception $e) {
-            // Handle any errors during the import
-            return redirect()->back()->withErrors(['excel_file' => 'Failed to import data. Please check the file and try again.']);
-        }
+    
+        Excel::import(new ReportsImport, $request->file('excel_file'));
+    
+        return redirect()->back()->with('success', 'Data imported successfully.');
     }
 }
