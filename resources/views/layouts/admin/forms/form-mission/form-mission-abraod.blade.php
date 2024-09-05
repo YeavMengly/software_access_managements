@@ -5,7 +5,7 @@
             <div class="col-lg-12 margin-tb mb-4">
                 <div class="d-flex justify-content-between align-items-center">
                     <h3 class="card-title">បញ្ចូលតារាងរបាយការណ៏ចំណាយបេសកកម្មក្នុងប្រទេស ឆ្នាំ២០២៤</h3>
-                    <a class="btn btn-primary" href="{{ route('mission-cam.index') }}">ត្រឡប់ក្រោយ</a>
+                    <a class="btn btn-primary" href="{{ route('mission-abroad.index') }}">ត្រឡប់ក្រោយ</a>
                 </div>
             </div>
         </div>
