@@ -1,8 +1,8 @@
-@extends('layouts.master')
+{{-- @extends('layouts.master')
 
-@section('result-remain')
+@section('result-remain') --}}
     
-<div class="border-wrapper">
+<div class="border-wrapper mt-4 mr-4 ml-4">
     <div class="result-total-table-container">
         <h3>របាយការណ៍សរុបឥណនទាននៅសល់</h3>
         {{-- <h5>ប្រចាំខែមិថុនា ឆ្នាំ២០២៤</h5> --}}
@@ -33,6 +33,129 @@
                         <td>សកម្មភាព A</td>
 
                     </tr>
+                    <tr>
+                        <td>១</td>
+                        <td>ស្ថានភាព A</td>
+                        <td>មូលហេតុ 1</td>
+                        <td>សកម្មភាព 1</td>
+                        <td>ស្ថានភាព 1</td>
+                        <td>សារអារាបេត A</td>
+                        <td>មូលហេតុ A</td>
+                        <td>សកម្មភាព A</td>
+    
+                    </tr>
+                    <tr>
+                        <td>១</td>
+                        <td>ស្ថានភាព A</td>
+                        <td>មូលហេតុ 1</td>
+                        <td>សកម្មភាព 1</td>
+                        <td>ស្ថានភាព 1</td>
+                        <td>សារអារាបេត A</td>
+                        <td>មូលហេតុ A</td>
+                        <td>សកម្មភាព A</td>
+    
+                    </tr>
+                    <tr>
+                        <td>១</td>
+                        <td>ស្ថានភាព A</td>
+                        <td>មូលហេតុ 1</td>
+                        <td>សកម្មភាព 1</td>
+                        <td>ស្ថានភាព 1</td>
+                        <td>សារអារាបេត A</td>
+                        <td>មូលហេតុ A</td>
+                        <td>សកម្មភាព A</td>
+    
+                    </tr>
+                    <tr>
+                        <td>១</td>
+                        <td>ស្ថានភាព A</td>
+                        <td>មូលហេតុ 1</td>
+                        <td>សកម្មភាព 1</td>
+                        <td>ស្ថានភាព 1</td>
+                        <td>សារអារាបេត A</td>
+                        <td>មូលហេតុ A</td>
+                        <td>សកម្មភាព A</td>
+    
+                    </tr>
+                    <tr>
+                        <td>១</td>
+                        <td>ស្ថានភាព A</td>
+                        <td>មូលហេតុ 1</td>
+                        <td>សកម្មភាព 1</td>
+                        <td>ស្ថានភាព 1</td>
+                        <td>សារអារាបេត A</td>
+                        <td>មូលហេតុ A</td>
+                        <td>សកម្មភាព A</td>
+    
+                    </tr>
+                    <tr>
+                        <td>១</td>
+                        <td>ស្ថានភាព A</td>
+                        <td>មូលហេតុ 1</td>
+                        <td>សកម្មភាព 1</td>
+                        <td>ស្ថានភាព 1</td>
+                        <td>សារអារាបេត A</td>
+                        <td>មូលហេតុ A</td>
+                        <td>សកម្មភាព A</td>
+    
+                    </tr>
+                    <tr>
+                        <td>១</td>
+                        <td>ស្ថានភាព A</td>
+                        <td>មូលហេតុ 1</td>
+                        <td>សកម្មភាព 1</td>
+                        <td>ស្ថានភាព 1</td>
+                        <td>សារអារាបេត A</td>
+                        <td>មូលហេតុ A</td>
+                        <td>សកម្មភាព A</td>
+    
+                    </tr>
+                    <tr>
+                        <td>១</td>
+                        <td>ស្ថានភាព A</td>
+                        <td>មូលហេតុ 1</td>
+                        <td>សកម្មភាព 1</td>
+                        <td>ស្ថានភាព 1</td>
+                        <td>សារអារាបេត A</td>
+                        <td>មូលហេតុ A</td>
+                        <td>សកម្មភាព A</td>
+    
+                    </tr>
+                    <tr>
+                        <td>១</td>
+                        <td>ស្ថានភាព A</td>
+                        <td>មូលហេតុ 1</td>
+                        <td>សកម្មភាព 1</td>
+                        <td>ស្ថានភាព 1</td>
+                        <td>សារអារាបេត A</td>
+                        <td>មូលហេតុ A</td>
+                        <td>សកម្មភាព A</td>
+    
+                    </tr>
+                    <tr>
+                        <td>១</td>
+                        <td>ស្ថានភាព A</td>
+                        <td>មូលហេតុ 1</td>
+                        <td>សកម្មភាព 1</td>
+                        <td>ស្ថានភាព 1</td>
+                        <td>សារអារាបេត A</td>
+                        <td>មូលហេតុ A</td>
+                        <td>សកម្មភាព A</td>
+    
+                    </tr>
+                    
+                    <tr>
+                        <td>១</td>
+                        <td>ស្ថានភាព A</td>
+                        <td>មូលហេតុ 1</td>
+                        <td>សកម្មភាព 1</td>
+                        <td>ស្ថានភាព 1</td>
+                        <td>សារអារាបេត A</td>
+                        <td>មូលហេតុ A</td>
+                        <td>សកម្មភាព A</td>
+    
+                    </tr>
+                        
 
                     <!-- Repeat rows as needed -->
                 </tbody>
@@ -44,7 +167,7 @@
         <button type="button" class="btn btn-primary btn-width">Print</button>
     </div>
 </div>
-@endsection
+{{-- @endsection --}}
 
 
 @section('styles')

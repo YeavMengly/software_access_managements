@@ -7,7 +7,6 @@
                     <h2 style="font-weight: 700;">តារាងរបាយការណ៏ចំណាយបេសកកម្ម​ ឆ្នាំ២០២៤</h2>
                     <a class="btn btn-success" href="{{ route('missions.create') }}">បញ្ចូលទិន្នន័យ</a>
                 </div>
-
                 {{-- <form class="max-w-md mx-auto mt-3" method="GET" action="{{ route('missions.index') }}">
                     <div class="row">
                         <div class="col-md-6">
@@ -57,6 +56,7 @@
                     <th colspan="2" style="border: 2px solid black;">ប្រាក់ស្នាក់នៅ</th>
                     <th rowspan="2" style="border: 2px solid black;">សោហ៊ុយផ្សេងៗ</th>
                     <th rowspan="2" style="border: 2px solid black;">ទឹកប្រាក់សរុប</th>
+                    <th rowspan="2" style="border: 2px solid black;">Actions</th>
                 </tr>
                 <tr>
                     <th style="border: 2px solid black;">លេខ</th>
@@ -106,6 +106,23 @@
                         <td style="border: 2px solid black;">{{ number_format($mission->other_allowances, 0, '.', ',') }}
                         </td>
                         <td style="border: 2px solid black;">{{ number_format($mission->final_total, 0, '.', ',') }}</td>
+                        <td style="border: 2px solid black;">
+                            <div style="display: flex; gap: 5px;">
+                                <a href="{{ route('missions.edit', $mission->id) }}" class="btn btn-primary btn-sm">
+                                    <i class="fas fa-edit"></i>
+                                </a>
+                                <form id="delete-form-{{ $mission->id }}"
+                                    action="{{ route('missions.delete', $mission->id) }}" method="POST"
+                                    style="display:inline;">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="button" class="btn btn-danger btn-sm"
+                                        onclick="confirmDelete({{ $mission->id }})">
+                                        <i class="fas fa-trash-alt"></i>
+                                    </button>
+                                </form>
+                            </div>
+                        </td>
                     </tr>
                 @endforeach
                 <tr>
@@ -113,14 +130,13 @@
                         {{ 'សរុប' }}</td>
                     <td style="border: 2px solid black;"></td>
                     <td style="border: 2px solid black;"></td>
-                    <td style="border: 2px solid black;">
-                        {{ number_format($totals['travel_allowance'], 0, '.', ',') }}</td>
+                    <td style="border: 2px solid black;">{{ number_format($totals['travel_allowance'], 0, '.', ',') }}</td>
                     <td style="border: 2px solid black;"></td>
-                    <td style="border: 2px solid black;">
-                        {{ number_format($totals['total_pocket_money'], 0, '.', ',') }}</td>
+                    <td style="border: 2px solid black;">{{ number_format($totals['total_pocket_money'], 0, '.', ',') }}
+                    </td>
                     <td style="border: 2px solid black;"></td>
-                    <td style="border: 2px solid black;">
-                        {{ number_format($totals['total_meal_money'], 0, '.', ',') }}</td>
+                    <td style="border: 2px solid black;">{{ number_format($totals['total_meal_money'], 0, '.', ',') }}
+                    </td>
                     <td style="border: 2px solid black;"></td>
                     <td style="border: 2px solid black;">
                         {{ number_format($totals['total_accommodation_money'], 0, '.', ',') }}</td>
@@ -159,4 +175,26 @@
             white-space: nowrap;
         }
     </style>
+@endsection
+
+@section('scripts')
+    <script>
+        function confirmDelete(missionId) {
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "You won't be able to revert this!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, delete it!',
+                cancelButtonText: 'Cancel',
+                reverseButtons: true, 
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    document.getElementById('delete-form-' + missionId).submit();
+                }
+            });
+        }
+    </script>
 @endsection

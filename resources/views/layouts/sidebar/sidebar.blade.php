@@ -13,7 +13,7 @@
 
     <!-- Nav Item - Dashboard -->
     <li class="nav-item active">
-        <a class="nav-link" href="{{ route('result') }}">
+        <a class="nav-link" href="{{ route('result.index') }}">
             <span>របាយការណ៍សរុបប្រតិបត្តិការណ៍</span></a>
     </li>
 
@@ -108,12 +108,18 @@
             data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
                 <h6 class="collapse-header">ឥណទានសរុប</h6>
+<<<<<<< HEAD
+                <a class="collapse-item" href=" ">ឥណទានថ្មី</a>
+                <a class="collapse-item" href=" ">បូកយោងអនុវត្ត</a>
+                <a class="collapse-item" href=" ">នៅសល់</a>
+=======
                 <a class="collapse-item" href=" {{ route('result-new-loan') }} ">ឥណទានថ្មី</a>
                 <a class="collapse-item" href=" {{ route('result-sum-refer') }} ">បូកយោងអនុវត្ត</a>
                 <a class="collapse-item" href=" {{ route('result-remain') }} ">នៅសល់</a>
                 {{-- <a class="collapse-item" href=" ">Forgot Password</a>
                 <div class="collapse-divider"></div>
                 <h6 class="collapse-header">Other Pages:</h6> --}}
+>>>>>>> e494c73343dc90a04a649b1b0c329cec3e7de040
             </div>
         </div>
     </li>
@@ -128,6 +134,14 @@
         <div id="collapseFour" class="collapse" aria-labelledby="headingFour" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
                 <h6 class="collapse-header">ចំណាយបេសកកម្ម</h6>
+<<<<<<< HEAD
+                <a class="collapse-item" href="{{url('/mission-cam')}}">បេសកម្មក្នុងប្រទេស</a>
+                <a class="collapse-item" href="{{url('/mission-abroad')}}">បេសកម្មក្រៅប្រទេស</a>
+            </div>
+        </div>
+    </li>
+    
+=======
 
                 <a class="collapse-item" href="{{ route('missions.index') }}">ទម្រង់បញ្ចូល</a>
                 <a class="collapse-item" href="{{ url('/mission-cam') }}">បេសកម្មក្នុងប្រទេស</a>
@@ -139,80 +153,9 @@
         </div>
     </li>
 
+>>>>>>> e494c73343dc90a04a649b1b0c329cec3e7de040
     <!-- Divider -->
     <hr class="sidebar-divider">
-
-    <!-- Heading -->
-    {{-- <div class="sidebar-heading">
-        UI TOOL KIT
-    </div> --}}
-
-    <!-- Nav Item - Layouts Collapse Menu -->
-    {{-- <li class="nav-item">
-        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages"
-            aria-expanded="true" aria-controls="collapsePages">
-            <i class="fas fa-fw fa-folder"></i>
-            <span>Layouts</span>
-        </a>
-        <div id="collapsePages" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
-            <div class="bg-white py-2 collapse-inner rounded">
-                <h6 class="collapse-header">Login Screens:</h6>
-                <a class="collapse-item" href=" ">Login</a>
-                <a class="collapse-item" href=" ">Register</a>
-                <a class="collapse-item" href=" ">Forgot Password</a>
-                <div class="collapse-divider"></div>
-                <h6 class="collapse-header">Other Pages:</h6>
-                <a class="collapse-item" href="404.html">404 Page</a>
-                <a class="collapse-item" href="blank.html">Blank Page</a>
-            </div>
-        </div>
-    </li> --}}
-
-
-    <!-- Nav Item - Additional Components Collapse Menu -->
-    {{-- <li class="nav-item">
-        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseThreeCopy"
-            aria-expanded="true" aria-controls="collapseThreeCopy">
-            <i class="fas fa-fw fa-folder"></i>
-            <span>Layouts</span>
-        </a>
-        <div id="collapseThreeCopy" class="collapse" aria-labelledby="headingThreeCopy" data-parent="#accordionSidebar">
-            <div class="bg-white py-2 collapse-inner rounded">
-                <h6 class="collapse-header">Login Screens:</h6>
-                <a class="collapse-item" href=" ">Login</a>
-                <a class="collapse-item" href=" ">Register</a>
-                <a class="collapse-item" href=" ">Forgot Password</a>
-                <div class="collapse-divider"></div>
-                <h6 class="collapse-header">Other Pages:</h6>
-            </div>
-        </div>
-    </li> --}}
-
-
-
-    <!-- Nav Item - Charts -->
-    {{-- <li class="nav-item">
-        <a class="nav-link" href="">
-            <i class="fas fa-fw fa-chart-area"></i>
-            <span>Charts</span></a>
-    </li>
-
-    <!-- Nav Item - Feedback -->
-    <li class="nav-item">
-        <a class="nav-link" href="">
-            <i class="fas fa-fw fa-thumbs-up"></i>
-            <span>Feedback</span></a>
-    </li>
-
-    <!-- Nav Item - Tables -->
-    <li class="nav-item">
-        <a class="nav-link" href="">
-            <i class="fas fa-fw fa-table"></i>
-            <span>Tables</span></a>
-    </li> --}}
-
-    <!-- Divider -->
-    {{-- <hr class="sidebar-divider d-none d-md-block"> --}}
 
     <!-- Sidebar Toggler (Sidebar) -->
     <div class="text-center d-none d-md-inline">

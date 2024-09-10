@@ -1,55 +1,60 @@
 @extends('layouts.master')
 
 @section('form-certificate-upload')
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-lg-12 margin-tb mb-4">
-                <div class="d-flex justify-content-between align-items-center">
-                    <h3 class="card-title">បង្កើតសលាកបត្រ</h3>
-                    <a class="btn btn-primary" href="{{ route('certificate.index') }}">ត្រឡប់ក្រោយ</a>
-                </div>
-            </div>
-        </div>
-
-        <div id="alerts-container">
-            @if (session('success'))
-                <div class="alert alert-success alert-popup show" id="success-alert">
-                    {{ session('success') }}
-                    <button type="button" class="btn-close" aria-label="Close"></button>
-                </div>
-            @endif
-
-            @if ($errors->any())
-                <div class="alert alert-danger alert-popup show" id="error-alert">
-                    <strong>Whoops!</strong> There were some problems with your input.<br><br>
-                    <ul>
-                        @foreach ($errors->all() as $error)
-                            <li>{{ $error }}</li>
-                        @endforeach
-                    </ul>
-                    <button type="button" class="btn-close" aria-label="Close"></button>
-                </div>
-            @endif
-        </div>
-
-        <div class="border-wrapper">
-            <div class="form-container">
-                <form action="{{ route('certificate.store') }}" method="POST" enctype="multipart/form-data">
-                    @csrf
-
-                    <div class="form-group">
-                        <label for="report_key">ឈ្មោះសលាកបត្រ:</label>
-                        <input type="text" name="name_certificate" id="name_certificate"
-                            class="form-control @error('name_certificate') is-invalid @enderror">
-                        @error('name_certificate')
-                            <div class="invalid-feedback">{{ $message }}</div>
-                        @enderror
+    <div class="border-wrapper">
+        <div class="result-total-table-container">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-lg-12 margin-tb mb-4">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <h3 class="card-title">បង្កើតសលាកបត្រ</h3>
+                            <a class="btn btn-primary" href="{{ route('certificate.index') }}">ត្រឡប់ក្រោយ</a>
+                        </div>
                     </div>
+                </div>
 
-                    <div class="d-flex align-items-center">
-                        <button type="submit" class="btn btn-primary ml-auto">បានរក្សាទុក</button>
+                <div id="alerts-container">
+                    @if (session('success'))
+                        <div class="alert alert-success alert-popup show" id="success-alert">
+                            {{ session('success') }}
+                            <button type="button" class="btn-close" aria-label="Close"></button>
+                        </div>
+                    @endif
+
+                    @if ($errors->any())
+                        <div class="alert alert-danger alert-popup show" id="error-alert">
+                            <strong>Whoops!</strong> There were some problems with your input.<br><br>
+                            <ul>
+                                @foreach ($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                            <button type="button" class="btn-close" aria-label="Close"></button>
+                        </div>
+                    @endif
+                </div>
+
+                <div class="border-wrapper">
+
+                    <div class="form-container">
+                        <form action="{{ route('certificate.store') }}" method="POST" enctype="multipart/form-data">
+                            @csrf
+
+                            <div class="form-group">
+                                <label for="report_key">ឈ្មោះសលាកបត្រ:</label>
+                                <input type="text" name="name_certificate" id="name_certificate"
+                                    class="form-control @error('name_certificate') is-invalid @enderror">
+                                @error('name_certificate')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+
+                            <div class="d-flex align-items-center">
+                                <button type="submit" class="btn btn-primary ml-auto">បានរក្សាទុក</button>
+                            </div>
+                        </form>
                     </div>
-                </form>
+                </div>
             </div>
         </div>
     </div>
@@ -74,6 +79,11 @@
             opacity: 0;
             transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
             transform: translateY(-20px);
+        }
+
+        .result-total-table-container {
+            max-height: 100vh;
+            overflow-y: auto;
         }
 
         .alert-popup.show {

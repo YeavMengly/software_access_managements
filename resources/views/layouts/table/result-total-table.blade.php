@@ -7,8 +7,14 @@
 @endsection
 
 @section('result-total-table')
-    <div class="border-wrapper">
+<div class="d-flex justify-content-between align-items-center  mt-4 mr-4 ml-4">
+    <a class="btn btn-danger" href="{{ route('total_card') }}">
+        <i class="fas fa-arrow-left"></i> ត្រឡប់ក្រោយ
+    </a>
+</div>
+    <div class="border-wrapper mt-4 mr-4 ml-4">
         <div class="result-total-table-container">
+
             <h3>របាយការណ៍ធានាចំណាយថវិកាក្រសួងការងារ និងបណ្តុះបណ្តាលវិជ្ជាជីវៈ</h3>
             <h5>ប្រចាំខែមិថុនា ឆ្នាំ២០២៤</h5>
             <div class="table-container">

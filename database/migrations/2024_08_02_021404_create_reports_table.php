@@ -13,28 +13,32 @@ return new class extends Migration
     {
         if (!Schema::hasTable('reports')) {
             Schema::create('reports', function (Blueprint $table) {
-                $table->increments('id', true);
+                $table->increments('id'); // Auto-incrementing primary key
 
-                $table->unsignedBigInteger('sub_account_key')->change();
-                $table->foreignId('sub_account_key')->references('id')->on('sub_account_keys')->onDelete('cascade');
+                // Foreign key column
+                $table->foreignId('sub_account_key')->constrained('sub_account_keys')->onDelete('cascade');
 
+                // Other columns
                 $table->string('report_key');
-                $table->string('name_report_key');
+                $table->string('name_report_key')->nullable(); // Allow null if not required
                 $table->decimal('fin_law', 15, 2)->default(0);
-                $table->decimal('current_loan', 15, 2)->default(0); // get from early-balance to new months
+                $table->decimal('current_loan', 15, 2)->default(0);
                 $table->decimal('internal_increase', 15, 2)->default(0);
                 $table->decimal('unexpected_increase', 15, 2)->default(0);
                 $table->decimal('additional_increase', 15, 2)->default(0);
-                $table->decimal('total_increase', 15, 2)->default(0);   //sum (internal_increase, unexpected_increase, additional_increase )
-                $table->decimal('decrease', 15, 2)->default(0); // 
-                $table->decimal('editorial', 15, 2)->default(0);    // 
-                $table->decimal('new_credit_status', 15, 2)->default(0); //  (current_loan + total_increase - decrease - editorial)
-                $table->decimal('early_balance', 15, 2)->default(0);  //   calcualte sumif
-                $table->decimal('apply', 15, 2)->default(0); //  select form another
-                $table->decimal('deadline_balance', 15, 2)->default(0);  // (early_balance + apply)
-                $table->decimal('credit', 15, 2)->default(0);        // (new_credit_status - deadline_balance)
-                $table->decimal('law_average')->default(0);   //  (fin_law / deadline_balance )
-                $table->decimal('law_correction')->default(0);   //  (new_credit_status / deadline_balance)
+                $table->decimal('total_increase', 15, 2)->default(0);   // Calculated as sum of the other increases
+                $table->decimal('decrease', 15, 2)->default(0);
+                $table->decimal('editorial', 15, 2)->default(0);
+                $table->decimal('new_credit_status', 15, 2)->default(0); // Calculated as (current_loan + total_increase - decrease - editorial)
+                $table->decimal('early_balance', 15, 2)->default(0); // Sumif calculation
+                $table->decimal('apply', 15, 2)->default(0);
+                $table->decimal('deadline_balance', 15, 2)->default(0); // Calculated as (early_balance + apply)
+                $table->decimal('credit', 15, 2)->default(0); // Calculated as (new_credit_status - deadline_balance)
+                $table->decimal('law_average', 15, 2)->default(0); // Calculated as (fin_law / deadline_balance)
+                $table->decimal('law_correction', 15, 2)->default(0); // Calculated as (new_credit_status / deadline_balance)
+
+                // Unique constraint for the combination of sub_account_key and report_key
+                $table->unique(['sub_account_key', 'report_key']);
 
                 $table->timestamps();
             });

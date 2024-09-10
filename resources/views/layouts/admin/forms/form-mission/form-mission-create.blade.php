@@ -5,7 +5,7 @@
             <div class="col-lg-12 margin-tb mb-4">
                 <div class="d-flex justify-content-between align-items-center">
                     <h3 class="card-title">បញ្ចូលតារាងរបាយការណ៏ចំណាយបេសកកម្មក្នុងប្រទេស ឆ្នាំ២០២៤</h3>
-                    <a class="btn btn-primary" href="{{ route('missions.index') }}">ត្រឡប់ក្រោយ</a>
+                    <a class="btn btn-primary" href="{{ route('mission-cam.index') }}">ត្រឡប់ក្រោយ</a>
                 </div>
             </div>
         </div>
@@ -19,7 +19,7 @@
 
         @if ($errors->any())
             <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                <strong>Whoops!</strong> There were some problems with your input.<br><br>
+                <strong>Whoops!</strong>There were some problems with your input.<br><br>
                 <ul>
                     @foreach ($errors->all() as $error)
                         <li>{{ $error }}</li>
@@ -31,14 +31,15 @@
 
         <div class="border-wrapper">
             <div class="form-container">
-                <form action="{{ route('missions.store') }}" method="POST" enctype="multipart/form-data">
+                <form action="{{ route('mission-cam.store') }}" method="POST" enctype="multipart/form-data">
                     @csrf
                     <div class="row">
                         <div class="col-md-6">
+
                             <!-- Number of people -->
                             <div class="form-group">
                                 <label for="num_people">ចំនួនមនុស្ស:</label>
-                                <select id="num_people" class="form-control" required>
+                                <select id="num_people" class="form-control centered-text" required>
                                     <option value="">ជ្រើសរើសចំនួនមនុស្ស</option>
                                     @for ($i = 1; $i <= 5; $i++)
                                         <option value="{{ $i }}">{{ $i }}</option>
@@ -68,8 +69,6 @@
                                     @enderror
                                 </div>
                             </div>
-
-
                         </div>
 
                         <div class="col-md-6">
@@ -83,18 +82,33 @@
                             </div>
 
                             <div class="form-group">
-                                <label for="place">ទីកន្លែង:</label>
-                                <select name="place" id="place" class="form-control centered-text">
-                                    <option value="">ជ្រើសរើសទីកន្លែង</option>
-                                    <option value="within_country">ក្នុងប្រទេស</option>
-                                    <option value="abroad">ក្រៅប្រទេស</option>
-                                </select>
-                            </div>
-
-                            <div class="form-group">
-                                <label for="location">ជ្រើសរើសខេត្ត ឬ ប្រទេស:</label>
+                                <label for="location">ជ្រើសរើសខេត្ត:</label>
                                 <select name="location" id="location" class="form-control centered-text">
-                                    <option value="">ជ្រើសរើសខេត្ត ឬ ប្រទេស</option>
+                                    <option value="">ជ្រើសរើសខេត្ត</option>
+                                    <option value="កំពង់ធំ">កំពង់ធំ</option>
+                                    <option value="តាកែវ">តាកែវ</option>
+                                    <option value="សៀមរាប">សៀមរាប</option>
+                                    <option value="កំពង់ចាម">កំពង់ចាម</option>
+                                    <option value="បាត់ដំបង">បាត់ដំបង</option>
+                                    <option value="ប៉ៃលិន">ប៉ៃលិន</option>
+                                    <option value="បន្ទាយមានជ័យ">បន្ទាយមានជ័យ</option>
+                                    <option value="ពោធិ៍សាត់">ពោធិ៍សាត់</option>
+                                    <option value="ព្រះសីហនុ">ព្រះសីហនុ</option>
+                                    <option value="កំពត">កំពត</option>
+                                    <option value="កែប">កែប</option>
+                                    <option value="ឧត្តរមានជ័យ">ឧត្តរមានជ័យ</option>
+                                    <option value="ព្រៃវែង">ព្រៃវែង</option>
+                                    <option value="ស្វាយរៀង">ស្វាយរៀង</option>
+                                    <option value="ត្បូងឃ្មុំ">ត្បូងឃ្មុំ</option>
+                                    <option value="ក្រចេះ">ក្រចេះ</option>
+                                    <option value="មណ្ឌលគីរី">មណ្ឌលគីរី</option>
+                                    <option value="រតនគីរី">រតនគីរី</option>
+                                    <option value="កណ្ដាល">កណ្ដាល</option>
+                                    <option value="កោះកុង">កោះកុង</option>
+                                    <option value="កំពង់ស្ពី">កំពង់ស្ពី</option>
+                                    <option value="ស្ទឹងត្រែង">ស្ទឹងត្រែង</option>
+                                    <option value="ព្រះវិហារ">ព្រះវិហារ</option>
+                                    <option value="កំពង់ឆ្នាំង">កំពង់ឆ្នាំង</option>
                                 </select>
                             </div>
 
@@ -244,57 +258,6 @@
 
         })(jQuery);
 
-        $(function() {
-            // Populate location dropdown based on place selection
-            $("#place").change(function() {
-                var place = $(this).val();
-                var locationSelect = $("#location");
-                locationSelect.empty(); // Clear existing options
-
-                if (place === "within_country") {
-                    locationSelect.append('<option value="">ជ្រើសរើសខេត្ត</option>');
-                    locationSelect.append('<option value="កំពង់ធំ">កំពង់ធំ</option>');
-                    locationSelect.append('<option value="តាកែវ">តាកែវ</option>');
-                    locationSelect.append('<option value="សៀមរាប">សៀមរាប</option>');
-                    locationSelect.append('<option value="កំពង់ចាម">កំពង់ចាម</option>');
-                    locationSelect.append('<option value="បាត់ដំបង">បាត់ដំបង</option>');
-                    locationSelect.append('<option value="ប៉ៃលិន">ប៉ៃលិន</option>');
-                    locationSelect.append('<option value="បន្ទាយមានជ័យ">បន្ទាយមានជ័យ</option>');
-                    locationSelect.append('<option value="ពោធិ៍សាត់">ពោធិ៍សាត់</option>');
-                    locationSelect.append('<option value="ព្រះសីហនុ">ព្រះសីហនុ</option>');
-                    locationSelect.append('<option value="កំពត">កំពត</option>');
-                    locationSelect.append('<option value="កែប">កែប</option>');
-                    locationSelect.append('<option value="ឧត្តរមានជ័យ">ឧត្តរមានជ័យ</option>');
-                    locationSelect.append('<option value="ព្រៃវែង">ព្រៃវែង</option>');
-                    locationSelect.append('<option value="ស្វាយរៀង">ស្វាយរៀង</option>');
-                    locationSelect.append('<option value="ត្បូងឃ្មុំ">ត្បូងឃ្មុំ</option>');
-                    locationSelect.append('<option value="ក្រចេះ">ក្រចេះ</option>');
-                    locationSelect.append('<option value="មណ្ឌលគីរី">មណ្ឌលគីរី</option>');
-                    locationSelect.append('<option value="រតនគីរី">រតនគីរី</option>');
-                    locationSelect.append('<option value="កណ្ដាល">កណ្ដាល</option>');
-                    locationSelect.append('<option value="កោះកុង">កោះកុង</option>');
-                    locationSelect.append('<option value="កំពង់ស្ពី">កំពង់ស្ពី</option>');
-                    locationSelect.append('<option value="ស្ទឹងត្រែង">ស្ទឹងត្រែង</option>');
-                    locationSelect.append('<option value="ព្រះវិហារ">ព្រះវិហារ</option>');
-                    locationSelect.append('<option value="កំពង់ឆ្នាំង">កំពង់ឆ្នាំង</option>');
-                } else if (place === "abroad") {
-                    locationSelect.append('<option value="">ជ្រើសរើសប្រទេស</option>');
-                    locationSelect.append('<option value="អាមេរិក">អាមេរិក</option>');
-                    locationSelect.append('<option value="កាណាដា">កាណាដា</option>');
-                    locationSelect.append('<option value="ឡាវ">ឡាវ</option>');
-                    locationSelect.append('<option value="វៀតណាម">វៀតណាម</option>');
-                    locationSelect.append('<option value="ថៃ">ថៃ</option>');
-                    locationSelect.append('<option value="ចិន">ចិន</option>');
-                    locationSelect.append('<option value="កូរ៉េ">កូរ៉េ</option>');
-                    locationSelect.append('<option value="ជប៉ុន">ជប៉ុន</option>');
-                    locationSelect.append('<option value="មីយ៉ាន់ម៉ា">មីយ៉ាន់ម៉ា</option>');
-                    locationSelect.append('<option value="អឺរ៉ុប">អឺរ៉ុប</option>');
-                } else {
-                    locationSelect.append('<option value="">ជ្រើសរើសខេត្ត ឬ ប្រទេស</option>');
-                }
-            });
-        });
-
         $(document).ready(function() {
             const numPeopleSelect = $('#num_people');
             const rowsContainer = $('#rows-container');
@@ -319,13 +282,13 @@
                                 <option value="">ជ្រើសរើសតួនាទី</option>
                                 <option value="អគ្កាធិការរង">អគ្កាធិការរង</option>
                                 <option value="អគ្គនាយករង">អគ្គនាយករង</option>
-                                <option value="អគ្គលេខាធិការ">អគ្គលេខាធិការ</option>
+                                <option value="អគ្គលេខាធិការរង">អគ្គលេខាធិការរង</option>
                                 <option value="រដ្ឋលេខាធិការ">រដ្ឋលេខាធិការ</option>
                                 <option value="អនុរដ្ឋលេខាធិការ">អនុរដ្ឋលេខាធិការ</option>
                                 <option value="ប្រ.ការិយាល័យ">ប្រ.ការិយាល័យ</option>
                                 <option value="អនុ.ការិយាល័យ">អនុ.ការិយាល័យ</option>
                                 <option value="អនុប្រធានផ្នែក">អនុប្រធានផ្នែក</option>
-                                <option value="មន្រ្តី">មន្ត្រី</option>
+                                <option value="មន្ត្រី">មន្ត្រី</option>
                                 <option value="ជំនួយការ">ជំនួយការ</option>
                             </select>
                         </div>
