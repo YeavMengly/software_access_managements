@@ -1,7 +1,8 @@
 @extends('layouts.master')
 
 @section('dashboardui')
-    <div class="container-fluid fullscreen-container d-flex flex-column pt-4">
+    <div class="container-fluid fullscreen-container d-flex flex-column pt-4"
+        style="font-family: 'Khmer OS Siemreap', sans-serif;">
         <!-- Main content which should scroll if necessary -->
         <div class="main-content flex-grow-1">
             <div class="row justify-content-center d-flex align-items-center">
@@ -58,8 +59,8 @@
             </div>
         </div>
         <!-- Footer content -->
-        <div class="footer-section text-center">
-            <p> នាយកដ្ឋានហិរញ្ញវត្ថុ និងទ្រព្យសម្បត្តិរដ្ឋ</p>
+        <div class="footer-section">
+            <p style="margin: 0;"> នាយកដ្ឋានហិរញ្ញវត្ថុ និងទ្រព្យសម្បត្តិរដ្ឋ</p>
         </div>
     </div>
 @endsection

@@ -34,9 +34,9 @@ class CambodiaExport implements FromQuery, WithHeadings, WithMapping, WithStyles
         }
 
         // Apply date filter if provided
-        if ($this->searchDate) {
+        if (!empty($this->searchDate)) {
             $query->whereDate('mission_start_date', $this->searchDate);
-        }
+        } 
 
         // Select the columns you want
         return $query->select(
@@ -175,7 +175,7 @@ class CambodiaExport implements FromQuery, WithHeadings, WithMapping, WithStyles
     {
         return [
             1 => ['font' => ['bold' => true]],
-        ];
+        ]; 
     }
 
     public function title(): string

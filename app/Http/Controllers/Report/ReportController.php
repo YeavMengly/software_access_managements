@@ -168,7 +168,6 @@ class ReportController extends Controller
             'decrease' => 'nullable|numeric',
         ]);
 
-
         // Set 'decrease' to 0 if it's not provided
         $validatedData['internal_increase'] = $validatedData['internal_increase'] ?? 0;
         $validatedData['unexpected_increase'] = $validatedData['unexpected_increase'] ?? 0;

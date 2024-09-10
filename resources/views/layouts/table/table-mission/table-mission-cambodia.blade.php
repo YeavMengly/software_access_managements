@@ -1,34 +1,45 @@
 @extends('layouts.master')
 
 @section('content-table-mission-cambodia')
-    <form class="max-w-md mx-auto mt-3 table-header" method="GET" action="">
-        <div class="row">
-            <div class="col-md-6">
-                <div class="input-group my-3" style="width: 70%; font-family: 'Khmer OS Siemreap', sans-serif">
-                    <input type="search" name="search" value="{{ request('search') }}" class="form-control"
-                        placeholder="ស្វែងរកទិន្នន័យ" aria-label="Search Address">
-                    <button type="submit" class="btn btn-primary">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 50 50">
-                            <path
-                                d="M 21 3 C 11.621094 3 4 10.621094 4 20 C 4 29.378906 11.621094 37 21 37 C 24.710938 37 28.140625 35.804688 30.9375 33.78125 L 44.09375 46.90625 L 46.90625 44.09375 L 33.90625 31.0625 C 36.460938 28.085938 38 24.222656 38 20 C 38 10.621094 30.378906 3 21 3 Z M 21 5 C 29.296875 5 36 11.703125 36 20 C 36 28.296875 29.296875 35 21 35 C 12.703125 35 6 28.296875 6 20 C 6 11.703125 12.703125 5 21 5 Z">
-                            </path>
-                        </svg>
-                    </button>
-                </div>
-                <!-- Search by date -->
-                <div class="input-group my-3" style="width: 70%; font-family: 'Khmer OS Siemreap', sans-serif">
-                    <input type="date" name="search_date" value="{{ request('search_date') }}" class="form-control"
-                        placeholder="Start Date" aria-label="Start Date">
-                </div>
-            </div>
-            <div class="col-md-6">
-                <div class="d-flex align-items-center justify-content-end py-3">
-                    <a class="btn btn-success" href="{{ route('mission-cam.create') }}"
-                        style="font-family: 'Khmer OS Siemreap', sans-serif;">បញ្ចូលទិន្នន័យ</a>
+    <div class="sticky-header">
+        <div class="row mt-4 mr-4">
+            <div class="col-lg-12 margin-tb mb-4">
+                <div class="d-flex justify-content-between align-items-center">
+                    <a class="btn btn-danger" href="{{ url('/card_certificate') }}"
+                        style="font-family: 'Khmer OS Siemreap', sans-serif;"> <i class="fas fa-arrow-left"></i>
+                        ត្រឡប់ក្រោយ</a>
                 </div>
             </div>
         </div>
-    </form>
+        <form class="max-w-md mx-auto mt-3" method="GET" action="">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="input-group my-3" style="width: 70%; font-family: 'Khmer OS Siemreap', sans-serif">
+                        <input type="search" name="search" value="{{ request('search') }}" class="form-control"
+                            placeholder="ស្វែងរកទិន្នន័យ" aria-label="Search Address">
+                        <button type="submit" class="btn btn-primary">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 50 50">
+                                <path
+                                    d="M 21 3 C 11.621094 3 4 10.621094 4 20 C 4 29.378906 11.621094 37 21 37 C 24.710938 37 28.140625 35.804688 30.9375 33.78125 L 44.09375 46.90625 L 46.90625 44.09375 L 33.90625 31.0625 C 36.460938 28.085938 38 24.222656 38 20 C 38 10.621094 30.378906 3 21 3 Z M 21 5 C 29.296875 5 36 11.703125 36 20 C 36 28.296875 29.296875 35 21 35 C 12.703125 35 6 28.296875 6 20 C 6 11.703125 12.703125 5 21 5 Z">
+                                </path>
+                            </svg>
+                        </button>
+                    </div>
+                    <!-- Search by date -->
+                    <div class="input-group mt my-3" style="width: 70%; font-family: 'Khmer OS Siemreap', sans-serif">
+                        <input type="date" name="search_date" value="{{ request('search_date') }}" class="form-control"
+                            placeholder="Start Date" aria-label="Start Date">
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="d-flex align-items-center justify-content-end py-3">
+                        <a class="btn btn-success" href="{{ route('mission-cam.create') }}"
+                            style="font-family: 'Khmer OS Siemreap', sans-serif;">បញ្ចូលទិន្នន័យ</a>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
 
     <div class="border-wrapper">
         <div class="result-total-table-container">
@@ -105,17 +116,27 @@
                         </tr>
 
                         <tr>
-                            <th style="border: 2px solid black; font-family: 'Khmer OS Siemreap', sans-serif">លេខ</th>
-                            <th style="border: 2px solid black; font-family: 'Khmer OS Siemreap', sans-serif">កាលបរិច្ឆេទ
+                            <th style="border: 2px solid black; font-family: 'Khmer OS Siemreap', sans-serif">លេខ
                             </th>
-                            <th style="border: 2px solid black; font-family: 'Khmer OS Siemreap', sans-serif">ចាប់ផ្ដើម</th>
-                            <th style="border: 2px solid black; font-family: 'Khmer OS Siemreap', sans-serif">ត្រឡប់</th>
-                            <th style="border: 2px solid black; font-family: 'Khmer OS Siemreap', sans-serif">របប</th>
-                            <th style="border: 2px solid black; font-family: 'Khmer OS Siemreap', sans-serif">សរុប</th>
-                            <th style="border: 2px solid black; font-family: 'Khmer OS Siemreap', sans-serif">របប</th>
-                            <th style="border: 2px solid black; font-family: 'Khmer OS Siemreap', sans-serif">សរុប</th>
-                            <th style="border: 2px solid black; font-family: 'Khmer OS Siemreap', sans-serif">របប</th>
-                            <th style="border: 2px solid black; font-family: 'Khmer OS Siemreap', sans-serif">សរុប</th>
+                            <th style="border: 2px solid black; font-family: 'Khmer OS Siemreap', sans-serif">
+                                កាលបរិច្ឆេទ
+                            </th>
+                            <th style="border: 2px solid black; font-family: 'Khmer OS Siemreap', sans-serif">
+                                ចាប់ផ្ដើម</th>
+                            <th style="border: 2px solid black; font-family: 'Khmer OS Siemreap', sans-serif">ត្រឡប់
+                            </th>
+                            <th style="border: 2px solid black; font-family: 'Khmer OS Siemreap', sans-serif">របប
+                            </th>
+                            <th style="border: 2px solid black; font-family: 'Khmer OS Siemreap', sans-serif">សរុប
+                            </th>
+                            <th style="border: 2px solid black; font-family: 'Khmer OS Siemreap', sans-serif">របប
+                            </th>
+                            <th style="border: 2px solid black; font-family: 'Khmer OS Siemreap', sans-serif">សរុប
+                            </th>
+                            <th style="border: 2px solid black; font-family: 'Khmer OS Siemreap', sans-serif">របប
+                            </th>
+                            <th style="border: 2px solid black; font-family: 'Khmer OS Siemreap', sans-serif">សរុប
+                            </th>
                         </tr>
                     </thead>
                     <tbody style="border: 2px solid black;">
@@ -197,7 +218,7 @@
                         <tr>
                             <td colspan="10"
                                 style="border: 2px solid black; font-family: 'Khmer OS Muol Light', sans-serif;">
-                                {{ 'សរុប' }}</td>
+                                {{ 'សរុបរួម' }}</td>
                             <td style="border: 2px solid black;"></td>
                             <td style="border: 2px solid black;"></td>
                             <td style="border: 2px solid black;">
@@ -212,7 +233,8 @@
                             <td style="border: 2px solid black;">
                                 {{ number_format($totals['total_accommodation_money'], 0, '.', ',') }}</td>
                             <td style="border: 2px solid black;"></td>
-                            <td style="border: 2px solid black;">{{ number_format($totals['final_total'], 0, '.', ',') }}
+                            <td style="border: 2px solid black;">
+                                {{ number_format($totals['final_total'], 0, '.', ',') }}
                             </td>
                         </tr>
                     </tbody>
@@ -228,13 +250,6 @@
 
 @section('styles')
     <style>
-        .table-header {
-            position: relative;
-            /* or absolute, depending on your layout */
-            z-index: 1000;
-            /* Higher values bring the element to the front */
-        }
-
         .border-wrapper {
             border: 2px solid black;
             padding: 10px;
@@ -302,10 +317,10 @@
                 title: 'ពិតជាចង់លុបទិន្នន័យមែនឬទេ?',
                 icon: 'warning',
                 showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
-                confirmButtonText: 'ត្រឡប់ក្រោយ',
-                cancelButtonText: 'លុបទិន្នន័យ!',
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                cancelButtonText: 'ត្រឡប់ក្រោយ',
+                confirmButtonText: 'លុបទិន្នន័យ!',
                 reverseButtons: true,
             }).then((result) => {
                 if (result.isConfirmed) {
@@ -359,6 +374,39 @@
                     });
                 });
             });
+        });
+    </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const fullscreenButton = document.getElementById('fullscreen-btn');
+            const container = document.querySelector('.fullscreen-container');
+
+            function toggleFullscreen() {
+                if (document.fullscreenElement) {
+                    document.exitFullscreen();
+                } else {
+                    document.documentElement.requestFullscreen();
+                }
+            }
+
+            function updateButtonIcon() {
+                if (document.fullscreenElement) {
+                    fullscreenButton.innerHTML = '<i class="fas fa-compress"></i>'; // Zoom Out icon
+                } else {
+                    fullscreenButton.innerHTML = '<i class="fas fa-expand"></i>'; // Zoom In icon
+                }
+            }  
+
+            fullscreenButton.addEventListener('click', function() {
+                toggleFullscreen();
+            });
+
+            document.addEventListener('fullscreenchange', updateButtonIcon);
+            document.addEventListener('webkitfullscreenchange', updateButtonIcon);
+            document.addEventListener('mozfullscreenchange', updateButtonIcon);
+            document.addEventListener('MSFullscreenChange', updateButtonIcon);
+
+            updateButtonIcon();
         });
     </script>
 @endsection
