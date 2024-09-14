@@ -99,7 +99,7 @@ class ReportController extends Controller
             'decrease' => 'nullable|numeric|min:0',
         ]);
 
-        // Set default values for nullable fields
+
         $validatedData['internal_increase'] = $validatedData['internal_increase'] ?? 0;
         $validatedData['unexpected_increase'] = $validatedData['unexpected_increase'] ?? 0;
         $validatedData['additional_increase'] = $validatedData['additional_increase'] ?? 0;

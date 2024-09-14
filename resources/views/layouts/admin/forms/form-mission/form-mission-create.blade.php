@@ -2,8 +2,9 @@
 @section('form-form-mission')
     <div class="container-fluid">
         <div class="row">
-            <div class="col-lg-12 margin-tb mb-4">
-                <div class="d-flex justify-content-between align-items-center">
+            <div class="col-lg-12 margin-tb mb-4 mt-4">
+                <div class="d-flex justify-content-between align-items-center"
+                    style="font-family: 'Khmer OS Siemreap', sans-serif;">
                     <h3 class="card-title">បញ្ចូលតារាងរបាយការណ៏ចំណាយបេសកកម្មក្នុងប្រទេស ឆ្នាំ២០២៤</h3>
                     <a class="btn btn-primary" href="{{ route('mission-cam.index') }}">ត្រឡប់ក្រោយ</a>
                 </div>
@@ -19,7 +20,7 @@
 
         @if ($errors->any())
             <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                <strong>Whoops!</strong>There were some problems with your input.<br><br>
+                <strong>Whoops!</strong><br><br>
                 <ul>
                     @foreach ($errors->all() as $error)
                         <li>{{ $error }}</li>
@@ -33,9 +34,8 @@
             <div class="form-container">
                 <form action="{{ route('mission-cam.store') }}" method="POST" enctype="multipart/form-data">
                     @csrf
-                    <div class="row">
+                    <div class="row" style="font-family: 'Khmer OS Siemreap', sans-serif;">
                         <div class="col-md-6">
-
                             <!-- Number of people -->
                             <div class="form-group">
                                 <label for="num_people">ចំនួនមនុស្ស:</label>

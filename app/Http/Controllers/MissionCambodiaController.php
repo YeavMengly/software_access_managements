@@ -365,7 +365,7 @@ class MissionCambodiaController extends Controller
     public function export(Request $request)
     {
         $search = $request->input('search');
-        $searchDate = $request->input('search_date');
+        $searchDate = $request->input('mission_start_date');
 
         return Excel::download(new CambodiaExport($search, $searchDate), 'mission-cambodia.xlsx');
     }

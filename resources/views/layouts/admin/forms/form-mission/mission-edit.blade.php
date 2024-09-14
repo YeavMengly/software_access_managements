@@ -1,16 +1,16 @@
 @extends('layouts.master')
 
 @section('form-form-mission')
-    <div class="container-fluid">
+    <div class="container-fluid" style="font-family: 'Khmer OS Siemreap', sans-serif;">
         <div class="row">
-            <div class="col-lg-12 margin-tb mb-4">
+            <div class="col-lg-12 margin-tb mb-4 mt-4">
                 <div class="d-flex justify-content-between align-items-center">
                     <h3 class="card-title">កែប្រែទម្រង់បេសកកម្ម</h3>
                     <a class="btn btn-primary" href="{{ route('mission-cam.index') }}">ត្រឡប់ក្រោយ</a>
                 </div>
             </div>
         </div>
-​
+
         @if (session('success'))
             <div class="alert alert-success alert-dismissible fade show" role="alert">
                 {{ session('success') }}
@@ -147,8 +147,8 @@
                             <div class="form-group">
                                 <label for="travel_allowance">សោហ៊ុយធ្វើដំណើរ:</label>
                                 <input type="number" name="travel_allowance" id="travel_allowance"
-                                       class="form-control @error('travel_allowance') is-invalid @enderror"
-                                       value="{{ old('travel_allowance', $missions->travel_allowance) }}">
+                                    class="form-control @error('travel_allowance') is-invalid @enderror"
+                                    value="{{ old('travel_allowance', $missions->travel_allowance) }}">
                                 @error('travel_allowance')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror

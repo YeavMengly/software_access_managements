@@ -55,7 +55,6 @@ Route::get('/programs', [TotalProgramsController::class, 'index'])->name('progra
 Route::get('/card_certificate', [CertificateCardController::class, 'index'])->name('card_certificate');
 Route::get('/total_card', [TotalCardController::class, 'index'])->name('total_card');
 
-
 //===============================>> Manage Resource
 Route::resource('codes', ReportController::class);
 Route::resource('keys', KeyController::class);
@@ -65,15 +64,10 @@ Route::resource('sub-account', SubAccountKeyController::class);
 //===============================>> Certificate
 Route::resource('certificate', CertificateController::class);
 Route::resource('certificate-data', CertificateDataController::class);
-
-
 Route::get('/certificate-amount', [AmountCertificateController::class, 'index'])->name('certificate-amount');
 
-
-
-
 //===============================>> Manage Mission
-Route::resource('missions', ResultMissionController::class);
+// Route::resource('missions', ResultMissionController::class);
 
 //===============================>> Manage Result Operation
 // Route::get('/', [ResultController::class, 'index'])->name('result');
@@ -106,24 +100,20 @@ Route::delete('/mission-cam/{mission}', [MissionCambodiaController::class, 'dele
 //===============================>> Manage Exports
 // Route::get('/import-data',[ReportController::class, 'import'])->name('import-data');
 // Route::get('/import', [ReportController::class, 'import'])->name('import.form');
-Route::post('/import-excel', [ReportController::class, 'import'])->name('reports.import');
 
-//===============================>> Manage Exports
+Route::post('/reports/import', [ReportController::class, 'importExcelData'])->name('reports.import');
+Route::post('/import-excel', [ReportController::class, 'import'])->name('reports.import');
 
 
 //===============================>> Manage Mission Exports
 Route::get('/mission-cambodia/export', [MissionCambodiaController::class, 'export'])->name('table-mission-cambodia');
 
-
 Route::get('/export', [ResultController::class, 'export'])->name('result.export');
-
 
 //===============================>> Manage Pdf Print
 Route::get('/results/pdf', [ResultController::class, 'exportPdf'])->name('result.exportPdf');
 
-
 Route::get('/mission-abroad', [MissionAbroadController::class, 'index'])->name('table-mission-abroad');
 // Route::get('mission-abroad/export', [MissionAbroadController::class, 'export'])->name('table-mission-abroad');
-
 
 Route::get('mission-abroad/export', [MissionAbroadController::class, 'export'])->name('table-mission-abroad');

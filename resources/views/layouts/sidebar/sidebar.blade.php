@@ -108,18 +108,16 @@
             data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
                 <h6 class="collapse-header">ឥណទានសរុប</h6>
-<<<<<<< HEAD
                 <a class="collapse-item" href=" ">ឥណទានថ្មី</a>
                 <a class="collapse-item" href=" ">បូកយោងអនុវត្ត</a>
                 <a class="collapse-item" href=" ">នៅសល់</a>
-=======
+
                 <a class="collapse-item" href=" {{ route('result-new-loan') }} ">ឥណទានថ្មី</a>
                 <a class="collapse-item" href=" {{ route('result-sum-refer') }} ">បូកយោងអនុវត្ត</a>
                 <a class="collapse-item" href=" {{ route('result-remain') }} ">នៅសល់</a>
                 {{-- <a class="collapse-item" href=" ">Forgot Password</a>
                 <div class="collapse-divider"></div>
                 <h6 class="collapse-header">Other Pages:</h6> --}}
->>>>>>> e494c73343dc90a04a649b1b0c329cec3e7de040
             </div>
         </div>
     </li>

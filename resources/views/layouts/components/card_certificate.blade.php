@@ -21,10 +21,11 @@
                 </div>
 
                 <div class="col-md-4 mb-3">
-                    <a href="{{ route('missions.index') }}" class="btn btn-custom btn-block animate-button">
+                    <a href="{{ route('mission-cam.index') }}" class="btn btn-custom btn-block animate-button">
                         <i class="fas fa-briefcase"></i> តារាងបេសកម្ម
                     </a>
                 </div>
+                
 
 
                 <div class="col-md-4 mb-3">
