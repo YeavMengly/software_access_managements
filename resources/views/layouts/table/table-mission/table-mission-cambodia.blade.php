@@ -218,28 +218,29 @@
                         <tr>
                             <td colspan="10"
                                 style="border: 2px solid black; font-family: 'Khmer OS Muol Light', sans-serif;">
-                                {{ 'សរុបរួម' }}</td>
+                                <strong>{{ 'សរុបរួម' }}</strong></td>
                             <td style="border: 2px solid black;"></td>
                             <td style="border: 2px solid black;"></td>
-                            <td style="border: 2px solid black;">
-                                {{ number_format($totals['travel_allowance'], 0, '.', ',') }}</td>
-                            <td style="border: 2px solid black;"></td>
-                            <td style="border: 2px solid black;">
-                                {{ number_format($totals['total_pocket_money'], 0, '.', ',') }}</td>
+                            <td style="border: 2px solid black;"><strong>{{ number_format($totals['travel_allowance'], 0, '.', ',') }}</strong></td>
                             <td style="border: 2px solid black;"></td>
                             <td style="border: 2px solid black;">
-                                {{ number_format($totals['total_meal_money'], 0, '.', ',') }}</td>
+                                <strong>{{ number_format($totals['total_pocket_money'], 0, '.', ',') }}</strong></td>
                             <td style="border: 2px solid black;"></td>
                             <td style="border: 2px solid black;">
-                                {{ number_format($totals['total_accommodation_money'], 0, '.', ',') }}</td>
+                                <strong>{{ number_format($totals['total_meal_money'], 0, '.', ',') }}</strong></td>
                             <td style="border: 2px solid black;"></td>
                             <td style="border: 2px solid black;">
-                                {{ number_format($totals['final_total'], 0, '.', ',') }}
+                                <strong>{{ number_format($totals['total_accommodation_money'], 0, '.', ',') }}</strong></td>
+                            <td style="border: 2px solid black;"></td>
+                            <td style="border: 2px solid black;">
+                                <strong>{{ number_format($totals['final_total'], 0, '.', ',') }}</strong>
                             </td>
                         </tr>
                     </tbody>
                 </table>
             </div>
+
+            
         </div>
         <div class="d-flex justify-content-end mt-3">
             <a href="{{ route('table-mission-cambodia') }}?search={{ request('search') }}"
