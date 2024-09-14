@@ -15,20 +15,8 @@
         href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
         rel="stylesheet">
 
-    <!-- Custom styles for this template-->
-    <link href="/css/sb-admin-2.min.css" rel="stylesheet">
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-
-    <!-- Include FontAwesome CSS (optional) -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" rel="stylesheet">
-
-    <!-- Include SweetAlert CSS and JS -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
-    {{-- Font Style By --}}
-
     <!-- Custom Khmer Fonts -->
+
     <link href="https://fonts.googleapis.com/css2?family=Siemreap&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Khmer+OS+Muol+Light&display=swap" rel="stylesheet">
 
@@ -58,13 +46,14 @@
             <div id="content">
 
                 <!-- Topbar -->
-                <div style="position: fixed; top: 0; left: 0; width: 100%; z-index: 1030; background-color: rgb(202, 59, 59);">
+                <div
+                    style="position: fixed; top: 0; left: 0; width: 100%; z-index: 1030; background-color: rgb(202, 59, 59);">
                     @include('layouts.navigation.navigation')
                 </div>
                 <!-- End of Topbar -->
 
                 <!-- Begin Page Content -->
-                <div class="container-fluid"  style="padding-top: 90px;">
+                <div class="container-fluid" style="padding-top: 90px;">
 
                     {{-- Component Button --}}
                     @yield('dashboardui')
@@ -209,7 +198,7 @@
 
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
-    {{-- <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script> --}}
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     @yield('scripts')
 
     {{-- <script src="{{ asset('js/custom.js') }}"></script> --}}

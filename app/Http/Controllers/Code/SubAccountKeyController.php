@@ -14,6 +14,7 @@ class SubAccountKeyController extends Controller
         $search = $request->input('search');
         $sort = $request->input('sort', 'sub_account_key'); // Default sorting by 'sub_account_key'
         $direction = $request->input('direction', 'asc'); // Default direction is 'asc'
+        $perPage = $request->input('per_page', 25);
 
         // Define valid columns for sorting
         $validColumns = ['code', 'account_key', 'sub_account_key'];
@@ -47,7 +48,7 @@ class SubAccountKeyController extends Controller
             $query->orderBy('sub_account_keys.sub_account_key', $direction);
         }
 
-        $subAccountKeys = $query->paginate(10); // Adjust pagination as needed
+        $subAccountKeys = $query->paginate($perPage); // Use the per_page value
 
         return view('layouts.admin.forms.sub_accounts.sub-account-index', compact('subAccountKeys'));
     }

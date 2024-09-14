@@ -74,7 +74,7 @@
                                 </td>
                             </tr>
                         @endforeach
-                        
+
 
                         {{-- Sum Report-Key --}}
                         @foreach ($totals['total_amount_by_report_key'] as $reportKey => $total)
@@ -163,6 +163,18 @@
         table {
             width: 100%;
             border-collapse: collapse;
+        }
+
+        .btn,
+        .form-control,
+        label,
+        th,
+        td {
+            border: 1px solid black;
+            text-align: center;
+            padding: 5px;
+            font-family: 'Khmer OS Siemreap', sans-serif;
+            font-size: 16px;
         }
 
         th,

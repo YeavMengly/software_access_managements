@@ -86,6 +86,7 @@
         .container-fluid {
             padding: 16px;
         }
+        
     </style>
 @endsection
 

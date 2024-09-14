@@ -13,6 +13,8 @@ class KeyController extends Controller
         $search = $request->input('search');
         $sortBy = $request->input('sort_by', 'code');
         $sortOrder = $request->input('sort_order', 'asc');
+        $perPage = $request->input('per_page', 25);
+
 
         $query = Key::query();
 
@@ -29,7 +31,8 @@ class KeyController extends Controller
             $query->orderBy('name', $sortOrder);
         }
 
-        $keys = $query->paginate(10);
+        $keys = $query->paginate($perPage); 
+
 
         return view('layouts.admin.forms.keys.key-index', compact('keys', 'sortBy', 'sortOrder', 'search'));
     }

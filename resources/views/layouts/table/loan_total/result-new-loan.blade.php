@@ -18,20 +18,46 @@
                 <table class="table-border">
                     <thead class="header-border">
                         <tr>
-                            {{-- <th rowspan="2">ល.រ</th> --}}
+                            <th rowspan="2">កម្មវិធី</th>
+                            <!-- Use Blade logic to display unique code -->
+                            @php
+                                $displayedCodes = [];
+                            @endphp
                             @foreach ($reports as $report)
-                                <th rowspan="2">{{ $report->subAccountKey->accountKey->key->code }}</th>
+                                @php
+                                    $code = $report->subAccountKey->accountKey->key->code;
+                                    if (!in_array($code, $displayedCodes)) {
+                                        $displayedCodes[] = $code;
+                                @endphp
+                                    <th rowspan="2">ជំពូក​ {{ $code }}</th>
+                                @php
+                                    }
+                                @endphp
                             @endforeach
                         </tr>
+
                         <tr>
                             <!-- Additional headers if needed -->
                         </tr>
                     </thead>
+                   
+                        
                     <tbody class="cell-border">
+                        <!-- Add your rows here -->
+                        <tr>
+                            <td>កម្មវិធីទី១</td>
+                            @foreach ($displayedCodes as $code)
+                                <td><!-- Data for {{ $code }} --></td>
+                            @endforeach
+                        </tr>
 
-                        @foreach ($reports as $report)
-                            <td>{{ $report->fin_law }}</td>
-                        @endforeach
+                        <tr>
+                            <td>កម្មវិធីទី២</td>
+                            @foreach ($displayedCodes as $code)
+                                <td><!-- Data for {{ $code }} --></td>
+                            @endforeach
+                        </tr>
+                        <!-- Add more rows as needed -->
                     </tbody>
                 </table>
             </div>
@@ -62,6 +88,13 @@
 
         .table-container {
             width: 100%;
+        }
+
+        th, .btn,
+        td {
+            border: 1px solid black;
+            text-align: center;
+            padding: 5px;
         }
 
         table {

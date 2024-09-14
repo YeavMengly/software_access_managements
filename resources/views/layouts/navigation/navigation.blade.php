@@ -6,9 +6,9 @@
                 <img src="/img/MLVT.jpg" alt="MLVT Logo" style="width: 70px; height: 70px;">
             </div>
             <div class="header-text ml-4">
-                <h5 style="font-size: 28px; font-weight: 800">
+                <h1" style="font-size: 28px; font-weight: 800; font-family: 'Khmer OS Muol Light' ">
                     នាយកដ្ឋានហិរញ្ញវត្ថុ​ និងទ្រព្យសម្បត្តិរដ្ឋ
-                </h5>
+                </h1>
             </div>
         </a>
     </div>

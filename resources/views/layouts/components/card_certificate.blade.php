@@ -40,8 +40,6 @@
 
 @section('styles')
     <style>
-        /* @import url('https://fonts.googleapis.com/css2?family=Khmer+OS+Siemreap&display=swap'); */
-
         .main-content {
             display: flex;
             justify-content: center;
@@ -82,6 +80,11 @@
 
         .btn-custom:hover {
             background-color: #33a3ff;
+        }
+
+        a {
+            font-family: 'Khmer OS Siemreap', sans-serif;
+            font-size: 18px;
         }
 
         .animate-button {

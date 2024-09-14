@@ -100,7 +100,10 @@ Route::delete('/mission-cam/{mission}', [MissionCambodiaController::class, 'dele
 //===============================>> Manage Exports
 // Route::get('/import-data',[ReportController::class, 'import'])->name('import-data');
 // Route::get('/import', [ReportController::class, 'import'])->name('import.form');
+
 Route::post('/reports/import', [ReportController::class, 'importExcelData'])->name('reports.import');
+Route::post('/import-excel', [ReportController::class, 'import'])->name('reports.import');
+
 
 //===============================>> Manage Mission Exports
 Route::get('/mission-cambodia/export', [MissionCambodiaController::class, 'export'])->name('table-mission-cambodia');

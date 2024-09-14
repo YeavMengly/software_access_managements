@@ -43,16 +43,21 @@
                                     <!-- Sub Account Key Input -->
                                     <div class="form-group">
                                         <strong>លេខអនុគណនី:</strong>
-                                        <select name="sub_account_key" class="form-control">
+                                        <input type="text" id="searchSubAccountKey" class="form-control"
+                                            placeholder="ស្វែងរកលេខអនុគណនី...">
+                                        <p id="resultCount" style="font-weight: bold;">ចំនួន: 0</p>
+
+                                        <select name="sub_account_key" id="subAccountKeySelect" class="form-control "
+                                            size="5" onclick="getSelectedValue()">
                                             @foreach ($subAccountKeys as $subAccountKey)
                                                 <option value="{{ $subAccountKey->id }}">
-                                                    {{ $subAccountKey->accountKey->key->code }} -
-                                                    {{ $subAccountKey->accountKey->account_key }} -
                                                     {{ $subAccountKey->sub_account_key }}
                                                 </option>
                                             @endforeach
                                         </select>
                                     </div>
+
+
 
                                     <!-- Report Key Input -->
                                     <div class="form-group">
@@ -78,12 +83,15 @@
                                     <div class="form-group">
                                         <label for="fin_law">ច្បាប់ហិរញ្ញវត្ថុ:</label>
                                         <input type="number" name="fin_law" id="fin_law"
-                                            class="form-control @error('fin_law') is-invalid @enderror"
-                                            oninput="updateCurrentLoan(this)">
+                                            class="form-control @error('fin_law') is-invalid @enderror" min="0"
+                                            oninput="updateCurrentLoan(this); formatNumber(this)">
                                         @error('fin_law')
                                             <div class="invalid-feedback">{{ $message }}</div>
                                         @enderror
                                     </div>
+
+
+
 
                                     <!-- Current Loan Input (readonly) -->
                                     <div class="form-group">
@@ -102,7 +110,7 @@
                                         <label for="internal_increase">កើនផ្ទៃក្នុង:</label>
                                         <input type="number" name="internal_increase" id="internal_increase"
                                             class="form-control @error('internal_increase') is-invalid @enderror"
-                                            oninput="formatNumber(this)">
+                                            min="0" oninput="formatNumber(this)">
                                         @error('internal_increase')
                                             <div class="invalid-feedback">{{ $message }}</div>
                                         @enderror
@@ -113,7 +121,7 @@
                                         <label for="unexpected_increase">មិនបានគ្រោងទុក:</label>
                                         <input type="number" name="unexpected_increase" id="unexpected_increase"
                                             class="form-control @error('unexpected_increase') is-invalid @enderror"
-                                            oninput="formatNumber(this)">
+                                            min="0" oninput="formatNumber(this)">
                                         @error('unexpected_increase')
                                             <div class="invalid-feedback">{{ $message }}</div>
                                         @enderror
@@ -124,7 +132,7 @@
                                         <label for="additional_increase">បំពេញបន្ថែម:</label>
                                         <input type="number" name="additional_increase" id="additional_increase"
                                             class="form-control @error('additional_increase') is-invalid @enderror"
-                                            oninput="formatNumber(this)">
+                                            min="0" oninput="formatNumber(this)">
                                         @error('additional_increase')
                                             <div class="invalid-feedback">{{ $message }}</div>
                                         @enderror
@@ -134,7 +142,7 @@
                                     <div class="form-group">
                                         <label for="decrease">ថយ:</label>
                                         <input type="number" name="decrease" id="decrease"
-                                            class="form-control @error('decrease') is-invalid @enderror"
+                                            class="form-control @error('decrease') is-invalid @enderror" min="0"
                                             oninput="formatNumber(this)">
                                         @error('decrease')
                                             <div class="invalid-feedback">{{ $message }}</div>
@@ -165,6 +173,22 @@
 
         .container-fluid {
             padding: 16px;
+        }
+
+        #subAccountKeySelect {
+            text-align: left;
+        }
+
+        .btn,
+        .form-control,
+        /* label, */
+        th,
+        td {
+            border: 1px solid black;
+            text-align: center;
+            padding: 5px;
+            font-family: 'Khmer OS Siemreap', sans-serif;
+            font-size: 16px;
         }
     </style>
 @endsection
@@ -233,13 +257,95 @@
 
     <script>
         function updateCurrentLoan(finLawInput) {
-            const finLaw = parseFloat(finLawInput.value);
+            const finLawValue = parseFloat(finLawInput.value) || 0;
             const currentLoanInput = document.getElementById('current_loan');
-            if (!isNaN(finLaw)) {
-                currentLoanInput.value = finLaw;
-            } else {
-                currentLoanInput.value = '';
+            currentLoanInput.value = finLawValue;
+        }
+
+        function formatNumber(input) {
+            // Optional: You can add formatting logic if necessary
+            const value = input.value;
+            input.value = value.replace(/\D/g, ''); // This example strips non-numeric characters
+        }
+    </script>
+    <script>
+        let currentIndex = -1; // Initialize to -1 so no item is selected initially
+
+        document.getElementById('searchSubAccountKey').addEventListener('input', function() {
+            const filter = this.value.toUpperCase();
+            const select = document.getElementById('subAccountKeySelect');
+            const options = select.getElementsByTagName('option');
+            let resultCount = 0;
+
+            // Reset selection index when search input changes
+            currentIndex = -1;
+
+            for (let i = 0; i < options.length; i++) {
+                const optionText = options[i].textContent || options[i].innerText;
+                if (optionText.toUpperCase().indexOf(filter) > -1) {
+                    options[i].style.display = '';
+                    resultCount++;
+                } else {
+                    options[i].style.display = 'none';
+                }
             }
+
+            document.getElementById('resultCount').textContent = `ចំនួន: ${resultCount}`;
+        });
+
+        // Event listener for pressing "Enter", "ArrowUp", and "ArrowDown" keys
+        document.getElementById('searchSubAccountKey').addEventListener('keydown', function(event) {
+            const select = document.getElementById('subAccountKeySelect');
+            const options = select.getElementsByTagName('option');
+            const visibleOptions = Array.from(options).filter(option => option.style.display !== 'none');
+
+            if (event.key === 'Enter') {
+                event.preventDefault(); // Prevent default action (form submission)
+                if (visibleOptions.length > 0 && currentIndex >= 0) {
+                    // Select the current highlighted option when pressing "Enter"
+                    select.selectedIndex = Array.from(options).indexOf(visibleOptions[currentIndex]);
+                    getSelectedValue(); // Show the selected value in SweetAlert
+                }
+            } else if (event.key === 'ArrowDown') {
+                event.preventDefault();
+                // Move down through the visible options
+                if (currentIndex < visibleOptions.length - 1) {
+                    currentIndex++;
+                    highlightOption(visibleOptions[currentIndex]);
+                }
+            } else if (event.key === 'ArrowUp') {
+                event.preventDefault();
+                // Move up through the visible options
+                if (currentIndex > 0) {
+                    currentIndex--;
+                    highlightOption(visibleOptions[currentIndex]);
+                }
+            }
+        });
+
+        function highlightOption(option) {
+            const select = document.getElementById('subAccountKeySelect');
+            const options = select.getElementsByTagName('option');
+
+            // Remove highlight from all options
+            for (let i = 0; i < options.length; i++) {
+                options[i].style.backgroundColor = ''; // Remove highlight
+            }
+
+            // Highlight the currently selected option
+            option.style.backgroundColor = '#d1e7dd'; // You can choose any highlight color
+        }
+
+        function getSelectedValue() {
+            const select = document.getElementById('subAccountKeySelect');
+            const selectedValue = select.options[select.selectedIndex].text;
+
+            Swal.fire({
+                title: 'Selected Value',
+                text: `You selected: ${selectedValue}`,
+                icon: 'info',
+                confirmButtonText: 'OK'
+            });
         }
     </script>
 @endsection
