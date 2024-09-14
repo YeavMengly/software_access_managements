@@ -151,6 +151,18 @@
                                             <div class="invalid-feedback">{{ $message }}</div>
                                         @enderror
                                     </div>
+
+                                    {{-- <div class="form-group">
+                                        <label for="apply">អនុវត្ត:</label>
+                                        <input type="number" name="apply" id="apply"
+                                            value="{{ old('apply', $report->apply) }}"
+                                            class="form-control @error('apply') is-invalid @enderror" readonly>
+                                        @error('apply')
+                                            <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
+                                    </div> --}}
+
+
                                 </div>
                             </div>
 
@@ -230,5 +242,31 @@
             }
 
         })(jQuery); // End of use strict
+    </script>
+
+    <script>
+        function updateApplyValue() {
+            let finLaw = parseFloat(document.getElementById('fin_law').value) || 0;
+            let internalIncrease = parseFloat(document.getElementById('internal_increase').value) || 0;
+            let unexpectedIncrease = parseFloat(document.getElementById('unexpected_increase').value) || 0;
+            let additionalIncrease = parseFloat(document.getElementById('additional_increase').value) || 0;
+            let decrease = parseFloat(document.getElementById('decrease').value) || 0;
+
+            // Calculate total_increase and new_credit_status
+            let totalIncrease = internalIncrease + unexpectedIncrease + additionalIncrease;
+            let newCreditStatus = finLaw + totalIncrease - decrease;
+
+            // Update the apply field (if needed)
+            document.getElementById('apply').value = newCreditStatus;
+
+            // You can add other calculations if needed here
+        }
+
+        // Attach the event listeners to the fields that affect the calculations
+        document.getElementById('fin_law').addEventListener('input', updateApplyValue);
+        document.getElementById('internal_increase').addEventListener('input', updateApplyValue);
+        document.getElementById('unexpected_increase').addEventListener('input', updateApplyValue);
+        document.getElementById('additional_increase').addEventListener('input', updateApplyValue);
+        document.getElementById('decrease').addEventListener('input', updateApplyValue);
     </script>
 @endsection

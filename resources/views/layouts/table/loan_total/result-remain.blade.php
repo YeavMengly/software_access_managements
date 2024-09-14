@@ -10,154 +10,46 @@
             <table class="table-border">
                 <thead class="header-border">
                     <tr>
-                        <th rowspan="2">ល.រ</th>
-                        <th rowspan="2">ឥណទានថ្មី</th>
-                        <th rowspan="2">ជំពូក</th>
-                        <th rowspan="2">ជំពូក</th>
-                        <th rowspan="2">ជំពូក</th>
-                        <th rowspan="2">ជំពូក</th>
-                        <th rowspan="2">ជំពូក</th>
-                        <th rowspan="2">ជំពូក</th>
+                        <th rowspan="2">កម្មវិធី</th>
+                        <!-- Use Blade logic to display unique code -->
+                        @php
+                            $displayedCodes = [];
+                        @endphp
+                        @foreach ($reports as $report)
+                            @php
+                                $code = $report->subAccountKey->accountKey->key->code;
+                                if (!in_array($code, $displayedCodes)) {
+                                    $displayedCodes[] = $code;
+                            @endphp
+                                <th rowspan="2">ជំពូក​ {{ $code }}</th>
+                            @php
+                                }
+                            @endphp
+                        @endforeach
+                    </tr>
+
+                    <tr>
+                        <!-- Additional headers if needed -->
                     </tr>
                 </thead>
+               
+                    
                 <tbody class="cell-border">
                     <!-- Add your rows here -->
                     <tr>
-                        <td>១</td>
-                        <td>ស្ថានភាព A</td>
-                        <td>មូលហេតុ 1</td>
-                        <td>សកម្មភាព 1</td>
-                        <td>ស្ថានភាព 1</td>
-                        <td>សារអារាបេត A</td>
-                        <td>មូលហេតុ A</td>
-                        <td>សកម្មភាព A</td>
+                        <td>កម្មវិធីទី១</td>
+                        @foreach ($displayedCodes as $code)
+                            <td><!-- Data for {{ $code }} --></td>
+                        @endforeach
+                    </tr>
 
-                    </tr>
                     <tr>
-                        <td>១</td>
-                        <td>ស្ថានភាព A</td>
-                        <td>មូលហេតុ 1</td>
-                        <td>សកម្មភាព 1</td>
-                        <td>ស្ថានភាព 1</td>
-                        <td>សារអារាបេត A</td>
-                        <td>មូលហេតុ A</td>
-                        <td>សកម្មភាព A</td>
-    
+                        <td>កម្មវិធីទី២</td>
+                        @foreach ($displayedCodes as $code)
+                            <td><!-- Data for {{ $code }} --></td>
+                        @endforeach
                     </tr>
-                    <tr>
-                        <td>១</td>
-                        <td>ស្ថានភាព A</td>
-                        <td>មូលហេតុ 1</td>
-                        <td>សកម្មភាព 1</td>
-                        <td>ស្ថានភាព 1</td>
-                        <td>សារអារាបេត A</td>
-                        <td>មូលហេតុ A</td>
-                        <td>សកម្មភាព A</td>
-    
-                    </tr>
-                    <tr>
-                        <td>១</td>
-                        <td>ស្ថានភាព A</td>
-                        <td>មូលហេតុ 1</td>
-                        <td>សកម្មភាព 1</td>
-                        <td>ស្ថានភាព 1</td>
-                        <td>សារអារាបេត A</td>
-                        <td>មូលហេតុ A</td>
-                        <td>សកម្មភាព A</td>
-    
-                    </tr>
-                    <tr>
-                        <td>១</td>
-                        <td>ស្ថានភាព A</td>
-                        <td>មូលហេតុ 1</td>
-                        <td>សកម្មភាព 1</td>
-                        <td>ស្ថានភាព 1</td>
-                        <td>សារអារាបេត A</td>
-                        <td>មូលហេតុ A</td>
-                        <td>សកម្មភាព A</td>
-    
-                    </tr>
-                    <tr>
-                        <td>១</td>
-                        <td>ស្ថានភាព A</td>
-                        <td>មូលហេតុ 1</td>
-                        <td>សកម្មភាព 1</td>
-                        <td>ស្ថានភាព 1</td>
-                        <td>សារអារាបេត A</td>
-                        <td>មូលហេតុ A</td>
-                        <td>សកម្មភាព A</td>
-    
-                    </tr>
-                    <tr>
-                        <td>១</td>
-                        <td>ស្ថានភាព A</td>
-                        <td>មូលហេតុ 1</td>
-                        <td>សកម្មភាព 1</td>
-                        <td>ស្ថានភាព 1</td>
-                        <td>សារអារាបេត A</td>
-                        <td>មូលហេតុ A</td>
-                        <td>សកម្មភាព A</td>
-    
-                    </tr>
-                    <tr>
-                        <td>១</td>
-                        <td>ស្ថានភាព A</td>
-                        <td>មូលហេតុ 1</td>
-                        <td>សកម្មភាព 1</td>
-                        <td>ស្ថានភាព 1</td>
-                        <td>សារអារាបេត A</td>
-                        <td>មូលហេតុ A</td>
-                        <td>សកម្មភាព A</td>
-    
-                    </tr>
-                    <tr>
-                        <td>១</td>
-                        <td>ស្ថានភាព A</td>
-                        <td>មូលហេតុ 1</td>
-                        <td>សកម្មភាព 1</td>
-                        <td>ស្ថានភាព 1</td>
-                        <td>សារអារាបេត A</td>
-                        <td>មូលហេតុ A</td>
-                        <td>សកម្មភាព A</td>
-    
-                    </tr>
-                    <tr>
-                        <td>១</td>
-                        <td>ស្ថានភាព A</td>
-                        <td>មូលហេតុ 1</td>
-                        <td>សកម្មភាព 1</td>
-                        <td>ស្ថានភាព 1</td>
-                        <td>សារអារាបេត A</td>
-                        <td>មូលហេតុ A</td>
-                        <td>សកម្មភាព A</td>
-    
-                    </tr>
-                    <tr>
-                        <td>១</td>
-                        <td>ស្ថានភាព A</td>
-                        <td>មូលហេតុ 1</td>
-                        <td>សកម្មភាព 1</td>
-                        <td>ស្ថានភាព 1</td>
-                        <td>សារអារាបេត A</td>
-                        <td>មូលហេតុ A</td>
-                        <td>សកម្មភាព A</td>
-    
-                    </tr>
-                    
-                    <tr>
-                        <td>១</td>
-                        <td>ស្ថានភាព A</td>
-                        <td>មូលហេតុ 1</td>
-                        <td>សកម្មភាព 1</td>
-                        <td>ស្ថានភាព 1</td>
-                        <td>សារអារាបេត A</td>
-                        <td>មូលហេតុ A</td>
-                        <td>សកម្មភាព A</td>
-    
-                    </tr>
-                        
-
-                    <!-- Repeat rows as needed -->
+                    <!-- Add more rows as needed -->
                 </tbody>
             </table>
         </div>
@@ -197,6 +89,13 @@
             text-align: center;
             padding: 5px;
         }
+        th, .btn,
+        td {
+            border: 1px solid black;
+            text-align: center;
+            padding: 5px;
+        }
+
 
         h3,
         h5 {

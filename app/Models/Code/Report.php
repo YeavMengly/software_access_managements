@@ -33,6 +33,9 @@ class Report extends Model
         'law_correction',
     ];
 
+    protected $dates = ['date_column'];
+
+
     // belong table to subAccount class
     public function subAccountKey()
     {

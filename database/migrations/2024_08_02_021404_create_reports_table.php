@@ -16,7 +16,8 @@ return new class extends Migration
                 $table->increments('id'); // Auto-incrementing primary key
 
                 // Foreign key column
-                $table->foreignId('sub_account_key')->constrained('sub_account_keys')->onDelete('cascade');
+                $table->unsignedBigInteger('sub_account_key')->change();
+                $table->foreignId('sub_account_key')->references('id')->on('sub_account_keys')->onDelete('cascade');
 
                 // Other columns
                 $table->string('report_key');

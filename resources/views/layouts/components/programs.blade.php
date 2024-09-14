@@ -8,19 +8,19 @@
                     <a href="{{ route('keys.index') }}" class="btn btn-custom btn-block animate-button">
                         <i class="fas fa-plus"></i> បញ្ចូលទិន្ន័យជំពូក
                     </a>
-                    
+
                 </div>
                 <div class="col-md-4 mb-3">
                     <a href="{{ route('accounts.index') }}" class="btn btn-custom btn-block animate-button">
                         <i class="fas fa-edit"></i> បញ្ចូលទិន្ន័យគណនី
                     </a>
-                    
+
                 </div>
                 <div class="col-md-4 mb-3">
                     <a href="{{ route('sub-account.index') }}" class="btn btn-custom btn-block animate-button">
                         <i class="fas fa-edit"></i> បញ្ចូលទិន្ន័យអនុគណនី
                     </a>
-                    
+
                 </div>
                 <div class="col-md-4 mb-3">
                     <a href="" class="btn btn-custom btn-block animate-button">
@@ -32,7 +32,7 @@
                     <a href="{{ url('/') }}" class="btn btn-custom btn-block animate-button">
                         <i class="fas fa-sign-out-alt"></i> ចាកចេញ
                     </a>
-                    
+
                 </div>
             </div>
         </div>
@@ -50,7 +50,8 @@
             align-items: center;
             height: 100vh;
             width: 100vw;
-            background-color: #f0f0f0; /* Optional background color */
+            background-color: #f0f0f0;
+            /* Optional background color */
         }
 
         .container-box {
@@ -75,8 +76,15 @@
             transition: background-color 0.3s ease;
             animation: fadeIn 1s ease-out;
             font-family: 'Khmer OS Siemreap', sans-serif;
-            font-size: 28px; /* Updated font size */
-            font-weight: bold; /* Optional: make text bold */
+            font-size: 28px;
+            /* Updated font size */
+            font-weight: bold;
+            /* Optional: make text bold */
+        }
+
+        a {
+            font-family: 'Khmer OS Siemreap', sans-serif;
+            font-size: 18px;
         }
 
         .btn-custom:hover {
@@ -91,6 +99,7 @@
             from {
                 opacity: 0;
             }
+
             to {
                 opacity: 1;
             }
@@ -101,6 +110,7 @@
                 opacity: 0;
                 transform: translateY(20px);
             }
+
             to {
                 opacity: 1;
                 transform: translateY(0);

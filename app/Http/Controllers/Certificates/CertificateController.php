@@ -11,9 +11,13 @@ class CertificateController extends Controller
     public function index(Request $request)
     {
         $search = $request->input('search');
+
+        $perPage = $request->input('per_page', 5);
+
         $certificates = Certificate::when($search, function ($query, $search) {
             return $query->where('name_certificate', 'like', "%{$search}%");
-        })->paginate(10);
+        })->paginate($perPage);
+
 
         // Pass the message if no certificates are found
         // $message = $certificates->isEmpty() ? 'គ្មានទិន្ន័យសលាកបត្រ.' : null;

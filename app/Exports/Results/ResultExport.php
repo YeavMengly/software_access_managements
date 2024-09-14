@@ -25,7 +25,7 @@ class ResultExport implements FromCollection, WithHeadings, WithMapping
     public function headings(): array
     {
         return [
-            'ល.រ',
+            // 'ល.រ',
             'ជំពូក',
             'គណនី',
             'អនុគណនី', 
@@ -51,7 +51,7 @@ class ResultExport implements FromCollection, WithHeadings, WithMapping
     public function map($result): array
     {
         return [
-            $result->id,
+            // $result->id,
             $result->subAccountKey->accountKey->key->code,
             $result->subAccountKey->accountKey->account_key,
             $result->subAccountKey->sub_account_key,

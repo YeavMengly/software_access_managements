@@ -10,9 +10,10 @@
                 </a>
                 <h2 style="font-weight: 700;">តារាងទិន្នន័យសលាកបត្រ</h2>
 
-                <a id="submit-button" class="btn btn-success justify-content-between" href="{{ route('certificate-data.create') }}">
+                <a id="submit-button" class="btn btn-success justify-content-between"
+                    href="{{ route('certificate-data.create') }}">
                     បញ្ចូលទិន្ន័យ
-                    <i id="plus-icon" class="fas fa-plus" ></i>
+                    <i id="plus-icon" class="fas fa-plus"></i>
                     <div id="loader" class="loader" style="display: none;"></div>
                 </a>
 
@@ -38,14 +39,22 @@
         </div>
     </div>
 
-    @if ($message = Session::get('success'))
-        <div class="alert alert-success alert-dismissible fade show" role="alert">
-            <p>{{ $message }}</p>
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
-    @endif
     <div class="border-wrapper ml-4 mr-4">
         <div class="result-total-table-container">
+
+            <div class="d-flex justify-content-end mb-2">
+                <!-- Dropdown for showing number of items per page -->
+                <div style="width: 120px;">
+                    <select name="per_page" class="form-control" onchange="window.location.href=this.value;">
+                        <option value="{{ url()->current() }}?per_page=5" {{ request('per_page') == 5 ? 'selected' : '' }}>
+                            បង្ហាញ 5</option>
+                        <option value="{{ url()->current() }}?per_page=10"
+                            {{ request('per_page') == 10 ? 'selected' : '' }}>បង្ហាញ 10</option>
+                        <option value="{{ url()->current() }}?per_page=25"
+                            {{ request('per_page') == 25 ? 'selected' : '' }}>បង្ហាញ 25</option>
+                    </select>
+                </div>
+            </div>
             <table class="table table-striped table-hover ">
                 <thead>
                     <tr>
@@ -96,10 +105,6 @@
                                         @csrf
                                         @method('DELETE')
                                     </form>
-                                    {{-- <a class="btn btn-info"
-                                        href="{{ route('certificate-data.show', $certificateData->id) }}">
-                                        <i class="fas fa-eye" title="Show"></i>
-                                    </a> --}}
                                     <a class="btn btn-primary"
                                         href="{{ route('certificate-data.edit', $certificateData->id) }}">
                                         <i class="fas fa-edit" title="Edit"></i>
@@ -115,48 +120,57 @@
                 </tbody>
             </table>
 
-            <!-- Custom Pagination Links -->
-            <nav aria-label="Page navigation example">
-                <ul class="pagination">
-                    @if ($certificatesData->onFirstPage())
-                        <li class="page-item disabled">
-                            <a class="page-link" href="#" aria-label="Previous">
-                                <span aria-hidden="true">&laquo;</span>
-                                <span class="sr-only">Previous</span>
-                            </a>
-                        </li>
-                    @else
-                        <li class="page-item">
-                            <a class="page-link" href="{{ $certificatesData->previousPageUrl() }}" aria-label="Previous">
-                                <span aria-hidden="true">&laquo;</span>
-                                <span class="sr-only">Previous</span>
-                            </a>
-                        </li>
-                    @endif
+            <div class="d-flex justify-content-between align-items-center mt-4">
+                <!-- Custom Pagination Links -->
+                <nav aria-label="Page navigation example">
+                    <ul class="pagination">
+                        @if ($certificatesData->onFirstPage())
+                            <li class="page-item disabled">
+                                <a class="page-link" href="#" aria-label="Previous">
+                                    <span aria-hidden="true">&laquo;</span>
+                                    <span class="sr-only">Previous</span>
+                                </a>
+                            </li>
+                        @else
+                            <li class="page-item">
+                                <a class="page-link" href="{{ $certificatesData->previousPageUrl() }}"
+                                    aria-label="Previous">
+                                    <span aria-hidden="true">&laquo;</span>
+                                    <span class="sr-only">Previous</span>
+                                </a>
+                            </li>
+                        @endif
 
-                    @for ($i = 1; $i <= $certificatesData->lastPage(); $i++)
-                        <li class="page-item {{ $i == $certificatesData->currentPage() ? 'active' : '' }}">
-                            <a class="page-link" href="{{ $certificatesData->url($i) }}">{{ $i }}</a>
-                        </li>
-                    @endfor
+                        @for ($i = 1; $i <= $certificatesData->lastPage(); $i++)
+                            <li class="page-item {{ $i == $certificatesData->currentPage() ? 'active' : '' }}">
+                                <a class="page-link" href="{{ $certificatesData->url($i) }}">{{ $i }}</a>
+                            </li>
+                        @endfor
 
-                    @if ($certificatesData->hasMorePages())
-                        <li class="page-item">
-                            <a class="page-link" href="{{ $certificatesData->nextPageUrl() }}" aria-label="Next">
-                                <span aria-hidden="true">&raquo;</span>
-                                <span class="sr-only">Next</span>
-                            </a>
-                        </li>
-                    @else
-                        <li class="page-item disabled">
-                            <a class="page-link" href="#" aria-label="Next">
-                                <span aria-hidden="true">&raquo;</span>
-                                <span class="sr-only">Next</span>
-                            </a>
-                        </li>
-                    @endif
-                </ul>
-            </nav>
+                        @if ($certificatesData->hasMorePages())
+                            <li class="page-item">
+                                <a class="page-link" href="{{ $certificatesData->nextPageUrl() }}" aria-label="Next">
+                                    <span aria-hidden="true">&raquo;</span>
+                                    <span class="sr-only">Next</span>
+                                </a>
+                            </li>
+                        @else
+                            <li class="page-item disabled">
+                                <a class="page-link" href="#" aria-label="Next">
+                                    <span aria-hidden="true">&raquo;</span>
+                                    <span class="sr-only">Next</span>
+                                </a>
+                            </li>
+                        @endif
+                    </ul>
+                </nav>
+                <div>
+                    <p class="text-muted">បង្ហាញ {{ $certificatesData->firstItem() }} ដល់
+                        {{ $certificatesData->lastItem() }}
+                        នៃ
+                        {{ $certificatesData->total() }} លទ្ធផល</p>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -176,6 +190,18 @@
         .btn-container {
             position: relative;
             display: inline-block;
+        }
+
+        .btn,
+        .form-control,
+        label,
+        th,
+        td {
+            border: 1px solid black;
+            text-align: center;
+            padding: 5px;
+            font-family: 'Khmer OS Siemreap', sans-serif;
+            font-size: 16px;
         }
 
         #submit-button {
@@ -220,19 +246,34 @@
 @endsection
 @section('scripts')
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.1/dist/sweetalert2.min.js"></script>
-    <script type="text/javascript">
+    <!-- Include SweetAlert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    @if (Session::has('success'))
+        <script>
+            Swal.fire({
+                icon: 'success',
+                title: 'ជោគជ័យ',
+                text: '{{ Session::get('success') }}',
+                showConfirmButton: false,
+                timer: 2000
+            });
+        </script>
+    @endif
+
+    <script>
         function confirmDelete(id) {
             Swal.fire({
-                title: 'Are you sure?',
-                text: "You won't be able to revert this!",
+                title: 'តើអ្នកពិតជាចង់លុបមែនទេ?',
+                text: 'មិនអាចត្រឡប់វិញបានទេ!',
                 icon: 'warning',
                 showCancelButton: true,
                 confirmButtonColor: '#3085d6',
                 cancelButtonColor: '#d33',
-                confirmButtonText: 'Yes, delete it!'
+                confirmButtonText: 'បាទ/ចាស, លុបវា!',
+                cancelButtonText: 'បោះបង់',
             }).then((result) => {
                 if (result.isConfirmed) {
-                    // Submit the form corresponding to the certificate ID
                     document.getElementById('delete-form-' + id).submit();
                 }
             });

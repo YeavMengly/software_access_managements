@@ -7,16 +7,24 @@
 @endsection
 
 @section('result-total-general-table')
-    <h3>របាយការណ៍ធានាចំណាយសកម្មភាពថវិកាទូទៅរបស់រដ្ឋ</h3>
-    <h5>ប្រចាំខែមិថុនា ឆ្នាំ២០២៤</h5>
-    <div class="table-container">
+    <div class="d-flex justify-content-between align-items-center  mt-4 mr-4 ml-4">
+        <a class="btn btn-danger" href="{{ route('total_card') }}">
+            <i class="fas fa-arrow-left"></i> ត្រឡប់ក្រោយ
+        </a>
+    </div>
+    <div class="first-header text-center mt-4">
+        <h3>របាយការណ៍ធានាចំណាយសកម្មភាពថវិកាទូទៅរបស់រដ្ឋ</h3>
+        <h5>ប្រចាំខែមិថុនា ឆ្នាំ២០២៤</h5>
+    </div>
+    <div class="table-container  mt-4 ml-4 mr-4">
         <table class="table-border">
             <thead class="header-border">
                 <tr>
-                    <th rowspan="3" style="border: 1px solid black; font-size: 14px; max-width: 40px;" >ល.រ</th>
-                    <th rowspan="3" style="border: 1px solid black; font-size: 14px; max-width: 60px;" >កម្មវិធី</th>
+                    <th rowspan="3" style="border: 1px solid black; font-size: 14px; max-width: 40px;">ល.រ</th>
+                    <th rowspan="3" style="border: 1px solid black; font-size: 14px; max-width: 60px;">កម្មវិធី</th>
                     <th rowspan="3" style="border: 1px solid black; max-width: 120px; text-align: center">សកម្មភាព</th>
-                    <th rowspan="3" style="border: 1px solid black; max-width: 620px; text-align: center">អត្ថន័យចំណាយ</th>
+                    <th rowspan="3" style="border: 1px solid black; max-width: 620px; text-align: center">អត្ថន័យចំណាយ
+                    </th>
                     <th rowspan="3">ច្បាប់ហិ.វ</th>
                     <th rowspan="3">ឥណទានបច្ចុប្បន្ន</th>
                     <th colspan="5">ចលនាឥណទាន</th>
@@ -45,7 +53,7 @@
                 <!-- Add your rows here -->
                 <tr>
                     <td>១</td>
-                  
+
                     <td>30</td>
                     <td>ប្រុស</td>
                     <td>ម្តាយ A</td>
@@ -65,29 +73,7 @@
                     <td>សកម្មភាព A</td>
                     <td>សកម្មភាព A</td>
                 </tr>
-                {{-- <tr>
-                    <td>១</td>
-                  
-                    <td>ភូមិ A</td>
-                    <td>ឈ្មោះ A</td>
-                    <td>30</td>
-                    <td>ប្រុស</td>
-                    <td>ម្តាយ A</td>
-                    <td>ឪពុក A</td>
-                    <td>អាស័យដ្ឋាន A</td>
-                    <td>ស្ថានភាព A</td>
-                    <td>មូលហេតុ 1</td>
-                    <td>សកម្មភាព 1</td>
-                    <td>ស្ថានភាព 1</td>
-                    <td>សារអារាបេត A</td>
-                    <td>មូលហេតុ A</td>
-                    <td>សកម្មភាព A</td>
-                    <td>សកម្មភាព A</td>
-                    <td>សកម្មភាព A</td>
-                    <td>សកម្មភាព A</td>
-                    <td>សកម្មភាព A</td>
-              
-                </tr> --}}
+               
                 <!-- Repeat rows as needed -->
             </tbody>
         </table>
@@ -97,7 +83,8 @@
 @section('styles')
     <style>
         .result-total-general-table-container {
-            max-height: 600px; /* Adjust height as needed */
+            max-height: 600px;
+            /* Adjust height as needed */
             overflow-y: auto;
         }
 
@@ -115,13 +102,19 @@
             white-space: nowrap;
         }
 
-        th, td {
+        th,
+        td {
             border: 1px solid black;
             text-align: center;
             padding: 5px;
         }
 
-        h3, h5 {
+        h3 {
+            font-family: 'Khmer OS Muol Light', sans-serif;
+            font-size: 25px;
+        }
+
+        h5 {
             text-align: center;
             font-family: 'OS Moul', sans-serif;
         }
