@@ -53,7 +53,7 @@
                 <table id="reportTable" class="table-border">
                     <thead class="header-border">
                         <tr>
-                            <th rowspan="3">លេខ</th>
+                            {{-- <th rowspan="3">លេខ</th> --}}
                             <th rowspan="3">ជំពូក</th>
                             <th rowspan="3">គណនី</th>
                             <th rowspan="3">អនុគណនី</th>
@@ -95,7 +95,7 @@
                                 $currentReportKey = $report->report_key;
                             @endphp
                             <tr>
-                                <td class="filterable" data-filter="6001">{{ $loop->iteration }}</td>
+                                {{-- <td class="filterable" data-filter="6001">{{ $loop->iteration }}</td> --}}
                                 <td class="filterable"
                                     data-filter="{{ $report->subAccountKey->accountKey->key->code }}">
                                     {{ $report->subAccountKey->accountKey->key->code }}

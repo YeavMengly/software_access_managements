@@ -39,7 +39,12 @@
 
                             <div class="form-group">
                                 <strong>លេខកូដកម្មវិធី:</strong>
-                                <select name="report_key" class="form-control">
+                                <input type="text" id="searchReportKey" class="form-control"
+                                    placeholder="ស្វែងរកលេខកូដកម្មវិធី...">
+                                <p id="resultCount" style="font-weight: bold;">ចំនួន: 0</p>
+
+                                <select name="report_key" id="reportKeySelect" class="form-control" size="5"
+                                    onclick="getSelectedReportValue()">
                                     @foreach ($reports as $report)
                                         <option value="{{ $report->id }}">
                                             {{ $report->subAccountKey->accountKey->key->code }} >
@@ -50,6 +55,7 @@
                                     @endforeach
                                 </select>
                             </div>
+
 
 
                             <div class="form-group">
@@ -156,5 +162,40 @@
             });
 
         })(jQuery); // End of use strict
+    </script>
+
+    <script>
+        document.getElementById('searchReportKey').addEventListener('input', function() {
+            let filter = this.value.toLowerCase();
+            let select = document.getElementById('reportKeySelect');
+            let options = select.getElementsByTagName('option');
+            let count = 0;
+
+            // Loop through all options and hide those that don't match the search term
+            for (let i = 0; i < options.length; i++) {
+                let optionText = options[i].textContent || options[i].innerText;
+                if (optionText.toLowerCase().indexOf(filter) > -1) {
+                    options[i].style.display = '';
+                    count++;
+                } else {
+                    options[i].style.display = 'none';
+                }
+            }
+
+            // Update result count
+            document.getElementById('resultCount').textContent = 'ចំនួន: ' + count;
+        });
+
+        function getSelectedReportValue() {
+            const select = document.getElementById('reportKeySelect');
+            const selectedValue = select.options[select.selectedIndex].text;
+
+            Swal.fire({
+                title: 'Selected Value',
+                text: `You selected: ${selectedValue}`,
+                icon: 'info',
+                confirmButtonText: 'OK'
+            });
+        }
     </script>
 @endsection

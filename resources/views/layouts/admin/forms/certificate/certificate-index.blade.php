@@ -44,6 +44,19 @@
 
     <div class="border-wrapper ml-4 mr-4">
         <div class="result-total-table-container">
+            <div class="d-flex justify-content-end mb-2">
+                <!-- Dropdown for showing number of items per page -->
+                <div style="width: 120px;">
+                    <select name="per_page" class="form-control" onchange="window.location.href=this.value;">
+                        <option value="{{ url()->current() }}?per_page=5" {{ request('per_page') == 5 ? 'selected' : '' }}>
+                            បង្ហាញ 5</option>
+                        <option value="{{ url()->current() }}?per_page=10"
+                            {{ request('per_page') == 10 ? 'selected' : '' }}>បង្ហាញ 10</option>
+                        <option value="{{ url()->current() }}?per_page=25"
+                            {{ request('per_page') == 25 ? 'selected' : '' }}>បង្ហាញ 25</option>
+                    </select>
+                </div>
+            </div>
             <table class="table table-striped table-hover">
                 <thead>
                     <tr>
@@ -82,48 +95,56 @@
                 </tbody>
             </table>
 
-            <!-- Custom Pagination Links -->
-            <nav aria-label="Page navigation example">
-                <ul class="pagination">
-                    @if ($certificates->onFirstPage())
-                        <li class="page-item disabled">
-                            <a class="page-link" href="#" aria-label="Previous">
-                                <span aria-hidden="true">&laquo;</span>
-                                <span class="sr-only">Previous</span>
-                            </a>
-                        </li>
-                    @else
-                        <li class="page-item">
-                            <a class="page-link" href="{{ $certificates->previousPageUrl() }}" aria-label="Previous">
-                                <span aria-hidden="true">&laquo;</span>
-                                <span class="sr-only">Previous</span>
-                            </a>
-                        </li>
-                    @endif
+            <div class="d-flex justify-content-between align-items-center mt-4">
+                <!-- Custom Pagination Links -->
+                <nav aria-label="Page navigation example">
+                    <ul class="pagination">
+                        @if ($certificates->onFirstPage())
+                            <li class="page-item disabled">
+                                <a class="page-link" href="#" aria-label="Previous">
+                                    <span aria-hidden="true">&laquo;</span>
+                                    <span class="sr-only">Previous</span>
+                                </a>
+                            </li>
+                        @else
+                            <li class="page-item">
+                                <a class="page-link" href="{{ $certificates->previousPageUrl() }}" aria-label="Previous">
+                                    <span aria-hidden="true">&laquo;</span>
+                                    <span class="sr-only">Previous</span>
+                                </a>
+                            </li>
+                        @endif
 
-                    @for ($i = 1; $i <= $certificates->lastPage(); $i++)
-                        <li class="page-item {{ $i == $certificates->currentPage() ? 'active' : '' }}">
-                            <a class="page-link" href="{{ $certificates->url($i) }}">{{ $i }}</a>
-                        </li>
-                    @endfor
+                        @for ($i = 1; $i <= $certificates->lastPage(); $i++)
+                            <li class="page-item {{ $i == $certificates->currentPage() ? 'active' : '' }}">
+                                <a class="page-link" href="{{ $certificates->url($i) }}">{{ $i }}</a>
+                            </li>
+                        @endfor
 
-                    @if ($certificates->hasMorePages())
-                        <li class="page-item">
-                            <a class="page-link" href="{{ $certificates->nextPageUrl() }}" aria-label="Next">
-                                <span aria-hidden="true">&raquo;</span>
-                                <span class="sr-only">Next</span>
-                            </a>
-                        </li>
-                    @else
-                        <li class="page-item disabled">
-                            <a class="page-link" href="#" aria-label="Next">
-                                <span aria-hidden="true">&raquo;</span>
-                                <span class="sr-only">Next</span>
-                            </a>
-                        </li>
-                    @endif
-                </ul>
-            </nav>
+                        @if ($certificates->hasMorePages())
+                            <li class="page-item">
+                                <a class="page-link" href="{{ $certificates->nextPageUrl() }}" aria-label="Next">
+                                    <span aria-hidden="true">&raquo;</span>
+                                    <span class="sr-only">Next</span>
+                                </a>
+                            </li>
+                        @else
+                            <li class="page-item disabled">
+                                <a class="page-link" href="#" aria-label="Next">
+                                    <span aria-hidden="true">&raquo;</span>
+                                    <span class="sr-only">Next</span>
+                                </a>
+                            </li>
+                        @endif
+                    </ul>
+                </nav>
+
+                <div>
+                    <p class="text-muted">បង្ហាញ {{ $certificates->firstItem() }} ដល់ {{ $certificates->lastItem() }}
+                        នៃ
+                        {{ $certificates->total() }} លទ្ធផល</p>
+                </div>
+            </div>
         </div>
     </div>
 @endsection
@@ -139,6 +160,18 @@
         .result-total-table-container {
             max-height: 100vh;
             overflow-y: auto;
+        }
+
+        .btn,
+        .form-control,
+        label,
+        th,
+        td {
+            border: 1px solid black;
+            text-align: center;
+            padding: 5px;
+            font-family: 'Khmer OS Siemreap', sans-serif;
+            font-size: 16px;
         }
 
         .btn-container {

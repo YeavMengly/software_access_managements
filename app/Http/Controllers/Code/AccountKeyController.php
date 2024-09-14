@@ -14,6 +14,7 @@ class AccountKeyController extends Controller
         $search = $request->input('search');
         $sortBy = $request->input('sort_by', 'account_key');
         $sortOrder = $request->input('sort_order', 'asc');
+        $perPage = $request->input('per_page', 25);
 
         $query = AccountKey::query();
 
@@ -33,10 +34,14 @@ class AccountKeyController extends Controller
             $query->orderBy($sortBy, $sortOrder);
         }
 
-        $accountKeys = $query->paginate(10);
+        $accountKeys = $query->paginate($perPage); 
 
-        return view('layouts.admin.forms.accounts.account-index', compact('accountKeys', 'sortBy', 'sortOrder'));
+        // Fetch sorted keys based on user's selection
+        $keys = Key::orderBy('code', $sortOrder)->get();
+
+        return view('layouts.admin.forms.accounts.account-index', compact('accountKeys', 'keys', 'sortBy', 'sortOrder'));
     }
+
 
 
 
@@ -89,31 +94,31 @@ class AccountKeyController extends Controller
     }
 
     public function update(Request $request, $id)
-{
-    $request->validate([
-        'code' => 'required|exists:keys,id',
-        'account_key' => 'required',
-        'name_account_key' => 'required',
-    ]);
+    {
+        $request->validate([
+            'code' => 'required|exists:keys,id',
+            'account_key' => 'required',
+            'name_account_key' => 'required',
+        ]);
 
-    // Check if the combination of code and account_key already exists for another record
-    $existingRecord = AccountKey::where('code', $request->code) // Adjusted to 'code'
-        ->where('account_key', $request->account_key)
-        ->where('id', '<>', $id)
-        ->first();
+        // Check if the combination of code and account_key already exists for another record
+        $existingRecord = AccountKey::where('code', $request->code) // Adjusted to 'code'
+            ->where('account_key', $request->account_key)
+            ->where('id', '<>', $id)
+            ->first();
 
-    if ($existingRecord) {
-        // If the combination of code and account_key exists for another record, return with an error
-        return redirect()->back()->withErrors([
-            'account_key' => 'The combination of code and account key already exists.'
-        ])->withInput();
+        if ($existingRecord) {
+            // If the combination of code and account_key exists for another record, return with an error
+            return redirect()->back()->withErrors([
+                'account_key' => 'The combination of code and account key already exists.'
+            ])->withInput();
+        }
+
+        $accountKey = AccountKey::findOrFail($id);
+        $accountKey->update($request->only('code', 'account_key', 'name_account_key')); // Adjusted to 'code'
+
+        return redirect()->route('accounts.index')->with('success', 'លេខគណនីបានកែប្រែដោយជោគជ័យ។');
     }
-
-    $accountKey = AccountKey::findOrFail($id);
-    $accountKey->update($request->only('code', 'account_key', 'name_account_key')); // Adjusted to 'code'
-
-    return redirect()->route('accounts.index')->with('success', 'លេខគណនីបានកែប្រែដោយជោគជ័យ។');
-}
 
 
 

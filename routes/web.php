@@ -127,4 +127,3 @@ Route::get('/mission-abroad', [MissionAbroadController::class, 'index'])->name('
 
 
 Route::get('mission-abroad/export', [MissionAbroadController::class, 'export'])->name('table-mission-abroad');
-

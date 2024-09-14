@@ -9,19 +9,19 @@
                         <i class="fas fa-money-bill-wave"></i> របាយការណ៍សរុបធានាចំណាយ
                     </a>
                 </div>
-            
+
                 <div class="col-md-4 mb-3">
                     <a href="{{ route('result-total-table') }}" class="btn btn-custom btn-block animate-button">
                         <i class="fas fa-file-alt"></i> របាយការណ៍សកម្មភាព
                     </a>
                 </div>
-            
+
                 <div class="col-md-4 mb-3">
                     <a href="{{ route('result-total-summaries-table') }}" class="btn btn-custom btn-block animate-button">
                         <i class="fas fa-book"></i> របាយការណ៍សង្ខេប
                     </a>
                 </div>
-            
+
                 <div class="col-md-4 mb-3">
                     <a href="" class="btn btn-custom btn-block animate-button">
                         <i class="fas fa-list"></i> របាយការណ៍អនុវត្ត
@@ -29,7 +29,7 @@
                 </div>
 
                 <div class="col-md-4 mb-3">
-                    <a href="#" class="btn btn-custom btn-block animate-button">
+                    <a href="{{ route('result-total-general-table') }}" class="btn btn-custom btn-block animate-button">
                         <i class="fas fa-calendar-alt"></i> ផែនការថវិការដ្ឋ
                     </a>
                 </div>
@@ -39,20 +39,20 @@
                         <i class="fas fa-check"></i> លទ្ធផលសម្រេចបាន
                     </a>
                 </div>
-          
+
                 <div class="col-md-4 mb-3">
                     <a href="{{ route('result-new-loan') }}" class="btn btn-custom btn-block animate-button">
                         <i class="fas fa-briefcase"></i> ឥណទានសុប
                     </a>
                 </div>
-            
+
                 <div class="col-md-4 mb-3">
                     <a href="{{ url('/') }}" class="btn btn-custom btn-block animate-button">
                         <i class="fas fa-sign-out-alt"></i> ចាកចេញ
                     </a>
                 </div>
             </div>
-            
+
         </div>
     </div>
 @endsection
@@ -79,6 +79,7 @@
             animation: fadeInUp 1s ease-out;
             max-width: 70%;
         }
+
         .btn-custom {
             display: flex;
             justify-content: center;
@@ -96,6 +97,11 @@
             /* Updated font size */
             font-weight: bold;
             /* Optional: make text bold */
+        }
+
+        a {
+            font-family: 'Khmer OS Siemreap', sans-serif;
+            font-size: 18px;
         }
 
         .btn-custom:hover {

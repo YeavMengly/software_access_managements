@@ -22,7 +22,8 @@
                             </div>
                             <div class="col-md-6 mb-3">
                                 <a href="#" class="btn btn-custom btn-block animate-button">
-                                    បញ្ចូល ឬកែសម្រួលអង្គភាពថវិកា
+                                    បញ្ចូល ឬកែសម្រួលអង្គភាពថវិកា <i class="fas fa-lock"></i>
+
                                 </a>
                             </div>
                             <div class="col-md-6 mb-3">
@@ -47,7 +48,7 @@
                             </div>
                             <div class="col-md-12 mb-3">
                                 <button class="btn btn-custom btn-block animate-button" onclick="openAndCloseWindow()">
-                                    ចាកចេញពីកម្មវិធី
+                                    ចាកចេញពីកម្មវិធី <i class="fas fa-sign-out-alt"></i>
                                 </button>
                             </div>
 
@@ -58,8 +59,8 @@
             </div>
         </div>
         <!-- Footer content -->
-        <div class="footer-section text-center">
-            <p> នាយកដ្ឋានហិរញ្ញវត្ថុ និងទ្រព្យសម្បត្តិរដ្ឋ</p>
+        <div class="footer-section text-center text-center justify-content-center align-items-center">
+            <p> @២០២៤ រក្សាសិទ្ធគ្រប់យ៉ាងដោយ នាយកដ្ឋានហិរញ្ញវត្ថុ និងទ្រព្យសម្បត្តិរដ្ឋ</p>
         </div>
     </div>
 @endsection
@@ -110,6 +111,11 @@
             background-color: #FF5733;
         }
 
+        .btn,
+        p {
+            font-family: 'Khmer OS Siemreap', sans-serif;
+            font-size: 18px;
+        }
 
         .container-box {
             background-color: #ffffff;

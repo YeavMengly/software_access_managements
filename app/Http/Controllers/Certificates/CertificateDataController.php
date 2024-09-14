@@ -18,6 +18,7 @@ class CertificateDataController extends Controller
         $search = $request->input('search');
         $sortField = $request->input('sort_field', 'name_certificate');
         $sortDirection = $request->input('sort_direction', 'asc');
+        $perPage = $request->input('per_page', 5);
 
         if (!in_array($sortField, ['name_certificate', 'value_certificate', 'other_valid_column'])) {
             $sortField = 'name_certificate';
@@ -31,7 +32,7 @@ class CertificateDataController extends Controller
                 });
             })
             ->orderBy($sortField, $sortDirection)
-            ->paginate(10);
+            ->paginate($perPage);
 
         $dataAvailable = $certificatesData->isNotEmpty();
 
@@ -40,6 +41,7 @@ class CertificateDataController extends Controller
 
     public function create()
     {
+        // Fetch all necessary data 
         $keys = Key::all();
         $accountKeys = AccountKey::all();
         $subAccountKeys = SubAccountKey::all();
@@ -51,15 +53,18 @@ class CertificateDataController extends Controller
 
     public function store(Request $request)
     {
+        // Validate the request inputs
         $validated = $request->validate([
             'report_key' => 'required|exists:reports,id',
             'name_certificate' => 'required|exists:certificates,id',
-            'value_certificate' => 'required|numeric',
+            'value_certificate' => 'required|numeric|min:0',
         ]);
 
+        // Fetch report and certificate records
         $report = Report::findOrFail($validated['report_key']);
         $certificate = Certificate::findOrFail($validated['name_certificate']);
 
+        // Ensure the report and sub-account key are valid
         if (!$report || !$report->subAccountKey) {
             return redirect()->back()->withErrors(['error' => 'Invalid report or sub-account key.']);
         }
@@ -73,15 +78,28 @@ class CertificateDataController extends Controller
             return redirect()->back()->withErrors(['name_certificate' => 'The name_certificate must be unique within the same report.'])->withInput();
         }
 
-        // Create the certificate data
-        CertificateData::create([
+        // Create the certificate data entry
+        $certificateData = CertificateData::create([
             'report_key' => $validated['report_key'],
             'name_certificate' => $validated['name_certificate'],
             'value_certificate' => $validated['value_certificate'],
         ]);
 
-        // Recalculate and save report values
+        // Recalculate and update report values
         $this->recalculateAndSaveReport($report);
+
+        // Refresh the report to get the latest values
+        $report->refresh();
+
+        // Update the apply value to the last entered value_certificate
+        $lastCertificateData = CertificateData::where('report_key', $validated['report_key'])->latest()->first();
+        $report->apply = $lastCertificateData->value_certificate;
+
+        // Update early_balance by recalculating it based on the new data
+        // $report->early_balance = $this->calculateEarlyBalance($report) ?: 0;
+
+        // Save the report with the updated apply and early_balance
+        $report->save();
 
         return redirect()->route('certificate-data.index')->with('success', 'Certificate data created successfully.');
     }
@@ -104,55 +122,12 @@ class CertificateDataController extends Controller
         return view('layouts.admin.forms.certificate.certificate-data-edit', compact('certificateData', 'certificates', 'reports', 'subAccountKeys', 'accountKeys', 'keys'));
     }
 
-    // public function update(Request $request, $id)
-    // {
-    //     $validated = $request->validate([
-    //         'report_key' => 'required|exists:reports,id',
-    //         'name_certificate' => 'required|exists:certificates,id',
-    //         'value_certificate' => 'required|numeric',
-    //     ]);
-
-    //     $certificateData = CertificateData::findOrFail($id);
-    //     $report = Report::findOrFail($validated['report_key']);
-
-    //     if (!$report->subAccountKey) {
-    //         return redirect()->route('certificate-data.index')->with('error', 'SubAccountKey not found for the selected report.');
-    //     }
-
-    //     $subAccountKey = $report->subAccountKey;
-
-    //     if (!$subAccountKey->accountKey) {
-    //         return redirect()->route('certificate-data.index')->with('error', 'AccountKey not found for the selected sub-account.');
-    //     }
-
-    //     $accountKey = $subAccountKey->accountKey;
-
-    //     // Recalculate apply total
-    //     $newApplyTotal = CertificateData::where('report_key', $validated['report_key'])
-    //         ->where('id', '<>', $certificateData->id)
-    //         ->sum('value_certificate');
-    //     $newApplyTotal += $validated['value_certificate'];
-
-    //     $report->apply = $newApplyTotal;
-    //     $report->deadline_balance = $report->early_balance + $newApplyTotal;
-    //     $report->save();
-
-    //     $certificateData->update([
-    //         'report_key' => $validated['report_key'],
-    //         'name_certificate' => $validated['name_certificate'],
-    //         'value_certificate' => $validated['value_certificate'],
-    //         'amount' => $newApplyTotal,
-    //     ]);
-
-    //     return redirect()->route('certificate-data.index')->with('success', 'Certificate data updated successfully.');
-    // }
-
     public function update(Request $request, $id)
     {
         $validated = $request->validate([
             'report_key' => 'required|exists:reports,id',
             'name_certificate' => 'required|exists:certificates,id',
-            'value_certificate' => 'required|numeric',
+            'value_certificate' => 'required|numeric|min:0',
         ]);
 
         $certificateData = CertificateData::findOrFail($id);
@@ -179,40 +154,64 @@ class CertificateDataController extends Controller
         $certificateData = CertificateData::findOrFail($id);
         $report = Report::findOrFail($certificateData->report_key);
 
+        // Delete the certificate data
         $certificateData->delete();
 
-        // Recalculate the total value_certificate for the report
-        $newApplyTotal = CertificateData::where('report_key', $report->id)->sum('value_certificate');
-        $report->apply = $newApplyTotal > 0 ? $newApplyTotal : 0;
-        $report->deadline_balance = $report->early_balance + $report->apply;
-        $report->save();
+        // Recalculate and update report values
+        $this->recalculateAndSaveReport($report);
 
         return redirect()->route('certificate-data.index')->with('success', 'Certificate data deleted successfully.');
     }
 
-
     private function recalculateAndSaveReport(Report $report)
     {
-        // Recalculate apply total
-        $newApplyTotal = CertificateData::where('report_key', $report->id)->sum('value_certificate');
-        $report->apply = $newApplyTotal;
+        // Fetch all remaining certificate data for the given report_key
+        $certificateData = CertificateData::where('report_key', $report->id)->get();
 
-        // Recalculate deadline_balance
+        // If there are certificates, get the last value for apply, otherwise set to 0
+        if ($certificateData->isNotEmpty()) {
+            $report->apply = $certificateData->last()->value_certificate;
+        } else {
+            $report->apply = 0; // Default to 0 if no certificates
+        }
+
+        // Recalculate early_balance
+        $report->early_balance = $this->calculateEarlyBalance($report);
+
+        // Recalculate deadline_balance and credit
         $report->deadline_balance = $report->early_balance - $report->apply;
+        $report->credit = $report->new_credit_status - $report->deadline_balance;
 
-        // Calculate credit
-        $credit = $report->new_credit_status - $report->deadline_balance;
-        $report->credit = $credit;
+        // Calculate law_average and law_correction
+        $law_average = $report->deadline_balance > 0 ? ( $report->deadline_balance / $report->fin_law) * 100 : 0;
+        $law_correction =  $report->deadline_balance > 0 ? ( $report->deadline_balance /  $report->new_credit_status) * 100 : 0;
 
-        // Calculate law_average
-        // $law_average = $report->deadline_balance / $report->fin_law;
-        // $report->law_average = $law_average;
+        // Cap values between 0 and 100
+        // $report->law_average = min(max($law_average, 0), 100);
+        // $report->law_correction = min(max($law_correction, 0), 100);
 
-        // Calculate law_correction
-        // $law_correction = $report->new_credit_status / $report->fin_law;
-        // $report->law_correction = $law_correction;
-
-        // Save the updated report
+        // Save updated report values
         $report->save();
+    }
+
+    private function calculateEarlyBalance($report)
+    {
+        // Fetch all certificate data for the given report_key
+        $certificateData = CertificateData::where('report_key', $report->id)->get();
+
+        // If there is only one record, early_balance should be 0
+        if ($certificateData->count() === 1) {
+            return 0;
+        }
+
+        // If there are multiple records, sum all values except the last one
+        $totalEarlyBalance = $certificateData->slice(0, -1) // Exclude the last record
+            ->filter(function ($item) {
+                return !is_null($item->value_certificate) && $item->value_certificate !== '';
+            })
+            ->sum('value_certificate');
+
+        // Return the calculated balance, or 0 if no valid certificates
+        return $totalEarlyBalance ?: 0;
     }
 }

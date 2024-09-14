@@ -60,7 +60,7 @@
                         <!-- Add your rows here -->
                         @foreach ($totals['code'] as $codeId => $totalsByCode)
                             <tr>
-                                <td>ជំពូក: {{ $codeId }} </td>
+                                <td>ជំពូក: {{ $codeId }}</td>
                                 <td>{{ number_format($totalsByCode['fin_law'], 0, ' ', ' ') }}</td>
                                 <td>{{ number_format($totalsByCode['current_loan'], 0, ' ', ' ') }}</td>
                                 <td>{{ number_format($totalsByCode['total_increase'], 0, ' ', ' ') }}</td>
@@ -69,26 +69,27 @@
 
                                 {{-- Avg of early balance --}}
                                 <td>{{ number_format($totalsByCode['early_balance'], 0, ' ', ' ') }}</td>
-                                <td> {{ $totalsByCode['early_balance'] / $totalsByCode['new_credit_status'] }} %</td>
+                                <td> {{ number_format(($totalsByCode['early_balance'] / $totalsByCode['new_credit_status']) * 100, 2, '.', ' ') }}%
+                                </td>
 
                                 {{-- Avg of apply --}}
                                 <td>{{ number_format($totalsByCode['apply'], 0, ' ', ' ') }}</td>
-                                <td> {{ $totalsByCode['apply'] / $totalsByCode['new_credit_status'] }} %</td>
+                                <td> {{ number_format(($totalsByCode['apply'] / $totalsByCode['new_credit_status']) * 100, 2, '.', ' ') }}%
+                                </td>
 
                                 {{-- Avg of sum refer --}}
-                                <td> {{ number_format($totalsByCode['early_balance'] + $totalsByCode['apply'], 0, ' ', ' ') }}
+                                <td>{{ number_format($totalsByCode['early_balance'] + $totalsByCode['apply'], 0, ' ', ' ') }}
                                 </td>
-                                <td>{{ ($totalsByCode['early_balance'] + $totalsByCode['apply']) / $totalsByCode['new_credit_status'] }}
-                                    %</td>
+                                <td>{{ number_format((($totalsByCode['early_balance'] + $totalsByCode['apply']) / $totalsByCode['new_credit_status']) * 100, 2, '.', ' ') }}%
+                                </td>
 
                                 {{-- Avg Remain --}}
                                 <td>{{ number_format($totalsByCode['new_credit_status'] - ($totalsByCode['early_balance'] + $totalsByCode['apply']), 0, ' ', ' ') }}
                                 </td>
-                                <td>{{ ($totalsByCode['early_balance'] + $totalsByCode['apply'] - $totalsByCode['new_credit_status']) / $totalsByCode['new_credit_status'] }}
-                                    %</td>
+                                <td>{{ number_format((($totalsByCode['early_balance'] + $totalsByCode['apply'] - $totalsByCode['new_credit_status']) / $totalsByCode['new_credit_status']) * 100, 2, '.', ' ') }}%
+                                </td>
                             </tr>
                         @endforeach
-
                         <!-- Repeat rows as needed -->
                     </tbody>
                 </table>
@@ -131,9 +132,26 @@
             font-size: 25px;
         }
 
+        th,
+        td {
+            border: 1px solid black;
+            text-align: center;
+            padding: 5px;
+            font-family: 'Khmer OS Siemreap', sans-serif;
+            font-size: 16px;
+        }
+
         h5 {
             font-family: 'Khmer OS Siemreap', sans-serif;
             font-size: 25px;
         }
     </style>
+@endsection
+
+@section('scripts')
+    <script>
+        setInterval(function() {
+            window.location.reload();
+        }, 30000); // 30 seconds
+    </script>
 @endsection

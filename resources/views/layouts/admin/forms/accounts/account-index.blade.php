@@ -39,7 +39,19 @@
 
                 </div>
             </div>
-
+            <div class="d-flex justify-content-end mb-2">
+                <!-- Dropdown for showing number of items per page -->
+                <div style="width: 120px;">
+                    <select name="per_page" class="form-control" onchange="window.location.href=this.value;">
+                        <option value="{{ url()->current() }}?per_page=25"
+                            {{ request('per_page') == 25 ? 'selected' : '' }}>បង្ហាញ 25</option>
+                        <option value="{{ url()->current() }}?per_page=50"
+                            {{ request('per_page') == 50 ? 'selected' : '' }}>បង្ហាញ 50</option>
+                        <option value="{{ url()->current() }}?per_page=100"
+                            {{ request('per_page') == 100 ? 'selected' : '' }}>បង្ហាញ 100</option>
+                    </select>
+                </div>
+            </div>
             <table class="table table-striped table-hover">
                 <thead>
                     <tr>
@@ -144,8 +156,8 @@
                     </nav>
                 </div>
                 <div>
-                    <p class="text-muted">Showing {{ $accountKeys->firstItem() }} to {{ $accountKeys->lastItem() }} of
-                        {{ $accountKeys->total() }} results</p>
+                    <p class="text-muted">បង្ហាញ {{ $accountKeys->firstItem() }} ដល់ {{ $accountKeys->lastItem() }} នៃ
+                        {{ $accountKeys->total() }} លទ្ធផល</p>
                 </div>
             </div>
 
@@ -180,6 +192,15 @@
             color: #007bff;
         }
 
+        .btn, .form-control, label, th,
+        td {
+            border: 1px solid black;
+            text-align: center;
+            padding: 5px;
+            font-family: 'Khmer OS Siemreap', sans-serif;
+            font-size: 16px;
+        }
+        
         .pagination .page-link:hover {
             color: #0056b3;
             text-decoration: none;

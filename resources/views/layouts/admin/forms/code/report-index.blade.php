@@ -128,9 +128,9 @@
                                     </button>
                                 </div>
                             </div>
+
                         </div>
                     </form>
-
 
                 </div>
             </div>
@@ -154,6 +154,20 @@
             @endif
 
             <div class="table-container mt-4">
+                <div class="d-flex justify-content-end mb-2">
+                    <!-- Dropdown for showing number of items per page -->
+                    <div style="width: 120px;">
+                        <select name="per_page" class="form-control" onchange="window.location.href=this.value;">
+                            <option value="{{ url()->current() }}?per_page=25"
+                                {{ request('per_page') == 25 ? 'selected' : '' }}>បង្ហាញ 25</option>
+                            <option value="{{ url()->current() }}?per_page=50"
+                                {{ request('per_page') == 50 ? 'selected' : '' }}>បង្ហាញ 50</option>
+                            <option value="{{ url()->current() }}?per_page=100"
+                                {{ request('per_page') == 100 ? 'selected' : '' }}>បង្ហាញ 100</option>
+                        </select>
+                    </div>
+                </div>
+
                 <table class="table table-striped table-hover">
                     <thead>
                         <tr>
@@ -221,6 +235,7 @@
                                 <td colspan="13" style="text-align: center;">No data available</td>
                             </tr>
                         @endforelse
+
                     </tbody>
                 </table>
                 <div class="d-flex justify-content-between align-items-center mt-4">
@@ -229,18 +244,23 @@
                         <nav aria-label="Page navigation example">
                             <ul class="pagination">
                                 <li class="page-item{{ $reports->onFirstPage() ? ' disabled' : '' }}">
-                                    <a class="page-link" href="{{ $reports->previousPageUrl() }}" aria-label="Previous">
+                                    <a class="page-link"
+                                        href="{{ $reports->previousPageUrl() }}&per_page={{ request('per_page') }}"
+                                        aria-label="Previous">
                                         <span aria-hidden="true">&laquo;</span>
                                         <span class="sr-only">Previous</span>
                                     </a>
                                 </li>
                                 @for ($i = 1; $i <= $reports->lastPage(); $i++)
                                     <li class="page-item{{ $reports->currentPage() == $i ? ' active' : '' }}">
-                                        <a class="page-link" href="{{ $reports->url($i) }}">{{ $i }}</a>
+                                        <a class="page-link"
+                                            href="{{ $reports->url($i) }}&per_page={{ request('per_page') }}">{{ $i }}</a>
                                     </li>
                                 @endfor
                                 <li class="page-item{{ !$reports->hasMorePages() ? ' disabled' : '' }}">
-                                    <a class="page-link" href="{{ $reports->nextPageUrl() }}" aria-label="Next">
+                                    <a class="page-link"
+                                        href="{{ $reports->nextPageUrl() }}&per_page={{ request('per_page') }}"
+                                        aria-label="Next">
                                         <span aria-hidden="true">&raquo;</span>
                                         <span class="sr-only">Next</span>
                                     </a>
@@ -249,9 +269,8 @@
                         </nav>
                     </div>
                     <div>
-                        <p class="text-muted">Showing {{ $reports->firstItem() }} to {{ $reports->lastItem() }}
-                            of
-                            {{ $reports->total() }} results</p>
+                        <p class="text-muted">បង្ហាញ {{ $reports->firstItem() }} ដល់ {{ $reports->lastItem() }} នៃ
+                            {{ $reports->total() }} លទ្ធផល</p>
                     </div>
                 </div>
             </div>
@@ -329,6 +348,18 @@
 
         .custom-file-upload label i {
             margin-right: 8px;
+        }
+
+        .btn,
+        .form-control,
+        label,
+        th,
+        td {
+            border: 1px solid black;
+            text-align: center;
+            padding: 5px;
+            font-family: 'Khmer OS Siemreap', sans-serif;
+            font-size: 16px;
         }
 
         .btn-primary {
