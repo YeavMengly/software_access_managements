@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateMissionsTable extends Migration
+class CreateAbroadMissionsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class CreateMissionsTable extends Migration
      */
     public function up()
     {
-        Schema::create('missions', function (Blueprint $table) {
+        Schema::create('abroad_missions', function (Blueprint $table) {
             $table->id();
             $table->string('name');
             $table->string('role');
@@ -45,6 +45,6 @@ class CreateMissionsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('missions');
+        Schema::dropIfExists('abroad_missions');
     }
 }

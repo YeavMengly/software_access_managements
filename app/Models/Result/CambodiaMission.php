@@ -4,10 +4,10 @@ namespace App\Models\Result;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class ResultMission extends Model
+class CambodiaMission extends Model
 {
     use HasFactory;
-    protected $table = 'missions';
+    protected $table = 'cam_missions';
     protected $fillable = [
         'name',
         'role',
@@ -30,6 +30,6 @@ class ResultMission extends Model
         'total_accommodation_money',
         'travel_allowance',
         'other_allowances',
-        'final_total'
+        'final_total',
     ];
 }

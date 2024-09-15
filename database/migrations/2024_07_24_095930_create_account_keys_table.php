@@ -11,14 +11,19 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('account_keys', function (Blueprint $table) {
-            $table->id();
-            $table->unsignedBigInteger('code_id')->change();
-            $table->foreignId('code_id')->constrained('keys')->onDelete('cascade');
-            $table->string('account_key');
-            $table->string('name_account_key');
-            $table->timestamps();
-        });
+        if (!Schema::hasTable('account_keys')) {
+            Schema::create('account_keys', function (Blueprint $table) {
+                $table->increments('id', true);
+                
+                // Remove the ->change() method call as it's not needed for new columns
+                $table->unsignedBigInteger('code')->change();
+                $table->foreignId('code')->references('id')->on('keys')->onDelete('cascade');
+                
+                $table->string('account_key');
+                $table->string('name_account_key');
+                $table->timestamps();
+            });
+        }
     }
 
     /**

@@ -2,7 +2,7 @@
 
 namespace App\Exports;
 
-use App\Models\Result\ResultMission;
+use App\Models\Result\AbroadMission;
 use Maatwebsite\Excel\Concerns\FromQuery;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithMapping;
@@ -10,7 +10,7 @@ use Maatwebsite\Excel\Concerns\WithStyles;
 use Maatwebsite\Excel\Concerns\WithTitle;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 
-class MissionExport implements FromQuery, WithHeadings, WithMapping, WithStyles, WithTitle
+class AbroadMissionExport implements FromQuery, WithHeadings, WithMapping, WithStyles, WithTitle
 {
     protected $search;
 
@@ -21,7 +21,7 @@ class MissionExport implements FromQuery, WithHeadings, WithMapping, WithStyles,
 
     public function query()
     {
-        return ResultMission::query()
+        return AbroadMission::query()
             ->when($this->search, function ($query, $search) {
                 return $query->where('name', 'like', "%{$search}%")
                     ->orWhere('location', 'like', "%{$search}%")
@@ -166,6 +166,6 @@ class MissionExport implements FromQuery, WithHeadings, WithMapping, WithStyles,
 
     public function title(): string
     {
-        return 'Mission Export';
+        return 'Abroad Missions';
     }
 }

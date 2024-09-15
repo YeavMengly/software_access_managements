@@ -1,122 +1,74 @@
 @extends('layouts.master')
-
 @section('form-form-mission')
-<div class="container-fluid">
-    <div class="row">
-        <div class="col-lg-12 margin-tb mb-4">
-            <div class="d-flex justify-content-between align-items-center">
-                <h3 class="card-title">បញ្ចូលតារាងរបាយការណ៏ចំណាយបេសកកម្មក្នុងប្រទេស ឆ្នាំ២០២៤</h3>
-                <a class="btn btn-primary" href="{{ route('missions.index') }}">ត្រឡប់ក្រោយ</a>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-12 margin-tb mb-4 mt-4">
+                <div class="d-flex justify-content-between align-items-center"
+                    style="font-family: 'Khmer OS Siemreap', sans-serif;">
+                    <h3 class="card-title">បញ្ចូលតារាងរបាយការណ៏ចំណាយបេសកកម្មក្នុងប្រទេស ឆ្នាំ២០២៤</h3>
+                    <a class="btn btn-primary" href="{{ route('mission-cam.index') }}">ត្រឡប់ក្រោយ</a>
+                </div>
             </div>
         </div>
-    </div>
 
-    @if (session('success'))
-        <div class="alert alert-success alert-dismissible fade show" role="alert">
-            {{ session('success') }}
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
-    @endif
+        @if (session('success'))
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                {{ session('success') }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        @endif
 
-    @if ($errors->any())
-        <div class="alert alert-danger alert-dismissible fade show" role="alert">
-            <strong>Whoops!</strong> There were some problems with your input.<br><br>
-            <ul>
-                @foreach ($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                @endforeach
-            </ul>
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
-    @endif
+        @if ($errors->any())
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                <strong>Whoops!</strong><br><br>
+                <ul>
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        @endif
 
-    <div class="border-wrapper">
-    
         <div class="border-wrapper">
             <div class="form-container">
-                <form action="{{ route('missions.store') }}" method="POST" enctype="multipart/form-data">
+                <form action="{{ route('mission-cam.store') }}" method="POST" enctype="multipart/form-data">
                     @csrf
-                    <div class="row">
+                    <div class="row" style="font-family: 'Khmer OS Siemreap', sans-serif;">
                         <div class="col-md-6">
+                            <!-- Number of people -->
                             <div class="form-group">
-                                <label for="mission_letter">គោត្តនាម​​ និងនាម:</label>
-                                <input type="text" name="name" id="name" class="form-control" required>
-                                @error('name')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                @enderror
-                            </div>
-
-                            <div class="form-group">
-                                <strong>តួនាទី:</strong>
-                                <select name="role" class="form-control centered-text">
-                                    <option value="">ជ្រើសរើសតួនាទី</option>
-                                    <option value="អគ្កាធិការរង">អគ្កាធិការរង</option>
-                                    <option value="អគ្គនាយករង">អគ្គនាយករង</option>
-                                    <option value="អគ្គលេខាធិការរង">អគ្គលេខាធិការរង</option>
-                                    <option value="រដ្ឋលេខាធិការ">រដ្ឋលេខាធិការ</option>
-                                    <option value="អនុរដ្ឋលេខាធិការ">អនុរដ្ឋលេខាធិការ</option>
-                                    <option value="ប្រ.ការិយាល័យ">ប្រ.ការិយាល័យ</option>
-                                    <option value="អនុ.ការិយាល័យ">អនុ.ការិយាល័យ</option>
-                                    <option value="អនុប្រធានផ្នែក">អនុប្រធានផ្នែក</option>
-                                    <option value="មន្រ្តី">មន្ត្រី</option>
-                                    <option value="ជំនួយការ">ជំនួយការ</option>     
+                                <label for="num_people">ចំនួនមនុស្ស:</label>
+                                <select id="num_people" class="form-control centered-text" required>
+                                    <option value="">ជ្រើសរើសចំនួនមនុស្ស</option>
+                                    @for ($i = 1; $i <= 5; $i++)
+                                        <option value="{{ $i }}">{{ $i }}</option>
+                                    @endfor
                                 </select>
                             </div>
-                            
 
-                            <div class="form-group">
-                                <label for="position_type">ប្រភេទមុខតំណែង:</label>
-                                <select name="position_type" id="position_type" class="form-control centered-text">
-                                    <option value="">ជ្រើសរើសប្រភេទតួនាទី</option>
-                                    <option value="ក">ក</option>
-                                    <option value="ខ១">ខ១</option>
-                                    <option value="ខ២">ខ២</option>
-                                    <option value="គ">គ</option>
-                                    <option value="ឃ">ឃ</option>
-                                    <option value="ង">ង</option>
-                                </select>
-                            </div>                            
+                            <div id="rows-container"></div>
 
+                            <!-- Mission letter fields -->
                             <div class="form-group">
                                 <label for="mission_letter">លិខិតបញ្ជាបេសកកម្ម:</label>
                                 <div class="form-subgroup">
                                     <label for="letter_number">លេខ:</label>
-                                    <input type="text" name="letter_number" id="letter_number" class="form-control form-number @error('letter_number') is-invalid @enderror">
+                                    <input type="text" name="letter_number" id="letter_number"
+                                        class="form-control form-number @error('letter_number') is-invalid @enderror">
                                     @error('letter_number')
                                         <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
                                 </div>
                                 <div class="form-subgroup">
                                     <label for="letter_date">កាលបរិច្ឆេទ:</label>
-                                    <input type="date" name="letter_date" id="letter_date" class="form-control form-number @error('letter_date') is-invalid @enderror">
+                                    <input type="date" name="letter_date" id="letter_date"
+                                        class="form-control form-number @error('letter_date') is-invalid @enderror">
                                     @error('letter_date')
                                         <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
                                 </div>
                             </div>
-
-                            {{-- <div class="form-group">
-                                <label for="mission_letter">ប្រាក់ហោប៉ៅ:</label>
-                                <div class="form-subgroup">
-                                    <label for="letter_number">របប:</label>
-                                    <input type="text" name="pocket_money" id="letter_number" class="form-control form-number @error('letter_number') is-invalid @enderror">
-                                    @error('letter_number')
-                                        <div class="invalid-feedback">{{ $message }}</div>
-                                    @enderror
-                                </div>
-                            </div> --}}
-
-                            {{-- <div class="form-group">
-                                <label for="mission_letter">ប្រាក់ហូបចុក:</label>
-                                <div class="form-subgroup">
-                                    <label for="letter_number">របប:</label>
-                                    <input type="text" name="meal_money" id="letter_number" class="form-control form-number @error('letter_number') is-invalid @enderror">
-                                    @error('letter_number')
-                                        <div class="invalid-feedback">{{ $message }}</div>
-                                    @enderror
-                                </div>
-                            </div> --}}
-
                         </div>
 
                         <div class="col-md-6">
@@ -128,10 +80,11 @@
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
                             </div>
+
                             <div class="form-group">
-                                <label for="location">ទីកន្លែង:</label>
+                                <label for="location">ជ្រើសរើសខេត្ត:</label>
                                 <select name="location" id="location" class="form-control centered-text">
-                                    <option value="">ជ្រើសរើសទីកន្លែង</option>
+                                    <option value="">ជ្រើសរើសខេត្ត</option>
                                     <option value="កំពង់ធំ">កំពង់ធំ</option>
                                     <option value="តាកែវ">តាកែវ</option>
                                     <option value="សៀមរាប">សៀមរាប</option>
@@ -158,55 +111,35 @@
                                     <option value="កំពង់ឆ្នាំង">កំពង់ឆ្នាំង</option>
                                 </select>
                             </div>
-                            
-                            
+
                             <div class="form-group">
                                 <label for="mission_letter">កាលបរិច្ឆេទចុះបេសកកម្ម:</label>
                                 <div class="form-subgroup">
                                     <label for="letter_date">ចាប់ផ្ដើម:</label>
-                                    <input type="date" name="mission_start_date" id="letter_date" class="form-control form-number @error('letter_date') is-invalid @enderror">
+                                    <input type="date" name="mission_start_date" id="letter_date"
+                                        class="form-control form-number @error('letter_date') is-invalid @enderror">
                                     @error('letter_date')
                                         <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
                                 </div>
                                 <div class="form-subgroup">
                                     <label for="letter_date">បញ្ចប់:</label>
-                                    <input type="date" name="mission_end_date" id="letter_date" class="form-control form-number @error('letter_date') is-invalid @enderror">
+                                    <input type="date" name="mission_end_date" id="letter_date"
+                                        class="form-control form-number @error('letter_date') is-invalid @enderror">
                                     @error('letter_date')
                                         <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
                                 </div>
                             </div>
-
-                            {{-- <div class="form-group">
-                                <label for="address">សោហ៊ុយធ្វើដំណើរ:</label>
-                                <input type="text" name="travel_allowance" id="address"
-                                    class="form-control @error('address') is-invalid @enderror">
-                                @error('address')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                @enderror
-                            </div>
-                             --}}
-                            {{-- <div class="form-group">
-                                <label for="mission_letter">ប្រាក់ស្នាក់នៅ:</label>
-                                <div class="form-subgroup">
-                                    <label for="letter_number">របប:</label>
-                                    <input type="text" name="accommodation_money" id="letter_number" class="form-control form-number @error('letter_number') is-invalid @enderror">
-                                    @error('letter_number')
-                                        <div class="invalid-feedback">{{ $message }}</div>
-                                    @enderror
-                                </div>
-                            </div> --}}
                         </div>
                     </div>
-
                     <div class="d-flex align-items-center">
                         <button type="submit" class="btn btn-primary ml-auto">បានរក្សាទុក</button>
                     </div>
                 </form>
             </div>
         </div>
-</div>
+    </div>
 @endsection
 
 @section('styles')
@@ -215,6 +148,7 @@
             border: 2px solid black;
             padding: 10px;
         }
+
         .form-control {
             width: 100%;
             padding: 10px;
@@ -224,21 +158,24 @@
             border-radius: 4px;
             box-sizing: border-box;
         }
+
         .form-group label {
             display: block;
             margin-bottom: 5px;
             font-weight: bold;
         }
+
         .form-group {
             margin-bottom: 20px;
         }
+
         .form-subgroup {
             margin-bottom: 10px;
             display: flex;
             justify-content: center;
             align-items: center;
-
         }
+
         .centered-text {
             appearance: none;
             padding: 10px;
@@ -247,7 +184,8 @@
             align-items: center;
             justify-content: center;
         }
-        .form-number{
+
+        .form-number {
             margin-left: 25px;
         }
     </style>
@@ -259,14 +197,14 @@
     <script>
         $(function() {
             $("#letter_date").datepicker({
-                dateFormat: "yy-mm-dd" // Adjust the date format as needed
+                dateFormat: "yy-mm-dd"
             });
         });
 
         (function($) {
             "use strict";
 
-            // Toggle the side navigation
+            //Troggle the side navigation
             $("#sidebarToggle, #sidebarToggleTop").on('click', function(e) {
                 $("body").toggleClass("sidebar-toggled");
                 $(".sidebar").toggleClass("toggled");
@@ -319,6 +257,62 @@
             });
 
         })(jQuery);
-    </script>
 
+        $(document).ready(function() {
+            const numPeopleSelect = $('#num_people');
+            const rowsContainer = $('#rows-container');
+
+            numPeopleSelect.on('change', function() {
+                const numPeople = parseInt($(this).val(), 10);
+                rowsContainer.empty(); // Clear previous rows
+
+                for (let i = 0; i < numPeople; i++) {
+                    const rowHtml = `
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label for="name_${i + 1}">ឈ្មោះមន្ត្រី ${i + 1}:</label>
+                            <input type="text" name="names[]" id="name_${i + 1}" class="form-control" required>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label for="role_${i + 1}">តួនាទី ${i + 1}:</label>
+                            <select name="people[${i}][role]" id="role_${i}" class="form-control centered-text" required>
+                                <option value="">ជ្រើសរើសតួនាទី</option>
+                                <option value="អគ្កាធិការរង">អគ្កាធិការរង</option>
+                                <option value="អគ្គនាយករង">អគ្គនាយករង</option>
+                                <option value="អគ្គលេខាធិការរង">អគ្គលេខាធិការរង</option>
+                                <option value="រដ្ឋលេខាធិការ">រដ្ឋលេខាធិការ</option>
+                                <option value="អនុរដ្ឋលេខាធិការ">អនុរដ្ឋលេខាធិការ</option>
+                                <option value="ប្រ.ការិយាល័យ">ប្រ.ការិយាល័យ</option>
+                                <option value="អនុ.ការិយាល័យ">អនុ.ការិយាល័យ</option>
+                                <option value="អនុប្រធានផ្នែក">អនុប្រធានផ្នែក</option>
+                                <option value="មន្ត្រី">មន្ត្រី</option>
+                                <option value="ជំនួយការ">ជំនួយការ</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label for="position_type_${i + 1}">មុខងារ ${i + 1}:</label>
+                            <select name="people[${i}][position_type]" id="position_type_${i}" class="form-control centered-text" required>
+                                <option value="">ជ្រើសរើសប្រភេទតួនាទី</option>
+                                <option value="ក">ក</option>
+                                <option value="ខ១">ខ១</option>
+                                <option value="ខ២">ខ២</option>
+                                <option value="គ">គ</option>
+                                <option value="ឃ">ឃ</option>
+                                <option value="ង">ង</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            `;
+                    rowsContainer.append(rowHtml);
+                }
+            });
+            document.getElementById('place').addEventListener('change', updateLocationOptions);
+        });
+    </script>
 @endsection

@@ -24,6 +24,7 @@ class ResultTotalController extends Controller
             'unexpected_increase' => $reports->sum('unexpected_increase'),
             'additional_increase' => $reports->sum('additional_increase'),
             'decrease' => $reports->sum('decrease'),
+            'apply' => $reports->sum('apply'),
             'total_increase' => $reports->sum(function ($report) {
                 return $report->internal_increase + $report->unexpected_increase + $report->additional_increase;
             }),

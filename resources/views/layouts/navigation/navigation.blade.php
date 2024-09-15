@@ -1,37 +1,18 @@
-<nav class="navbar  navbar-expand navbar-light bg-white topbar mb-4 static-top shadow ", style="height: 80px">
+<nav class="navbar d-flex sticky navbar-expand-lg navbar-light bg-white topbar static-top shadow ", style="height: 90px;">
 
-    <!-- Sidebar Toggle (Topbar) -->
-    <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
-        <i class="fa fa-bars"></i>
-    </button>
-
-    <!-- Topbar Search -->
-    <form class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
-        <div class="input-group">
-            <input type="text" class="form-control bg-light border-0 small" placeholder="ស្វែងរក" aria-label="Search"
-                aria-describedby="basic-addon2">
-            <div class="input-group-append">
-                <button class="btn btn-primary" type="button">
-                    <i class="fas fa-search fa-sm"></i>
-                </button>
+    <div class="first-header d-flex align-items-center" style="font-family: 'Khmer OS Muol Light', sans-serif;">
+        <a class="sidebar-brand d-flex align-items-center" style="text-decoration: none" href="{{ url('/') }}">
+            <div class="logo-mlvt">
+                <img src="/img/MLVT.jpg" alt="MLVT Logo" style="width: 70px; height: 70px;">
             </div>
-        </div>
-    </form>
-
-    {{-- <form class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search" method="GET" action="{{ route('result.index') }}">
-        <div class="input-group">
-            <input type="text" name="code_id" value="{{ request('code_id') }}" class="form-control bg-light border-0 small" placeholder="ជំពូក" aria-label="Code ID" aria-describedby="basic-addon2">
-            <input type="text" name="account_key_id" value="{{ request('account_key_id') }}" class="form-control bg-light border-0 small" placeholder="គណនី" aria-label="Account Key ID" aria-describedby="basic-addon2">
-            <input type="text" name="sub_account_key_id" value="{{ request('sub_account_key_id') }}" class="form-control bg-light border-0 small" placeholder="អនុគណនី" aria-label="Sub Account Key ID" aria-describedby="basic-addon2">
-            <input type="text" name="report_key" value="{{ request('report_key') }}" class="form-control bg-light border-0 small" placeholder="កូដកម្មវិធី" aria-label="Report Key" aria-describedby="basic-addon2">
-            <div class="input-group-append">
-                <button class="btn btn-primary" type="submit">
-                    <i class="fas fa-search fa-sm"></i> ស្វែងរក
-                </button>
+            <div class="header-text ml-4">
+                <h1" style="font-size: 28px; font-weight: 800; font-family: 'Khmer OS Muol Light' ">
+                    នាយកដ្ឋានហិរញ្ញវត្ថុ​ និងទ្រព្យសម្បត្តិរដ្ឋ
+                </h1>
             </div>
-        </div>
-    </form>
-     --}}
+        </a>
+    </div>
+
     <!-- Topbar Navbar -->
     <ul class="navbar-nav ml-auto">
 
@@ -57,70 +38,14 @@
                 </form>
             </div>
         </li>
-        {{-- <li class="nav-item mx-1">
-            <div class="filter-container" style="display: flex; justify-content: center; align-items: center; height: 80px;">
-                <form method="GET" action="{{ route('reports.index') }}" class="d-flex justify-content-center align-items-center" style="width: 100%;">
-                    <input type="text" name="code" id="code" placeholder="Filter by Section" class="form-control mr-2" value="{{ request()->section }}" />
-                    <input type="text" name="account_key" id="account_key" placeholder="Filter by Account" class="form-control mr-2" value="{{ request()->account }}" />
-                    <input type="text" name="sub_account_key" id="sub_account_key" placeholder="Filter by Sub-Account" class="form-control mr-2" value="{{ request()->sub_account }}" />
-                    <input type="text" name="report_key" id="report_key" placeholder="Filter by Program Code" class="form-control" value="{{ request()->program_code }}" />
-                    <button type="submit" class="btn btn-primary ml-2">Filter</button>
-                </form>
-            </div>
-        </li> --}}
 
-        <!-- Nav Item - Alerts -->
-        {{-- <li class="nav-item dropdown no-arrow mx-1">
-            <a class="nav-link dropdown-toggle" href="#" id="alertsDropdown" role="button"
-                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                <i class="fas fa-bell fa-fw"></i>
-                <!-- Counter - Alerts -->
-                <span class="badge badge-danger badge-counter">3+</span>
-            </a>
-            <!-- Dropdown - Alerts -->
-            <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in"
-                aria-labelledby="alertsDropdown">
-                <h6 class="dropdown-header">
-                    Alerts Center
-                </h6>
-                <a class="dropdown-item d-flex align-items-center" href="#">
-                    <div class="mr-3">
-                        <div class="icon-circle bg-primary">
-                            <i class="fas fa-file-alt text-white"></i>
-                        </div>
-                    </div>
-                    <div>
-                        <div class="small text-gray-500">December 12, 2019</div>
-                        <span class="font-weight-bold">A new monthly report is ready to
-                            download!</span>
-                    </div>
-                </a>
-                <a class="dropdown-item d-flex align-items-center" href="#">
-                    <div class="mr-3">
-                        <div class="icon-circle bg-success">
-                            <i class="fas fa-donate text-white"></i>
-                        </div>
-                    </div>
-                    <div>
-                        <div class="small text-gray-500">December 7, 2019</div>
-                        $290.29 has been deposited into your account!
-                    </div>
-                </a>
-                <a class="dropdown-item d-flex align-items-center" href="#">
-                    <div class="mr-3">
-                        <div class="icon-circle bg-warning">
-                            <i class="fas fa-exclamation-triangle text-white"></i>
-                        </div>
-                    </div>
-                    <div>
-                        <div class="small text-gray-500">December 2, 2019</div>
-                        Spending Alert: We've noticed unusually high spending for your account.
-                    </div>
-                </a>
-                <a class="dropdown-item text-center small text-gray-500" href="#">Show All
-                    Alerts</a>
-            </div>
-        </li> --}}
+        <!-- Centered Fullscreen Button -->
+        <a id="fullscreen-btn" class="btn btn-dark d-flex justify-content-center align-items-center mr-2 mt-2"
+            style="height: 50px; width: 50px;">
+            <i class="fas fa-expand"></i>
+        </a>
+
+
         <li class="nav-item dropdown no-arrow mx-1">
             <a class="nav-link dropdown-toggle" href="#" id="alertsDropdown" role="button" data-toggle="dropdown"
                 aria-haspopup="true" aria-expanded="false">
@@ -147,7 +72,7 @@
 
 
         <!-- Nav Item - Messages -->
-        {{-- <li class="nav-item dropdown no-arrow mx-1">
+        <li class="nav-item dropdown no-arrow mx-1">
             <a class="nav-link dropdown-toggle" href="#" id="messagesDropdown" role="button"
                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 <i class="fas fa-envelope fa-fw"></i>
@@ -196,8 +121,8 @@
                 </a>
                 <a class="dropdown-item d-flex align-items-center" href="#">
                     <div class="dropdown-list-image mr-3">
-                        <img class="rounded-circle"
-                            src="https://source.unsplash.com/Mv9hjnEUHR4/60x60" alt="...">
+                        <img class="rounded-circle" src="https://source.unsplash.com/Mv9hjnEUHR4/60x60"
+                            alt="...">
                         <div class="status-indicator bg-success"></div>
                     </div>
                     <div>
@@ -209,14 +134,14 @@
                 <a class="dropdown-item text-center small text-gray-500" href="#">Read More
                     Messages</a>
             </div>
-        </li> --}}
+        </li>
 
         <div class="topbar-divider d-none d-sm-block"></div>
 
         <!-- Nav Item - User Information -->
         <li class="nav-item dropdown no-arrow">
-            <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown"
-                aria-haspopup="true" aria-expanded="false">
+            <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
+                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 <span class="mr-2 d-none d-lg-inline text-gray-600 small">Douglas McGee</span>
                 <img class="img-profile rounded-circle" src="/img/undraw_profile.svg">
             </a>
@@ -241,7 +166,6 @@
                 </a>
             </div>
         </li>
-
     </ul>
 
 </nav>
