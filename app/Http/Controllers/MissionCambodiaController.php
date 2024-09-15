@@ -269,7 +269,7 @@ class MissionCambodiaController extends Controller
         $validatedData = $request->validate([
             'name' => 'required|string|max:255',
             'role' => 'required|string|max:255',
-            'position_type' => 'required|string|max:255',
+            'position_type' => 'required|string|max:255', 
             'letter_number' => 'required|numeric',
             'letter_date' => 'required|date',
             'mission_objective' => 'required|string|max:255',
@@ -364,9 +364,7 @@ class MissionCambodiaController extends Controller
     // Export data to Excel file
     public function export(Request $request)
     {
-        $search = $request->input('search');
-        $searchDate = $request->input('mission_start_date');
-
-        return Excel::download(new CambodiaExport($search, $searchDate), 'mission-cambodia.xlsx');
+        $export = new CambodiaExport($request->input('search'), $request->input('mission_start_date'));
+        return $export->export($request);
     }
 }

@@ -22,9 +22,7 @@ use App\Http\Controllers\Result\ResultSuccess\CostPerformController;
 use App\Http\Controllers\Result\ResultSuccess\TotalController;
 use App\Http\Controllers\Result\ResultSummariesController;
 use App\Http\Controllers\Result\ResultTotalController;
-use App\Http\Controllers\ResultMissionController;
 use App\Http\Controllers\Loans\SumReferController;
-use App\Models\Totals\Total;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -95,7 +93,6 @@ Route::resource('/mission-cam', MissionCambodiaController::class);
 Route::get('/mission-cam/{id}/edit', [MissionCambodiaController::class, 'edit'])->name('missions.edit');
 Route::put('/mission-cam/{id}', [MissionCambodiaController::class, 'update'])->name('missions.update');
 Route::delete('/mission-cam/{mission}', [MissionCambodiaController::class, 'delete'])->name('missions.delete');
-
 
 //===============================>> Manage Exports
 // Route::get('/import-data',[ReportController::class, 'import'])->name('import-data');
