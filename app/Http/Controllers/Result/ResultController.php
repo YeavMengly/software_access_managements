@@ -29,14 +29,13 @@ class ResultController extends Controller
 
         // Retrieve filtered results
         $results = $query->get();
-
+        
         // Calculate totals for the results
         $totals = $this->calculateTotals($results);
 
         // Return the view with results and totals
         return view('layouts.table.result', compact('totals', 'results'));
     }
-
 
     public function export(Request $request)
     {

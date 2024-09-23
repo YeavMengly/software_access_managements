@@ -54,8 +54,9 @@
                                 <label for="mission_letter">លិខិតបញ្ជាបេសកកម្ម:</label>
                                 <div class="form-subgroup">
                                     <label for="letter_number">លេខ:</label>
-                                    <input type="text" name="letter_number" id="letter_number"
-                                        class="form-control form-number @error('letter_number') is-invalid @enderror">
+                                    <input type="number" name="letter_number" id="letter_number"
+                                        class="form-control form-number @error('letter_number') is-invalid @enderror"
+                                        min="0" oninput="this.value = this.value.replace(/[^0-9]/g, '');">
                                     @error('letter_number')
                                         <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
@@ -74,8 +75,9 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label for="internal_increase">កម្មវត្ថុនៃការចុះបេសកកម្ម:</label>
-                                <input type="text" name="mission_objective" id="internal_increase"
-                                    class="form-control @error('internal_increase') is-invalid @enderror">
+                                <textarea name="mission_objective" id="internal_increase" rows="5"
+                                    class="form-control @error('internal_increase') is-invalid @enderror"
+                                    style="resize: vertical; font-family: 'Khmer OS Siemreap', sans-serif;"></textarea>
                                 @error('internal_increase')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
@@ -280,16 +282,25 @@
                             <label for="role_${i + 1}">តួនាទី ${i + 1}:</label>
                             <select name="people[${i}][role]" id="role_${i}" class="form-control centered-text" required>
                                 <option value="">ជ្រើសរើសតួនាទី</option>
-                                <option value="អគ្កាធិការរង">អគ្កាធិការរង</option>
-                                <option value="អគ្គនាយករង">អគ្គនាយករង</option>
-                                <option value="អគ្គលេខាធិការរង">អគ្គលេខាធិការរង</option>
+                                <option value="រដ្ឋមន្រ្តី">រដ្ឋមន្រ្តី</option>
+                                <option value="ទីប្រឹក្សាអមក្រសួង">ទីប្រឹក្សាអមក្រសួង</option>
                                 <option value="រដ្ឋលេខាធិការ">រដ្ឋលេខាធិការ</option>
                                 <option value="អនុរដ្ឋលេខាធិការ">អនុរដ្ឋលេខាធិការ</option>
+                                <option value="អគ្កាធិការ">អគ្កាធិការ</option>
+                                <option value="អគ្កាធិការរង">អគ្កាធិការរង</option>
+                                <option value="អគ្គនាយក">អគ្គនាយក</option>
+                                <option value="អគ្គនាយករង">អគ្គនាយករង</option>
+                                <option value="អគ្គលេខាធិការ">អគ្គលេខាធិការ</option>
+                                <option value="អគ្គលេខាធិការរង">អគ្គលេខាធិការរង</option>
+                                <option value="ប្រ.នាយកដ្ឋាន">ប្រ.នាយកដ្ឋាន</option>
+                                <option value="អនុ.នាយកដ្ឋាន">អនុ.នាយកដ្ឋាន</option>
                                 <option value="ប្រ.ការិយាល័យ">ប្រ.ការិយាល័យ</option>
                                 <option value="អនុ.ការិយាល័យ">អនុ.ការិយាល័យ</option>
+                                <option value="ប្រធានផ្នែក">ប្រធានផ្នែក</option>
                                 <option value="អនុប្រធានផ្នែក">អនុប្រធានផ្នែក</option>
                                 <option value="មន្ត្រី">មន្ត្រី</option>
                                 <option value="ជំនួយការ">ជំនួយការ</option>
+                                <option value="មន្ត្រីជាប់កិច្ចសន្យា">មន្ត្រីជាប់កិច្ចសន្យា</option>
                             </select>
                         </div>
                     </div>
