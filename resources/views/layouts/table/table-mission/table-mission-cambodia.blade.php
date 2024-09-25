@@ -64,7 +64,7 @@
 
             </div>
         </form>
-        <div class="d-flex justify-content-end mb-2">
+        {{-- <div class="d-flex justify-content-end mb-2">
             <!-- Dropdown for showing number of items per page -->
             <div style="width: 120px;">
                 <select name="per_page" class="form-control" onchange="window.location.href=this.value;">
@@ -76,7 +76,7 @@
                         បង្ហាញ 100</option>
                 </select>
             </div>
-        </div>
+        </div> --}}
     </div>
 
     <div class="border-wrapper mt-3">
@@ -308,7 +308,7 @@
                     </tbody>
                 </table>
 
-                <div class="d-flex justify-content-between align-items-center mt-4">
+                {{-- <div class="d-flex justify-content-between align-items-center mt-4">
                     <div>
                         <!-- Custom Pagination -->
                         <nav aria-label="Page navigation example">
@@ -342,7 +342,7 @@
                         <p class="text-muted">បង្ហាញ {{ $missions->firstItem() }} ដល់ {{ $missions->lastItem() }} នៃ
                             {{ $missions->total() }} លទ្ធផល</p>
                     </div>
-                </div>
+                </div> --}}
             </div>
         </div>
         <div class="d-flex justify-content-end mt-3">

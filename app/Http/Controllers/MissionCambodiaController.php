@@ -97,8 +97,8 @@ class MissionCambodiaController extends Controller
         // Fetch missions
         $missions = $query->get();
 
-        $perPage = $request->get('per_page', 25); // Get per_page from request or default to 25
-        $missions = CambodiaMission::paginate($perPage); // Assuming 'ResultMission' is the model
+        // $perPage = $request->get('per_page', 25); // Get per_page from request or default to 25
+        // $missions = CambodiaMission::paginate($perPage); // Assuming 'ResultMission' is the model
 
         // Calculate totals
         $totals = [
@@ -200,7 +200,6 @@ class MissionCambodiaController extends Controller
         ];
 
         // Variable to hold the final mission ID
-        // Ensure arrays are initialized
         $names = $request->names ?? [];
         $people = $request->people ?? [];
 
