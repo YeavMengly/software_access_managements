@@ -8,7 +8,6 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\Rule;
-use PgSql\Lob;
 
 class MissionCambodiaController extends Controller
 {
@@ -50,6 +49,8 @@ class MissionCambodiaController extends Controller
         // Initialize query builder
         $query = CambodiaMission::query();
 
+        // Ensure pagination is used
+        $missions = CambodiaMission::paginate(20);
 
         // Filter by text search if provided
         if ($search) {
@@ -96,9 +97,6 @@ class MissionCambodiaController extends Controller
 
         // Fetch missions
         $missions = $query->get();
-
-        // $perPage = $request->get('per_page', 25); // Get per_page from request or default to 25
-        // $missions = CambodiaMission::paginate($perPage); // Assuming 'ResultMission' is the model
 
         // Calculate totals
         $totals = [
@@ -215,6 +213,45 @@ class MissionCambodiaController extends Controller
             // Check if positionType is valid
             if (!isset($positionTypes[$positionType])) {
                 return response()->json(['error' => 'Invalid position type'], 400);
+            }
+
+            // **Check for duplicate mission**
+            $existingMission = CambodiaMission::where('name', $name)
+                ->where(function ($query) use ($request) {
+                    $query->whereBetween('mission_start_date', [$request->mission_start_date, $request->mission_end_date])
+                        ->orWhereBetween('mission_end_date', [$request->mission_start_date, $request->mission_end_date]);
+                })
+                ->where('letter_number', '!=', $request->letter_number) // Exclude same letter_number
+                ->first();
+
+            if ($existingMission) {
+                // If a mission exists with the same name, overlapping dates, and a different letter number
+                return back()->withErrors(['error' => "ឈ្មោះ '$name' បានចុះបេសកកម្មនៅថ្ងៃនេះរួចហើយ។"]);
+            }
+
+            // Calculate the new mission duration
+            $missionStartDate = new \DateTime($request->mission_start_date);
+            $missionEndDate = new \DateTime($request->mission_end_date);
+            $newMissionDays = $missionStartDate->diff($missionEndDate)->days + 1;
+
+            // Retrieve existing missions for this person within the same month
+            $existingMissionsThisMonth = CambodiaMission::where('name', $name)
+                ->whereMonth('mission_start_date', $missionStartDate->format('m'))
+                ->whereYear('mission_start_date', $missionStartDate->format('Y'))
+                ->get();
+
+            // Calculate total days in existing missions
+            $totalExistingDays = 0;
+            foreach ($existingMissionsThisMonth as $existingMission) {
+                $existingStartDate = new \DateTime($existingMission->mission_start_date);
+                $existingEndDate = new \DateTime($existingMission->mission_end_date);
+                $totalExistingDays += $existingStartDate->diff($existingEndDate)->days + 1;
+            }
+
+            // Check if total days exceed 10
+            $totalDays = $totalExistingDays + $newMissionDays;
+            if ($totalDays > 10) {
+                return back()->withErrors(['error' => "ឈ្មោះ '$name' មិនអាចចុះបេសកកម្មលើសពី ១០ ថ្ងៃក្នុងមួយខែ។"]);
             }
 
             // Get the position type values
@@ -336,10 +373,49 @@ class MissionCambodiaController extends Controller
             'travel_allowance' => 'required|numeric|min:0',
         ]);
 
+        $name = $validatedData['name']; // Retrieve name from the validated data
+
+        // **Check for duplicate mission**
+        $existingMission = CambodiaMission::where('name', $name)
+            ->where(function ($query) use ($request) {
+                $query->whereBetween('mission_start_date', [$request->mission_start_date, $request->mission_end_date])
+                    ->orWhereBetween('mission_end_date', [$request->mission_start_date, $request->mission_end_date]);
+            })
+            ->where('letter_number', '!=', $request->letter_number) // Exclude the same letter_number
+            ->first();
+
+        if ($existingMission) {
+            // If a mission exists with the same name, overlapping dates, and a different letter number
+            return back()->withErrors(['error' => "ឈ្មោះ '$name' បានចុះបេសកកម្មនៅថ្ងៃនេះរួចហើយ។"]);
+        }
+
+        // Calculate the new mission duration
+        $missionStartDate = new \DateTime($request->mission_start_date);
+        $missionEndDate = new \DateTime($request->mission_end_date);
+        $newMissionDays = $missionStartDate->diff($missionEndDate)->days + 1;
+
+        // Retrieve existing missions for this person within the same month
+        $existingMissionsThisMonth = CambodiaMission::where('name', $name)
+            ->whereMonth('mission_start_date', $missionStartDate->format('m'))
+            ->whereYear('mission_start_date', $missionStartDate->format('Y'))
+            ->get();
+
+        // Calculate total days in existing missions
+        $totalExistingDays = 0;
+        foreach ($existingMissionsThisMonth as $existingMissionThisMonth) {
+            $existingStartDate = new \DateTime($existingMissionThisMonth->mission_start_date);
+            $existingEndDate = new \DateTime($existingMissionThisMonth->mission_end_date);
+            $totalExistingDays += $existingStartDate->diff($existingEndDate)->days + 1;
+        }
+
+        // Check if total days exceed 10 days per month
+        $totalDays = $totalExistingDays + $newMissionDays;
+        if ($totalDays > 10) {
+            return back()->withErrors(['error' => "ឈ្មោះ '$name' មិនអាចចុះបេសកកម្មលើសពី ១០ ថ្ងៃក្នុងមួយខែ។"]);
+        }
+
         // Get the position type values
         $positionType = $validatedData['position_type'];
-
-
 
         // Get the allowance amounts for the given position type (for one person)
         $pocketMoneyPerDay = $positionTypes[$positionType]['pocket_money'] ?? 0;

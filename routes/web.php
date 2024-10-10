@@ -36,17 +36,14 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-// Route::get('/', function () {
-//     return view('welcome');
-// });
-
 Route::get('/', function () {
     return view('dashboard.dashboardui');
 });
 
-// Route::get('/', function () {
-//     return view('layouts.master');
-// });
+// Route to display report-mission view
+Route::get('/report-mission', function () {
+    return view('layouts.table.table-mission.report-mission');
+})->name('report-mission');
 
 // Route Components Grid
 Route::get('/programs', [TotalProgramsController::class, 'index'])->name('programs');

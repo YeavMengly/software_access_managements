@@ -19,15 +19,22 @@
         @endif
 
         @if ($errors->any())
-            <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                <strong>Whoops!</strong><br><br>
-                <ul>
-                    @foreach ($errors->all() as $error)
-                        <li>{{ $error }}</li>
-                    @endforeach
-                </ul>
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-            </div>
+            <script>
+                document.addEventListener('DOMContentLoaded', function() {
+                    Swal.fire({
+                        title: 'Whoops!',
+                        html: `
+                    <ul style="text-align: left;">
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                `,
+                        icon: 'error',
+                        confirmButtonText: 'Okay'
+                    });
+                });
+            </script>
         @endif
 
         <div class="border-wrapper">
@@ -135,7 +142,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="d-flex align-items-center">
+                    <div class="d-flex align-items-center" style="font-family: 'Khmer OS Siemreap', sans-serif;">
                         <button type="submit" class="btn btn-primary ml-auto">បានរក្សាទុក</button>
                     </div>
                 </form>
