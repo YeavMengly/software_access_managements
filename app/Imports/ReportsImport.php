@@ -7,13 +7,12 @@ use Illuminate\Support\Facades\Log;
 use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
 use Maatwebsite\Excel\Concerns\WithValidation;
-use Maatwebsite\Excel\Concerns\Importable;
 use Maatwebsite\Excel\Concerns\SkipsFailures;
 use Maatwebsite\Excel\Concerns\SkipsOnFailure;
 
-class ReportsImport implements ToModel
+class ReportsImport implements ToModel, WithHeadingRow, WithValidation, SkipsOnFailure
 {
-    use Importable, SkipsFailures;
+    use SkipsFailures;
 
     /**
      * Process each row of the import.
@@ -24,41 +23,35 @@ class ReportsImport implements ToModel
      */
     public function model(array $row)
     {
-        // Log the row data for debugging
-        Log::info('Importing row: ' . json_encode($row));
-
-        dd($row);
-
-        // Skip empty rows or header rows
-        if (isset($row['sub_account_key']) && !empty($row['sub_account_key'])) {
-            $total_increase = $row['internal_increase'] + $row['unexpected_increase'] + $row['additional_increase'];
-            $new_credit_status = $row['current_loan'] + $total_increase - $row['decrease'] - $row['editorial'];
-            $deadline_balance = $row['early_balance'] + $row['apply'];
-            $credit = $new_credit_status - $deadline_balance;
-            $law_average = $deadline_balance != 0 ? $row['fin_law'] / $deadline_balance : 0;
-            $law_correction = $deadline_balance != 0 ? $new_credit_status / $deadline_balance : 0;
-
-            return new Report([
-                'sub_account_key'     => $row['sub_account_key'],
-                'report_key'          => $row['report_key'],
-                'fin_law'             => $row['fin_law'] ?? 0,
-                'current_loan'        => $row['current_loan'] ?? 0,
-                'internal_increase'   => $row['internal_increase'] ?? 0,
-                'unexpected_increase' => $row['unexpected_increase'] ?? 0,
-                'additional_increase' => $row['additional_increase'] ?? 0,
-                'total_increase'      => $total_increase,
-                'decrease'            => $row['decrease'] ?? 0,
-                'editorial'           => $row['editorial'] ?? 0,
-                'early_balance'       => $row['early_balance'] ?? 0,
-                'apply'               => $row['apply'] ?? 0,
-                'deadline_balance'    => $deadline_balance,
-                'credit'              => $credit,
-                'law_average'         => $law_average,
-                'law_correction'      => $law_correction,
-            ]);
-        }
-
-        return null;
+        // Log the raw row data for debugging
+        Log::info('Raw row data:', $row);
+    
+        // Perform calculations
+        $total_increase = ($row['internal_increase'] ?? 0) + ($row['unexpected_increase'] ?? 0) + ($row['additional_increase'] ?? 0);
+        $new_credit_status = ($row['current_loan'] ?? 0) + $total_increase - ($row['decrease'] ?? 0) - ($row['editorial'] ?? 0);
+        $deadline_balance = ($row['early_balance'] ?? 0) + ($row['apply'] ?? 0);
+        $credit = $new_credit_status - $deadline_balance;
+        $law_average = $deadline_balance != 0 ? ($row['fin_law'] ?? 0) / $deadline_balance : 0;
+        $law_correction = $deadline_balance != 0 ? $new_credit_status / $deadline_balance : 0;
+    
+        return new Report([
+            'sub_account_key'     => $row['sub_account_key'],
+            'report_key'          => $row['report_key'],
+            'fin_law'             => $row['fin_law'] ?? 0,
+            'current_loan'        => $row['current_loan'] ?? 0,
+            'internal_increase'   => $row['internal_increase'] ?? 0,
+            'unexpected_increase' => $row['unexpected_increase'] ?? 0,
+            'additional_increase' => $row['additional_increase'] ?? 0,
+            'total_increase'      => $total_increase,
+            'decrease'            => $row['decrease'] ?? 0,
+            'editorial'           => $row['editorial'] ?? 0,
+            'early_balance'       => $row['early_balance'] ?? 0,
+            'apply'               => $row['apply'] ?? 0,
+            'deadline_balance'    => $deadline_balance,
+            'credit'              => $credit,
+            'law_average'         => $law_average,
+            'law_correction'      => $law_correction,
+        ]);
     }
 
     /**

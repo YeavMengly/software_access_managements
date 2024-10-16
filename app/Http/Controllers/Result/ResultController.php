@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Result;
 use App\Exports\Results\ResultExport;
 use App\Http\Controllers\Controller;
 use App\Models\Code\Report;
-use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Log;
@@ -42,15 +41,16 @@ class ResultController extends Controller
         try {
             // Initialize query builder for Report model
             $query = Report::query();
-
+    
             // Apply filters
             $this->applyFilters($query, $request);
-
+    
             // Retrieve the filtered data
             $results = $query->get();
-
-            // Export the filtered data
-            return Excel::download(new ResultExport($results), 'reports.xlsx');
+    
+            // Create an instance of ResultExport and call the export method
+            $resultExport = new ResultExport($results);
+            return $resultExport->export($request);
         } catch (\Exception $e) {
             return response()->json(['error' => $e->getMessage()], 500);
         }
@@ -65,20 +65,21 @@ class ResultController extends Controller
             // Apply filters
             $this->applyFilters($query, $request);
 
-            // Generate PDF
-            $pdf = Pdf::loadView('layouts.pdf.result_pdf', [
-                'reports' => $query->get(),
-                'totals' => $this->calculateTotals($query->get()),
-            ])->setPaper('a2', 'landscape')
-                ->setOption('zoom', '100%')
-                ->setOptions([
-                    'margin-top' => 5,
-                    'margin-bottom' => 5,
-                    'margin-left' => 0,
-                    'margin-right' => 5,
-                ]);
+            // Get data
+            $reports = $query->get();
+            $totals = $this->calculateTotals($reports);
 
-            return $pdf->download('results.pdf');
+            // Build the HTML content
+            $html = view('layouts.pdf.result_pdf', compact('reports', 'totals'))->render();
+
+            // Generate PDF using mPDF
+            $mpdf = new \Mpdf\Mpdf(['format' => 'A2-L']);
+
+            // Write the HTML content to the PDF
+            $mpdf->WriteHTML($html);
+
+            // Download PDF
+            return $mpdf->Output('របាយការណ៍ធានាចំណាយថវិការ.pdf', 'D');
         } catch (\Exception $e) {
             return response()->json(['error' => $e->getMessage()], 500);
         }
@@ -205,14 +206,6 @@ class ResultController extends Controller
             }
 
             // Aggregate values
-            $law_average = $result->deadline_balance > 0 ? ($result->deadline_balance / $result->fin_law) * 100 : 0;
-            $law_correction = $result->deadline_balance > 0 ? ($result->deadline_balance / $result->new_credit_status) * 100 : 0;
-
-            // Cap values between 0 and 100
-            // $law_average = min(max($law_average, 0), 100);
-            // $law_correction = min(max($law_correction, 0), 100);
-
-            // Aggregate values
             $totals['reportKey'][$codeId][$accountKeyId][$subAccountKeyId][$reportKeyId]['fin_law'] += $result->fin_law;
             $totals['reportKey'][$codeId][$accountKeyId][$subAccountKeyId][$reportKeyId]['current_loan'] += $result->current_loan;
             $totals['reportKey'][$codeId][$accountKeyId][$subAccountKeyId][$reportKeyId]['internal_increase'] += $result->internal_increase;
@@ -225,19 +218,11 @@ class ResultController extends Controller
             $totals['reportKey'][$codeId][$accountKeyId][$subAccountKeyId][$reportKeyId]['apply'] += $result->apply;
             $totals['reportKey'][$codeId][$accountKeyId][$subAccountKeyId][$reportKeyId]['deadline_balance'] += $result->deadline_balance;
             $totals['reportKey'][$codeId][$accountKeyId][$subAccountKeyId][$reportKeyId]['credit'] += $result->credit;
-            $totals['reportKey'][$codeId][$accountKeyId][$subAccountKeyId][$reportKeyId]['law_average'] += $result->law_average;
+            $totals['reportKey'][$codeId][$accountKeyId][$subAccountKeyId][$reportKeyId]['law_average'] = $result->law_average;
             $totals['reportKey'][$codeId][$accountKeyId][$subAccountKeyId][$reportKeyId]['law_correction'] += $result->law_correction;
         }
 
         foreach ($reports as $report) {
-
-            $law_average = $report->deadline_balance > 0 ? ($report->deadline_balance / $report->fin_law) * 100 : 0;
-            $law_correction = $report->deadline_balance > 0 ? ($report->deadline_balance / $report->new_credit_status) * 100 : 0;
-
-            // Cap values between 0 and 100
-            // $law_average = min(max($law_average, 0), 100);
-            // $law_correction = min(max($law_correction, 0), 100);
-
 
             $totals['fin_law'] += $report->fin_law;
             $totals['current_loan'] += $report->current_loan;
@@ -251,9 +236,8 @@ class ResultController extends Controller
             $totals['apply'] += $report->apply;
             $totals['deadline_balance'] += $report->deadline_balance;
             $totals['credit'] += $report->credit;
-            $totals['law_average'] += $report->law_average;
-            $totals['law_correction'] += $report->law_correction;
-
+            $totals['law_average'] = $totals['law_average'] ? ($totals['deadline_balance'] / $totals['fin_law']) * 100 : 0;
+            $totals['law_correction'] =  $totals['law_correction'] ? ($totals['deadline_balance'] / $totals['new_credit_status']) * 100 : 0;
             $totalIncrease = $report->internal_increase + $report->unexpected_increase + $report->additional_increase;
             $totals['total_increase'] += $totalIncrease;
         }
@@ -319,12 +303,29 @@ class ResultController extends Controller
             'credit' => 0,
             'law_average' => 0,
             'law_correction' => 0,
+
         ];
 
         foreach ($reports as $report) {
-            foreach ($sumFields as $key => &$value) {
-                $value += $report->$key;
-            }
+            $sumFields['fin_law'] += $report->fin_law;
+            $sumFields['current_loan'] += $report->current_loan;
+            $sumFields['internal_increase'] += $report->internal_increase;
+            $sumFields['unexpected_increase'] += $report->unexpected_increase;
+            $sumFields['additional_increase'] += $report->additional_increase;
+            $sumFields['decrease'] += $report->decrease;
+            $sumFields['editorial'] += $report->editorial;
+            $sumFields['new_credit_status'] += $report->new_credit_status;
+            $sumFields['early_balance'] += $report->early_balance;
+            $sumFields['apply'] += $report->apply;
+            $sumFields['deadline_balance'] += $report->deadline_balance;
+            $sumFields['credit'] += $report->credit;
+
+            $sumFields['law_average'] = ($sumFields['fin_law'] > 0 && $sumFields['deadline_balance'] > 0) ?
+                ($sumFields['deadline_balance'] / $sumFields['fin_law']) * 100 : null;
+
+            $sumFields['law_correction'] = ($sumFields['new_credit_status'] > 0 && $sumFields['deadline_balance'] > 0) ?
+                ($sumFields['deadline_balance'] / $sumFields['new_credit_status']) * 100 : null;
+
 
             // Calculate the 'total_increase' as the sum of 'internal_increase', 'unexpected_increase', and 'additional_increase'
             $sumFields['total_increase'] = $sumFields['internal_increase'] + $sumFields['unexpected_increase'] + $sumFields['additional_increase'];

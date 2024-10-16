@@ -92,7 +92,7 @@
                                     </div>
 
                                     <!-- Current Loan Input (readonly) -->
-                                    <div class="form-group">
+                                    {{-- <div class="form-group">
                                         <label for="current_loan">ឥណទានបច្ចុប្បន្ន:</label>
                                         <input type="number" name="current_loan" id="current_loan"
                                             value="{{ old('current_loan', $report->current_loan) }}"
@@ -100,7 +100,17 @@
                                         @error('current_loan')
                                             <div class="invalid-feedback">{{ $message }}</div>
                                         @enderror
+                                    </div> --}}
+                                    <div class="form-group">
+                                        <label for="current_loan">ឥណទានបច្ចុប្បន្ន:</label>
+                                        <input type="number" name="current_loan" id="current_loan"
+                                            value="{{ old('current_loan', $report->current_loan) }}"
+                                            class="form-control @error('current_loan') is-invalid @enderror">
+                                        @error('current_loan')
+                                            <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
                                     </div>
+
                                 </div>
 
                                 <div class="col-md-6">
@@ -152,15 +162,15 @@
                                         @enderror
                                     </div>
 
-                                    {{-- <div class="form-group">
-                                        <label for="apply">អនុវត្ត:</label>
-                                        <input type="number" name="apply" id="apply"
-                                            value="{{ old('apply', $report->apply) }}"
-                                            class="form-control @error('apply') is-invalid @enderror" readonly>
-                                        @error('apply')
+                                    <div class="form-group">
+                                        <label for="early_balance">ស.ម.ដើមគ្រា:</label>
+                                        <input type="number" name="early_balance" id="early_balance"
+                                            value="{{ old('early_balance', $report->early_balance) }}"
+                                            class="form-control @error('early_balance') is-invalid @enderror" >
+                                        @error('early_balance')
                                             <div class="invalid-feedback">{{ $message }}</div>
                                         @enderror
-                                    </div> --}}
+                                    </div>
 
 
                                 </div>

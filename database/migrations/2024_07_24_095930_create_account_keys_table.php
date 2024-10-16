@@ -13,12 +13,8 @@ return new class extends Migration
     {
         if (!Schema::hasTable('account_keys')) {
             Schema::create('account_keys', function (Blueprint $table) {
-                $table->increments('id', true);
-                
-                // Remove the ->change() method call as it's not needed for new columns
-                $table->unsignedBigInteger('code')->change();
-                $table->foreignId('code')->references('id')->on('keys')->onDelete('cascade');
-                
+                $table->increments('id');
+                $table->foreignId('code')->constrained('keys')->onDelete('cascade'); // Define the foreign key
                 $table->string('account_key');
                 $table->string('name_account_key');
                 $table->timestamps();

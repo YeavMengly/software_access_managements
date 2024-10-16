@@ -40,30 +40,31 @@
                             <div class="form-group">
                                 <strong>លេខកូដកម្មវិធី:</strong>
                                 <input type="text" id="searchReportKey" class="form-control"
-                                    placeholder="ស្វែងរកលេខកូដកម្មវិធី...">
+                                    placeholder="ស្វែងរកលេខកូដកម្មវិធី..." onkeyup="filterReportKeys(event)">
                                 <p id="resultCount" style="font-weight: bold;">ចំនួន: 0</p>
 
                                 <select name="report_key" id="reportKeySelect" class="form-control" size="5"
-                                    onclick="getSelectedReportValue()">
+                                    onchange="updateReportInputField()">
                                     @foreach ($reports as $report)
                                         <option value="{{ $report->id }}">
-                                            {{ $report->subAccountKey->accountKey->key->code }} >
-                                            {{ $report->subAccountKey->accountKey->account_key }} >
-                                            {{ $report->subAccountKey->sub_account_key }} >
+                                            {{ optional($report->subAccountKey)->sub_account_key }} >
                                             {{ $report->report_key }}
                                         </option>
                                     @endforeach
+
                                 </select>
                             </div>
 
-
-
                             <div class="form-group">
                                 <strong>ឈ្មោះសលាកបត្រ:</strong>
-                                <select name="name_certificate" class="form-control">
+
+                                <!-- Search field for filtering certificate options -->
+                                <input type="text" id="searchCertificate" class="form-control"
+                                    placeholder="ស្វែងរកឈ្មោះសលាកបត្រ..." onkeyup="filterCertificates()">
+
+                                <select name="name_certificate" id="certificateSelect" class="form-control" size="5">
                                     @foreach ($certificates as $certificate)
-                                        <option value="{{ $certificate->id }}">{{ $certificate->name_certificate }}
-                                        </option>
+                                        <option value="{{ $certificate->id }}">{{ $certificate->name_certificate }}</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -196,6 +197,88 @@
                 icon: 'info',
                 confirmButtonText: 'OK'
             });
+        }
+    </script>
+
+    <script>
+        function filterReportKeys(event) {
+            var input = document.getElementById('searchReportKey').value.toLowerCase();
+            var select = document.getElementById('reportKeySelect');
+            var options = select.options;
+            var count = 0;
+
+            for (var i = 0; i < options.length; i++) {
+                var optionText = options[i].textContent.toLowerCase();
+                if (optionText.includes(input)) {
+                    options[i].style.display = ''; // Show matching option
+                    count++;
+                } else {
+                    options[i].style.display = 'none'; // Hide non-matching option
+                }
+            }
+
+            document.getElementById('resultCount').innerText = 'ចំនួន: ' + count;
+
+            // Handle arrow key navigation
+            if (event.key === 'ArrowDown') {
+                if (selectedIndex < options.length - 1) {
+                    selectedIndex++;
+                    while (options[selectedIndex].style.display === 'none') {
+                        selectedIndex++;
+                        if (selectedIndex >= options.length) {
+                            selectedIndex = options.length - 1;
+                            break;
+                        }
+                    }
+                    options[selectedIndex].selected = true;
+                    updateReportInputField();
+                }
+            } else if (event.key === 'ArrowUp') {
+                if (selectedIndex > 0) {
+                    selectedIndex--;
+                    while (options[selectedIndex].style.display === 'none') {
+                        selectedIndex--;
+                        if (selectedIndex < 0) {
+                            selectedIndex = 0;
+                            break;
+                        }
+                    }
+                    options[selectedIndex].selected = true;
+                    updateReportInputField();
+                }
+            } else if (event.key === 'Enter') {
+                updateReportInputField();
+            }
+        }
+
+        function updateReportInputField() {
+            var select = document.getElementById('reportKeySelect');
+            var selectedOption = select.options[select.selectedIndex];
+            if (selectedOption) {
+                document.getElementById('searchReportKey').value = selectedOption.textContent;
+            }
+        }
+    </script>
+
+    <script>
+        function filterCertificates() {
+            const searchTerm = document.getElementById('searchCertificate').value.toLowerCase();
+            const certificateSelect = document.getElementById('certificateSelect');
+            const options = certificateSelect.options;
+
+            let count = 0;
+            for (let i = 0; i < options.length; i++) {
+                const option = options[i];
+                const text = option.textContent.toLowerCase();
+
+                // Show or hide options based on the search term
+                if (text.includes(searchTerm)) {
+                    option.style.display = '';
+                    count++;
+                } else {
+                    option.style.display = 'none';
+                }
+            }
         }
     </script>
 @endsection

@@ -44,10 +44,11 @@
                                     <div class="form-group">
                                         <strong>លេខអនុគណនី:</strong>
                                         <input type="text" id="searchSubAccountKey" class="form-control"
-                                            placeholder="ស្វែងរកលេខអនុគណនី...">
+                                            placeholder="ស្វែងរកលេខអនុគណនី..." onkeyup="filterSubAccountKeys(event)"
+                                            oninput="resetSubAccountSelection()">
                                         <p id="resultCount" style="font-weight: bold;">ចំនួន: 0</p>
 
-                                        <select name="sub_account_key" id="subAccountKeySelect" class="form-control "
+                                        <select name="sub_account_key" id="subAccountKeySelect" class="form-control"
                                             size="5" onclick="getSelectedValue()">
                                             @foreach ($subAccountKeys as $subAccountKey)
                                                 <option value="{{ $subAccountKey->id }}">
@@ -56,7 +57,6 @@
                                             @endforeach
                                         </select>
                                     </div>
-
 
 
                                     <!-- Report Key Input -->
@@ -90,18 +90,26 @@
                                         @enderror
                                     </div>
 
-
-
-
                                     <!-- Current Loan Input (readonly) -->
-                                    <div class="form-group">
+                                    {{-- <div class="form-group">
                                         <label for="current_loan">ឥណទានបច្ចុប្បន្ន:</label>
                                         <input type="number" name="current_loan" id="current_loan"
                                             class="form-control @error('current_loan') is-invalid @enderror" readonly>
                                         @error('current_loan')
                                             <div class="invalid-feedback">{{ $message }}</div>
                                         @enderror
+                                    </div> --}}
+
+                                    <!-- Current Loan Input -->
+                                    <div class="form-group">
+                                        <label for="current_loan">ឥណទានបច្ចុប្បន្ន:</label>
+                                        <input type="number" name="current_loan" id="current_loan"
+                                            class="form-control @error('current_loan') is-invalid @enderror" min="0">
+                                        @error('current_loan')
+                                            <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
                                     </div>
+
                                 </div>
 
                                 <div class="col-md-6">
@@ -152,10 +160,11 @@
                             </div>
 
                             <div class="d-flex align-items-center">
-                                <button type="submit" class="btn btn-primary ml-auto">បានរក្សាទុក</button>
+                                <button type="submit" class="btn btn-primary ml-auto">
+                                    <i class="fas fa-save"></i> បានរក្សាទុក
+                                </button>
                             </div>
                         </form>
-
                     </div>
                 </div>
             </div>
@@ -165,6 +174,8 @@
 @endsection
 
 @section('styles')
+    {{-- Custom style here --}}
+
     <style>
         .border-wrapper {
             border: 2px solid black;
@@ -181,7 +192,6 @@
 
         .btn,
         .form-control,
-        /* label, */
         th,
         td {
             border: 1px solid black;
@@ -194,6 +204,7 @@
 @endsection
 
 @section('scripts')
+    {{-- Include SweetAlert2 --}}
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script>
@@ -268,7 +279,7 @@
             input.value = value.replace(/\D/g, ''); // This example strips non-numeric characters
         }
     </script>
-    <script>
+    {{-- <script>
         let currentIndex = -1; // Initialize to -1 so no item is selected initially
 
         document.getElementById('searchSubAccountKey').addEventListener('input', function() {
@@ -346,6 +357,85 @@
                 icon: 'info',
                 confirmButtonText: 'OK'
             });
+        }
+    </script> --}}
+
+    <script>
+        let selectedIndex = -1;
+
+        // Function to filter sub-account keys
+        function filterSubAccountKeys(event) {
+            var input = document.getElementById('searchSubAccountKey').value.toLowerCase();
+            var select = document.getElementById('subAccountKeySelect');
+            var options = select.options;
+            var count = 0;
+
+            // Loop through options to filter them
+            for (var i = 0; i < options.length; i++) {
+                var optionText = options[i].textContent.toLowerCase();
+                if (optionText.includes(input)) {
+                    options[i].style.display = ''; // Show matching option
+                    count++;
+                } else {
+                    options[i].style.display = 'none'; // Hide non-matching option
+                }
+            }
+
+            // Update the result count
+            document.getElementById('resultCount').innerText = 'ចំនួន: ' + count;
+
+            // Handle arrow key navigation
+            if (event.key === 'ArrowDown') {
+                if (selectedIndex < options.length - 1) {
+                    selectedIndex++;
+                    while (options[selectedIndex].style.display === 'none') {
+                        selectedIndex++;
+                        if (selectedIndex >= options.length) {
+                            selectedIndex = options.length - 1;
+                            break;
+                        }
+                    }
+                    options[selectedIndex].selected = true;
+                    updateSubAccountInputField();
+                }
+            } else if (event.key === 'ArrowUp') {
+                if (selectedIndex > 0) {
+                    selectedIndex--;
+                    while (options[selectedIndex].style.display === 'none') {
+                        selectedIndex--;
+                        if (selectedIndex < 0) {
+                            selectedIndex = 0;
+                            break;
+                        }
+                    }
+                    options[selectedIndex].selected = true;
+                    updateSubAccountInputField();
+                }
+            } else if (event.key === 'Enter') {
+                updateSubAccountInputField();
+            }
+        }
+
+        // Function to reset the selection if input changes
+        function resetSubAccountSelection() {
+            selectedIndex = -1;
+            var select = document.getElementById('subAccountKeySelect');
+            select.selectedIndex = -1; // Deselect any selected option
+        }
+
+        // Function to update input field with the selected dropdown value
+        function updateSubAccountInputField() {
+            var select = document.getElementById('subAccountKeySelect');
+            var selectedOption = select.options[select.selectedIndex];
+
+            if (selectedOption) {
+                document.getElementById('searchSubAccountKey').value = selectedOption.textContent;
+            }
+        }
+
+        // Function to handle selection
+        function getSelectedValue() {
+            updateSubAccountInputField();
         }
     </script>
 @endsection

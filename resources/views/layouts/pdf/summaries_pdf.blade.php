@@ -1,24 +1,161 @@
-@extends('layouts.master')
+<!DOCTYPE html>
+<html>
 
-@section('result-total-summaries')
-    <div class="result-total-table-container">
-        @yield('result-total-table')
-    </div>
-@endsection
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Report</title>
 
-@section('result-total-table')
-    <div class="d-flex justify-content-between align-items-center  mt-4 mr-4 ml-4">
-        <a class="btn btn-danger" href="{{ route('total_card') }}">
-            <i class="fas fa-arrow-left"></i> ត្រឡប់ក្រោយ
-        </a>
-    </div>
-    <div class="border-wrapper mt-4 ml-4 mr-4">
+    {{-- <style>
+        @font-face {
+            font-family: khmer;
+            font-style: normal;
+            font-weight: 400;
+            src: url({{ asset('fonts/khmer.ttf') }}) format('true-type');
+        }
+
+        body {
+            font-family: 'Khmer OS', sans-serif;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .first-header,
+        .second-header {
+            text-align: center;
+            /* Ensures the text inside is centered */
+        }
+
+        .result-total-table-container {
+            padding: 16px;
+
+        }
+
+        .ministry-text {
+            text-align: left;
+            padding-left: 20px;
+            /* Add padding if necessary */
+        }
+
+
+        th,
+        td {
+            border: 1px solid black;
+            text-align: center;
+            padding: 5px;
+        }
+
+        h3,
+        h5 {
+            text-align: center;
+        }
+
+        .result-total-table-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            /* Centers rows horizontally */
+        }
+
+        .first-header,
+        .second-header {
+            text-align: center;
+            /* Centers text in these sections */
+            width: 100%;
+        }
+
+        .ministry-text {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            /* Aligns text to the left */
+            width: 100%;
+            padding-left: 20px;
+            /* Add padding to give some left space */
+        }
+
+        .ministry-text h3 {
+            margin: 0;
+            /* Optional: Adjust this if you want less/more space between lines */
+        }
+    </style> --}}
+    <style>
+        @font-face {
+            font-family: khmer;
+            font-style: normal;
+            font-weight: 400;
+            src: url({{ asset('fonts/khmer.ttf') }}) format('true-type');
+        }
+
+        body {
+            font-family: 'Khmer OS', sans-serif;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .result-total-table-container {
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            /* Centers rows horizontally */
+        }
+
+        .first-header,
+        .second-header {
+            text-align: center;
+            /* Centers text in these sections */
+            width: 100%;
+        }
+
+        .ministry-text {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            /* Aligns text to the left */
+            width: 100%;
+            padding-left: 20px;
+            /* Add padding to give some left space */
+        }
+
+        .ministry-text h3 {
+            margin: 0;
+            /* Optional: Adjust this if you want less/more space between lines */
+        }
+
+        th,
+        td {
+            border: 1px solid black;
+            text-align: center;
+            padding: 5px;
+        }
+    </style>
+
+    <style type="text/css">
+        .khmer {
+            font-family: 'Khmer', cursive;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="border-wrapper">
         <div class="result-total-table-container mt-4">
+
+
             <!-- Row 1: Centered -->
             <div class="first-header text-center">
                 <h2>ព្រះរាជាណាចក្រកម្ពុជា</h2>
                 <h3>ជាតិ សាសនា ព្រះមហាក្សត្រ</h3>
-                <h3>3</h3>
+                {{-- <h3>3</h3> --}}
             </div>
 
             <!-- Row 2: Flex aligned to the left -->
@@ -34,7 +171,9 @@
                 <h3>របាយការណ៍សង្ខេប</h3>
                 {{-- <h4>ប្រចាំខែមិថុនា ឆ្នាំ២០២៤</h4> --}}
             </div>
+
             <div class="table-container">
+
                 <table class="table-border mt-4 mb-4">
                     <thead class="header-border">
                         <tr>
@@ -271,11 +410,6 @@
                                 </td>
                             </tr>
                         @endforeach
-
-                        {{-- <tr class="total-row" style="background: coral; ">
-                            <td><strong>លម្អិតតាមកម្មវិធី</strong></td>
-
-                        </tr> --}}
 
                         @php
                             // Initialize variables for totals
@@ -922,89 +1056,11 @@
                     </tbody>
                 </table>
             </div>
-            {{--        Start action btn export and print        --}}
-            <div class="d-flex justify-content-end mt-3 mb-3">
-                <a href="{{ route('summaries.export', request()->query()) }}" class="btn btn-danger btn-width mr-2">
-                    <i class="fas fa-download"></i> Export
-                </a>
-                <a href="{{ route('summaries.exportPdf', request()->query()) }}" class="btn btn-primary btn-width">
-                    <i class="fas fa-print"></i> Print
-                </a>
-            </div>
+
 
         </div>
+
     </div>
-@endsection
+</body>
 
-@section('styles')
-    <style>
-        .border-wrapper {
-            border: 2px solid black;
-            padding: 10px;
-        }
-
-        .result-total-table-container {
-            padding: 16px;
-
-        }
-
-
-        .table-container {
-            width: 100%;
-        }
-
-        .total-row {
-            background-color: #f8f9fa;
-            border-top: 2px solid #dee2e6;
-        }
-
-        .btn-width {
-            width: 120px;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-
-        th,
-        td {
-            border: 1px solid black;
-            text-align: center;
-            padding: 5px;
-        }
-
-        h2 {
-            font-family: 'Khmer OS Muol Light', sans-serif;
-            font-size: 24px;
-        }
-
-        h3,
-        h4 {
-            font-family: 'Khmer OS Muol Light', sans-serif;
-            font-size: 25px;
-        }
-
-        th,
-        td {
-            border: 1px solid black;
-            text-align: center;
-            padding: 5px;
-            font-family: 'Khmer OS Siemreap', sans-serif;
-            font-size: 16px;
-        }
-
-        h5 {
-            font-family: 'Khmer OS Siemreap', sans-serif;
-            font-size: 25px;
-        }
-    </style>
-@endsection
-
-@section('scripts')
-    <script>
-        setInterval(function() {
-            window.location.reload();
-        }, 30000); // 30 seconds
-    </script>
-@endsection
+</html>

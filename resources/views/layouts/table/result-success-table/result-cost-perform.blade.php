@@ -32,7 +32,14 @@
                         @foreach ($totals['code'] as $codeId => $totalsByCode)
                             <tr>
                                 <td>ជំពូក: {{ $codeId }}</td>
-                                <td>{{ $totalsByCode['name'] ?? 'Unknown' }}</td>
+                                <td>
+                                    @if(isset($totalsByCode['name']))
+                                        {{ $totalsByCode['name'] }}
+                                    @else
+                                        {{ 'Unknown' }}
+                                    @endif
+                                </td>
+                                
                                 <td>{{ number_format($totalsByCode['fin_law'], 0, ' ', ' ') }}</td>
                                 <td>{{ number_format($totalsByCode['current_loan'], 0, ' ', ' ') }}</td>
                                 <td></td>
