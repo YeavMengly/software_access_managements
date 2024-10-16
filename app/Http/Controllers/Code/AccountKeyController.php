@@ -15,35 +15,32 @@ class AccountKeyController extends Controller
         $sortBy = $request->input('sort_by', 'account_key');
         $sortOrder = $request->input('sort_order', 'asc');
         $perPage = $request->input('per_page', 25);
-
+    
         $query = AccountKey::query();
-
+    
         if ($search) {
             $query->where('account_key', 'like', '%' . $search . '%')
-                ->orWhere('name_account_key', 'like', '%' . $search . '%')
-                ->orWhereHas('key', function ($q) use ($search) {
-                    $q->where('code', 'like', '%' . $search . '%');
-                });
+                  ->orWhere('name_account_key', 'like', '%' . $search . '%')
+                  ->orWhereHas('key', function ($q) use ($search) {
+                      $q->where('code', 'like', '%' . $search . '%');
+                  });
         }
-
-        if ($sortBy === 'key.code') {
-            $query->join('keys', 'account_keys.code_id', '=', 'keys.id')
-                ->orderBy('keys.code', $sortOrder)
-                ->select('account_keys.*');
+    
+        if ($sortBy === 'code') {
+            $query->join('keys', 'account_keys.code', '=', 'keys.code')
+                  ->orderBy('keys.code', $sortOrder)
+                  ->select('account_keys.*');
         } else {
             $query->orderBy($sortBy, $sortOrder);
         }
-
-        $accountKeys = $query->paginate($perPage); 
-
-        // Fetch sorted keys based on user's selection
+    
+        $accountKeys = $query->paginate($perPage);
+    
         $keys = Key::orderBy('code', $sortOrder)->get();
-
+    
         return view('layouts.admin.forms.accounts.account-index', compact('accountKeys', 'keys', 'sortBy', 'sortOrder'));
     }
-
-
-
+    
 
     public function create()
     {

@@ -73,6 +73,8 @@
                     @yield('result-general-pay')
                     @yield('result-administrative-plan')
                     @yield('result-total-summaries')
+                    @yield('result-total-apply')
+                 
 
                     @yield('content-mission')
                     @yield('content-table-mission-cambodia')

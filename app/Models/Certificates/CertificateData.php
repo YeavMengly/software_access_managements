@@ -43,6 +43,4 @@ class CertificateData extends Model
         return $this->belongsTo(Key::class, 'code');
     }
 
-    
-
 }

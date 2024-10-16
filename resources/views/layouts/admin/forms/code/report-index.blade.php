@@ -36,7 +36,7 @@
                         </div>
                     </div>
 
-                    <!-- Import Modal -->
+                    {{-- Import Modal --}}
                     <div class="modal fade" id="importModal" tabindex="-1" aria-labelledby="importModalLabel"
                         aria-hidden="true">
                         <div class="modal-dialog modal-dialog-centered">
@@ -83,16 +83,17 @@
                         </div>
                     </div>
 
+                    {{-- Field Search --}}
                     <form class="max-w-md mx-auto mt-4" method="GET" action="{{ url()->current() }}">
                         <div class="row">
-                            <div class="col-md-3">
+                            {{-- <div class="col-md-3">
                                 <input type="text" name="code_id" value="{{ request('code_id') }}"
                                     class="form-control mb-2" placeholder="លេខជំពូក">
                             </div>
                             <div class="col-md-3">
                                 <input type="text" name="account_key_id" value="{{ request('account_key_id') }}"
                                     class="form-control mb-2" placeholder="លេខគណនី">
-                            </div>
+                            </div> --}}
                             <div class="col-md-3">
                                 <input type="text" name="sub_account_key_id" value="{{ request('sub_account_key_id') }}"
                                     class="form-control mb-2" placeholder="លេខអនុគណនី">
@@ -101,10 +102,10 @@
                                 <input type="text" name="report_key" value="{{ request('report_key') }}"
                                     class="form-control mb-2" placeholder="លេខកូដកម្មវិធី">
                             </div>
-                            <div class="col-md-3">
+                            {{-- <div class="col-md-3">
                                 <input type="date" name="date" value="{{ request('date') }}"
                                     class="form-control mb-2" placeholder="Date (YYYY-MM-DD or YYYY-MM-DD - YYYY-MM-DD)">
-                            </div>
+                            </div> --}}
                             <div class="col-md-12">
                                 <div class="input-group my-3">
                                     <button type="submit" class="btn btn-primary mr-2"
@@ -153,152 +154,126 @@
                 </script>
             @endif
 
-            <div class="table-container mt-4">
-                <div class="d-flex justify-content-end mb-2">
-                    <!-- Dropdown for showing number of items per page -->
-                    <div style="width: 120px;">
-                        <select name="per_page" class="form-control" onchange="window.location.href=this.value;">
-                            <option value="{{ url()->current() }}?per_page=25"
-                                {{ request('per_page') == 25 ? 'selected' : '' }}>បង្ហាញ 25</option>
-                            <option value="{{ url()->current() }}?per_page=50"
-                                {{ request('per_page') == 50 ? 'selected' : '' }}>បង្ហាញ 50</option>
-                            <option value="{{ url()->current() }}?per_page=100"
-                                {{ request('per_page') == 100 ? 'selected' : '' }}>បង្ហាញ 100</option>
-                        </select>
-                    </div>
-                </div>
-
-                <table class="table table-striped table-hover">
-                    <thead>
-                        <tr>
-                            <th style="border: 1px solid black; font-size: 14px; max-width: 20px;">ល.រ</th>
-                            <th style="border: 1px solid black; font-size: 14px; max-width: 40px;">ល.ជំពូក</th>
-                            <th style="border: 1px solid black; font-size: 14px; max-width: 50px;">ល.គណនី</th>
-                            <th style="border: 1px solid black; font-size: 14px; max-width: 50px;">ល.អនុគណនី</th>
-                            <th style="border: 1px solid black; font-size: 14px; max-width: 60px;">ល.កូដកម្មវិធី</th>
-                            <th style="border: 1px solid black; font-size: 14px; max-width: 80px;">ចំណាត់ថ្នាក់</th>
-                            <th style="border: 1px solid black; font-size: 14px; max-width: 80px;">ច្បាប់ហិរញ្ញវត្ថុ</th>
-                            <th style="border: 1px solid black; font-size: 14px; max-width: 80px;">ឥណទានបច្ចុប្បន្ន</th>
-                            <th style="border: 1px solid black; font-size: 14px; max-width: 80px;">កើនផ្ទៃក្នុង</th>
-                            <th style="border: 1px solid black; font-size: 14px; max-width: 80px;">មិនបានគ្រោងទុក</th>
-                            <th style="border: 1px solid black; font-size: 14px; max-width: 80px;">បំពេញបន្ថែម</th>
-                            <th style="border: 1px solid black; font-size: 14px; max-width: 80px;">ថយ</th>
-                            <th style="border: 1px solid black; width: 200px; font-size: 12px;">សកម្មភាព</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @forelse ($reports as $report)
-                            <tr>
-                                <td style="border: 1px solid black; max-width: 20px; text-align: center">
-                                    {{ $loop->iteration }}
-                                </td>
-                                <td style="border: 1px solid black; max-width: 80px; text-align: center">
-                                    {{ $report->subAccountKey->accountKey->key->code }}</td>
-                                <td style="border: 1px solid black; max-width: 80px; text-align: center">
-                                    {{ $report->subAccountKey->accountKey->account_key }}</td>
-                                <td style="border: 1px solid black; max-width: 80px; text-align: center">
-                                    {{ $report->subAccountKey->sub_account_key }}</td>
-                                <td style="border: 1px solid black; max-width: 80px; text-align: center">
-                                    {{ $report->report_key }}</td>
-                                <td style="border: 1px solid black; max-width: 220px;">{{ $report->name_report_key }}</td>
-                                <td style="border: 1px solid black; max-width: 80px; text-align: center">
-                                    {{ number_format($report->fin_law, 0, ' ', ' ') }}</td>
-                                <td style="border: 1px solid black; max-width: 80px; text-align: center">
-                                    {{ number_format($report->current_loan, 0, ' ', ' ') }}</td>
-                                <td style="border: 1px solid black; max-width: 80px; text-align: center">
-                                    {{ number_format($report->internal_increase, 0, ' ', ' ') }}</td>
-                                <td style="border: 1px solid black; max-width: 80px; text-align: center">
-                                    {{ number_format($report->unexpected_increase, 0, ' ', ' ') }}</td>
-                                <td style="border: 1px solid black; max-width: 80px; text-align: center">
-                                    {{ number_format($report->additional_increase) }}</td>
-                                <td style="border: 1px solid black; max-width: 80px; text-align: center">
-                                    {{ number_format($report->decrease, 0, ' ', ' ') }}</td>
-
-                                <td style="border: 1px solid black; text-align: center; justify-content: center">
-                                    <form id="delete-form-{{ $report->id }}"
-                                        action="{{ route('codes.destroy', $report->id) }}" method="POST"
-                                        style="display: none;">
-                                        @csrf
-                                        @method('DELETE')
-                                    </form>
-                                    <a class="btn btn-primary" href="{{ route('codes.edit', $report->id) }}">
-                                        <i class="fas fa-edit" title="Edit"></i>
-                                    </a>
-                                    <button type="button" class="btn btn-danger"
-                                        onclick="confirmDelete({{ $report->id }})">
-                                        <i class="fas fa-trash-alt" title="Delete"></i>
-                                    </button>
-                                </td>
-                            </tr>
-                        @empty
-                            <tr>
-                                <td colspan="13" style="text-align: center;">No data available</td>
-                            </tr>
-                        @endforelse
-
-                    </tbody>
-                </table>
-                <div class="d-flex justify-content-between align-items-center mt-4">
-                    <div>
-                        <!-- Custom Pagination -->
-                        <nav aria-label="Page navigation example">
-                            <ul class="pagination">
-                                <li class="page-item{{ $reports->onFirstPage() ? ' disabled' : '' }}">
-                                    <a class="page-link"
-                                        href="{{ $reports->previousPageUrl() }}&per_page={{ request('per_page') }}"
-                                        aria-label="Previous">
-                                        <span aria-hidden="true">&laquo;</span>
-                                        <span class="sr-only">Previous</span>
-                                    </a>
-                                </li>
-                                @for ($i = 1; $i <= $reports->lastPage(); $i++)
-                                    <li class="page-item{{ $reports->currentPage() == $i ? ' active' : '' }}">
-                                        <a class="page-link"
-                                            href="{{ $reports->url($i) }}&per_page={{ request('per_page') }}">{{ $i }}</a>
-                                    </li>
-                                @endfor
-                                <li class="page-item{{ !$reports->hasMorePages() ? ' disabled' : '' }}">
-                                    <a class="page-link"
-                                        href="{{ $reports->nextPageUrl() }}&per_page={{ request('per_page') }}"
-                                        aria-label="Next">
-                                        <span aria-hidden="true">&raquo;</span>
-                                        <span class="sr-only">Next</span>
-                                    </a>
-                                </li>
-                            </ul>
-                        </nav>
-                    </div>
-                    <div>
-                        <p class="text-muted">បង្ហាញ {{ $reports->firstItem() }} ដល់ {{ $reports->lastItem() }} នៃ
-                            {{ $reports->total() }} លទ្ធផល</p>
-                    </div>
+            {{-- Dropdown for showing number of items per page --}}
+            <div class="d-flex justify-content-end mb-2">
+                <div style="width: 120px;">
+                    <select name="per_page" class="form-control" onchange="window.location.href=this.value;">
+                        <option value="{{ url()->current() }}?per_page=25"
+                            {{ request('per_page') == 25 ? 'selected' : '' }}>បង្ហាញ 25</option>
+                        <option value="{{ url()->current() }}?per_page=50"
+                            {{ request('per_page') == 50 ? 'selected' : '' }}>បង្ហាញ 50</option>
+                        <option value="{{ url()->current() }}?per_page=100"
+                            {{ request('per_page') == 100 ? 'selected' : '' }}>បង្ហាញ 100</option>
+                    </select>
                 </div>
             </div>
 
+            {{-- Table --}}
+            <table class="table table-striped table-hover">
+                <thead>
+                    <tr>
+                        <th style="border: 1px solid black; font-size: 14px; max-width: 50px;">លេខអនុគណនី</th>
+                        <th style="border: 1px solid black; font-size: 14px; max-width: 60px;">លេខកូដកម្មវិធី</th>
+                        <th style="border: 1px solid black; font-size: 14px; max-width: 80px;">ចំណាត់ថ្នាក់</th>
+                        <th style="border: 1px solid black; font-size: 14px; max-width: 80px;">ច្បាប់ហិរញ្ញវត្ថុ</th>
+                        <th style="border: 1px solid black; font-size: 14px; max-width: 80px;">ឥណទានបច្ចុប្បន្ន</th>
+                        <th style="border: 1px solid black; font-size: 14px; max-width: 80px;">កើនផ្ទៃក្នុង</th>
+                        <th style="border: 1px solid black; font-size: 14px; max-width: 80px;">មិនបានគ្រោងទុក</th>
+                        <th style="border: 1px solid black; font-size: 14px; max-width: 80px;">បំពេញបន្ថែម</th>
+                        <th style="border: 1px solid black; font-size: 14px; max-width: 80px;">ថយ</th>
+                        <th style="border: 1px solid black; font-size: 14px; max-width: 80px;">សមតុល្យដើមគ្រា</th>
+                        <th style="border: 1px solid black; font-size: 14px; max-width: 80px;">សកម្មភាព</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @forelse ($reports as $report)
+                        <tr>
+                            <td style="border: 1px solid black; max-width: 80px; text-align: center">
+                                {{ $report->subAccountKey->sub_account_key }}</td>
+                            <td style="border: 1px solid black; max-width: 80px; text-align: center">
+                                {{ $report->report_key }}</td>
+                            <td style="border: 1px solid black; max-width: 220px; text-align: start;">{{ $report->name_report_key }}</td>
+                            <td style="border: 1px solid black; max-width: 80px; text-align: center">
+                                {{ number_format($report->fin_law, 0, ' ', ' ') }}</td>
+                            <td style="border: 1px solid black; max-width: 80px; text-align: center">
+                                {{ number_format($report->current_loan, 0, ' ', ' ') }}</td>
+                            <td style="border: 1px solid black; max-width: 80px; text-align: center">
+                                {{ number_format($report->internal_increase, 0, ' ', ' ') }}</td>
+                            <td style="border: 1px solid black; max-width: 80px; text-align: center">
+                                {{ number_format($report->unexpected_increase, 0, ' ', ' ') }}</td>
+                            <td style="border: 1px solid black; max-width: 80px; text-align: center">
+                                {{ number_format($report->additional_increase) }}</td>
+                            <td style="border: 1px solid black; max-width: 80px; text-align: center">
+                                {{ number_format($report->decrease, 0, ' ', ' ') }}</td>
+                                <td style="border: 1px solid black; max-width: 80px; text-align: center">
+                                    {{ number_format($report->early_balance, 0, ' ', ' ') }}</td>
 
+                            <td style="border: 1px solid black; text-align: center; justify-content: center">
+                                <form id="delete-form-{{ $report->id }}"
+                                    action="{{ route('codes.destroy', $report->id) }}" method="POST"
+                                    style="display: none;">
+                                    @csrf
+                                    @method('DELETE')
+                                </form>
+                                <a class="btn btn-primary" href="{{ route('codes.edit', $report->id) }}">
+                                    <i class="fas fa-edit" title="Edit"></i>
+                                </a>
+                                <button type="button" class="btn btn-danger"
+                                    onclick="confirmDelete({{ $report->id }})">
+                                    <i class="fas fa-trash-alt" title="Delete"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    @empty
+                        <tr>
+                            <td colspan="13" style="text-align: center;">គ្មានទិន្នន័យ</td>
+                        </tr>
+                    @endforelse
+
+                </tbody>
+            </table>
+            {{-- Custom Pagination --}}
+            <div class="d-flex justify-content-between align-items-center mt-4">
+                <div>
+                    <nav aria-label="Page navigation example">
+                        <ul class="pagination">
+                            <li class="page-item{{ $reports->onFirstPage() ? ' disabled' : '' }}">
+                                <a class="page-link"
+                                    href="{{ $reports->previousPageUrl() }}&per_page={{ request('per_page') }}"
+                                    aria-label="Previous">
+                                    <span aria-hidden="true">&laquo;</span>
+                                    <span class="sr-only">Previous</span>
+                                </a>
+                            </li>
+                            @for ($i = 1; $i <= $reports->lastPage(); $i++)
+                                <li class="page-item{{ $reports->currentPage() == $i ? ' active' : '' }}">
+                                    <a class="page-link"
+                                        href="{{ $reports->url($i) }}&per_page={{ request('per_page') }}">{{ $i }}</a>
+                                </li>
+                            @endfor
+                            <li class="page-item{{ !$reports->hasMorePages() ? ' disabled' : '' }}">
+                                <a class="page-link"
+                                    href="{{ $reports->nextPageUrl() }}&per_page={{ request('per_page') }}"
+                                    aria-label="Next">
+                                    <span aria-hidden="true">&raquo;</span>
+                                    <span class="sr-only">Next</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+                <div>
+                    <p class="text-muted">បង្ហាញ {{ $reports->firstItem() }} ដល់ {{ $reports->lastItem() }} នៃ
+                        {{ $reports->total() }} លទ្ធផល</p>
+                </div>
+            </div>
         </div>
     </div>
 @endsection
 
-
 @section('styles')
-    <style>
-        .border-wrapper {
-            /* border: 2px solid black; */
-            padding: 32px;
-        }
+    {{-- Custom style here --}}
 
-        .description {
-            height: 220px;
-            overflow-y: auto;
-        }
-
-        .table-container {
-            width: 100%;
-        }
-    </style>
-
-    <!-- Add this CSS to style the modal and file input -->
     <style>
         .modal-content {
             border-radius: 10px;
@@ -311,6 +286,19 @@
         .modal-title {
             font-size: 1.25rem;
             font-weight: bold;
+        }
+
+        .border-wrapper {
+            padding: 32px;
+        }
+
+        .description {
+            height: 220px;
+            overflow-y: auto;
+        }
+
+        .table-container {
+            width: 100%;
         }
 
         .btn-link {
@@ -386,13 +374,13 @@
 @endsection
 
 @section('scripts')
+    {{-- Include SweetAlert2 --}}
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/js/all.min.js"
         integrity="sha512-nh8KkfWJZK0C0H8z8Z0z8W3R7ZFl8k5Hq9O1O7s9O0P8+Hybz5VQ1cDUNUr+M+4H0ttD5F5lsS4uRUmxT1b4g=="
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
 
-    <!-- Add this JavaScript to handle form submission and show loading spinner -->
     <script>
         document.getElementById('excelFile').addEventListener('change', function() {
             const fileInput = document.getElementById('excelFile');
