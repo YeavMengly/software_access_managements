@@ -101,6 +101,11 @@
                     @yield('form-report-upload')
                     @yield('form-report-edit')
 
+                    @yield('content-loans')
+                    @yield('form-content-loans-upload')
+                    @yield('form-content-loans-edit')
+               
+
                     @yield('form-form-mission')
 
                     <div class="container-fluid">

@@ -4,6 +4,7 @@ namespace App\Models\Certificates;
 
 use App\Models\Code\AccountKey;
 use App\Models\Code\Key;
+use App\Models\Code\Loans;
 use App\Models\Code\Report;
 use App\Models\Code\SubAccountKey;
 use Illuminate\Database\Eloquent\Model;
@@ -41,6 +42,10 @@ class CertificateData extends Model
 
     public function key(){
         return $this->belongsTo(Key::class, 'code');
+    }
+
+    public function loans(){
+        return $this->belongsTo(Loans::class, 'report_key');
     }
 
 }

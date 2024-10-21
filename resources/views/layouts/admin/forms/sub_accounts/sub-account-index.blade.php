@@ -10,9 +10,9 @@
                             <i class="fas fa-arrow-left"></i> ត្រឡប់ក្រោយ
                         </a>
                         <h2 class="mx-auto" style="font-weight: 700;">តារាងលេខកូដអនុគណនី</h2>
-                        {{-- <a class="btn btn-success" href="{{ route('sub-account.create') }}">
+                        <a class="btn btn-success" href="{{ route('sub-account.create') }}">
                             បញ្ចូលទិន្នន័យ <i class="fas fa-plus" style="margin-left: 8px;"></i>
-                        </a> --}}
+                        </a>
                     </div>
 
                     {{-- Field Search --}}

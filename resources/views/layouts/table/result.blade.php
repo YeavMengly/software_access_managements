@@ -102,7 +102,75 @@
 
                     <div class="second-header text-center">
                         <h3>របាយការណ៍ធានាចំណាយថវិកាក្រសួងការងារ និងបណ្តុះបណ្តាលវិជ្ជាជីវៈ</h3>
-                        <h4>ប្រចាំខែមិថុនា ឆ្នាំ២០២៤</h4>
+                        <?php
+                        function getKhmerMonth($month)
+                        {
+                            $months = [
+                                1 => 'មករា',
+                                2 => 'កុម្ភៈ',
+                                3 => 'មិនាឆ្នាំ',
+                                4 => 'មេសា',
+                                5 => 'ឧសភា',
+                                6 => 'មិថុនា',
+                                7 => 'កក្កដា',
+                                8 => 'សីហា',
+                                9 => 'កញ្ញា',
+                                10 => 'តុលា',
+                                11 => 'វិច្ឆិកា',
+                                12 => 'ធ្នូ',
+                            ];
+                        
+                            return $months[$month] ?? '';
+                        }
+                        
+                        function convertToKhmerNumber($number)
+                        {
+                            $khmerNumbers = [
+                                '0' => '០',
+                                '1' => '១',
+                                '2' => '២',
+                                '3' => '៣',
+                                '4' => '៤',
+                                '5' => '៥',
+                                '6' => '៦',
+                                '7' => '៧',
+                                '8' => '៨',
+                                '9' => '៩',
+                            ];
+                        
+                            return strtr($number, $khmerNumbers);
+                        }
+                        ?>
+
+                        <h4>
+                            ប្រចាំ
+                            @if (request('start_date') && request('end_date'))
+                                <?php
+                                // Use Carbon to parse the dates
+                                $startDate = \Carbon\Carbon::parse(request('start_date'));
+                                $endDate = \Carbon\Carbon::parse(request('end_date'));
+                                ?>
+                                <span>
+                                    {{ convertToKhmerNumber($startDate->day) }} {{ getKhmerMonth($startDate->month) }}
+                                    {{ convertToKhmerNumber($startDate->year) }}
+                                    ដល់
+                                    {{ convertToKhmerNumber($endDate->day) }} {{ getKhmerMonth($endDate->month) }}
+                                    {{ convertToKhmerNumber($endDate->year) }}
+                                </span>
+                            @else
+                                <?php
+                                // Get current month and year
+                                $currentMonth = date('n'); // Numeric representation of current month (1-12)
+                                $currentYear = date('Y'); // Current year
+                                ?>
+                                <span>ខែ {{ getKhmerMonth($currentMonth) }}
+                                    ឆ្នាំ{{ convertToKhmerNumber($currentYear) }}</span> {{-- Default text for current month dynamically --}}
+                            @endif
+                        </h4>
+
+
+
+
                     </div>
                     <div class="table-container">
 

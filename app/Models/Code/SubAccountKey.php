@@ -41,4 +41,10 @@ class SubAccountKey extends Model
     {
         return $this->hasMany(CertificateData::class, 'sub_account_key');
     }
+
+    public function loans(){
+        return $this->hasMany(Loans::class, 'sub_account_key');
+    }
+
+
 }
