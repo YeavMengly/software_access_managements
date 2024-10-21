@@ -16,10 +16,12 @@ class ResultSummariesController extends Controller
     public function index()
     {
         // Fetch reports (Adjust the query as needed)
-        $reports = Report::all();
+        $reports = Report::getReportSql()->get();
 
+        // dd($reports);
         // Calculate the totals
         $totals = $this->calculateTotals($reports);
+
 
         // Store the totals into the database
         $this->storeSummaryReport($totals);
@@ -82,10 +84,8 @@ class ResultSummariesController extends Controller
     }
 
 
-
     private function calculateTotals($reports)
     {
-        // Initialize the totals array with all fields set to 0
         $totals = [
             'fin_law' => 0,
             'current_loan' => 0,
@@ -106,80 +106,60 @@ class ResultSummariesController extends Controller
                 'total_sum_refer' => 0,
                 'total_remain' => 0,
             ],
+            'report_key_seven' => [ // New section to store column sums
+
+            ],
         ];
 
-        foreach ($reports as $report) {
-            $totals['fin_law'] += $report->fin_law;
-            $totals['current_loan'] += $report->current_loan;
-            $totals['decrease'] += $report->decrease;
-            $totals['new_credit_status'] += $report->new_credit_status;
-            $totals['early_balance'] += $report->early_balance;
-            $totals['apply'] += $report->apply;
-
-            // Sum increase
-            $totalIncrease = $report->internal_increase + $report->unexpected_increase + $report->additional_increase;
-            $totals['total_increase'] += $totalIncrease;
-        }
-
-        // Group reports by code
-        $groupedByCode = $reports->groupBy(function ($report) {
-            return $report->subAccountKey->accountKey->key->code ?? 'Unknown';
-        });
-
-        foreach ($groupedByCode as $codeId => $reportsByCode) {
-            $totals['code'][$codeId] = $this->calculateSumFields($reportsByCode);
-
+        foreach ($reports as $index => $report) {
+            $totals['code']["$report->code"] = $this->calculateSumFields($report);
+            $totals['fin_law'] += $report->fin_law ?? 0;
+            $totals['current_loan'] += $report->current_loan ?? 0;
+            $totals['decrease'] += $report->decrease ?? 0;
+            $totals['new_credit_status'] += $report->new_credit_status ?? 0;
+            $totals['early_balance'] += $report->early_balance ?? 0;
+            $totals['apply'] += $report->apply ?? 0;
+            $report1 = substr($report->report_key, 2, 1);
             // Update the total sums
-            $totals['total_sums']['fin_law'] += $totals['code'][$codeId]['fin_law'];
-            $totals['total_sums']['current_loan'] += $totals['code'][$codeId]['current_loan'];
-            $totals['total_sums']['decrease'] += $totals['code'][$codeId]['decrease'];
-            $totals['total_sums']['new_credit_status'] += $totals['code'][$codeId]['new_credit_status'];
-            $totals['total_sums']['early_balance'] += $totals['code'][$codeId]['early_balance'];
-            $totals['total_sums']['apply'] += $totals['code'][$codeId]['apply'];
-            $totals['total_sums']['total_increase'] += $totals['code'][$codeId]['total_increase'];
-            $totals['total_sums']['total_sum_refer'] += $totals['code'][$codeId]['early_balance'] + $totals['code'][$codeId]['apply'];
-            $totals['total_sums']['total_remain'] += $totals['code'][$codeId]['new_credit_status'] - ($totals['code'][$codeId]['early_balance'] + $totals['code'][$codeId]['apply']);
-        }
+            $totals['total_sums']['fin_law'] += ($totals['code']["$report->code"]['fin_law'] ?? 0);
+            $totals['total_sums']['current_loan'] += ($totals['code']["$report->code"]['current_loan'] ?? 0);
+            $totals['total_sums']['decrease'] += ($totals['code']["$report->code"]['decrease'] ?? 0);
+            $totals['total_sums']['new_credit_status'] += ($totals['code']["$report->code"]['new_credit_status'] ?? 0);
+            $totals['total_sums']['early_balance'] += ($totals['code']["$report->code"]['early_balance'] ?? 0);
+            $totals['total_sums']['apply'] += ($totals['code']["$report->code"]['apply'] ?? 0);
+            $totals['total_sums']['total_increase'] += ($totals['code']["$report->code"]['total_increase'] ?? 0);
+            $totals['total_sums']['total_sum_refer'] += ($totals['code']["$report->code"]['early_balance'] ?? 0) + ($totals['code']["$report->code"]['apply'] ?? 0);
+            $totals['total_sums']['total_remain'] += ($totals['code']["$report->code"]['new_credit_status'] ?? 0) - (($totals['code']["$report->code"]['early_balance'] ?? 0) + ($totals['code']["$report->code"]['apply'] ?? 0));
 
-        // Group reports by the first three digits of report_key
-        $groupedByReportKeyThreePrefix = $reports->groupBy(function ($report) {
-            return substr($report->report_key, 0, 3); // Extract first 3 digits of report_key
-        });
-
-        // Calculate totals for the three-digit grouping
-        foreach ($groupedByReportKeyThreePrefix as $prefix => $reportsByPrefix) {
-            // Initialize group totals for the prefix
-            $totals['report_key'][$prefix] = $this->calculateSumFields($reportsByPrefix);
-
-            // Call this function for store 
-            $this->updateReportKeyTotal($prefix, $totals);
-        }
-
-        $totals['report_key'] = collect($totals['report_key'])->sortKeys();
-
-        $groupedByReportKeySevenPrefix = $reports->groupBy(function ($report) {
-            return substr($report->report_key, 0, 7); // Extract first 7 digits of report_key
-        });
-
-        // Calculate totals for the seven-digit grouping
-        foreach ($groupedByReportKeySevenPrefix as $prefix => $reportsByPrefix) {
-
-            // Initialize group totals for the prefix
-            $totals['report_key_seven'][$prefix] = $this->calculateSumFields($reportsByPrefix);
-
+            $totals['report_key']["$report1"] = [
+                'fin_law' => $totals['report_key']["$report1"]['fin_law'] ?? 0,
+                'current_loan' => $totals['report_key']["$report1"]['current_loan'] ?? 0,
+                'decrease' => $totals['report_key']["$report1"]['decrease'] ?? 0,
+                'new_credit_status' => $totals['report_key']["$report1"]['new_credit_status'] ?? 0,
+                'early_balance' => $totals['report_key']["$report1"]['early_balance'] ?? 0,
+                'apply' => $totals['report_key']["$report1"]['apply'] ?? 0,
+                'total_increase' => $totals['report_key']["$report1"]['total_increase'] ?? 0,
+                'total_sum_refer' => $totals['report_key']["$report1"]['total_sum_refer'] ?? 0,
+                'total_remain' => $totals['report_key']["$report1"]['total_remain'] ?? 0,
+            ];
+            
+            $totals['report_key']["$report1"]['report_key_seven']["$report->report_key"] = $this->calculateSumFields($report);
+            
             // Update the total sums using the seven-digit prefix
-            $totals['total_sums']['fin_law'] += $totals['report_key_seven'][$prefix]['fin_law'];
-            $totals['total_sums']['current_loan'] += $totals['report_key_seven'][$prefix]['current_loan'];
-            $totals['total_sums']['decrease'] += $totals['report_key_seven'][$prefix]['decrease'];
-            $totals['total_sums']['new_credit_status'] += $totals['report_key_seven'][$prefix]['new_credit_status'];
-            $totals['total_sums']['early_balance'] += $totals['report_key_seven'][$prefix]['early_balance'];
-            $totals['total_sums']['apply'] += $totals['report_key_seven'][$prefix]['apply'];
-            $totals['total_sums']['total_increase'] += $totals['report_key_seven'][$prefix]['total_increase'];
-            $totals['total_sums']['total_sum_refer'] += $totals['report_key_seven'][$prefix]['early_balance'] + $totals['report_key_seven'][$prefix]['apply'];
-            $totals['total_sums']['total_remain'] += $totals['report_key_seven'][$prefix]['new_credit_status'] - ($totals['report_key_seven'][$prefix]['early_balance'] + $totals['report_key_seven'][$prefix]['apply']);
+            $totals['report_key']["$report1"]['fin_law'] += $totals['report_key']["$report1"]['report_key_seven']["$report->report_key"]['fin_law'];
+            $totals['report_key']["$report1"]['current_loan'] += $totals['report_key']["$report1"]['report_key_seven']["$report->report_key"]['current_loan'];
+            $totals['report_key']["$report1"]['decrease'] += $totals['report_key']["$report1"]['report_key_seven']["$report->report_key"]['decrease'];
+            $totals['report_key']["$report1"]['new_credit_status'] += $totals['report_key']["$report1"]['report_key_seven']["$report->report_key"]['new_credit_status'];
+            $totals['report_key']["$report1"]['early_balance'] += $totals['report_key']["$report1"]['report_key_seven']["$report->report_key"]['early_balance'];
+            $totals['report_key']["$report1"]['apply'] += $totals['report_key']["$report1"]['report_key_seven']["$report->report_key"]['apply'];
+            $totals['report_key']["$report1"]['total_increase'] += $totals['report_key']["$report1"]['report_key_seven']["$report->report_key"]['total_increase'];
+            
+            $totals['report_key']["$report1"]['total_sum_refer'] += $totals['report_key']["$report1"]['report_key_seven']["$report->report_key"]['early_balance'] + $totals['report_key']["$report1"]['report_key_seven']["$report->report_key"]['apply'];
+            
+            $totals['report_key']["$report1"]['total_remain'] += $totals['report_key']["$report1"]['report_key_seven']["$report->report_key"]['new_credit_status']
+                - ($totals['report_key']["$report1"]['report_key_seven']["$report->report_key"]['early_balance'] + $totals['report_key']["$report1"]['report_key_seven']["$report->report_key"]['apply']);
+            
         }
-
-        $totals['report_key_seven'] = collect($totals['report_key_seven'])->sortKeys();
 
         return $totals;
     }
@@ -187,13 +167,13 @@ class ResultSummariesController extends Controller
     private function calculateSumFields($reports)
     {
         return [
-            'fin_law' => $reports->sum('fin_law'),
-            'current_loan' => $reports->sum('current_loan'),
-            'decrease' => $reports->sum('decrease'),
-            'new_credit_status' => $reports->sum('new_credit_status'),
-            'early_balance' => $reports->sum('early_balance'),
-            'apply' => $reports->sum('apply'),
-            'total_increase' => $reports->sum('total_increase')
+            'fin_law' => ($reports->fin_law ?? 0),
+            'current_loan' => ($reports->current_loan ?? 0),
+            'decrease' => ($reports->decrease ?? 0),
+            'new_credit_status' => ($reports->new_credit_status ?? 0),
+            'early_balance' => ($reports->early_balance ?? 0),
+            'apply' => ($reports->apply ?? 0),
+            'total_increase' => ($reports->total_increase ?? 0)
         ];
     }
 
@@ -201,10 +181,10 @@ class ResultSummariesController extends Controller
     {
         try {
             DB::transaction(function () use ($totals) {
-                foreach ($totals['code'] as $codeId => $data) {
+                foreach ($totals['code'] as $code => $data) {
                     try {
                         SummaryReport::updateOrCreate(
-                            ['program' => $codeId],
+                            ['program' => $code->code],
                             [
                                 'fin_law' => $data['fin_law'],
                                 'current_loan' => $data['current_loan'],
@@ -222,48 +202,12 @@ class ResultSummariesController extends Controller
                             ]
                         );
                     } catch (\Exception $e) {
-                        Log::error("Error storing summary for code: {$codeId}, Error: " . $e->getMessage());
+                        Log::error("Error storing summary for code: {$code->code}, Error: " . $e->getMessage());
                     }
                 }
             });
         } catch (\Exception $e) {
             Log::error('Transaction failed: ' . $e->getMessage());
-        }
-    }
-
-
-    private function calculatePercentage($part, $total)
-    {
-        return $total > 0 ? ($part / $total) * 100 : 0;
-    }
-
-    private function updateReportKeyTotal($prefix, $totals)
-    {
-        try {
-            // Attempt to update or create the ReportKeyTotal entry
-            ReportKeyTotal::updateOrCreate(
-                ['report_key_prefix' => $prefix], // Unique prefix
-                [
-                    'fin_law' => $totals['report_key'][$prefix]['fin_law'],
-                    'current_loan' => $totals['report_key'][$prefix]['current_loan'],
-                    'decrease' => $totals['report_key'][$prefix]['decrease'],
-                    'new_credit_status' => $totals['report_key'][$prefix]['new_credit_status'],
-                    'early_balance' => $totals['report_key'][$prefix]['early_balance'],
-                    'apply' => $totals['report_key'][$prefix]['apply'],
-                    'total_increase' => $totals['report_key'][$prefix]['total_increase'],
-                    'total_sum_refer' => $totals['report_key'][$prefix]['early_balance'] + $totals['report_key'][$prefix]['apply'],
-                    'total_remain' => $totals['report_key'][$prefix]['new_credit_status'] - ($totals['report_key'][$prefix]['early_balance'] + $totals['report_key'][$prefix]['apply']),
-                ]
-            );
-        } catch (\Exception $e) {
-            // Handle the exception and return a suitable response or log the error
-            Log::error('Failed to update ReportKeyTotal for prefix: ' . $prefix, ['error' => $e->getMessage()]);
-
-            // Optionally, you can throw an HTTP exception or return a response
-            return response()->json([
-                'message' => 'Failed to update report key total.',
-                'error' => $e->getMessage()
-            ], 500);
         }
     }
 }

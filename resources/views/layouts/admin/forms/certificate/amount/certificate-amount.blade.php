@@ -51,42 +51,20 @@
                                     លេខសម្គាល់កម្មវិធី
                                 </a>
                             </th>
-                            <th style="border: 1px solid black; font-size: 14px;">ឈ្មោះសលាកបត្រ</th>
+
+                            {{-- <th style="border: 1px solid black; font-size: 14px;">ឈ្មោះសលាកបត្រ</th> --}}
                             <th style="border: 1px solid black; font-size: 14px;">ចំនួនទឹកប្រាក់</th>
                         </tr>
                     </thead>
                     <tbody>
-                        {{-- @foreach ($certificatesData as $certificateData)
-                            <tr>
-                                <td style="border: 1px solid black; text-align: center;">{{ $loop->iteration }}</td>
-                                <td style="border: 1px solid black; text-align: center;">
-                                    {{ $certificateData->report && $certificateData->report->subAccountKey ? $certificateData->report->subAccountKey->accountKey->key->code : 'N/A' }}
-                                    >
-                                    {{ $certificateData->report && $certificateData->report->subAccountKey ? $certificateData->report->subAccountKey->accountKey->account_key : 'N/A' }}
-                                    >
-                                    {{ $certificateData->report && $certificateData->report->subAccountKey ? $certificateData->report->subAccountKey->sub_account_key : 'N/A' }}
-                                    >
-                                    {{ $certificateData->report ? $certificateData->report->report_key : 'N/A' }}
-                                </td>
-                                <td style="border: 1px solid black; text-align: center;">
-                                    {{ $certificateData->certificate->name_certificate ?? 'N/A' }}
-                                </td>
-                                <td style="border: 1px solid black; text-align: center;">
-                                    {{ number_format($certificateData->value_certificate, 0, ' ', ' ') }}
-                                </td>
-                            </tr>
-                        @endforeach --}}
                         @foreach ($totals['code'] as $codeId => $codeTotals)
                             <tr>
                                 <td colspan="1" style="border: 1px solid black; text-align: center;">
-                                    {{ $codeId }} </td>
-                                <td colspan="1" style="border: 1px solid black; text-align: center;"></td>
-                                <td colspan="1" style="border: 1px solid black; text-align: center;"></td>
-                                <td colspan="1" style="border: 1px solid black; text-align: right;">
-                                <td style="border: 1px solid black; text-align: center;">
-                                    {{ $codeTotals['name_certificate'] ?? 'N/A' }}
-                                    <!-- Display the name_certificate here -->
+                                    {{ $codeId }}
                                 </td>
+                                <td colspan="1" style="border: 1px solid black; text-align: center;"></td>
+                                <td colspan="1" style="border: 1px solid black; text-align: center;"></td>
+                                <td colspan="1" style="border: 1px solid black; text-align: right;"></td>
                                 <td style="border: 1px solid black; text-align: center;">
                                     {{ number_format($codeTotals['value_certificate'], 0, ' ', ' ') }}
                                 </td>
@@ -96,13 +74,10 @@
                                 <tr>
                                     <td colspan="1" style="border: 1px solid black; text-align: center;"></td>
                                     <td colspan="1" style="border: 1px solid black; text-align: center;">
-                                        {{ $accountKeyId }}:</td>
-                                    <td colspan="1" style="border: 1px solid black; text-align: center;"></td>
-                                    <td colspan="1" style="border: 1px solid black; text-align: center;"></td>
-                                    <td style="border: 1px solid black; text-align: center;">
-                                        {{ $accountKeyTotals['name_certificate'] ?? 'N/A' }}
-                                        <!-- Display the name_certificate here -->
+                                        {{ $accountKeyId }}:
                                     </td>
+                                    <td colspan="1" style="border: 1px solid black; text-align: center;"></td>
+                                    <td colspan="1" style="border: 1px solid black; text-align: center;"></td>
                                     <td style="border: 1px solid black; text-align: center;">
                                         {{ number_format($accountKeyTotals['value_certificate'], 0, ' ', ' ') }}
                                     </td>
@@ -110,16 +85,12 @@
 
                                 @foreach ($totals['subAccountKey'][$codeId][$accountKeyId] as $subAccountKeyId => $subAccountKeyTotals)
                                     <tr>
-                                        <td colspan="1" style="border: 1px solid black; text-align: center;"> </td>
-                                        <td colspan="1" style="border: 1px solid black; text-align: center;"> </td>
+                                        <td colspan="1" style="border: 1px solid black; text-align: center;"></td>
+                                        <td colspan="1" style="border: 1px solid black; text-align: center;"></td>
                                         <td colspan="1" style="border: 1px solid black; text-align: center;">
-                                            {{ $subAccountKeyId }}</td>
-
-                                        <td colspan="1" style="border: 1px solid black; text-align: right;"> </td>
-                                        <td style="border: 1px solid black; text-align: center;">
-                                            {{ $subAccountKeyTotals['name_certificate'] ?? 'N/A' }}
-                                            <!-- Display the name_certificate here -->
+                                            {{ $subAccountKeyId }}
                                         </td>
+                                        <td colspan="1" style="border: 1px solid black; text-align: right;"></td>
                                         <td style="border: 1px solid black; text-align: center;">
                                             {{ number_format($subAccountKeyTotals['value_certificate'], 0, ' ', ' ') }}
                                         </td>
@@ -127,16 +98,12 @@
 
                                     @foreach ($totals['reportKey'][$codeId][$accountKeyId][$subAccountKeyId] as $reportKeyId => $reportKeyTotals)
                                         <tr>
+                                            <td colspan="1" style="border: 1px solid black; text-align: center;"></td>
+                                            <td colspan="1" style="border: 1px solid black; text-align: center;"></td>
+                                            <td colspan="1" style="border: 1px solid black; text-align: center;"></td>
                                             <td colspan="1" style="border: 1px solid black; text-align: center;">
-                                            <td colspan="1" style="border: 1px solid black; text-align: center;">
-                                            <td colspan="1" style="border: 1px solid black; text-align: center;">
-                                            <td colspan="1" style="border: 1px solid black; text-align: center;">
-                                                {{ $reportKeyId }}</td>
-                                            <td style="border: 1px solid black; text-align: center;">
-                                                {{ $reportKeyTotals['name_certificate'] ?? 'N/A' }}
-                                                <!-- Display the name_certificate here -->
+                                                {{ $reportKeyId }}
                                             </td>
-
                                             <td style="border: 1px solid black; text-align: center;">
                                                 {{ number_format($reportKeyTotals['value_certificate'], 0, ' ', ' ') }}
                                             </td>
@@ -145,7 +112,6 @@
                                 @endforeach
                             @endforeach
                         @endforeach
-
 
 
 
@@ -204,7 +170,7 @@
 
                         {{-- Sum Total --}}
                         <tr>
-                            <td colspan="5" style="border: 1px solid black; text-align: center;">
+                            <td colspan="4" style="border: 1px solid black; text-align: center;">
                                 <strong>សរុបទាំងអស់</strong>
                             </td>
                             <td style="border: 1px solid black; text-align: center;">

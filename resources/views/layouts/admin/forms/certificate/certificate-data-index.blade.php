@@ -61,7 +61,7 @@
                         <th style="border: 1px solid black; font-size: 14px; width: 180px;">លេខអនុគណនី</th>
                         <th style="border: 1px solid black; font-size: 14px; width: 180px;">លេខកូដកម្មវិធី</th>
 
-                        <th style="border: 1px solid black; font-size: 14px; width:260px;">ឈ្មោះសលាកបត្រ</th>
+                        {{-- <th style="border: 1px solid black; font-size: 14px; width:260px;">ឈ្មោះសលាកបត្រ</th> --}}
                         <th style="border: 1px solid black; font-size: 14px; width:260px;">ចំនួនទឹកប្រាក់</th>
                         <th style="border: 1px solid black;" width="200px">សកម្មភាព</th>
                     </tr>
@@ -82,9 +82,9 @@
                                 <td style="border: 1px solid black; text-align: center;">
                                     {{ $certificateData->report ? $certificateData->report->report_key : 'N/A' }}
                                 </td>
-                                <td style="border: 1px solid black; text-align: center;">
+                                {{-- <td style="border: 1px solid black; text-align: center;">
                                     {{ $certificateData->certificate ? $certificateData->certificate->name_certificate : 'N/A' }}
-                                </td>
+                                </td> --}}
                                 <td style="border: 1px solid black; text-align: center;">
                                     {{ number_format($certificateData->value_certificate, 0, ' ', ' ') }}
                                 </td>

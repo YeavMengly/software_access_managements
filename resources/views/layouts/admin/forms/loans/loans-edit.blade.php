@@ -1,6 +1,6 @@
 @extends('layouts.master')
 
-@section('form-report-edit')
+@section('form-content-loans-edit')
     <div class="border-wrapper">
         <div class="result-total-table-container">
             <div class="container-fluid">
@@ -8,7 +8,7 @@
                     <div class="col-lg-12 margin-tb mb-4">
                         <div class="d-flex justify-content-between align-items-center">
                             <h3 class="card-title">កែប្រែទិន្នន័យ</h3>
-                            <a class="btn btn-danger" href="{{ route('codes.index') }}"> <i class="fas fa-arrow-left"></i>
+                            <a class="btn btn-danger" href="{{ route('loans.index') }}"> <i class="fas fa-arrow-left"></i>
                                 ត្រឡប់ក្រោយ</a>
                         </div>
                     </div>
@@ -35,7 +35,7 @@
 
                 <div class="border-wrapper">
                     <div class="form-container">
-                        <form action="{{ route('codes.update', $report->id) }}" method="POST"
+                        <form action="{{ route('loans.update', $loan->id) }}" method="POST"
                             enctype="multipart/form-data">
                             @csrf
                             @method('PUT')
@@ -48,7 +48,7 @@
                                         <select name="sub_account_key" class="form-control">
                                             @foreach ($subAccountKeys as $subAccountKey)
                                                 <option value="{{ $subAccountKey->id }}"
-                                                    {{ $subAccountKey->id == $report->sub_account_key ? 'selected' : '' }}>
+                                                    {{ $subAccountKey->id == $loan->sub_account_key ? 'selected' : '' }}>
                                                     {{ $subAccountKey->accountKey->key->code }} -
                                                     {{ $subAccountKey->accountKey->account_key }} -
                                                     {{ $subAccountKey->sub_account_key }}
@@ -61,7 +61,7 @@
                                     <div class="form-group">
                                         <label for="report_key">លេខកូដកម្មវិធី:</label>
                                         <input type="number" name="report_key" id="report_key"
-                                            value="{{ old('report_key', $report->report_key) }}"
+                                            value="{{ old('report_key', $loan->report_key) }}"
                                             class="form-control @error('report_key') is-invalid @enderror">
                                         @error('report_key')
                                             <div class="invalid-feedback">{{ $message }}</div>
@@ -72,7 +72,7 @@
                                     <div class="form-group">
                                         <label for="name_report_key">ចំណាត់ថ្នាក់:</label>
                                         <input type="text" name="name_report_key" id="name_report_key"
-                                            value="{{ old('name_report_key', $report->name_report_key) }}"
+                                            value="{{ old('name_report_key', $loan->name_report_key) }}"
                                             class="form-control @error('name_report_key') is-invalid @enderror">
                                         @error('name_report_key')
                                             <div class="invalid-feedback">{{ $message }}</div>
@@ -83,18 +83,18 @@
                                     <div class="form-group">
                                         <label for="fin_law">ច្បាប់ហិរញ្ញវត្ថុ:</label>
                                         <input type="number" name="fin_law" id="fin_law"
-                                            value="{{ old('fin_law', $report->fin_law) }}"
+                                            value="{{ old('fin_law', $loan->fin_law) }}"
                                             class="form-control @error('fin_law') is-invalid @enderror"
                                             oninput="updateCurrentLoan(this)">
                                         @error('fin_law')
                                             <div class="invalid-feedback">{{ $message }}</div>
                                         @enderror
                                     </div>
-
+                                    
                                     <div class="form-group">
                                         <label for="current_loan">ឥណទានបច្ចុប្បន្ន:</label>
                                         <input type="number" name="current_loan" id="current_loan"
-                                            value="{{ old('current_loan', $report->current_loan) }}"
+                                            value="{{ old('current_loan', $loan->current_loan) }}"
                                             class="form-control @error('current_loan') is-invalid @enderror">
                                         @error('current_loan')
                                             <div class="invalid-feedback">{{ $message }}</div>
@@ -103,67 +103,6 @@
 
                                 </div>
 
-                                <div class="col-md-6">
-                                    <!-- Internal Increase Input -->
-                                    {{-- <div class="form-group">
-                                        <label for="internal_increase">កើនផ្ទៃក្នុង:</label>
-                                        <input type="number" name="internal_increase" id="internal_increase"
-                                            value="{{ old('internal_increase', $report->internal_increase) }}"
-                                            class="form-control @error('internal_increase') is-invalid @enderror"
-                                            oninput="formatNumber(this)">
-                                        @error('internal_increase')
-                                            <div class="invalid-feedback">{{ $message }}</div>
-                                        @enderror
-                                    </div>
-
-                                    <!-- Unexpected Increase Input -->
-                                    <div class="form-group">
-                                        <label for="unexpected_increase">មិនបានគ្រោងទុក:</label>
-                                        <input type="number" name="unexpected_increase" id="unexpected_increase"
-                                            value="{{ old('unexpected_increase', $report->unexpected_increase) }}"
-                                            class="form-control @error('unexpected_increase') is-invalid @enderror"
-                                            oninput="formatNumber(this)">
-                                        @error('unexpected_increase')
-                                            <div class="invalid-feedback">{{ $message }}</div>
-                                        @enderror
-                                    </div>
-
-                                    <!-- Additional Increase Input -->
-                                    <div class="form-group">
-                                        <label for="additional_increase">បំពេញបន្ថែម:</label>
-                                        <input type="number" name="additional_increase" id="additional_increase"
-                                            value="{{ old('additional_increase', $report->additional_increase) }}"
-                                            class="form-control @error('additional_increase') is-invalid @enderror"
-                                            oninput="formatNumber(this)">
-                                        @error('additional_increase')
-                                            <div class="invalid-feedback">{{ $message }}</div>
-                                        @enderror
-                                    </div>
-
-                                    <!-- Decrease Input -->
-                                    <div class="form-group">
-                                        <label for="decrease">ថយ:</label>
-                                        <input type="number" name="decrease" id="decrease"
-                                            value="{{ old('decrease', $report->decrease) }}"
-                                            class="form-control @error('decrease') is-invalid @enderror"
-                                            oninput="formatNumber(this)">
-                                        @error('decrease')
-                                            <div class="invalid-feedback">{{ $message }}</div>
-                                        @enderror
-                                    </div> --}}
-
-                                    {{-- <div class="form-group">
-                                        <label for="early_balance">ស.ម.ដើមគ្រា:</label>
-                                        <input type="number" name="early_balance" id="early_balance"
-                                            value="{{ old('early_balance', $report->early_balance) }}"
-                                            class="form-control @error('early_balance') is-invalid @enderror" >
-                                        @error('early_balance')
-                                            <div class="invalid-feedback">{{ $message }}</div>
-                                        @enderror
-                                    </div> --}}
-
-
-                                </div>
                             </div>
 
                             <div class="d-flex align-items-center">

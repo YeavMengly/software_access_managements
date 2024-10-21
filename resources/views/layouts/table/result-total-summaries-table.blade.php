@@ -50,19 +50,15 @@
                             <th colspan="2">នៅសល់</th>
                         </tr>
                         <tr>
-                            {{-- total start balance --}}
                             <th>សរុប</th>
                             <th>ភាគរយ</th>
 
-                            {{-- total apply --}}
                             <th>សរុប</th>
                             <th>ភាគរយ</th>
 
-                            {{-- total sum refer --}}
                             <th>សរុប</th>
                             <th>ភាគរយ</th>
 
-                            {{-- total remain --}}
                             <th>សរុប</th>
                             <th>ភាគរយ</th>
 
@@ -78,7 +74,6 @@
                             <td>{{ number_format($totals['total_sums']['new_credit_status'], 0, ' ', ' ') }}</td>
                             <td>{{ number_format($totals['total_sums']['early_balance'], 0, ' ', ' ') }}</td>
 
-                            {{-- Total Avg of early balance --}}
                             <td>
                                 @if ($totals['total_sums']['new_credit_status'] > 0)
                                     {{ number_format(($totals['total_sums']['early_balance'] / $totals['total_sums']['new_credit_status']) * 100, 2, '.', ' ') }}%
@@ -89,7 +84,6 @@
 
                             <td>{{ number_format($totals['total_sums']['apply'], 0, ' ', ' ') }}</td>
 
-                            {{-- Total Avg of apply --}}
                             <td>
                                 @if ($totals['total_sums']['new_credit_status'] > 0)
                                     {{ number_format(($totals['total_sums']['apply'] / $totals['total_sums']['new_credit_status']) * 100, 2, '.', ' ') }}%
@@ -100,7 +94,6 @@
 
                             <td>{{ number_format($totals['total_sums']['total_sum_refer'], 0, ' ', ' ') }}</td>
 
-                            {{-- Total Avg of sum refer --}}
                             <td>
                                 @if ($totals['total_sums']['new_credit_status'] > 0)
                                     {{ number_format((($totals['total_sums']['early_balance'] + $totals['total_sums']['apply']) / $totals['total_sums']['new_credit_status']) * 100, 2, '.', ' ') }}%
@@ -111,7 +104,7 @@
 
                             <td>{{ number_format($totals['total_sums']['total_remain'], 0, ' ', ' ') }}</td>
 
-                            {{-- Total Avg Remain --}}
+
                             <td>
                                 @if ($totals['total_sums']['new_credit_status'] > 0)
                                     {{ number_format((($totals['total_sums']['new_credit_status'] - ($totals['total_sums']['early_balance'] + $totals['total_sums']['apply'])) / $totals['total_sums']['new_credit_status']) * 100, 2, '.', ' ') }}%
@@ -120,7 +113,7 @@
                                 @endif
                             </td>
                         </tr>
-                        <!-- Add your rows here -->
+
                         @foreach ($totals['code'] as $codeId => $totalsByCode)
                             <tr>
                                 <td>{{ $codeId }}</td>
@@ -130,7 +123,6 @@
                                 <td>{{ number_format($totalsByCode['decrease'], 0, ' ', ' ') }}</td>
                                 <td>{{ number_format($totalsByCode['new_credit_status'], 0, ' ', ' ') }}</td>
 
-                                {{-- Avg of early balance --}}
                                 <td>{{ number_format($totalsByCode['early_balance'], 0, ' ', ' ') }}</td>
                                 <td>
                                     @if ($totalsByCode['new_credit_status'] > 0)
@@ -140,7 +132,6 @@
                                     @endif
                                 </td>
 
-                                {{-- Avg of apply --}}
                                 <td>{{ number_format($totalsByCode['apply'], 0, ' ', ' ') }}</td>
                                 <td>
                                     @if ($totalsByCode['new_credit_status'] > 0)
@@ -150,7 +141,6 @@
                                     @endif
                                 </td>
 
-                                {{-- Avg of sum refer --}}
                                 <td>{{ number_format($totalsByCode['early_balance'] + $totalsByCode['apply'], 0, ' ', ' ') }}
                                 </td>
                                 <td>
@@ -161,7 +151,6 @@
                                     @endif
                                 </td>
 
-                                {{-- Avg Remain --}}
                                 <td>{{ number_format($totalsByCode['new_credit_status'] - ($totalsByCode['early_balance'] + $totalsByCode['apply']), 0, ' ', ' ') }}
                                 </td>
                                 <td>
@@ -183,7 +172,6 @@
                             <td>{{ number_format($totals['total_sums']['new_credit_status'], 0, ' ', ' ') }}</td>
                             <td>{{ number_format($totals['total_sums']['early_balance'], 0, ' ', ' ') }}</td>
 
-                            {{-- Total Avg of early balance --}}
                             <td>
                                 @if ($totals['total_sums']['new_credit_status'] > 0)
                                     {{ number_format(($totals['total_sums']['early_balance'] / $totals['total_sums']['new_credit_status']) * 100, 2, '.', ' ') }}%
@@ -194,7 +182,6 @@
 
                             <td>{{ number_format($totals['total_sums']['apply'], 0, ' ', ' ') }}</td>
 
-                            {{-- Total Avg of apply --}}
                             <td>
                                 @if ($totals['total_sums']['new_credit_status'] > 0)
                                     {{ number_format(($totals['total_sums']['apply'] / $totals['total_sums']['new_credit_status']) * 100, 2, '.', ' ') }}%
@@ -205,7 +192,6 @@
 
                             <td>{{ number_format($totals['total_sums']['total_sum_refer'], 0, ' ', ' ') }}</td>
 
-                            {{-- Total Avg of sum refer --}}
                             <td>
                                 @if ($totals['total_sums']['new_credit_status'] > 0)
                                     {{ number_format((($totals['total_sums']['early_balance'] + $totals['total_sums']['apply']) / $totals['total_sums']['new_credit_status']) * 100, 2, '.', ' ') }}%
@@ -215,8 +201,6 @@
                             </td>
 
                             <td>{{ number_format($totals['total_sums']['total_remain'], 0, ' ', ' ') }}</td>
-
-                            {{-- Total Avg Remain --}}
                             <td>
                                 @if ($totals['total_sums']['new_credit_status'] > 0)
                                     {{ number_format((($totals['total_sums']['new_credit_status'] - ($totals['total_sums']['early_balance'] + $totals['total_sums']['apply'])) / $totals['total_sums']['new_credit_status']) * 100, 2, '.', ' ') }}%
@@ -226,10 +210,110 @@
                             </td>
                         </tr>
 
-                        {{-- Display total sums for report_key by the first 3 digits --}}
                         @foreach ($totals['report_key'] as $prefix => $totalsByCode)
                             <tr>
                                 <td>{{ $prefix }}</td>
+                                <td>{{ number_format($totalsByCode['fin_law'], 0, ' ', ' ') }}</td>
+                                <td>{{ number_format($totalsByCode['current_loan'], 0, ' ', ' ') }}</td>
+                                <td>{{ number_format($totalsByCode['total_increase'], 0, ' ', ' ') }}</td>
+                                <td>{{ number_format($totalsByCode['decrease'], 0, ' ', ' ') }}</td>
+                                <td>{{ number_format($totalsByCode['new_credit_status'], 0, ' ', ' ') }}</td>
+                                <td>{{ number_format($totalsByCode['early_balance'], 0, ' ', ' ') }}</td>
+
+                                <td>
+                                    @if ($totals['total_sums']['new_credit_status'] > 0)
+                                        {{ number_format(($totals['total_sums']['early_balance'] / $totals['total_sums']['new_credit_status']) * 100, 2, '.', ' ') }}%
+                                    @else
+                                        0%
+                                    @endif
+                                </td>
+
+                                <td>{{ number_format($totals['total_sums']['apply'], 0, ' ', ' ') }}</td>
+
+                                <td>
+                                    @if ($totals['total_sums']['new_credit_status'] > 0)
+                                        {{ number_format(($totals['total_sums']['apply'] / $totals['total_sums']['new_credit_status']) * 100, 2, '.', ' ') }}%
+                                    @else
+                                        0%
+                                    @endif
+                                </td>
+
+                                <td>{{ number_format($totals['total_sums']['total_sum_refer'], 0, ' ', ' ') }}</td>
+
+                                <td>
+                                    @if ($totals['total_sums']['new_credit_status'] > 0)
+                                        {{ number_format((($totals['total_sums']['early_balance'] + $totals['total_sums']['apply']) / $totals['total_sums']['new_credit_status']) * 100, 2, '.', ' ') }}%
+                                    @else
+                                        0%
+                                    @endif
+                                </td>
+
+                                <td>{{ number_format($totals['total_sums']['total_remain'], 0, ' ', ' ') }}</td>
+
+                                <td>
+                                    @if ($totals['total_sums']['new_credit_status'] > 0)
+                                        {{ number_format((($totals['total_sums']['new_credit_status'] - ($totals['total_sums']['early_balance'] + $totals['total_sums']['apply'])) / $totals['total_sums']['new_credit_status']) * 100, 2, '.', ' ') }}%
+                                    @else
+                                        0%
+                                    @endif
+                                </td>
+                            </tr>
+                        @endforeach
+
+                        <tr style="background-color: rgb(181, 245, 86);">
+                            <td><strong>លម្អិតតាមកម្មវិធី</strong></td>
+                            <td>{{ number_format($totals['total_sums']['fin_law'], 0, ' ', ' ') }}</td>
+                            <td>{{ number_format($totals['total_sums']['current_loan'], 0, ' ', ' ') }}</td>
+                            <td>{{ number_format($totals['total_sums']['total_increase'], 0, ' ', ' ') }}</td>
+                            <td>{{ number_format($totals['total_sums']['decrease'], 0, ' ', ' ') }}</td>
+                            <td>{{ number_format($totals['total_sums']['new_credit_status'], 0, ' ', ' ') }}</td>
+                            <td>{{ number_format($totals['total_sums']['early_balance'], 0, ' ', ' ') }}</td>
+
+                            <td>
+                                @if ($totals['total_sums']['new_credit_status'] > 0)
+                                    {{ number_format(($totals['total_sums']['early_balance'] / $totals['total_sums']['new_credit_status']) * 100, 2, '.', ' ') }}%
+                                @else
+                                    0%
+                                @endif
+                            </td>
+
+                            <td>{{ number_format($totals['total_sums']['apply'], 0, ' ', ' ') }}</td>
+
+                            <td>
+                                @if ($totals['total_sums']['new_credit_status'] > 0)
+                                    {{ number_format(($totals['total_sums']['apply'] / $totals['total_sums']['new_credit_status']) * 100, 2, '.', ' ') }}%
+                                @else
+                                    0%
+                                @endif
+                            </td>
+
+                            <td>{{ number_format($totals['total_sums']['early_balance'] + $totals['total_sums']['apply'], 0, ' ', ' ') }}
+                            </td>
+
+                            <td>
+                                @if ($totals['total_sums']['new_credit_status'] > 0)
+                                    {{ number_format((($totals['total_sums']['early_balance'] + $totals['total_sums']['apply']) / $totals['total_sums']['new_credit_status']) * 100, 2, '.', ' ') }}%
+                                @else
+                                    0%
+                                @endif
+                            </td>
+
+                            <td>{{ number_format($totals['total_sums']['new_credit_status'] - ($totals['total_sums']['early_balance'] + $totals['total_sums']['apply']), 0, ' ', ' ') }}
+                            </td>
+
+                            <td>
+                                @if ($totals['total_sums']['new_credit_status'] > 0)
+                                    {{ number_format((($totals['total_sums']['new_credit_status'] - ($totals['total_sums']['early_balance'] + $totals['total_sums']['apply'])) / $totals['total_sums']['new_credit_status']) * 100, 2, '.', ' ') }}%
+                                @else
+                                    0%
+                                @endif
+                            </td>
+                        </tr>
+
+                        @foreach ($totals['report_key'] as $prefix => $totalsByCode)
+                            {{-- Display total row above the detailed rows --}}
+                            <tr style="background-color: rgb(181, 245, 86);">
+                                <td> កម្មវិធី {{ $prefix }}</td>
                                 <td>{{ number_format($totalsByCode['fin_law'], 0, ' ', ' ') }}</td>
                                 <td>{{ number_format($totalsByCode['current_loan'], 0, ' ', ' ') }}</td>
                                 <td>{{ number_format($totalsByCode['total_increase'], 0, ' ', ' ') }}</td>
@@ -270,655 +354,52 @@
                                     @endif
                                 </td>
                             </tr>
-                        @endforeach
 
-                        {{-- <tr class="total-row" style="background: coral; ">
-                            <td><strong>លម្អិតតាមកម្មវិធី</strong></td>
-
-                        </tr> --}}
-
-                        @php
-                            // Initialize variables for totals
-                            $totalFinLaw = 0;
-                            $totalCurrentLoan = 0;
-                            $totalTotalIncrease = 0;
-                            $totalDecrease = 0;
-                            $totalNewCreditStatus = 0;
-                            $totalEarlyBalance = 0;
-                            $totalApply = 0;
-
-                            // Calculate totals based on prefixes
-                            foreach ($totals['report_key_seven'] as $prefix => $totalsByCode) {
-                                if (in_array(substr($prefix, 0, 3), ['321', '322', '323', '324', '325'])) {
-                                    $totalFinLaw += $totalsByCode['fin_law'];
-                                    $totalCurrentLoan += $totalsByCode['current_loan'];
-                                    $totalTotalIncrease += $totalsByCode['total_increase'];
-                                    $totalDecrease += $totalsByCode['decrease'];
-                                    $totalNewCreditStatus += $totalsByCode['new_credit_status'];
-                                    $totalEarlyBalance += $totalsByCode['early_balance'];
-                                    $totalApply += $totalsByCode['apply'];
-                                }
-                            }
-                        @endphp
-
-                        <tr style="background-color: rgb(181, 245, 86);">
-                            <td><strong>លម្អិតតាមកម្មវិធី</strong></td>
-                            <td>{{ number_format($totalFinLaw, 0, ' ', ' ') }}</td>
-                            <td>{{ number_format($totalCurrentLoan, 0, ' ', ' ') }}</td>
-                            <td>{{ number_format($totalTotalIncrease, 0, ' ', ' ') }}</td>
-                            <td>{{ number_format($totalDecrease, 0, ' ', ' ') }}</td>
-                            <td>{{ number_format($totalNewCreditStatus, 0, ' ', ' ') }}</td>
-                            <td>{{ number_format($totalEarlyBalance, 0, ' ', ' ') }}</td>
-                            <td>
-                                @if ($totalNewCreditStatus > 0)
-                                    {{ number_format(($totalEarlyBalance / $totalNewCreditStatus) * 100, 2, '.', ' ') }}%
-                                @else
-                                    0%
-                                @endif
-                            </td>
-                            <td>{{ number_format($totalApply, 0, ' ', ' ') }}</td>
-                            <td>
-                                @if ($totalNewCreditStatus > 0)
-                                    {{ number_format(($totalApply / $totalNewCreditStatus) * 100, 2, '.', ' ') }}%
-                                @else
-                                    0%
-                                @endif
-                            </td>
-                            <td>{{ number_format($totalEarlyBalance + $totalApply, 0, ' ', ' ') }}</td>
-                            <td>
-                                @if ($totalNewCreditStatus > 0)
-                                    {{ number_format((($totalEarlyBalance + $totalApply) / $totalNewCreditStatus) * 100, 2, '.', ' ') }}%
-                                @else
-                                    0%
-                                @endif
-                            </td>
-                            <td>{{ number_format($totalNewCreditStatus - ($totalEarlyBalance + $totalApply), 0, ' ', ' ') }}
-                            </td>
-                            <td>
-                                @if ($totalNewCreditStatus > 0)
-                                    {{ number_format((($totalNewCreditStatus - ($totalEarlyBalance + $totalApply)) / $totalNewCreditStatus) * 100, 2, '.', ' ') }}%
-                                @else
-                                    0%
-                                @endif
-                            </td>
-                        </tr>
-
-
-                        {{-- Initialize total variables --}}
-                        @php
-                            $totalFinLaw = 0;
-                            $totalCurrentLoan = 0;
-                            $totalTotalIncrease = 0;
-                            $totalDecrease = 0;
-                            $totalNewCreditStatus = 0;
-                            $totalEarlyBalance = 0;
-                            $totalApply = 0;
-                        @endphp
-
-                        {{-- Loop through totals to calculate the overall totals --}}
-                        @foreach ($totals['report_key_seven'] as $prefix => $totalsByCode)
-                            @if (substr($prefix, 0, 3) === '321')
-                                @php
-                                    $totalFinLaw += $totalsByCode['fin_law'];
-                                    $totalCurrentLoan += $totalsByCode['current_loan'];
-                                    $totalTotalIncrease += $totalsByCode['total_increase'];
-                                    $totalDecrease += $totalsByCode['decrease'];
-                                    $totalNewCreditStatus += $totalsByCode['new_credit_status'];
-                                    $totalEarlyBalance += $totalsByCode['early_balance'];
-                                    $totalApply += $totalsByCode['apply'];
-                                @endphp
-                            @endif
-                        @endforeach
-
-                        {{-- Display total row above the detailed rows --}}
-                        <tr style="background-color: rgb(181, 245, 86);">
-                            <td>កម្មវិធី1</td>
-                            <td>{{ number_format($totalFinLaw, 0, ' ', ' ') }}</td>
-                            <td>{{ number_format($totalCurrentLoan, 0, ' ', ' ') }}</td>
-                            <td>{{ number_format($totalTotalIncrease, 0, ' ', ' ') }}</td>
-                            <td>{{ number_format($totalDecrease, 0, ' ', ' ') }}</td>
-                            <td>{{ number_format($totalNewCreditStatus, 0, ' ', ' ') }}</td>
-                            <td>{{ number_format($totalEarlyBalance, 0, ' ', ' ') }}</td>
-                            <td>
-                                @if ($totalNewCreditStatus > 0)
-                                    {{ number_format(($totalEarlyBalance / $totalNewCreditStatus) * 100, 2, '.', ' ') }}%
-                                @else
-                                    0%
-                                @endif
-                            </td>
-                            <td>{{ number_format($totalApply, 0, ' ', ' ') }}</td>
-                            <td>
-                                @if ($totalNewCreditStatus > 0)
-                                    {{ number_format(($totalApply / $totalNewCreditStatus) * 100, 2, '.', ' ') }}%
-                                @else
-                                    0%
-                                @endif
-                            </td>
-                            <td>{{ number_format($totalEarlyBalance + $totalApply, 0, ' ', ' ') }}</td>
-                            <td>
-                                @if ($totalNewCreditStatus > 0)
-                                    {{ number_format((($totalEarlyBalance + $totalApply) / $totalNewCreditStatus) * 100, 2, '.', ' ') }}%
-                                @else
-                                    0%
-                                @endif
-                            </td>
-                            <td>{{ number_format($totalNewCreditStatus - ($totalEarlyBalance + $totalApply), 0, ' ', ' ') }}
-                            </td>
-                            <td>
-                                @if ($totalNewCreditStatus > 0)
-                                    {{ number_format((($totalNewCreditStatus - ($totalEarlyBalance + $totalApply)) / $totalNewCreditStatus) * 100, 2, '.', ' ') }}%
-                                @else
-                                    0%
-                                @endif
-                            </td>
-                        </tr>
-
-                        {{-- Now display the detailed rows --}}
-                        @foreach ($totals['report_key_seven'] as $prefix => $totalsByCode)
-                            @if (substr($prefix, 0, 3) === '321')
+                            @foreach ($totalsByCode['report_key_seven'] as $index => $total)
                                 <tr>
-                                    <td>{{ $prefix }}</td>
-                                    <td>{{ number_format($totalsByCode['fin_law'], 0, ' ', ' ') }}</td>
-                                    <td>{{ number_format($totalsByCode['current_loan'], 0, ' ', ' ') }}</td>
-                                    <td>{{ number_format($totalsByCode['total_increase'], 0, ' ', ' ') }}</td>
-                                    <td>{{ number_format($totalsByCode['decrease'], 0, ' ', ' ') }}</td>
-                                    <td>{{ number_format($totalsByCode['new_credit_status'], 0, ' ', ' ') }}</td>
-                                    <td>{{ number_format($totalsByCode['early_balance'], 0, ' ', ' ') }}</td>
+                                    <td>{{ $index }}</td>
+                                    <td>{{ number_format($total['fin_law'], 0, ' ', ' ') }}</td>
+                                    <td>{{ number_format($total['current_loan'], 0, ' ', ' ') }}</td>
+                                    <td>{{ number_format($total['total_increase'], 0, ' ', ' ') }}</td>
+                                    <td>{{ number_format($total['decrease'], 0, ' ', ' ') }}</td>
+                                    <td>{{ number_format($total['new_credit_status'], 0, ' ', ' ') }}</td>
+                                    <td>{{ number_format($total['early_balance'], 0, ' ', ' ') }}</td>
                                     <td>
-                                        @if ($totalsByCode['new_credit_status'] > 0)
-                                            {{ number_format(($totalsByCode['early_balance'] / $totalsByCode['new_credit_status']) * 100, 2, '.', ' ') }}%
+                                        @if ($total['new_credit_status'] > 0)
+                                            {{ number_format(($total['early_balance'] / $total['new_credit_status']) * 100, 2, '.', ' ') }}%
                                         @else
                                             0%
                                         @endif
                                     </td>
-                                    <td>{{ number_format($totalsByCode['apply'], 0, ' ', ' ') }}</td>
+                                    <td>{{ number_format($total['apply'], 0, ' ', ' ') }}</td>
                                     <td>
-                                        @if ($totalsByCode['new_credit_status'] > 0)
-                                            {{ number_format(($totalsByCode['apply'] / $totalsByCode['new_credit_status']) * 100, 2, '.', ' ') }}%
+                                        @if ($total['new_credit_status'] > 0)
+                                            {{ number_format(($total['apply'] / $total['new_credit_status']) * 100, 2, '.', ' ') }}%
                                         @else
                                             0%
                                         @endif
                                     </td>
-                                    <td>{{ number_format($totalsByCode['early_balance'] + $totalsByCode['apply'], 0, ' ', ' ') }}
-                                    </td>
+                                    <td>{{ number_format($total['early_balance'] + $total['apply'], 0, ' ', ' ') }}</td>
                                     <td>
-                                        @if ($totalsByCode['new_credit_status'] > 0)
-                                            {{ number_format((($totalsByCode['early_balance'] + $totalsByCode['apply']) / $totalsByCode['new_credit_status']) * 100, 2, '.', ' ') }}%
+                                        @if ($total['new_credit_status'] > 0)
+                                            {{ number_format((($total['early_balance'] + $total['apply']) / $total['new_credit_status']) * 100, 2, '.', ' ') }}%
                                         @else
                                             0%
                                         @endif
                                     </td>
-                                    <td>{{ number_format($totalsByCode['new_credit_status'] - ($totalsByCode['early_balance'] + $totalsByCode['apply']), 0, ' ', ' ') }}
+                                    <td>{{ number_format($total['new_credit_status'] - ($total['early_balance'] + $total['apply']), 0, ' ', ' ') }}
                                     </td>
                                     <td>
-                                        @if ($totalsByCode['new_credit_status'] > 0)
-                                            {{ number_format((($totalsByCode['new_credit_status'] - ($totalsByCode['early_balance'] + $totalsByCode['apply'])) / $totalsByCode['new_credit_status']) * 100, 2, '.', ' ') }}%
+                                        @if ($total['new_credit_status'] > 0)
+                                            {{ number_format((($total['new_credit_status'] - ($total['early_balance'] + $total['apply'])) / $total['new_credit_status']) * 100, 2, '.', ' ') }}%
                                         @else
                                             0%
                                         @endif
                                     </td>
                                 </tr>
-                            @endif
+                            @endforeach
                         @endforeach
 
-                        {{-- Calculate totals for each field --}}
-                        @php
-                            $totalFinLaw = 0;
-                            $totalCurrentLoan = 0;
-                            $totalTotalIncrease = 0;
-                            $totalDecrease = 0;
-                            $totalNewCreditStatus = 0;
-                            $totalEarlyBalance = 0;
-                            $totalApply = 0;
-
-                            foreach ($totals['report_key_seven'] as $prefix => $totalsByCode) {
-                                if (substr($prefix, 0, 3) === '322') {
-                                    $totalFinLaw += $totalsByCode['fin_law'];
-                                    $totalCurrentLoan += $totalsByCode['current_loan'];
-                                    $totalTotalIncrease += $totalsByCode['total_increase'];
-                                    $totalDecrease += $totalsByCode['decrease'];
-                                    $totalNewCreditStatus += $totalsByCode['new_credit_status'];
-                                    $totalEarlyBalance += $totalsByCode['early_balance'];
-                                    $totalApply += $totalsByCode['apply'];
-                                }
-                            }
-                        @endphp
-
-                        {{-- Total row above the loop --}}
-                        <tr style="background-color: rgb(181, 245, 86);">
-                            <td>កម្មវិធី2</td>
-                            <td>{{ number_format($totalFinLaw, 0, ' ', ' ') }}</td>
-                            <td>{{ number_format($totalCurrentLoan, 0, ' ', ' ') }}</td>
-                            <td>{{ number_format($totalTotalIncrease, 0, ' ', ' ') }}</td>
-                            <td>{{ number_format($totalDecrease, 0, ' ', ' ') }}</td>
-                            <td>{{ number_format($totalNewCreditStatus, 0, ' ', ' ') }}</td>
-                            <td>{{ number_format($totalEarlyBalance, 0, ' ', ' ') }}</td>
-                            <td>
-                                @if ($totalNewCreditStatus > 0)
-                                    {{ number_format(($totalEarlyBalance / $totalNewCreditStatus) * 100, 2, '.', ' ') }}%
-                                @else
-                                    0%
-                                @endif
-                            </td>
-                            <td>{{ number_format($totalApply, 0, ' ', ' ') }}</td>
-                            <td>
-                                @if ($totalNewCreditStatus > 0)
-                                    {{ number_format(($totalApply / $totalNewCreditStatus) * 100, 2, '.', ' ') }}%
-                                @else
-                                    0%
-                                @endif
-                            </td>
-                            <td>{{ number_format($totalEarlyBalance + $totalApply, 0, ' ', ' ') }}</td>
-                            <td>
-                                @if ($totalNewCreditStatus > 0)
-                                    {{ number_format((($totalEarlyBalance + $totalApply) / $totalNewCreditStatus) * 100, 2, '.', ' ') }}%
-                                @else
-                                    0%
-                                @endif
-                            </td>
-                            <td>{{ number_format($totalNewCreditStatus - ($totalEarlyBalance + $totalApply), 0, ' ', ' ') }}
-                            </td>
-                            <td>
-                                @if ($totalNewCreditStatus > 0)
-                                    {{ number_format((($totalNewCreditStatus - ($totalEarlyBalance + $totalApply)) / $totalNewCreditStatus) * 100, 2, '.', ' ') }}%
-                                @else
-                                    0%
-                                @endif
-                            </td>
-                        </tr>
-
-                        {{-- Loop through the details --}}
-                        @foreach ($totals['report_key_seven'] as $prefix => $totalsByCode)
-                            @if (substr($prefix, 0, 3) === '322')
-                                <tr>
-                                    <td>{{ $prefix }}</td>
-                                    <td>{{ number_format($totalsByCode['fin_law'], 0, ' ', ' ') }}</td>
-                                    <td>{{ number_format($totalsByCode['current_loan'], 0, ' ', ' ') }}</td>
-                                    <td>{{ number_format($totalsByCode['total_increase'], 0, ' ', ' ') }}</td>
-                                    <td>{{ number_format($totalsByCode['decrease'], 0, ' ', ' ') }}</td>
-                                    <td>{{ number_format($totalsByCode['new_credit_status'], 0, ' ', ' ') }}</td>
-                                    <td>{{ number_format($totalsByCode['early_balance'], 0, ' ', ' ') }}</td>
-                                    <td>
-                                        @if ($totalsByCode['new_credit_status'] > 0)
-                                            {{ number_format(($totalsByCode['early_balance'] / $totalsByCode['new_credit_status']) * 100, 2, '.', ' ') }}%
-                                        @else
-                                            0%
-                                        @endif
-                                    </td>
-                                    <td>{{ number_format($totalsByCode['apply'], 0, ' ', ' ') }}</td>
-                                    <td>
-                                        @if ($totalsByCode['new_credit_status'] > 0)
-                                            {{ number_format(($totalsByCode['apply'] / $totalsByCode['new_credit_status']) * 100, 2, '.', ' ') }}%
-                                        @else
-                                            0%
-                                        @endif
-                                    </td>
-                                    <td>{{ number_format($totalsByCode['early_balance'] + $totalsByCode['apply'], 0, ' ', ' ') }}
-                                    </td>
-                                    <td>
-                                        @if ($totalsByCode['new_credit_status'] > 0)
-                                            {{ number_format((($totalsByCode['early_balance'] + $totalsByCode['apply']) / $totalsByCode['new_credit_status']) * 100, 2, '.', ' ') }}%
-                                        @else
-                                            0%
-                                        @endif
-                                    </td>
-                                    <td>{{ number_format($totalsByCode['new_credit_status'] - ($totalsByCode['early_balance'] + $totalsByCode['apply']), 0, ' ', ' ') }}
-                                    </td>
-                                    <td>
-                                        @if ($totalsByCode['new_credit_status'] > 0)
-                                            {{ number_format((($totalsByCode['new_credit_status'] - ($totalsByCode['early_balance'] + $totalsByCode['apply'])) / $totalsByCode['new_credit_status']) * 100, 2, '.', ' ') }}%
-                                        @else
-                                            0%
-                                        @endif
-                                    </td>
-                                </tr>
-                            @endif
-                        @endforeach
-
-                        @php
-                            // Initialize variables for totals
-                            $totalFinLaw = 0;
-                            $totalCurrentLoan = 0;
-                            $totalTotalIncrease = 0;
-                            $totalDecrease = 0;
-                            $totalNewCreditStatus = 0;
-                            $totalEarlyBalance = 0;
-                            $totalApply = 0;
-
-                            // Calculate totals first
-                            foreach ($totals['report_key_seven'] as $prefix => $totalsByCode) {
-                                if (substr($prefix, 0, 3) === '323') {
-                                    $totalFinLaw += $totalsByCode['fin_law'];
-                                    $totalCurrentLoan += $totalsByCode['current_loan'];
-                                    $totalTotalIncrease += $totalsByCode['total_increase'];
-                                    $totalDecrease += $totalsByCode['decrease'];
-                                    $totalNewCreditStatus += $totalsByCode['new_credit_status'];
-                                    $totalEarlyBalance += $totalsByCode['early_balance'];
-                                    $totalApply += $totalsByCode['apply'];
-                                }
-                            }
-                        @endphp
-
-                        {{-- Display totals row above the loop --}}
-                        <tr style="background-color: rgb(181, 245, 86);">
-                            <td>កម្មវិធី3</td>
-                            <td>{{ number_format($totalFinLaw, 0, ' ', ' ') }}</td>
-                            <td>{{ number_format($totalCurrentLoan, 0, ' ', ' ') }}</td>
-                            <td>{{ number_format($totalTotalIncrease, 0, ' ', ' ') }}</td>
-                            <td>{{ number_format($totalDecrease, 0, ' ', ' ') }}</td>
-                            <td>{{ number_format($totalNewCreditStatus, 0, ' ', ' ') }}</td>
-                            <td>{{ number_format($totalEarlyBalance, 0, ' ', ' ') }}</td>
-                            <td>
-                                @if ($totalNewCreditStatus > 0)
-                                    {{ number_format(($totalEarlyBalance / $totalNewCreditStatus) * 100, 2, '.', ' ') }}%
-                                @else
-                                    0%
-                                @endif
-                            </td>
-                            <td>{{ number_format($totalApply, 0, ' ', ' ') }}</td>
-                            <td>
-                                @if ($totalNewCreditStatus > 0)
-                                    {{ number_format(($totalApply / $totalNewCreditStatus) * 100, 2, '.', ' ') }}%
-                                @else
-                                    0%
-                                @endif
-                            </td>
-                            <td>{{ number_format($totalEarlyBalance + $totalApply, 0, ' ', ' ') }}</td>
-                            <td>
-                                @if ($totalNewCreditStatus > 0)
-                                    {{ number_format((($totalEarlyBalance + $totalApply) / $totalNewCreditStatus) * 100, 2, '.', ' ') }}%
-                                @else
-                                    0%
-                                @endif
-                            </td>
-                            <td>{{ number_format($totalNewCreditStatus - ($totalEarlyBalance + $totalApply), 0, ' ', ' ') }}
-                            </td>
-                            <td>
-                                @if ($totalNewCreditStatus > 0)
-                                    {{ number_format((($totalNewCreditStatus - ($totalEarlyBalance + $totalApply)) / $totalNewCreditStatus) * 100, 2, '.', ' ') }}%
-                                @else
-                                    0%
-                                @endif
-                            </td>
-                        </tr>
-
-                        {{-- Loop through individual rows --}}
-                        @foreach ($totals['report_key_seven'] as $prefix => $totalsByCode)
-                            @if (substr($prefix, 0, 3) === '323')
-                                <tr>
-                                    <td>{{ $prefix }}</td>
-                                    <td>{{ number_format($totalsByCode['fin_law'], 0, ' ', ' ') }}</td>
-                                    <td>{{ number_format($totalsByCode['current_loan'], 0, ' ', ' ') }}</td>
-                                    <td>{{ number_format($totalsByCode['total_increase'], 0, ' ', ' ') }}</td>
-                                    <td>{{ number_format($totalsByCode['decrease'], 0, ' ', ' ') }}</td>
-                                    <td>{{ number_format($totalsByCode['new_credit_status'], 0, ' ', ' ') }}</td>
-                                    <td>{{ number_format($totalsByCode['early_balance'], 0, ' ', ' ') }}</td>
-                                    <td>
-                                        @if ($totalsByCode['new_credit_status'] > 0)
-                                            {{ number_format(($totalsByCode['early_balance'] / $totalsByCode['new_credit_status']) * 100, 2, '.', ' ') }}%
-                                        @else
-                                            0%
-                                        @endif
-                                    </td>
-                                    <td>{{ number_format($totalsByCode['apply'], 0, ' ', ' ') }}</td>
-                                    <td>
-                                        @if ($totalsByCode['new_credit_status'] > 0)
-                                            {{ number_format(($totalsByCode['apply'] / $totalsByCode['new_credit_status']) * 100, 2, '.', ' ') }}%
-                                        @else
-                                            0%
-                                        @endif
-                                    </td>
-                                    <td>{{ number_format($totalsByCode['early_balance'] + $totalsByCode['apply'], 0, ' ', ' ') }}
-                                    </td>
-                                    <td>
-                                        @if ($totalsByCode['new_credit_status'] > 0)
-                                            {{ number_format((($totalsByCode['early_balance'] + $totalsByCode['apply']) / $totalsByCode['new_credit_status']) * 100, 2, '.', ' ') }}%
-                                        @else
-                                            0%
-                                        @endif
-                                    </td>
-                                    <td>{{ number_format($totalsByCode['new_credit_status'] - ($totalsByCode['early_balance'] + $totalsByCode['apply']), 0, ' ', ' ') }}
-                                    </td>
-                                    <td>
-                                        @if ($totalsByCode['new_credit_status'] > 0)
-                                            {{ number_format((($totalsByCode['new_credit_status'] - ($totalsByCode['early_balance'] + $totalsByCode['apply'])) / $totalsByCode['new_credit_status']) * 100, 2, '.', ' ') }}%
-                                        @else
-                                            0%
-                                        @endif
-                                    </td>
-                                </tr>
-                            @endif
-                        @endforeach
-
-                        @php
-                            // Initialize variables for totals
-                            $totalFinLaw = 0;
-                            $totalCurrentLoan = 0;
-                            $totalTotalIncrease = 0;
-                            $totalDecrease = 0;
-                            $totalNewCreditStatus = 0;
-                            $totalEarlyBalance = 0;
-                            $totalApply = 0;
-
-                            // Calculate totals first
-                            foreach ($totals['report_key_seven'] as $prefix => $totalsByCode) {
-                                if (substr($prefix, 0, 3) === '324') {
-                                    $totalFinLaw += $totalsByCode['fin_law'];
-                                    $totalCurrentLoan += $totalsByCode['current_loan'];
-                                    $totalTotalIncrease += $totalsByCode['total_increase'];
-                                    $totalDecrease += $totalsByCode['decrease'];
-                                    $totalNewCreditStatus += $totalsByCode['new_credit_status'];
-                                    $totalEarlyBalance += $totalsByCode['early_balance'];
-                                    $totalApply += $totalsByCode['apply'];
-                                }
-                            }
-                        @endphp
-
-                        {{-- Display totals row above the loop --}}
-                        <tr style="background-color: rgb(181, 245, 86);">
-                            <td>កម្មវិធី4</td>
-                            <td>{{ number_format($totalFinLaw, 0, ' ', ' ') }}</td>
-                            <td>{{ number_format($totalCurrentLoan, 0, ' ', ' ') }}</td>
-                            <td>{{ number_format($totalTotalIncrease, 0, ' ', ' ') }}</td>
-                            <td>{{ number_format($totalDecrease, 0, ' ', ' ') }}</td>
-                            <td>{{ number_format($totalNewCreditStatus, 0, ' ', ' ') }}</td>
-                            <td>{{ number_format($totalEarlyBalance, 0, ' ', ' ') }}</td>
-                            <td>
-                                @if ($totalNewCreditStatus > 0)
-                                    {{ number_format(($totalEarlyBalance / $totalNewCreditStatus) * 100, 2, '.', ' ') }}%
-                                @else
-                                    0%
-                                @endif
-                            </td>
-                            <td>{{ number_format($totalApply, 0, ' ', ' ') }}</td>
-                            <td>
-                                @if ($totalNewCreditStatus > 0)
-                                    {{ number_format(($totalApply / $totalNewCreditStatus) * 100, 2, '.', ' ') }}%
-                                @else
-                                    0%
-                                @endif
-                            </td>
-                            <td>{{ number_format($totalEarlyBalance + $totalApply, 0, ' ', ' ') }}</td>
-                            <td>
-                                @if ($totalNewCreditStatus > 0)
-                                    {{ number_format((($totalEarlyBalance + $totalApply) / $totalNewCreditStatus) * 100, 2, '.', ' ') }}%
-                                @else
-                                    0%
-                                @endif
-                            </td>
-                            <td>{{ number_format($totalNewCreditStatus - ($totalEarlyBalance + $totalApply), 0, ' ', ' ') }}
-                            </td>
-                            <td>
-                                @if ($totalNewCreditStatus > 0)
-                                    {{ number_format((($totalNewCreditStatus - ($totalEarlyBalance + $totalApply)) / $totalNewCreditStatus) * 100, 2, '.', ' ') }}%
-                                @else
-                                    0%
-                                @endif
-                            </td>
-                        </tr>
-
-                        {{-- Loop through individual rows --}}
-                        @foreach ($totals['report_key_seven'] as $prefix => $totalsByCode)
-                            @if (substr($prefix, 0, 3) === '324')
-                                <tr>
-                                    <td>{{ $prefix }}</td>
-                                    <td>{{ number_format($totalsByCode['fin_law'], 0, ' ', ' ') }}</td>
-                                    <td>{{ number_format($totalsByCode['current_loan'], 0, ' ', ' ') }}</td>
-                                    <td>{{ number_format($totalsByCode['total_increase'], 0, ' ', ' ') }}</td>
-                                    <td>{{ number_format($totalsByCode['decrease'], 0, ' ', ' ') }}</td>
-                                    <td>{{ number_format($totalsByCode['new_credit_status'], 0, ' ', ' ') }}</td>
-                                    <td>{{ number_format($totalsByCode['early_balance'], 0, ' ', ' ') }}</td>
-                                    <td>
-                                        @if ($totalsByCode['new_credit_status'] > 0)
-                                            {{ number_format(($totalsByCode['early_balance'] / $totalsByCode['new_credit_status']) * 100, 2, '.', ' ') }}%
-                                        @else
-                                            0%
-                                        @endif
-                                    </td>
-                                    <td>{{ number_format($totalsByCode['apply'], 0, ' ', ' ') }}</td>
-                                    <td>
-                                        @if ($totalsByCode['new_credit_status'] > 0)
-                                            {{ number_format(($totalsByCode['apply'] / $totalsByCode['new_credit_status']) * 100, 2, '.', ' ') }}%
-                                        @else
-                                            0%
-                                        @endif
-                                    </td>
-                                    <td>{{ number_format($totalsByCode['early_balance'] + $totalsByCode['apply'], 0, ' ', ' ') }}
-                                    </td>
-                                    <td>
-                                        @if ($totalsByCode['new_credit_status'] > 0)
-                                            {{ number_format((($totalsByCode['early_balance'] + $totalsByCode['apply']) / $totalsByCode['new_credit_status']) * 100, 2, '.', ' ') }}%
-                                        @else
-                                            0%
-                                        @endif
-                                    </td>
-                                    <td>{{ number_format($totalsByCode['new_credit_status'] - ($totalsByCode['early_balance'] + $totalsByCode['apply']), 0, ' ', ' ') }}
-                                    </td>
-                                    <td>
-                                        @if ($totalsByCode['new_credit_status'] > 0)
-                                            {{ number_format((($totalsByCode['new_credit_status'] - ($totalsByCode['early_balance'] + $totalsByCode['apply'])) / $totalsByCode['new_credit_status']) * 100, 2, '.', ' ') }}%
-                                        @else
-                                            0%
-                                        @endif
-                                    </td>
-                                </tr>
-                            @endif
-                        @endforeach
-
-                        @php
-                            // Initialize variables for totals
-                            $totalFinLaw = 0;
-                            $totalCurrentLoan = 0;
-                            $totalTotalIncrease = 0;
-                            $totalDecrease = 0;
-                            $totalNewCreditStatus = 0;
-                            $totalEarlyBalance = 0;
-                            $totalApply = 0;
-
-                            // Calculate totals first
-                            foreach ($totals['report_key_seven'] as $prefix => $totalsByCode) {
-                                if (substr($prefix, 0, 3) === '325') {
-                                    $totalFinLaw += $totalsByCode['fin_law'];
-                                    $totalCurrentLoan += $totalsByCode['current_loan'];
-                                    $totalTotalIncrease += $totalsByCode['total_increase'];
-                                    $totalDecrease += $totalsByCode['decrease'];
-                                    $totalNewCreditStatus += $totalsByCode['new_credit_status'];
-                                    $totalEarlyBalance += $totalsByCode['early_balance'];
-                                    $totalApply += $totalsByCode['apply'];
-                                }
-                            }
-                        @endphp
-
-                        {{-- Display totals row above the loop --}}
-                        <tr style="background-color: rgb(181, 245, 86);">
-                            <td>កម្មវិធី5</td>
-                            <td>{{ number_format($totalFinLaw, 0, ' ', ' ') }}</td>
-                            <td>{{ number_format($totalCurrentLoan, 0, ' ', ' ') }}</td>
-                            <td>{{ number_format($totalTotalIncrease, 0, ' ', ' ') }}</td>
-                            <td>{{ number_format($totalDecrease, 0, ' ', ' ') }}</td>
-                            <td>{{ number_format($totalNewCreditStatus, 0, ' ', ' ') }}</td>
-                            <td>{{ number_format($totalEarlyBalance, 0, ' ', ' ') }}</td>
-                            <td>
-                                @if ($totalNewCreditStatus > 0)
-                                    {{ number_format(($totalEarlyBalance / $totalNewCreditStatus) * 100, 2, '.', ' ') }}%
-                                @else
-                                    0%
-                                @endif
-                            </td>
-                            <td>{{ number_format($totalApply, 0, ' ', ' ') }}</td>
-                            <td>
-                                @if ($totalNewCreditStatus > 0)
-                                    {{ number_format(($totalApply / $totalNewCreditStatus) * 100, 2, '.', ' ') }}%
-                                @else
-                                    0%
-                                @endif
-                            </td>
-                            <td>{{ number_format($totalEarlyBalance + $totalApply, 0, ' ', ' ') }}</td>
-                            <td>
-                                @if ($totalNewCreditStatus > 0)
-                                    {{ number_format((($totalEarlyBalance + $totalApply) / $totalNewCreditStatus) * 100, 2, '.', ' ') }}%
-                                @else
-                                    0%
-                                @endif
-                            </td>
-                            <td>{{ number_format($totalNewCreditStatus - ($totalEarlyBalance + $totalApply), 0, ' ', ' ') }}
-                            </td>
-                            <td>
-                                @if ($totalNewCreditStatus > 0)
-                                    {{ number_format((($totalNewCreditStatus - ($totalEarlyBalance + $totalApply)) / $totalNewCreditStatus) * 100, 2, '.', ' ') }}%
-                                @else
-                                    0%
-                                @endif
-                            </td>
-                        </tr>
-
-                        {{-- Loop through individual rows --}}
-                        @foreach ($totals['report_key_seven'] as $prefix => $totalsByCode)
-                            @if (substr($prefix, 0, 3) === '325')
-                                <tr>
-                                    <td>{{ $prefix }}</td>
-                                    <td>{{ number_format($totalsByCode['fin_law'], 0, ' ', ' ') }}</td>
-                                    <td>{{ number_format($totalsByCode['current_loan'], 0, ' ', ' ') }}</td>
-                                    <td>{{ number_format($totalsByCode['total_increase'], 0, ' ', ' ') }}</td>
-                                    <td>{{ number_format($totalsByCode['decrease'], 0, ' ', ' ') }}</td>
-                                    <td>{{ number_format($totalsByCode['new_credit_status'], 0, ' ', ' ') }}</td>
-                                    <td>{{ number_format($totalsByCode['early_balance'], 0, ' ', ' ') }}</td>
-                                    <td>
-                                        @if ($totalsByCode['new_credit_status'] > 0)
-                                            {{ number_format(($totalsByCode['early_balance'] / $totalsByCode['new_credit_status']) * 100, 2, '.', ' ') }}%
-                                        @else
-                                            0%
-                                        @endif
-                                    </td>
-                                    <td>{{ number_format($totalsByCode['apply'], 0, ' ', ' ') }}</td>
-                                    <td>
-                                        @if ($totalsByCode['new_credit_status'] > 0)
-                                            {{ number_format(($totalsByCode['apply'] / $totalsByCode['new_credit_status']) * 100, 2, '.', ' ') }}%
-                                        @else
-                                            0%
-                                        @endif
-                                    </td>
-                                    <td>{{ number_format($totalsByCode['early_balance'] + $totalsByCode['apply'], 0, ' ', ' ') }}
-                                    </td>
-                                    <td>
-                                        @if ($totalsByCode['new_credit_status'] > 0)
-                                            {{ number_format((($totalsByCode['early_balance'] + $totalsByCode['apply']) / $totalsByCode['new_credit_status']) * 100, 2, '.', ' ') }}%
-                                        @else
-                                            0%
-                                        @endif
-                                    </td>
-                                    <td>{{ number_format($totalsByCode['new_credit_status'] - ($totalsByCode['early_balance'] + $totalsByCode['apply']), 0, ' ', ' ') }}
-                                    </td>
-                                    <td>
-                                        @if ($totalsByCode['new_credit_status'] > 0)
-                                            {{ number_format((($totalsByCode['new_credit_status'] - ($totalsByCode['early_balance'] + $totalsByCode['apply'])) / $totalsByCode['new_credit_status']) * 100, 2, '.', ' ') }}%
-                                        @else
-                                            0%
-                                        @endif
-                                    </td>
-                                </tr>
-                            @endif
-                        @endforeach
                     </tbody>
                 </table>
             </div>

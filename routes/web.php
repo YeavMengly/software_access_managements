@@ -23,6 +23,7 @@ use App\Http\Controllers\Result\ResultSuccess\TotalController;
 use App\Http\Controllers\Result\ResultSummariesController;
 use App\Http\Controllers\Result\ResultTotalController;
 use App\Http\Controllers\Loans\SumReferController;
+use App\Http\Controllers\Report\LoansController;
 use App\Http\Controllers\Result\ResultApplyController;
 use Illuminate\Support\Facades\Route;
 
@@ -59,6 +60,7 @@ Route::resource('codes', ReportController::class);
 Route::resource('keys', KeyController::class);
 Route::resource('accounts', AccountKeyController::class);
 Route::resource('sub-account', SubAccountKeyController::class);
+Route::resource('loans', LoansController::class);
 
 //===============================>> Certificate
 Route::resource('certificate', CertificateController::class);
@@ -70,7 +72,7 @@ Route::get('/certificate-amount', [AmountCertificateController::class, 'index'])
 
 //===============================>> Manage Result Operation
 // Route::get('/', [ResultController::class, 'index'])->name('result');
-Route::get('/results', [ResultController::class, 'index'])->name('result.index');
+Route::get('/total_card/results', [ResultController::class, 'index'])->name('result.index');
 Route::get('/result-total', [ResultTotalController::class, 'index'])->name('result-total-table');
 Route::get('/result-total-general', [ResultGeneralController::class, 'index'])->name('result-total-general-table');
 Route::get('/result-operation', [ResultOperationController::class, 'index'])->name('result-total-operation-table');
@@ -102,6 +104,9 @@ Route::delete('/mission-cam/{mission}', [MissionCambodiaController::class, 'dele
 
 Route::post('/reports/import', [ReportController::class, 'importExcelData'])->name('reports.import');
 Route::post('/import-excel', [ReportController::class, 'import'])->name('reports.import');
+
+Route::get('/loans/import', [LoansController::class, 'showImportForm'])->name('loans.importForm');
+Route::post('/loans/import', [LoansController::class, 'import'])->name('loans.import');
 
 //===============================>> Manage Mission Exports
 Route::get('/mission-cambodia/export', [MissionCambodiaController::class, 'export'])->name('table-mission-cambodia');
