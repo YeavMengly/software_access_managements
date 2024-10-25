@@ -45,6 +45,7 @@
                     style="background-color: #007bff;
                     padding: 10px 40px; 
                     font-size: 18px; 
+                    width: 200px;
                     font-family: 'Khmer OS Siemreap', sans-serif; 
                     transition: background-color 0.3s ease, transform 0.3s ease; 
                     box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);">
@@ -55,6 +56,7 @@
                 <button type="button" class="btn btn-secondary ml-3" onclick="clearSearch()"
                     style="padding: 10px 40px;
                     font-size: 18px;
+                    width: 200px;
                     font-family: 'Khmer OS Siemreap', sans-serif;
                     background-color: #6c757d;
                     transition: background-color 0.3s ease;">
@@ -62,11 +64,13 @@
                 </button>
 
                 <!-- Report Mission -->
-                <button type="button" class="btn btn-secondary ml-3" onclick="window.location.href='{{ route('report-mission') }}'"
+                <button type="button" class="btn btn-secondary ml-3"
+                    onclick="window.location.href='{{ route('reports-missions.index') }}'"
                     style="padding: 10px 40px;
                     font-size: 18px;
                     font-family: 'Khmer OS Siemreap', sans-serif;
                     background-color: #df5bad;
+                    width: 200px;
                     transition: background-color 0.3s ease;">
                     តារាងទូទាត់
                 </button>

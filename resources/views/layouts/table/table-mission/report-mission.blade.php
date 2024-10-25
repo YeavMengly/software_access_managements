@@ -2,12 +2,77 @@
 
 @section('content-table-mission-cambodia')
     <div class="row">
-        <div class="col-lg-12 margin-tb mb-4 mt-4">
+        <div class="col-lg-6 margin-tb mb-4 mt-4">
             <div class="d-flex justify-content-between align-items-center"
                 style="font-family: 'Khmer OS Siemreap', sans-serif;">
-                <a class="btn btn-primary" href="{{ route('mission-cam.index') }}">ត្រឡប់ក្រោយ</a>
+                <a class="btn btn-danger" href="{{ route('mission-cam.index') }}"><i class="fas fa-arrow-left"></i>
+                    ត្រឡប់ក្រោយ</a>
             </div>
         </div>
+        <div class="col-md-6">
+            <div class="d-flex align-items-center justify-content-end py-3">
+                <a class="btn btn-success" href="{{ route('reports-missions.create') }}"
+                    style="font-family: 'Khmer OS Siemreap', sans-serif;">បញ្ចូលទិន្នន័យ</a>
+            </div>
+        </div>
+    </div>
+    <div class="row-1">
+        <!-- New Officer List Button -->
+        <a style="font-family: 'Khmer OS Siemreap', sans-serif;" class="btn btn-success"
+            href="{{ route('imported-mission-table') }}"><i class="fas fa-list"></i>
+            បញ្ជីឈ្មោះមន្រ្តី</a>
+
+        <!-- Button to Open the Modal -->
+        <button style="font-family: 'Khmer OS Siemreap', sans-serif;" type="button" class="btn btn-primary"
+            data-bs-toggle="modal" data-bs-target="#uploadModal">
+            Upload File
+        </button>
+
+        <!-- Modal -->
+        <div class="modal fade" id="uploadModal" tabindex="-1" aria-labelledby="uploadModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-custom">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="uploadModalLabel">Upload File</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form style="width: 500px;" method="POST" action="{{ route('report-table.import') }}"
+                            enctype="multipart/form-data">
+                            @csrf
+                            <div class="form-group mb-4">
+                                <label for="file" class="form-label text-lg font-semibold text-gray-700">Select
+                                    File</label>
+                                <input type="file"
+                                    class="form-control block mx-auto w-100 text-gray-700 bg-gray-100 border border-gray-300 rounded-lg focus:outline-none focus:ring focus:ring-indigo-300"
+                                    name="file" id="file" required>
+                            </div>
+                            <div class="d-grid gap-2">
+                                <button type="submit"
+                                    class="btn btn-primary w-full py-2 text-white bg-indigo-600 hover:bg-indigo-700 font-semibold text-lg rounded-lg transition duration-300">Import</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {{-- <form style="width: 500px;" method="POST" action="{{ route('report-table.import') }}"
+            enctype="multipart/form-data">
+            @csrf
+            <div class="form-group mb-4">
+                <label for="button" class="mt-3 form-label text-lg font-semibold text-gray-700">Upload File</label>
+                <input type="file"
+                    class="form-control block w-full px-4 py-3 mt-2 text-gray-700 bg-gray-100 border border-gray-300 rounded-lg focus:outline-none focus:ring focus:ring-indigo-300"
+                    name="file" id="file" required>
+            </div>
+
+            <div class="d-grid gap-2">
+                <button type="submit"
+                    class="btn btn-primary w-full py-2 text-white bg-indigo-600 hover:bg-indigo-700 font-semibold text-lg rounded-lg transition duration-300">Import</button>
+            </div>
+        </form> --}}
+
     </div>
     <div class="border-wrapper mt-3">
         <div class="result-total-table-container">
@@ -22,16 +87,18 @@
                 <h4>ការិយាល័យហិរញ្ញវត្ថុ</h4>
             </div>
             <div class="third-header">
-                <h4>តារាងរបាយការណ៍ចំណាយបេសកកម្មក្នុងប្រទេសឆ្នាំ ២០២៤</h4>
-                <h4>របស់អគ្គនាយករដ្ឋបាល និងហិរញ្ញវត្ថុ</h4>
+                <h4>តារាងទូទាត់ប្រាក់បេសកកម្មក្នុងប្រទេសចាប់ពីថ្ងៃទី៨-២៨ ខែមីនា ឆ្នាំ២០២៤</h4>
+                <h4>នៃក្រសួងការងារ និងបណ្ដុះបណ្ដាលវិជ្ជាជីវៈ ត្រូវផ្ទេរទៅធនាគារកាណាឌីយ៉ា ក.អ</h4>
             </div>
 
             <div class="table-container">
-                <table class="table-border ">
+                <table class="table-border">
                     <thead>
                         <tr style="align-items: center; font-family: 'Khmer OS Muol Light', sans-serif;">
                             <th rowspan="2" style="border: 2px solid black;">
-                                អន្តលេខ</th>
+                                ល.រ</th>
+                            <th rowspan="2" style="border: 2px solid black;">
+                                អត្តលេខ</th>
                             <th rowspan="2" style="border: 2px solid black;">
                                 ឈ្មោះ-ខ្មែរ</th>
                             <th rowspan="2" style="border: 2px solid black;">
@@ -41,139 +108,22 @@
                             <th rowspan="2" style="border: 2px solid black;">
                                 ទឹកប្រាក់សរុប</th>
                             <th rowspan="2" style="border: 2px solid black;">
-                                សកម្មភាពផ្សេងៗ</th>
+                                ផ្សេងៗ</th>
                         </tr>
-
                     </thead>
-                    {{-- <tbody style="border: 2px solid black;">
-                        <tr>
-                            <td colspan="23" style="text-align: left; font-family: 'Khmer OS Siemreap', sans-serif">
-                                សម្រាប់កម្មវិធីទី០៥ ចង្កោមសកម្មភាពទី០១ ស្ដីពី ពង្រឹងប្រសិទ្ធភាពនៃការអនុវត្តចំណាយ
-                                និងការគ្រប់គ្រងកិច្ចការហិរញ្ញវត្ថុតាមប្រព័ន្ធ FMIS</td>
-                        </tr>
-                        @foreach ($missions->groupBy('letter_number') as $letterNumber => $group)
-                            @foreach ($group as $index => $mission)
-                                <tr>
-                                    <td style="border: 2px solid black; font-family: 'Khmer OS Siemreap', sans-serif">
-                                        {{ $loop->parent->iteration }}.{{ $index + 1 }}</td>
-                                    <td
-                                        style="border: 2px solid black; width:180px; font-family: 'Khmer OS Siemreap', sans-serif">
-                                        {{ $mission->name }}</td>
-                                    <td
-                                        style="border: 2px solid black; width: 100px; font-family: 'Khmer OS Siemreap', sans-serif">
-                                        {{ $mission->role }}</td>
-                                    <td style="border: 2px solid black; font-family: 'Khmer OS Siemreap', sans-serif">
-                                        {{ $mission->position_type }}</td>
-                                    <td style="border: 2px solid black; font-family: 'Khmer OS Siemreap', sans-serif">
-                                        {{ $mission->letter_number }}</td>
-                                    <td
-                                        style="border: 2px solid black; width: 110px; font-family: 'Khmer OS Siemreap', sans-serif">
-                                        {{ $mission->letter_date }}</td>
-                                    <td style="border: 2px solid black; font-family: 'Khmer OS Siemreap', sans-serif">
-                                        {{ $mission->mission_objective }}</td>
-                                    <td style="border: 2px solid black; font-family: 'Khmer OS Siemreap', sans-serif">
-                                        {{ $mission->location }}</td>
-                                    <td
-                                        style="border: 2px solid black; width: 110px; font-family: 'Khmer OS Siemreap', sans-serif">
-                                        {{ $mission->mission_start_date }}</td>
-                                    <td
-                                        style="border: 2px solid black; width: 110px; font-family: 'Khmer OS Siemreap', sans-serif">
-                                        {{ $mission->mission_end_date }}</td>
-                                    <td style="border: 2px solid black; font-family: 'Khmer OS Siemreap', sans-serif">
-                                        {{ $mission->days_count }}</td>
-                                    <td style="border: 2px solid black; font-family: 'Khmer OS Siemreap', sans-serif">
-                                        {{ $mission->nights_count }}</td>
-                                    <td style="border: 2px solid black; font-family: 'Khmer OS Siemreap', sans-serif">
-                                        {{ number_format($mission->travel_allowance, 0, '.', ',') }}</td>
-                                    <td style="border: 2px solid black; font-family: 'Khmer OS Siemreap', sans-serif">
-                                        {{ number_format($mission->pocket_money, 0, '.', ',') }}</td>
-                                    <td style="border: 2px solid black; font-family: 'Khmer OS Siemreap', sans-serif">
-                                        {{ number_format($mission->total_pocket_money, 0, '.', ',') }}</td>
-                                    <td style="border: 2px solid black; font-family: 'Khmer OS Siemreap', sans-serif">
-                                        {{ number_format($mission->meal_money, 0, '.', ',') }}</td>
-                                    <td style="border: 2px solid black; font-family: 'Khmer OS Siemreap', sans-serif">
-                                        {{ number_format($mission->total_meal_money, 0, '.', ',') }}</td>
-                                    <td style="border: 2px solid black; font-family: 'Khmer OS Siemreap', sans-serif">
-                                        {{ number_format($mission->accommodation_money, 0, '.', ',') }}</td>
-                                    <td style="border: 2px solid black; font-family: 'Khmer OS Siemreap', sans-serif">
-                                        {{ number_format($mission->total_accommodation_money, 0, '.', ',') }}</td>
-                                    <td style="border: 2px solid black; font-family: 'Khmer OS Siemreap', sans-serif">
-                                        {{ number_format($mission->other_allowances, 0, '.', ',') }}</td>
-                                    <td style="border: 2px solid black; font-family: 'Khmer OS Siemreap', sans-serif">
-                                        {{ number_format($mission->final_total, 0, '.', ',') }}</td>
-                                    <td style="border: 2px solid black;">
-                                        <div style="display: flex; gap: 5px;">
-                                            <a href="{{ route('missions.edit', $mission->id) }}"
-                                                class="btn btn-primary btn-sm">
-                                                <i class="fas fa-edit"></i>
-                                            </a>
-                                            <form id="delete-form-{{ $mission->id }}"
-                                                action="{{ route('missions.delete', $mission->id) }}" method="POST"
-                                                style="display:inline;">
-                                                @csrf
-                                                @method('DELETE')
-                                                <button type="button" class="btn btn-danger btn-sm"
-                                                    onclick="confirmDelete({{ $mission->id }})">
-                                                    <i class="fas fa-trash-alt"></i>
-                                                </button>
-                                            </form>
-                                        </div>
-                                    </td>
-                                </tr>
-                            @endforeach
-                            <!-- Display the total row for this group -->
+                    <tbody id="table-body" style="border: 2px solid black; font-family: 'Khmer OS Siemreap', sans-serif;">
+                        @foreach ($data as $index => $mission)
                             <tr>
-                                <td colspan="12"
-                                    style="border: 2px solid black; font-family: 'Khmer OS Muol Light', sans-serif;">
-                                    <strong>{{ 'សរុប' }} {{ $loop->index + 1 }}</strong>
-                                </td>
-                                <td style="border: 2px solid black;">
-                                    <strong>{{ number_format($groupedTotals[$letterNumber]['travel_allowance'], 0, '.', ',') }}</strong>
-                                </td>
+                                <td style="border: 2px solid black;">{{ $index + 1 }}</td>
+                                <td style="border: 2px solid black;">{{ $mission['id_number'] }}</td>
+                                <td style="border: 2px solid black;">{{ $mission['name_khmer'] }}</td>
+                                <td style="border: 2px solid black;">{{ $mission['name_latin'] }}</td>
+                                <td style="border: 2px solid black;">{{ $mission['account_number'] }}</td>
+                                <td style="border: 2px solid black;">{{ number_format($mission['total_amount'], 2) }}</td>
                                 <td style="border: 2px solid black;"></td>
-                                <td style="border: 2px solid black;">
-                                    <strong>{{ number_format($groupedTotals[$letterNumber]['total_pocket_money'], 0, '.', ',') }}</strong>
-                                </td>
-                                <td style="border: 2px solid black;"></td>
-                                <td style="border: 2px solid black;">
-                                    <strong>{{ number_format($groupedTotals[$letterNumber]['total_meal_money'], 0, '.', ',') }}</strong>
-                                </td>
-                                <td style="border: 2px solid black;"></td>
-                                <td style="border: 2px solid black;">
-                                    <strong>{{ number_format($groupedTotals[$letterNumber]['total_accommodation_money'], 0, '.', ',') }}</strong>
-                                </td>
-                                <td style="border: 2px solid black;"></td>
-                                <td style="border: 2px solid black;">
-                                    <strong>{{ number_format($groupedTotals[$letterNumber]['final_total'], 0, '.', ',') }}</strong>
-                                </td>
                             </tr>
                         @endforeach
-                        <tr>
-                            <td colspan="12"
-                                style="border: 2px solid black; font-family: 'Khmer OS Muol Light', sans-serif;">
-                                <strong>{{ 'សរុបរួម' }}</strong>
-                            </td>
-                            <td style="border: 2px solid black;">
-                                <strong>{{ number_format($totals['travel_allowance'], 0, '.', ',') }}</strong>
-                            </td>
-                            <td style="border: 2px solid black;"></td>
-                            <td style="border: 2px solid black;">
-                                <strong>{{ number_format($totals['total_pocket_money'], 0, '.', ',') }}</strong>
-                            </td>
-                            <td style="border: 2px solid black;"></td>
-                            <td style="border: 2px solid black;">
-                                <strong>{{ number_format($totals['total_meal_money'], 0, '.', ',') }}</strong>
-                            </td>
-                            <td style="border: 2px solid black;"></td>
-                            <td style="border: 2px solid black;">
-                                <strong>{{ number_format($totals['total_accommodation_money'], 0, '.', ',') }}</strong>
-                            </td>
-                            <td style="border: 2px solid black;"></td>
-                            <td style="border: 2px solid black;">
-                                <strong>{{ number_format($totals['final_total'], 0, '.', ',') }}</strong>
-                            </td>
-                        </tr>
-                    </tbody> --}}
+                    </tbody>
                 </table>
             </div>
         </div>
@@ -242,6 +192,10 @@
         .large-checkbox {
             transform: scale(2);
             margin: 7px;
+        }
+
+        .modal-custom {
+            max-width: 530px;
         }
     </style>
 @endsection
