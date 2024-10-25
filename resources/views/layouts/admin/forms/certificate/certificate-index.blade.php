@@ -10,7 +10,7 @@
             </div>
 
             <div class="d-flex justify-content-between align-items-center">
-                <h2 style="font-weight: 700;">តារាងឈ្មោះសលាកបត្រ</h2>
+                <h2 class="flex-grow-1 text-center" style="font-weight: 700;">តារាងឈ្មោះសលាកបត្រ</h2>
                 <div class="btn-container">
                     <a id="submit-button" class="btn btn-success justify-content-between"
                         href="{{ route('certificate.create') }}">
@@ -48,20 +48,42 @@
                 <!-- Dropdown for showing number of items per page -->
                 <div style="width: 120px;">
                     <select name="per_page" class="form-control" onchange="window.location.href=this.value;">
-                        <option value="{{ url()->current() }}?per_page=5" {{ request('per_page') == 5 ? 'selected' : '' }}>
-                            បង្ហាញ 5</option>
-                        <option value="{{ url()->current() }}?per_page=10"
-                            {{ request('per_page') == 10 ? 'selected' : '' }}>បង្ហាញ 10</option>
                         <option value="{{ url()->current() }}?per_page=25"
-                            {{ request('per_page') == 25 ? 'selected' : '' }}>បង្ហាញ 25</option>
+                            {{ request('per_page') == 25 ? 'selected' : '' }}>
+                            បង្ហាញ 25</option>
+                        <option value="{{ url()->current() }}?per_page=50"
+                            {{ request('per_page') == 50 ? 'selected' : '' }}>បង្ហាញ 50</option>
+                        <option value="{{ url()->current() }}?per_page=100"
+                            {{ request('per_page') == 100 ? 'selected' : '' }}>បង្ហាញ 100</option>
                     </select>
                 </div>
             </div>
             <table class="table table-striped table-hover">
                 <thead>
                     <tr>
-                        <th style="border: 1px solid black; font-size: 14px; width: 180px;">លេខរៀង</th>
-                        <th style="border: 1px solid black; font-size: 14px; width:260px;">ឈ្មោះសលាកបត្រ</th>
+                        <!-- Index Column -->
+                        <th style="border: 1px solid black; font-size: 14px; width: 180px;">
+                            លេខរៀង
+                        </th>
+
+                        <!-- Sort by Name Certificate -->
+                        <th style="border: 1px solid black; font-size: 14px; width:260px;">
+                            <a
+                                href="{{ route('certificate.index', [
+                                    'search' => request('search'), // Preserve the search query
+                                    'per_page' => request('per_page'), // Preserve items per page
+                                    'sort_field' => 'name_certificate',
+                                    'sort_direction' => $sortField === 'name_certificate' && $sortDirection === 'asc' ? 'desc' : 'asc',
+                                ]) }}">
+                                ឈ្មោះសលាកបត្រ
+                                <!-- Display sort icon based on current sort direction -->
+                                @if ($sortField === 'name_certificate')
+                                    <i class="fas fa-sort-{{ $sortDirection === 'asc' ? 'up' : 'down' }}"></i>
+                                @endif
+                            </a>
+                        </th>
+
+                        <!-- Action Column -->
                         <th style="border: 1px solid black;" width="200px">សកម្មភាព</th>
                     </tr>
                 </thead>
@@ -69,9 +91,9 @@
                     @forelse ($certificates as $certificate)
                         <tr>
                             <td style="border: 1px solid black; text-align: center;">{{ $loop->iteration }}</td>
+                            <td style="border: 1px solid black; text-align: center;">{{ $certificate->name_certificate }}
+                            </td>
                             <td style="border: 1px solid black; text-align: center;">
-                                {{ $certificate->name_certificate }}</td>
-                            <td style="border: 1px solid black; text-align: center; justify-content: center;">
                                 <form id="delete-form-{{ $certificate->id }}"
                                     action="{{ route('certificate.destroy', $certificate->id) }}" method="POST"
                                     style="display: none;">
@@ -89,55 +111,43 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="13" style="text-align: center;">គ្មានទិន្នន័យ</td>
+                            <td colspan="3" style="text-align: center;">គ្មានទិន្នន័យ</td>
                         </tr>
                     @endforelse
                 </tbody>
             </table>
 
+
             <div class="d-flex justify-content-between align-items-center mt-4">
                 <!-- Custom Pagination Links -->
-                <nav aria-label="Page navigation example">
-                    <ul class="pagination">
-                        @if ($certificates->onFirstPage())
-                            <li class="page-item disabled">
-                                <a class="page-link" href="#" aria-label="Previous">
+                <div>
+                    <nav aria-label="Page navigation example">
+                        <ul class="pagination">
+                            <li class="page-item{{ $certificates->onFirstPage() ? ' disabled' : '' }}">
+                                <a class="page-link"
+                                    href="{{ $certificates->previousPageUrl() }}&per_page={{ request('per_page') }}"
+                                    aria-label="Previous">
                                     <span aria-hidden="true">&laquo;</span>
                                     <span class="sr-only">Previous</span>
                                 </a>
                             </li>
-                        @else
-                            <li class="page-item">
-                                <a class="page-link" href="{{ $certificates->previousPageUrl() }}" aria-label="Previous">
-                                    <span aria-hidden="true">&laquo;</span>
-                                    <span class="sr-only">Previous</span>
-                                </a>
-                            </li>
-                        @endif
-
-                        @for ($i = 1; $i <= $certificates->lastPage(); $i++)
-                            <li class="page-item {{ $i == $certificates->currentPage() ? 'active' : '' }}">
-                                <a class="page-link" href="{{ $certificates->url($i) }}">{{ $i }}</a>
-                            </li>
-                        @endfor
-
-                        @if ($certificates->hasMorePages())
-                            <li class="page-item">
-                                <a class="page-link" href="{{ $certificates->nextPageUrl() }}" aria-label="Next">
+                            @for ($i = 1; $i <= $certificates->lastPage(); $i++)
+                                <li class="page-item{{ $certificates->currentPage() == $i ? ' active' : '' }}">
+                                    <a class="page-link"
+                                        href="{{ $certificates->url($i) }}&per_page={{ request('per_page') }}">{{ $i }}</a>
+                                </li>
+                            @endfor
+                            <li class="page-item{{ !$certificates->hasMorePages() ? ' disabled' : '' }}">
+                                <a class="page-link"
+                                    href="{{ $certificates->nextPageUrl() }}&per_page={{ request('per_page') }}"
+                                    aria-label="Next">
                                     <span aria-hidden="true">&raquo;</span>
                                     <span class="sr-only">Next</span>
                                 </a>
                             </li>
-                        @else
-                            <li class="page-item disabled">
-                                <a class="page-link" href="#" aria-label="Next">
-                                    <span aria-hidden="true">&raquo;</span>
-                                    <span class="sr-only">Next</span>
-                                </a>
-                            </li>
-                        @endif
-                    </ul>
-                </nav>
+                        </ul>
+                    </nav>
+                </div>
 
                 <div>
                     <p class="text-muted">បង្ហាញ {{ $certificates->firstItem() }} ដល់ {{ $certificates->lastItem() }}
@@ -157,10 +167,10 @@
             padding: 10px;
         }
 
-        .result-total-table-container {
-            max-height: 100vh;
-            overflow-y: auto;
-        }
+        /* .result-total-table-container {
+                max-height: 100vh;
+                overflow-y: auto;
+            } */
 
         .btn,
         .form-control,

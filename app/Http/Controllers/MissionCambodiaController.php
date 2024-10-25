@@ -4,9 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Exports\CambodiaExport;
 use App\Models\Result\CambodiaMission;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
-use Maatwebsite\Excel\Facades\Excel;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\Rule;
+use PgSql\Lob;
 
 class MissionCambodiaController extends Controller
 {
@@ -42,10 +44,12 @@ class MissionCambodiaController extends Controller
     {
         // Retrieve search queries
         $search = $request->input('search');
-        $searchDate = $request->input('search_date');
+        $startDate = $request->input('start_date');
+        $endDate = $request->input('end_date');
 
         // Initialize query builder
         $query = CambodiaMission::query();
+
 
         // Filter by text search if provided
         if ($search) {
@@ -53,15 +57,48 @@ class MissionCambodiaController extends Controller
                 $q->where('name', 'like', '%' . $search . '%')
                     ->orWhere('location', 'like', '%' . $search . '%');
             });
+
+            // Get all missions that match the search criteria
+            $matchingMissions = $query->get();
+
+            // Get unique letter_numbers from the matching missions
+            $letterNumbers = $matchingMissions->pluck('letter_number')->unique();
+
+            // If there are multiple letter_numbers or at least one matching mission
+            if ($letterNumbers->count() > 0) {
+                // Adjust the query to get all missions with any of the matching 'letter_number' values
+                $query = CambodiaMission::whereIn('letter_number', $letterNumbers);
+            }
         }
 
-        // Filter by mission_start_date if provided
-        if ($searchDate) {
-            $query->whereDate('mission_start_date', $searchDate);
+        // Filter by date range if both start_date and end_date are provided
+        if ($startDate && $endDate) {
+            try {
+                $startDate = Carbon::createFromFormat('Y-m-d', $startDate)->startOfDay();
+                $endDate = Carbon::createFromFormat('Y-m-d', $endDate)->endOfDay();
+                $query->whereBetween('created_at', [$startDate, $endDate]);
+            } catch (\Exception $e) {
+                // Handle invalid date format error
+                Log::error('Invalid date format: ' . $e->getMessage());
+                return redirect()->back()->withErrors(['date' => 'Invalid date format. Please use YYYY-MM-DD format.']);
+            }
+        } elseif ($startDate) {
+            // Filter by start_date if only start_date is provided
+            try {
+                $startDate = Carbon::createFromFormat('Y-m-d', $startDate)->startOfDay();
+                $query->where('created_at', '>=', $startDate);
+            } catch (\Exception $e) {
+                // Handle invalid date format error
+                Log::error('Invalid date format: ' . $e->getMessage());
+                return redirect()->back()->withErrors(['date' => 'Invalid date format. Please use YYYY-MM-DD format.']);
+            }
         }
 
         // Fetch missions
         $missions = $query->get();
+
+        // $perPage = $request->get('per_page', 25); // Get per_page from request or default to 25
+        // $missions = CambodiaMission::paginate($perPage); // Assuming 'ResultMission' is the model
 
         // Calculate totals
         $totals = [
@@ -72,10 +109,22 @@ class MissionCambodiaController extends Controller
             'final_total' => $missions->sum('final_total'),
         ];
 
-        // Pass the missions and totals to the view
+        // Calculate grouped totals by 'letter_number'
+        $groupedTotals = $missions->groupBy('letter_number')->map(function ($group) {
+            return [
+                'travel_allowance' => $group->sum('travel_allowance'),
+                'total_pocket_money' => $group->sum('total_pocket_money'),
+                'total_meal_money' => $group->sum('total_meal_money'),
+                'total_accommodation_money' => $group->sum('total_accommodation_money'),
+                'final_total' => $group->sum('final_total'),
+            ];
+        });
+
+        // Pass the missions, totals, and groupedTotals to the view
         return view('layouts.table.table-mission.table-mission-cambodia', [
             'missions' => $missions,
             'totals' => $totals,
+            'groupedTotals' => $groupedTotals,
         ]);
     }
 
@@ -88,16 +137,25 @@ class MissionCambodiaController extends Controller
     {
         // Define possible roles
         $roles = [
-            'អគ្កាធិការរង',
-            'អគ្គនាយករង',
-            'អគ្គលេខាធិការរង',
+            'រដ្ឋមន្រ្តី',
+            'ទីប្រឹក្សាអមក្រសួង',
             'រដ្ឋលេខាធិការ',
             'អនុរដ្ឋលេខាធិការ',
+            'អគ្កាធិការ',
+            'អគ្កាធិការរង',
+            'អគ្គនាយក',
+            'អគ្គនាយករង',
+            'អគ្គលេខាធិការ',
+            'អគ្គលេខាធិការរង',
+            'ប្រ.នាយកដ្ឋាន',
+            'អនុ.នាយកដ្ឋាន',
             'ប្រ.ការិយាល័យ',
             'អនុ.ការិយាល័យ',
+            'ប្រធានផ្នែក',
             'អនុប្រធានផ្នែក',
             'មន្ត្រី',
             'ជំនួយការ',
+            'មន្ត្រីជាប់កិច្ចសន្យា',
         ];
 
         // Define possible position types
@@ -142,7 +200,6 @@ class MissionCambodiaController extends Controller
         ];
 
         // Variable to hold the final mission ID
-        // Ensure arrays are initialized
         $names = $request->names ?? [];
         $people = $request->people ?? [];
 
@@ -269,7 +326,7 @@ class MissionCambodiaController extends Controller
         $validatedData = $request->validate([
             'name' => 'required|string|max:255',
             'role' => 'required|string|max:255',
-            'position_type' => 'required|string|max:255', 
+            'position_type' => 'required|string|max:255',
             'letter_number' => 'required|numeric',
             'letter_date' => 'required|date',
             'mission_objective' => 'required|string|max:255',

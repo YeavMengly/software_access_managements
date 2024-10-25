@@ -9,16 +9,18 @@
                         <a class="btn btn-danger" href="{{ route('programs') }}">
                             <i class="fas fa-arrow-left"></i> ត្រឡប់ក្រោយ
                         </a>
-                        <h2 style="font-weight: 700;">តារាងលេខជំពូក</h2>
+                        
+                        <h2 class="mx-auto" style="font-weight: 700;">តារាងលេខជំពូក</h2>
 
-                        <a id="submit-button" class="btn btn-success" href="{{ route('keys.create') }}">
+                        {{-- <a id="submit-button" class="btn btn-success" href="{{ route('keys.create') }}">
                             បញ្ចូលទិន្ន័យ
                             <i id="plus-icon" class="fas fa-plus" style="margin-left: 0px;"></i>
                             <div id="loader" class="loader" style="display: none;"></div>
-                        </a>
+                        </a> --}}
 
                     </div>
 
+                    {{-- Field Search --}}
                     <form class="max-w-md mx-auto mt-3" method="GET" action="{{ route('keys.index') }}">
                         <div class="row">
                             <div class="col-md-6">
@@ -40,8 +42,9 @@
                 </div>
             </div>
 
+
+            {{-- Dropdown for showing number of items per page --}}
             <div class="d-flex justify-content-end mb-2">
-                <!-- Dropdown for showing number of items per page -->
                 <div style="width: 120px;">
                     <select name="per_page" class="form-control" onchange="window.location.href=this.value;">
                         <option value="{{ url()->current() }}?per_page=25"
@@ -54,10 +57,10 @@
                 </div>
             </div>
 
+            {{-- Table --}}
             <table class="table table-striped table-hover">
                 <thead>
                     <tr>
-                        <th style="border: 1px solid black;">លេខរៀង</th>
                         <th style="border: 1px solid black;">
                             <a href="{{ route('keys.index', ['sort_by' => 'code', 'sort_order' => $sortOrder === 'asc' ? 'desc' : 'asc', 'search' => $search]) }}"
                                 class="text-decoration-none">
@@ -98,9 +101,8 @@
                         @endphp
                         @forelse ($keys as $key)
                             <tr>
-                                <td style="border: 1px solid black; text-align: center;">{{ $count }}</td>
                                 <td style="border: 1px solid black; text-align: center;">{{ $key->code }}</td>
-                                <td style="border: 1px solid black; text-align: center;">{{ $key->name }}</td>
+                                <td style="border: 1px solid black; text-align: start; padding-left: 2%;">{{ $key->name }}</td>
                                 <td style="border: 1px solid black; text-align: center; justify-content: center">
                                     <form id="delete-form-{{ $key->id }}"
                                         action="{{ route('keys.destroy', $key->id) }}" method="POST"
@@ -129,7 +131,7 @@
                 </tbody>
             </table>
 
-            <!-- Custom Pagination Links -->
+            {{-- Custom Pagination --}}
             <div class="d-flex justify-content-between align-items-center mt-4">
                 <nav aria-label="Page navigation example">
                     <ul class="pagination">
@@ -183,10 +185,9 @@
 @endsection
 
 @section('styles')
-    <!-- Include any additional styles here -->
+    {{-- Insclude style here --}}
     <style>
         .border-wrapper {
-            /* border: 2px solid black; */
             padding: 32px;
         }
 
@@ -195,7 +196,10 @@
             display: inline-block;
         }
 
-        .btn, .form-control, label, th,
+        .btn,
+        .form-control,
+        label,
+        th,
         td {
             border: 1px solid black;
             text-align: center;
@@ -203,7 +207,7 @@
             font-family: 'Khmer OS Siemreap', sans-serif;
             font-size: 16px;
         }
-        
+
         #submit-button {
             position: relative;
             padding-right: 50px;
@@ -241,7 +245,7 @@
 @endsection
 
 @section('scripts')
-    <!-- Include SweetAlert2 -->
+    {{-- Include SweetAlert2 --}}
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     @if (Session::has('success'))

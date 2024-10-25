@@ -24,7 +24,7 @@
                     <div class="col-md-6">
                         <div class="input-group my-3" style="width: 70%;">
                             <input type="search" name="search" value="{{ request('search') }}" class="form-control"
-                                placeholder="ស្វែងរកទិន្នន័យ" aria-label="Search Address">
+                                placeholder="ស្វែងរកទិន្នន័យសលាកបត្រ" aria-label="Search Address">
                             <button type="submit" class="btn btn-primary">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 50 50">
                                     <path
@@ -46,25 +46,22 @@
                 <!-- Dropdown for showing number of items per page -->
                 <div style="width: 120px;">
                     <select name="per_page" class="form-control" onchange="window.location.href=this.value;">
-                        <option value="{{ url()->current() }}?per_page=5" {{ request('per_page') == 5 ? 'selected' : '' }}>
-                            បង្ហាញ 5</option>
-                        <option value="{{ url()->current() }}?per_page=10"
-                            {{ request('per_page') == 10 ? 'selected' : '' }}>បង្ហាញ 10</option>
-                        <option value="{{ url()->current() }}?per_page=25"
-                            {{ request('per_page') == 25 ? 'selected' : '' }}>បង្ហាញ 25</option>
+                        <option value="{{ url()->current() }}?per_page=25" {{ request('per_page') == 25 ? 'selected' : '' }}>
+                            បង្ហាញ 25</option>
+                        <option value="{{ url()->current() }}?per_page=50"
+                            {{ request('per_page') == 50 ? 'selected' : '' }}>បង្ហាញ 50</option>
+                        <option value="{{ url()->current() }}?per_page=100"
+                            {{ request('per_page') == 100 ? 'selected' : '' }}>បង្ហាញ 100</option>
                     </select>
                 </div>
             </div>
             <table class="table table-striped table-hover ">
                 <thead>
                     <tr>
-                        <th style="border: 1px solid black; font-size: 14px; width: 180px;">លេខរៀង</th>
-                        <th style="border: 1px solid black; font-size: 14px; width: 180px;">លេខជំពូក</th>
-                        <th style="border: 1px solid black; font-size: 14px; width: 180px;">លេខគណនី</th>
                         <th style="border: 1px solid black; font-size: 14px; width: 180px;">លេខអនុគណនី</th>
                         <th style="border: 1px solid black; font-size: 14px; width: 180px;">លេខកូដកម្មវិធី</th>
 
-                        <th style="border: 1px solid black; font-size: 14px; width:260px;">ឈ្មោះសលាកបត្រ</th>
+                        {{-- <th style="border: 1px solid black; font-size: 14px; width:260px;">ឈ្មោះសលាកបត្រ</th> --}}
                         <th style="border: 1px solid black; font-size: 14px; width:260px;">ចំនួនទឹកប្រាក់</th>
                         <th style="border: 1px solid black;" width="200px">សកម្មភាព</th>
                     </tr>
@@ -79,22 +76,15 @@
                     @else
                         @foreach ($certificatesData as $certificateData)
                             <tr>
-                                <td style="border: 1px solid black; text-align: center;">{{ $loop->iteration }}</td>
-                                <td style="border: 1px solid black; text-align: center;">
-                                    {{ $certificateData->report && $certificateData->report->subAccountKey ? $certificateData->report->subAccountKey->accountKey->key->code : 'N/A' }}
-                                </td>
-                                <td style="border: 1px solid black; text-align: center;">
-                                    {{ $certificateData->report && $certificateData->report->subAccountKey ? $certificateData->report->subAccountKey->accountKey->account_key : 'N/A' }}
-                                </td>
                                 <td style="border: 1px solid black; text-align: center;">
                                     {{ $certificateData->report && $certificateData->report->subAccountKey ? $certificateData->report->subAccountKey->sub_account_key : 'N/A' }}
                                 </td>
                                 <td style="border: 1px solid black; text-align: center;">
                                     {{ $certificateData->report ? $certificateData->report->report_key : 'N/A' }}
                                 </td>
-                                <td style="border: 1px solid black; text-align: center;">
+                                {{-- <td style="border: 1px solid black; text-align: center;">
                                     {{ $certificateData->certificate ? $certificateData->certificate->name_certificate : 'N/A' }}
-                                </td>
+                                </td> --}}
                                 <td style="border: 1px solid black; text-align: center;">
                                     {{ number_format($certificateData->value_certificate, 0, ' ', ' ') }}
                                 </td>
@@ -122,48 +112,34 @@
 
             <div class="d-flex justify-content-between align-items-center mt-4">
                 <!-- Custom Pagination Links -->
-                <nav aria-label="Page navigation example">
-                    <ul class="pagination">
-                        @if ($certificatesData->onFirstPage())
-                            <li class="page-item disabled">
-                                <a class="page-link" href="#" aria-label="Previous">
-                                    <span aria-hidden="true">&laquo;</span>
-                                    <span class="sr-only">Previous</span>
-                                </a>
-                            </li>
-                        @else
-                            <li class="page-item">
-                                <a class="page-link" href="{{ $certificatesData->previousPageUrl() }}"
+                <div>
+                    <nav aria-label="Page navigation example">
+                        <ul class="pagination">
+                            <li class="page-item{{ $certificatesData->onFirstPage() ? ' disabled' : '' }}">
+                                <a class="page-link"
+                                    href="{{ $certificatesData->previousPageUrl() }}&per_page={{ request('per_page') }}"
                                     aria-label="Previous">
                                     <span aria-hidden="true">&laquo;</span>
                                     <span class="sr-only">Previous</span>
                                 </a>
                             </li>
-                        @endif
-
-                        @for ($i = 1; $i <= $certificatesData->lastPage(); $i++)
-                            <li class="page-item {{ $i == $certificatesData->currentPage() ? 'active' : '' }}">
-                                <a class="page-link" href="{{ $certificatesData->url($i) }}">{{ $i }}</a>
-                            </li>
-                        @endfor
-
-                        @if ($certificatesData->hasMorePages())
-                            <li class="page-item">
-                                <a class="page-link" href="{{ $certificatesData->nextPageUrl() }}" aria-label="Next">
+                            @for ($i = 1; $i <= $certificatesData->lastPage(); $i++)
+                                <li class="page-item{{ $certificatesData->currentPage() == $i ? ' active' : '' }}">
+                                    <a class="page-link"
+                                        href="{{ $certificatesData->url($i) }}&per_page={{ request('per_page') }}">{{ $i }}</a>
+                                </li>
+                            @endfor
+                            <li class="page-item{{ !$certificatesData->hasMorePages() ? ' disabled' : '' }}">
+                                <a class="page-link"
+                                    href="{{ $certificatesData->nextPageUrl() }}&per_page={{ request('per_page') }}"
+                                    aria-label="Next">
                                     <span aria-hidden="true">&raquo;</span>
                                     <span class="sr-only">Next</span>
                                 </a>
                             </li>
-                        @else
-                            <li class="page-item disabled">
-                                <a class="page-link" href="#" aria-label="Next">
-                                    <span aria-hidden="true">&raquo;</span>
-                                    <span class="sr-only">Next</span>
-                                </a>
-                            </li>
-                        @endif
-                    </ul>
-                </nav>
+                        </ul>
+                    </nav>
+                </div>
                 <div>
                     <p class="text-muted">បង្ហាញ {{ $certificatesData->firstItem() }} ដល់
                         {{ $certificatesData->lastItem() }}
@@ -182,10 +158,10 @@
             padding: 10px;
         }
 
-        .result-total-table-container {
+        /* .result-total-table-container {
             max-height: 100vh;
             overflow-y: auto;
-        }
+        } */
 
         .btn-container {
             position: relative;

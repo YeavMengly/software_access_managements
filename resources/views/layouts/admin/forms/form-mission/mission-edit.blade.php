@@ -57,27 +57,42 @@
                                             <select name="role" id="role" class="form-control centered-text"
                                                 required>
                                                 <option value="">ជ្រើសរើសតួនាទី</option>
-                                                <option value="អគ្កាធិការរង"
-                                                    {{ old('role', $missions->role ?? '') == 'អគ្កាធិការរង' ? 'selected' : '' }}>
-                                                    អគ្កាធិការរង</option>
-                                                <option value="អគ្គនាយករង"
-                                                    {{ old('role', $missions->role ?? '') == 'អគ្គនាយករង' ? 'selected' : '' }}>
-                                                    អគ្គនាយករង</option>
-                                                <option value="អគ្គលេខាធិការ"
-                                                    {{ old('role', $missions->role ?? '') == 'អគ្គលេខាធិការ' ? 'selected' : '' }}>
-                                                    អគ្គលេខាធិការ</option>
+                                                <option value="រដ្ឋមន្រ្តី"
+                                                    {{ old('role', $missions->role ?? '') == 'រដ្ឋមន្រ្តី' ? 'selected' : '' }}>
+                                                    រដ្ឋមន្រ្តី</option>
+                                                <option value="ទីប្រឹក្សាអមក្រសួង"
+                                                    {{ old('role', $missions->role ?? '') == 'ទីប្រឹក្សាអមក្រសួង' ? 'selected' : '' }}>
+                                                    ទីប្រឹក្សាអមក្រសួង</option>
                                                 <option value="រដ្ឋលេខាធិការ"
                                                     {{ old('role', $missions->role ?? '') == 'រដ្ឋលេខាធិការ' ? 'selected' : '' }}>
                                                     រដ្ឋលេខាធិការ</option>
                                                 <option value="អនុរដ្ឋលេខាធិការ"
                                                     {{ old('role', $missions->role ?? '') == 'អនុរដ្ឋលេខាធិការ' ? 'selected' : '' }}>
                                                     អនុរដ្ឋលេខាធិការ</option>
+                                                <option value="អគ្កាធិការរង"
+                                                    {{ old('role', $missions->role ?? '') == 'អគ្កាធិការរង' ? 'selected' : '' }}>
+                                                    អគ្កាធិការរង</option>
+                                                <option value="អគ្គនាយករង"
+                                                    {{ old('role', $missions->role ?? '') == 'អគ្គនាយករង' ? 'selected' : '' }}>
+                                                    អគ្គនាយករង</option>
+                                                <option value="អគ្គលេខាធិការរង"
+                                                    {{ old('role', $missions->role ?? '') == 'អគ្គលេខាធិការរង' ? 'selected' : '' }}>
+                                                    អគ្គលេខាធិការរង</option>
+                                                <option value="ប្រ.នាយកដ្ឋាន"
+                                                    {{ old('role', $missions->role ?? '') == 'ប្រ.នាយកដ្ឋាន' ? 'selected' : '' }}>
+                                                    ប្រ.នាយកដ្ឋាន</option>
+                                                <option value="អនុ.នាយកដ្ឋាន"
+                                                    {{ old('role', $missions->role ?? '') == 'អនុ.នាយកដ្ឋាន' ? 'selected' : '' }}>
+                                                    អនុ.នាយកដ្ឋាន</option>
                                                 <option value="ប្រ.ការិយាល័យ"
                                                     {{ old('role', $missions->role ?? '') == 'ប្រ.ការិយាល័យ' ? 'selected' : '' }}>
                                                     ប្រ.ការិយាល័យ</option>
                                                 <option value="អនុ.ការិយាល័យ"
                                                     {{ old('role', $missions->role ?? '') == 'អនុ.ការិយាល័យ' ? 'selected' : '' }}>
                                                     អនុ.ការិយាល័យ</option>
+                                                <option value="ប្រធានផ្នែក"
+                                                    {{ old('role', $missions->role ?? '') == 'ប្រធានផ្នែក' ? 'selected' : '' }}>
+                                                    ប្រធានផ្នែក</option>
                                                 <option value="អនុប្រធានផ្នែក"
                                                     {{ old('role', $missions->role ?? '') == 'អនុប្រធានផ្នែក' ? 'selected' : '' }}>
                                                     អនុប្រធានផ្នែក</option>
@@ -87,6 +102,9 @@
                                                 <option value="ជំនួយការ"
                                                     {{ old('role', $missions->role ?? '') == 'ជំនួយការ' ? 'selected' : '' }}>
                                                     ជំនួយការ</option>
+                                                <option value="មន្ត្រីជាប់កិច្ចសន្យា"
+                                                    {{ old('role', $missions->role ?? '') == 'មន្ត្រីជាប់កិច្ចសន្យា' ? 'selected' : '' }}>
+                                                    មន្ត្រីជាប់កិច្ចសន្យា</option>
                                             </select>
                                         </div>
                                     </div>
@@ -159,15 +177,14 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label for="mission_objective">កម្មវត្ថុនៃការចុះបេសកកម្ម:</label>
-                                <input type="text" name="mission_objective" id="mission_objective"
-                                    class="form-control @error('mission_objective') is-invalid @enderror"
-                                    value="{{ old('mission_objective', $missions->mission_objective) }}"
-                                    oninput="updateCurrentLoan(this)">
+                                <textarea name="mission_objective" id="mission_objective" rows="5"
+                                          class="form-control @error('mission_objective') is-invalid @enderror"
+                                          oninput="updateCurrentLoan(this)"
+                                          style="resize: vertical; font-family: 'Khmer OS Siemreap', sans-serif;">{{ old('mission_objective', $missions->mission_objective) }}</textarea>
                                 @error('mission_objective')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
-                            </div>
-
+                            </div>                            
                             <div class="form-group">
                                 <label for="location">ជ្រើសរើសខេត្ត:</label>
                                 <select name="location" id="location" class="form-control centered-text">

@@ -3,8 +3,10 @@
 namespace App\Exports;
 
 use App\Models\Result\CambodiaMission;
+use Carbon\Carbon;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use PhpOffice\PhpSpreadsheet\Style\Fill;
 use PhpOffice\PhpSpreadsheet\Shared\Date;
@@ -23,7 +25,8 @@ class CambodiaExport
     public function export(Request $request)
     {
         $search = $request->input('search');
-        $searchDate = $request->input('mission_start_date');
+        $startDate = $request->input('start_date');
+        $endDate = $request->input('end_date');
 
         // Query the data from CambodiaMission based on search and searchDate
         $query = CambodiaMission::query();
@@ -35,23 +38,49 @@ class CambodiaExport
             });
         }
 
-        if ($searchDate) {
-            $query->whereDate('mission_start_date', $searchDate);
+        // Apply date range filter using created_at
+        if ($startDate) {
+            try {
+                $startDate = Carbon::createFromFormat('Y-m-d', $startDate)->startOfDay()->toDateTimeString();
+                if ($endDate) {
+                    $endDate = Carbon::createFromFormat('Y-m-d', $endDate)->endOfDay()->toDateTimeString();
+                    $query->whereBetween('created_at', [$startDate, $endDate]);
+                } else {
+                    $query->whereDate('created_at', '>=', $startDate);
+                }
+            } catch (\Exception $e) {
+                // Handle invalid date format error
+                Log::error('Invalid date format: ' . $e->getMessage());
+                return redirect()->back()->withErrors(['date' => 'Invalid date format. Please use YYYY-MM-DD format.']);
+            }
         }
+
 
         $missions = $query->get();
 
-        // Load the existing Excel template
+        /*
+        |-------------------------------------------------------------------------------
+        | Load the existing Excel template
+        |-------------------------------------------------------------------------------
+        */
         $templatePath = public_path('cambodia_export.xlsx');
         $spreadsheet = IOFactory::load($templatePath);
         $sheet = $spreadsheet->getActiveSheet();
 
-        // Track the previous values and the start row for merging
+        /*
+        |-------------------------------------------------------------------------------
+        | Track the previous values and the start row for merging
+        |-------------------------------------------------------------------------------
+        */
         $prevLetterNumber = null;
         $mergeStartRowLetter = null;
         $row = 13;
 
-        // Initialize total variables
+        /*
+        |-------------------------------------------------------------------------------
+        | Initialize total variables
+        |-------------------------------------------------------------------------------
+        */
         $totalTravelAllowance = 0;
         $totalPocketMoney = 0;
         $totalMealMoney = 0;
@@ -61,19 +90,27 @@ class CambodiaExport
         // Initialize a counter for the "សរុប" rows
         $totalCounter = 1;
 
+        // Initialize a counter for the overall iteration
+        $mainIndex = 1;
+        $subIndex = 0;
+
         foreach ($missions as $index => $mission) {
             $currentLetterNumber = $mission->letter_number;
 
-            // Check and merge letter_number and related columns
+            /*
+            |-------------------------------------------------------------------------------
+            | Check and merge letter_number and related columns
+            |-------------------------------------------------------------------------------
+            */
             if ($prevLetterNumber !== null && $currentLetterNumber !== $prevLetterNumber) {
 
                 if ($mergeStartRowLetter !== null && $mergeStartRowLetter !== $row - 1) {
                     // Merge cells for the previous group
                     $sheet->mergeCells("A{$row}:J{$row}");
-                    $sheet->mergeCells("E{$mergeStartRowLetter}:E" . ($row - 1)); // Merge letter_number
-                    $sheet->mergeCells("F{$mergeStartRowLetter}:F" . ($row - 1)); // Merge letter_date
-                    $sheet->mergeCells("G{$mergeStartRowLetter}:G" . ($row - 1)); // Merge mission_objective
-                    $sheet->mergeCells("H{$mergeStartRowLetter}:H" . ($row - 1)); // Merge location
+                    $sheet->mergeCells("E{$mergeStartRowLetter}:E" . ($row - 1));
+                    $sheet->mergeCells("F{$mergeStartRowLetter}:F" . ($row - 1));
+                    $sheet->mergeCells("G{$mergeStartRowLetter}:G" . ($row - 1));
+                    $sheet->mergeCells("H{$mergeStartRowLetter}:H" . ($row - 1));
 
                     // Add totals in a new row
                     $sheet->setCellValue('A' . $row, 'សរុប' . str_pad($totalCounter, 2, '0', STR_PAD_LEFT));
@@ -82,6 +119,9 @@ class CambodiaExport
                     $sheet->setCellValue('Q' . $row, number_format($totalMealMoney, 0, '.', ','));
                     $sheet->setCellValue('S' . $row, number_format($totalAccommodationMoney, 0, '.', ','));
                     $sheet->setCellValue('U' . $row, number_format($finalTotal, 0, '.', ','));
+
+                    // Center the text in the cell
+                    $sheet->getStyle('A' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
 
                     // Apply font styles with bold
                     $styleArray = [
@@ -126,8 +166,19 @@ class CambodiaExport
                 $mergeStartRowLetter = $row;
             }
 
-            // Populate data
-            $sheet->setCellValue('A' . $row, $index + 1);
+            /*
+            |-------------------------------------------------------------------------------
+            | Populate data
+            |-------------------------------------------------------------------------------
+            */
+            // Check if the letter number has changed
+            if ($prevLetterNumber !== null && $currentLetterNumber !== $prevLetterNumber) {
+                $mainIndex++;
+                $subIndex = 0;
+            }
+            // Increment sub-index for each mission in the current group
+            $subIndex++;
+            $sheet->setCellValue('A' . $row, "{$mainIndex}.{$subIndex}");
             $sheet->setCellValue('B' . $row, $mission->name);
             $sheet->setCellValue('C' . $row, $mission->role);
             $sheet->setCellValue('D' . $row, $mission->position_type);
@@ -166,22 +217,29 @@ class CambodiaExport
             $row++;
         }
 
-        // Merge and add totals for the last group if needed
+        /*
+        |-------------------------------------------------------------------------------
+        | Merge and add totals for the last group if needed
+        |-------------------------------------------------------------------------------
+        */
         if ($mergeStartRowLetter !== null && $mergeStartRowLetter !== $row - 1) {
             // Merge the last group's columns
-            $sheet->mergeCells("E{$mergeStartRowLetter}:E" . ($row - 1)); // Merge letter_number
-            $sheet->mergeCells("F{$mergeStartRowLetter}:F" . ($row - 1)); // Merge letter_date
-            $sheet->mergeCells("G{$mergeStartRowLetter}:G" . ($row - 1)); // Merge mission_objective
-            $sheet->mergeCells("H{$mergeStartRowLetter}:H" . ($row - 1)); // Merge location
-            $sheet->mergeCells("A{$row}:J{$row}"); // Merge columns A to J for Total label
+            $sheet->mergeCells("E{$mergeStartRowLetter}:E" . ($row - 1));
+            $sheet->mergeCells("F{$mergeStartRowLetter}:F" . ($row - 1));
+            $sheet->mergeCells("G{$mergeStartRowLetter}:G" . ($row - 1));
+            $sheet->mergeCells("H{$mergeStartRowLetter}:H" . ($row - 1));
+            $sheet->mergeCells("A{$row}:J{$row}");
 
             // Add totals for the last group
-            $sheet->setCellValue('A' . $row, 'សរុប' . str_pad($totalCounter, 2, '0', STR_PAD_LEFT)); // Display សរុប with a two-digit counter
+            $sheet->setCellValue('A' . $row, 'សរុប' . str_pad($totalCounter, 2, '0', STR_PAD_LEFT));
             $sheet->setCellValue('M' . $row, number_format($totalTravelAllowance, 0, '.', ','));
             $sheet->setCellValue('O' . $row, number_format($totalPocketMoney, 0, '.', ','));
             $sheet->setCellValue('Q' . $row, number_format($totalMealMoney, 0, '.', ','));
             $sheet->setCellValue('S' . $row, number_format($totalAccommodationMoney, 0, '.', ','));
             $sheet->setCellValue('U' . $row, number_format($finalTotal, 0, '.', ','));
+
+            // Center the text in the cell
+            $sheet->getStyle('A' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
 
             // Apply font styles with bold
             $styleArray = [
@@ -189,8 +247,16 @@ class CambodiaExport
                     'name' => 'Khmer OS Muol Light',
                     'bold' => true,
                 ],
+                'fill' => [
+                    'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
+                    'startColor' => [
+                        'argb' => 'D3D3D3',
+                    ],
+                ],
             ];
 
+            // Apply the style to the range of cells
+            $sheet->getStyle('A' . $row . ':U' . $row)->applyFromArray($styleArray);
             $sheet->getStyle('A' . $row)->applyFromArray($styleArray);
             $sheet->getStyle('M' . $row)->applyFromArray($styleArray);
             $sheet->getStyle('O' . $row)->applyFromArray($styleArray);

@@ -41,7 +41,13 @@
 
                             <div class="form-group">
                                 <strong>លេខគណនី:</strong>
-                                <select name="account_key" class="form-control">
+                                <input type="text" id="searchAccountKey" class="form-control text-align-left"
+                                    placeholder="ស្វែងរកលេខគណនី..." onkeyup="filterAccountKeys()"
+                                    oninput="resetSelection()">
+                                <p id="accountResultCount" style="font-weight: bold;">ចំនួន: 0</p>
+
+                                <select name="account_key" id="accountKeySelect" class="form-control" size="5"
+                                    onclick="getSelectedAccountValue()">
                                     @foreach ($accountKeys as $accountKey)
                                         <option value="{{ $accountKey->id }}">
                                             {{ $accountKey->key->code }} < {{ $accountKey->account_key }} </option>
@@ -86,6 +92,10 @@
 
         .container-fluid {
             padding: 16px;
+        }
+
+        .text-align-left {
+            text-align: left;
         }
     </style>
 @endsection
@@ -150,5 +160,79 @@
             });
 
         })(jQuery); // End of use strict
+    </script>
+
+    <script>
+        let selectedIndex = -1;
+
+        function filterAccountKeys(event) {
+            const searchInput = document.getElementById('searchAccountKey').value.toLowerCase();
+            const accountKeySelect = document.getElementById('accountKeySelect');
+            const options = accountKeySelect.getElementsByTagName('option');
+            let count = 0;
+
+            // Filter options based on search input
+            for (let i = 0; i < options.length; i++) {
+                const optionText = options[i].textContent.toLowerCase();
+                if (optionText.includes(searchInput)) {
+                    options[i].style.display = ''; // Show matching option
+                    count++;
+                } else {
+                    options[i].style.display = 'none'; // Hide non-matching option
+                }
+            }
+
+            // Update the result count
+            document.getElementById('accountResultCount').textContent = 'ចំនួន: ' + count;
+
+            // Handle arrow key navigation
+            if (event.key === 'ArrowDown') {
+                if (selectedIndex < options.length - 1) {
+                    selectedIndex++;
+                    while (options[selectedIndex].style.display === 'none') {
+                        selectedIndex++;
+                        if (selectedIndex >= options.length) {
+                            selectedIndex = options.length - 1;
+                            break;
+                        }
+                    }
+                    options[selectedIndex].selected = true;
+                    updateInputValue();
+                }
+            } else if (event.key === 'ArrowUp') {
+                if (selectedIndex > 0) {
+                    selectedIndex--;
+                    while (options[selectedIndex].style.display === 'none') {
+                        selectedIndex--;
+                        if (selectedIndex < 0) {
+                            selectedIndex = 0;
+                            break;
+                        }
+                    }
+                    options[selectedIndex].selected = true;
+                    updateInputValue();
+                }
+            } else if (event.key === 'Enter') {
+                updateInputValue();
+            }
+        }
+
+        function updateInputValue() {
+            const accountKeySelect = document.getElementById('accountKeySelect');
+            const selectedOption = accountKeySelect.options[accountKeySelect.selectedIndex];
+            document.getElementById('searchAccountKey').value = selectedOption.textContent;
+            document.getElementById('searchAccountKey').classList.add('text-align-left'); // Align text to the left
+        }
+
+        function getSelectedAccountValue() {
+            updateInputValue();
+        }
+
+        // Reset selection when user starts typing a new search
+        function resetSelection() {
+            selectedIndex = -1;
+            document.getElementById('searchAccountKey').classList.add(
+            'text-align-left'); // Ensure text remains left-aligned
+        }
     </script>
 @endsection

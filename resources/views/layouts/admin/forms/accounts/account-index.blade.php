@@ -12,12 +12,13 @@
                         <a class="btn btn-danger" href="{{ route('programs') }}">
                             <i class="fas fa-arrow-left"></i> ត្រឡប់ក្រោយ
                         </a>
-                        <h2 style="font-weight: 700;">តារាងលេខកូដគណនី</h2>
+                        <h2 class="mx-auto" style="font-weight: 700;">តារាងលេខកូដគណនី</h2>
                         <a class="btn btn-success" href="{{ route('accounts.create') }}">
                             បញ្ចូលទិន្នន័យ <i class="fas fa-plus" style="margin-left: 8px;"></i>
                         </a>
                     </div>
 
+                    {{-- Field Search --}}
                     <form class="max-w-md mx-auto mt-3" method="GET" action="{{ route('accounts.index') }}">
                         <div class="row">
                             <div class="col-md-6">
@@ -39,8 +40,9 @@
 
                 </div>
             </div>
+
+            {{-- Dropdown for showing number of items per page --}}
             <div class="d-flex justify-content-end mb-2">
-                <!-- Dropdown for showing number of items per page -->
                 <div style="width: 120px;">
                     <select name="per_page" class="form-control" onchange="window.location.href=this.value;">
                         <option value="{{ url()->current() }}?per_page=25"
@@ -52,23 +54,11 @@
                     </select>
                 </div>
             </div>
+
+            {{-- Table --}}
             <table class="table table-striped table-hover">
                 <thead>
                     <tr>
-                        <th style="border: 1px solid black;">លេខរៀង</th>
-                        <th style="border: 1px solid black;">
-                            <a href="{{ route('accounts.index', ['sort_by' => 'key.code', 'sort_order' => $sortBy === 'key.code' && $sortOrder === 'asc' ? 'desc' : 'asc', 'search' => request('search')]) }}"
-                                class="text-decoration-none">
-                                លេខជំពូក
-                                @if ($sortBy === 'key.code')
-                                    @if ($sortOrder === 'asc')
-                                        <span>&#9650;</span>
-                                    @else
-                                        <span>&#9660;</span>
-                                    @endif
-                                @endif
-                            </a>
-                        </th>
                         <th style="border: 1px solid black;">
                             <a href="{{ route('accounts.index', ['sort_by' => 'account_key', 'sort_order' => $sortBy === 'account_key' && $sortOrder === 'asc' ? 'desc' : 'asc', 'search' => request('search')]) }}"
                                 class="text-decoration-none">
@@ -101,10 +91,8 @@
                 <tbody>
                     @forelse ($accountKeys as $accountKey)
                         <tr>
-                            <td style="border: 1px solid black; text-align: center;">{{ $loop->iteration }}</td>
-                            <td style="border: 1px solid black; text-align: center;">{{ $accountKey->key->code }}</td>
                             <td style="border: 1px solid black; text-align: center;">{{ $accountKey->account_key }}</td>
-                            <td style="border: 1px solid black; text-align: center;">{{ $accountKey->name_account_key }}
+                            <td style="border: 1px solid black; text-align: start; padding-left: 2%;">{{ $accountKey->name_account_key }}
                             </td>
                             <td style="border: 1px solid black; text-align: center; justify-content: center">
                                 <form id="delete-form-{{ $accountKey->id }}"
@@ -130,9 +118,9 @@
                 </tbody>
             </table>
 
+            {{-- Custom Pagination --}}
             <div class="d-flex justify-content-between align-items-center mt-4">
                 <div>
-                    <!-- Custom Pagination -->
                     <nav aria-label="Page navigation example">
                         <ul class="pagination">
                             <li class="page-item{{ $accountKeys->onFirstPage() ? ' disabled' : '' }}">
@@ -160,12 +148,12 @@
                         {{ $accountKeys->total() }} លទ្ធផល</p>
                 </div>
             </div>
-
         </div>
     </div>
 @endsection
 
 @section('styles')
+    {{-- Insclude style here --}}
     <style>
         .border-wrapper {
             padding: 32px;
@@ -192,7 +180,10 @@
             color: #007bff;
         }
 
-        .btn, .form-control, label, th,
+        .btn,
+        .form-control,
+        label,
+        th,
         td {
             border: 1px solid black;
             text-align: center;
@@ -200,7 +191,7 @@
             font-family: 'Khmer OS Siemreap', sans-serif;
             font-size: 16px;
         }
-        
+
         .pagination .page-link:hover {
             color: #0056b3;
             text-decoration: none;
@@ -236,35 +227,9 @@
 
 
 @section('scripts')
-    {{-- <script type="text/javascript">
-        function confirmDelete(id) {
-            Swal.fire({
-                title: 'Are you sure?',
-                text: "You won't be able to revert this!",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
-                confirmButtonText: 'Yes, delete it!'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    // Submit the form corresponding to the certificate ID
-                    document.getElementById('delete-form-' + id).submit();
-
-                    // Show success message with blue text and a custom icon
-                    Swal.fire({
-                        icon: 'success',
-                        title: '<span style="color: blue;">Deleted!</span>',
-                        text: 'The record has been successfully deleted.',
-                        showConfirmButton: false,
-                        timer: 6000
-                    });
-                }
-            });
-        }
-    </script> --}}
-
+    {{-- Include SweetAlert2 --}}
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    
     @if (Session::has('success'))
         <script>
             Swal.fire({

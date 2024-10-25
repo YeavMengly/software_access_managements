@@ -18,16 +18,16 @@
                 <div class="row mb-3">
 
                     {{-- Filter Code --}}
-                    <div class="col-md-3">
+                    {{-- <div class="col-md-3">
                         <input type="text" name="code_id" value="{{ request('code_id') }}" class="form-control mb-2"
                             placeholder="ជំពូក">
-                    </div>
+                    </div> --}}
 
                     {{-- Filter Account --}}
-                    <div class="col-md-3">
+                    {{-- <div class="col-md-3">
                         <input type="text" name="account_key_id" value="{{ request('account_key_id') }}"
                             class="form-control mb-2" placeholder="គណនី">
-                    </div>
+                    </div> --}}
 
                     {{-- Filter Sub-Account --}}
                     <div class="col-md-3">
@@ -88,12 +88,89 @@
 
             <div class="border-wrapper">
                 <div class="result-total-table-container mt-4">
-                    <div class="first-header text-center">
-                        <h3>របាយការណ៍ធានាចំណាយថវិកាក្រសួងការងារ និងបណ្តុះបណ្តាលវិជ្ជាជីវៈ</h3>
 
+                    <div class="first-header text-center">
+                        <h2>ព្រះរាជាណាចក្រកម្ពុជា</h2>
+                        <h3>ជាតិ សាសនា ព្រះមហាក្សត្រ</h3>
+                        <h3>3</h3>
                     </div>
+                    <h3>ក្រសួងការងារ​ នឹងបណ្ដុះបណ្ដាលវិជ្ជាជីវៈ</h3>
+                    <h3>នាយកដ្ខានរដ្ខាបាល និងហិរញ្ញវត្ថុ</h3>
+                    <h3>នាយកដ្ខានហិរញ្ញវត្ថុ និងទ្រព្យសម្បត្តិរដ្ឋ</h3>
+                    <h3>ការិយាល័យហិរញ្ញវត្ថុ</h3>
+
+
                     <div class="second-header text-center">
-                        <h4>ប្រចាំខែមិថុនា ឆ្នាំ២០២៤</h4>
+                        <h3>របាយការណ៍ធានាចំណាយថវិកាក្រសួងការងារ និងបណ្តុះបណ្តាលវិជ្ជាជីវៈ</h3>
+                        <?php
+                        function getKhmerMonth($month)
+                        {
+                            $months = [
+                                1 => 'មករា',
+                                2 => 'កុម្ភៈ',
+                                3 => 'មិនាឆ្នាំ',
+                                4 => 'មេសា',
+                                5 => 'ឧសភា',
+                                6 => 'មិថុនា',
+                                7 => 'កក្កដា',
+                                8 => 'សីហា',
+                                9 => 'កញ្ញា',
+                                10 => 'តុលា',
+                                11 => 'វិច្ឆិកា',
+                                12 => 'ធ្នូ',
+                            ];
+                        
+                            return $months[$month] ?? '';
+                        }
+                        
+                        function convertToKhmerNumber($number)
+                        {
+                            $khmerNumbers = [
+                                '0' => '០',
+                                '1' => '១',
+                                '2' => '២',
+                                '3' => '៣',
+                                '4' => '៤',
+                                '5' => '៥',
+                                '6' => '៦',
+                                '7' => '៧',
+                                '8' => '៨',
+                                '9' => '៩',
+                            ];
+                        
+                            return strtr($number, $khmerNumbers);
+                        }
+                        ?>
+
+                        <h4>
+                            ប្រចាំ
+                            @if (request('start_date') && request('end_date'))
+                                <?php
+                                // Use Carbon to parse the dates
+                                $startDate = \Carbon\Carbon::parse(request('start_date'));
+                                $endDate = \Carbon\Carbon::parse(request('end_date'));
+                                ?>
+                                <span>
+                                    {{ convertToKhmerNumber($startDate->day) }} {{ getKhmerMonth($startDate->month) }}
+                                    {{ convertToKhmerNumber($startDate->year) }}
+                                    ដល់
+                                    {{ convertToKhmerNumber($endDate->day) }} {{ getKhmerMonth($endDate->month) }}
+                                    {{ convertToKhmerNumber($endDate->year) }}
+                                </span>
+                            @else
+                                <?php
+                                // Get current month and year
+                                $currentMonth = date('n'); // Numeric representation of current month (1-12)
+                                $currentYear = date('Y'); // Current year
+                                ?>
+                                <span>ខែ {{ getKhmerMonth($currentMonth) }}
+                                    ឆ្នាំ{{ convertToKhmerNumber($currentYear) }}</span> {{-- Default text for current month dynamically --}}
+                            @endif
+                        </h4>
+
+
+
+
                     </div>
                     <div class="table-container">
 
@@ -101,7 +178,7 @@
                         <table id="reportTable" class="table-border mt-4">
                             <thead class="header-border">
                                 <tr>
-                                    <th rowspan="3">លេខ</th>
+                                    {{-- <th rowspan="3">លេខ</th> --}}
                                     <th rowspan="3">ជំពូក</th>
                                     <th rowspan="3">គណនី</th>
                                     <th rowspan="3">អនុគណនី</th>
@@ -135,13 +212,14 @@
 
                                 {{-- Group Code --}}
                                 @foreach ($totals['code'] as $codeId => $totalsByCode)
-                                    <tr>
-                                        <td>{{ $loop->iteration }}</td>
+                                    <tr style="background-color: rgb(181, 245, 86);">
+                                        {{-- <td>{{ $loop->iteration }}</td> --}}
                                         <td colspan="1"> {{ $codeId }} </td>
                                         <td colspan="1"></td>
                                         <td colspan="1"></td>
                                         <td colspan="1"></td>
-                                        <td colspan="1" style="text-align: start;">{{ $totalsByCode['name'] }}</td>
+                                        <td colspan="1" style="text-align: start; width: 350px;">
+                                            {{ $totalsByCode['name'] }}</td>
                                         <td>{{ number_format($totalsByCode['fin_law'], 0, ' ', ' ') }}</td>
                                         <td>{{ number_format($totalsByCode['current_loan'], 0, ' ', ' ') }}</td>
                                         <td>{{ number_format($totalsByCode['internal_increase'], 0, ' ', ' ') }}</td>
@@ -155,8 +233,7 @@
                                         <td style="color: {{ $totalsByCode['editorial'] < 0 ? 'red' : 'black' }};">
                                             {{ number_format($totalsByCode['editorial'], 0, ' ', ' ') }}
                                         </td>
-                                        <td
-                                            style="color: {{ $totalsByCode['new_credit_status'] < 0 ? 'red' : 'black' }};">
+                                        <td style="color: {{ $totalsByCode['new_credit_status'] < 0 ? 'red' : 'black' }};">
                                             {{ number_format($totalsByCode['new_credit_status'], 0, ' ', ' ') }}
                                         </td>
                                         <td style="color: {{ $totalsByCode['early_balance'] < 0 ? 'red' : 'black' }};">
@@ -176,11 +253,10 @@
                                         <td style="color: {{ $totalsByCode['law_correction'] < 0 ? 'red' : 'black' }};">
                                             {{ number_format($totalsByCode['law_correction'], 2, '.', ' ') }} %</td>
                                     </tr>
-
                                     {{-- Group Account --}}
                                     @foreach ($totals['accountKey'][$codeId] as $accountKeyId => $totalsByAccountKey)
                                         <tr>
-                                            <td></td>
+                                            {{-- <td></td> --}}
                                             <td></td>
                                             <td colspan="1">{{ $accountKeyId }}</td>
                                             <td></td>
@@ -236,7 +312,7 @@
                                         {{-- Group Sub Account --}}
                                         @foreach ($totals['subAccountKey'][$codeId][$accountKeyId] as $subAccountKeyId => $totalsBySubAccountKey)
                                             <tr>
-                                                <td></td>
+                                                {{-- <td></td> --}}
                                                 <td></td>
                                                 <td></td>
                                                 <td colspan="1">{{ $subAccountKeyId }}</td>
@@ -297,7 +373,7 @@
                                             {{-- Listing Data Report --}}
                                             @foreach ($totals['reportKey'][$codeId][$accountKeyId][$subAccountKeyId] as $reportKeyId => $totalsByReportKey)
                                                 <tr>
-                                                    <td></td>
+                                                    {{-- <td></td> --}}
                                                     <td></td>
                                                     <td></td>
                                                     <td></td>
@@ -354,7 +430,6 @@
                                                         {{ number_format($totalsByReportKey['law_correction'], 2, '.', '') }}
                                                         %
                                                     </td>
-
                                                 </tr>
                                             @endforeach
                                         @endforeach
@@ -363,7 +438,7 @@
 
                                 {{--                  Total                  --}}
                                 <tr>
-                                    <td colspan="6" style="border: 1px solid black; text-align: center;">
+                                    <td colspan="5" style="border: 1px solid black; text-align: center;">
                                         <strong>សរុប</strong>: ការរាយការណ៍
                                     </td>
                                     <td colspan="1" style="color: {{ $totals['fin_law'] < 0 ? 'red' : 'black' }};">
@@ -404,12 +479,15 @@
                                         {{ number_format($totals['deadline_balance'], 0, ' ', ' ') }} </td>
                                     <td colspan="1" style="color: {{ $totals['credit'] < 0 ? 'red' : 'black' }};">
                                         {{ number_format($totals['credit'], 0, ' ', ' ') }} </td>
-                                    <td colspan="1"
-                                        style="color: {{ $totals['law_average'] < 0 ? 'red' : 'black' }};">
-                                        {{ number_format($totals['law_average'], 2, '.', ' ') }}% </td>
-                                    <td colspan="1"
-                                        style="color: {{ $totals['law_correction'] < 0 ? 'red' : 'black' }};">
-                                        {{ number_format($totals['law_correction'], 2, '.', ' ') }}% </td>
+                                    <td
+                                        style="color: {{ $totals['law_average'] !== null && $totals['law_average'] < 0 ? 'red' : 'black' }};">
+                                        {{ $totals['law_average'] !== null ? number_format($totals['law_average'], 2, '.', '') . '%' : 'N/A' }}
+                                    </td>
+                                    <td
+                                        style="color: {{ $totals['law_correction'] !== null && $totals['law_correction'] < 0 ? 'red' : 'black' }};">
+                                        {{ $totals['law_correction'] !== null ? number_format($totals['law_correction'], 2, '.', '') . '%' : 'N/A' }}
+                                    </td>
+
                                 </tr>
                                 {{-- End import data --}}
                             </tbody>
@@ -477,14 +555,15 @@
         }
 
 
-        h3 {
+        h2 {
             font-family: 'Khmer OS Muol Light', sans-serif;
-            font-size: 25px;
+            font-size: 24px;
         }
 
+        h3,
         h4 {
-            font-family: 'Khmer OS Siemreap', sans-serif;
-            font-size: 25px;
+            font-family: 'Khmer OS Muol Light', sans-serif;
+            font-size: 20px;
         }
 
         .btn-width {

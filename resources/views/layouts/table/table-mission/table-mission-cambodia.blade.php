@@ -17,18 +17,23 @@
                     <div class="input-group my-3" style="width: 70%; font-family: 'Khmer OS Siemreap', sans-serif">
                         <input type="search" name="search" value="{{ request('search') }}" class="form-control"
                             placeholder="ស្វែងរកទិន្នន័យ" aria-label="Search Address">
-                        <button type="submit" class="btn btn-primary">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 50 50">
-                                <path
-                                    d="M 21 3 C 11.621094 3 4 10.621094 4 20 C 4 29.378906 11.621094 37 21 37 C 24.710938 37 28.140625 35.804688 30.9375 33.78125 L 44.09375 46.90625 L 46.90625 44.09375 L 33.90625 31.0625 C 36.460938 28.085938 38 24.222656 38 20 C 38 10.621094 30.378906 3 21 3 Z M 21 5 C 29.296875 5 36 11.703125 36 20 C 36 28.296875 29.296875 35 21 35 C 12.703125 35 6 28.296875 6 20 C 6 11.703125 12.703125 5 21 5 Z">
-                                </path>
-                            </svg>
-                        </button>
+
                     </div>
                     <!-- Search by date -->
-                    <div class="input-group mt my-3" style="width: 70%; font-family: 'Khmer OS Siemreap', sans-serif">
-                        <input type="date" name="search_date" value="{{ request('search_date') }}" class="form-control"
+                    <div class="input-group mt-3 my-3" style="width: 70%; font-family: 'Khmer OS Siemreap', sans-serif">
+                        <!-- Label for Start Date -->
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"
+                                style="background-color: #007bff; color: white;">ចាប់ពីថ្ងៃ</span>
+                        </div>
+                        <input type="date" name="start_date" value="{{ request('start_date') }}" class="form-control"
                             placeholder="Start Date" aria-label="Start Date">
+                        <!-- Label for End Date -->
+                        <div class="input-group-prepend ml-5">
+                            <span class="input-group-text" style="background-color: #007bff; color: white;">ដល់ថ្ងៃ</span>
+                        </div>
+                        <input type="date" name="end_date" value="{{ request('end_date') }}" class="form-control"
+                            placeholder="End Date" aria-label="End Date">
                     </div>
                 </div>
                 <div class="col-md-6">
@@ -37,11 +42,44 @@
                             style="font-family: 'Khmer OS Siemreap', sans-serif;">បញ្ចូលទិន្នន័យ</a>
                     </div>
                 </div>
+                <button type="submit" class="btn btn-primary ml-3"
+                    style="background-color: #007bff;
+                    padding: 10px 40px; 
+                    font-size: 18px; 
+                    font-family: 'Khmer OS Siemreap', sans-serif; 
+                    transition: background-color 0.3s ease, transform 0.3s ease; 
+                    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);">
+                    ស្វែងរក
+                </button>
+
+                <!-- Clear Button -->
+                <button type="button" class="btn btn-secondary ml-3" onclick="clearSearch()"
+                    style="padding: 10px 40px;
+                    font-size: 18px;
+                    font-family: 'Khmer OS Siemreap', sans-serif;
+                    background-color: #6c757d;
+                    transition: background-color 0.3s ease;">
+                    សម្អាតទិន្នន័យ
+                </button>
+
             </div>
         </form>
+        {{-- <div class="d-flex justify-content-end mb-2">
+            <!-- Dropdown for showing number of items per page -->
+            <div style="width: 120px;">
+                <select name="per_page" class="form-control" onchange="window.location.href=this.value;">
+                    <option value="{{ url()->current() }}?per_page=25" {{ request('per_page') == 25 ? 'selected' : '' }}>
+                        បង្ហាញ 25</option>
+                    <option value="{{ url()->current() }}?per_page=50" {{ request('per_page') == 50 ? 'selected' : '' }}>
+                        បង្ហាញ 50</option>
+                    <option value="{{ url()->current() }}?per_page=100" {{ request('per_page') == 100 ? 'selected' : '' }}>
+                        បង្ហាញ 100</option>
+                </select>
+            </div>
+        </div> --}}
     </div>
 
-    <div class="border-wrapper">
+    <div class="border-wrapper mt-3">
         <div class="result-total-table-container">
             <div class="first-header">
                 <h4>ព្រះរាជាណាចក្រកម្ពុជា</h4>
@@ -141,96 +179,127 @@
                     </thead>
                     <tbody style="border: 2px solid black;">
                         <tr>
-                            <td colspan="22" style="text-align: left; font-family: 'Khmer OS Siemreap', sans-serif">
+                            <td colspan="23" style="text-align: left; font-family: 'Khmer OS Siemreap', sans-serif">
                                 សម្រាប់កម្មវិធីទី០៥ ចង្កោមសកម្មភាពទី០១ ស្ដីពី ពង្រឹងប្រសិទ្ធភាពនៃការអនុវត្តចំណាយ
                                 និងការគ្រប់គ្រងកិច្ចការហិរញ្ញវត្ថុតាមប្រព័ន្ធ FMIS</td>
                         </tr>
-                        @foreach ($missions as $index => $mission)
+                        @foreach ($missions->groupBy('letter_number') as $letterNumber => $group)
+                            @foreach ($group as $index => $mission)
+                                <tr>
+                                    <td style="border: 2px solid black; font-family: 'Khmer OS Siemreap', sans-serif">
+                                        {{ $loop->parent->iteration }}.{{ $index + 1 }}</td>
+                                    <td
+                                        style="border: 2px solid black; width:180px; font-family: 'Khmer OS Siemreap', sans-serif">
+                                        {{ $mission->name }}</td>
+                                    <td
+                                        style="border: 2px solid black; width: 100px; font-family: 'Khmer OS Siemreap', sans-serif">
+                                        {{ $mission->role }}</td>
+                                    <td style="border: 2px solid black; font-family: 'Khmer OS Siemreap', sans-serif">
+                                        {{ $mission->position_type }}</td>
+                                    <td style="border: 2px solid black; font-family: 'Khmer OS Siemreap', sans-serif">
+                                        {{ $mission->letter_number }}</td>
+                                    <td
+                                        style="border: 2px solid black; width: 110px; font-family: 'Khmer OS Siemreap', sans-serif">
+                                        {{ $mission->letter_date }}</td>
+                                    <td style="border: 2px solid black; font-family: 'Khmer OS Siemreap', sans-serif">
+                                        {{ $mission->mission_objective }}</td>
+                                    <td style="border: 2px solid black; font-family: 'Khmer OS Siemreap', sans-serif">
+                                        {{ $mission->location }}</td>
+                                    <td
+                                        style="border: 2px solid black; width: 110px; font-family: 'Khmer OS Siemreap', sans-serif">
+                                        {{ $mission->mission_start_date }}</td>
+                                    <td
+                                        style="border: 2px solid black; width: 110px; font-family: 'Khmer OS Siemreap', sans-serif">
+                                        {{ $mission->mission_end_date }}</td>
+                                    <td style="border: 2px solid black; font-family: 'Khmer OS Siemreap', sans-serif">
+                                        {{ $mission->days_count }}</td>
+                                    <td style="border: 2px solid black; font-family: 'Khmer OS Siemreap', sans-serif">
+                                        {{ $mission->nights_count }}</td>
+                                    <td style="border: 2px solid black; font-family: 'Khmer OS Siemreap', sans-serif">
+                                        {{ number_format($mission->travel_allowance, 0, '.', ',') }}</td>
+                                    <td style="border: 2px solid black; font-family: 'Khmer OS Siemreap', sans-serif">
+                                        {{ number_format($mission->pocket_money, 0, '.', ',') }}</td>
+                                    <td style="border: 2px solid black; font-family: 'Khmer OS Siemreap', sans-serif">
+                                        {{ number_format($mission->total_pocket_money, 0, '.', ',') }}</td>
+                                    <td style="border: 2px solid black; font-family: 'Khmer OS Siemreap', sans-serif">
+                                        {{ number_format($mission->meal_money, 0, '.', ',') }}</td>
+                                    <td style="border: 2px solid black; font-family: 'Khmer OS Siemreap', sans-serif">
+                                        {{ number_format($mission->total_meal_money, 0, '.', ',') }}</td>
+                                    <td style="border: 2px solid black; font-family: 'Khmer OS Siemreap', sans-serif">
+                                        {{ number_format($mission->accommodation_money, 0, '.', ',') }}</td>
+                                    <td style="border: 2px solid black; font-family: 'Khmer OS Siemreap', sans-serif">
+                                        {{ number_format($mission->total_accommodation_money, 0, '.', ',') }}</td>
+                                    <td style="border: 2px solid black; font-family: 'Khmer OS Siemreap', sans-serif">
+                                        {{ number_format($mission->other_allowances, 0, '.', ',') }}</td>
+                                    <td style="border: 2px solid black; font-family: 'Khmer OS Siemreap', sans-serif">
+                                        {{ number_format($mission->final_total, 0, '.', ',') }}</td>
+                                    <td style="border: 2px solid black;">
+                                        <div style="display: flex; gap: 5px;">
+                                            <a href="{{ route('missions.edit', $mission->id) }}"
+                                                class="btn btn-primary btn-sm">
+                                                <i class="fas fa-edit"></i>
+                                            </a>
+                                            <form id="delete-form-{{ $mission->id }}"
+                                                action="{{ route('missions.delete', $mission->id) }}" method="POST"
+                                                style="display:inline;">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="button" class="btn btn-danger btn-sm"
+                                                    onclick="confirmDelete({{ $mission->id }})">
+                                                    <i class="fas fa-trash-alt"></i>
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </td>
+                                </tr>
+                            @endforeach
+                            <!-- Display the total row for this group -->
                             <tr>
-                                <td style="border: 2px solid black; font-family: 'Khmer OS Siemreap', sans-serif">
-                                    {{ $index + 1 }}</td>
-                                <td
-                                    style="border: 2px solid black; width:180px; font-family: 'Khmer OS Siemreap', sans-serif">
-                                    {{ $mission->name }}</td>
-                                <td
-                                    style="border: 2px solid black; width: 100px; font-family: 'Khmer OS Siemreap', sans-serif">
-                                    {{ $mission->role }}</td>
-                                <td style="border: 2px solid black; font-family: 'Khmer OS Siemreap', sans-serif">
-                                    {{ $mission->position_type }}</td>
-                                <td style="border: 2px solid black; font-family: 'Khmer OS Siemreap', sans-serif">
-                                    {{ $mission->letter_number }}</td>
-                                <td
-                                    style="border: 2px solid black; width: 110px; font-family: 'Khmer OS Siemreap', sans-serif">
-                                    {{ $mission->letter_date }}</td>
-                                <td style="border: 2px solid black; font-family: 'Khmer OS Siemreap', sans-serif">
-                                    {{ $mission->mission_objective }}</td>
-                                <td style="border: 2px solid black; font-family: 'Khmer OS Siemreap', sans-serif">
-                                    {{ $mission->location }}</td>
-                                <td
-                                    style="border: 2px solid black; width: 110px; font-family: 'Khmer OS Siemreap', sans-serif">
-                                    {{ $mission->mission_start_date }}</td>
-                                <td
-                                    style="border: 2px solid black; width: 110px; font-family: 'Khmer OS Siemreap', sans-serif">
-                                    {{ $mission->mission_end_date }}</td>
-                                <td style="border: 2px solid black; font-family: 'Khmer OS Siemreap', sans-serif">
-                                    {{ $mission->days_count }}</td>
-                                <td style="border: 2px solid black; font-family: 'Khmer OS Siemreap', sans-serif">
-                                    {{ $mission->nights_count }}</td>
-                                <td style="border: 2px solid black; font-family: 'Khmer OS Siemreap', sans-serif">
-                                    {{ number_format($mission->travel_allowance, 0, '.', ',') }}</td>
-                                <td style="border: 2px solid black; font-family: 'Khmer OS Siemreap', sans-serif">
-                                    {{ number_format($mission->pocket_money, 0, '.', ',') }}</td>
-                                <td style="border: 2px solid black; font-family: 'Khmer OS Siemreap', sans-serif">
-                                    {{ number_format($mission->total_pocket_money, 0, '.', ',') }}</td>
-                                <td style="border: 2px solid black; font-family: 'Khmer OS Siemreap', sans-serif">
-                                    {{ number_format($mission->meal_money, 0, '.', ',') }}
+                                <td colspan="12"
+                                    style="border: 2px solid black; font-family: 'Khmer OS Muol Light', sans-serif;">
+                                    <strong>{{ 'សរុប' }} {{ $loop->index + 1 }}</strong>
                                 </td>
-                                <td style="border: 2px solid black; font-family: 'Khmer OS Siemreap', sans-serif">
-                                    {{ number_format($mission->total_meal_money, 0, '.', ',') }}</td>
-                                <td style="border: 2px solid black; font-family: 'Khmer OS Siemreap', sans-serif">
-                                    {{ number_format($mission->accommodation_money, 0, '.', ',') }}</td>
-                                <td style="border: 2px solid black; font-family: 'Khmer OS Siemreap', sans-serif">
-                                    {{ number_format($mission->total_accommodation_money, 0, '.', ',') }}</td>
-                                <td style="border: 2px solid black; font-family: 'Khmer OS Siemreap', sans-serif">
-                                    {{ number_format($mission->other_allowances, 0, '.', ',') }}</td>
-                                <td style="border: 2px solid black; font-family: 'Khmer OS Siemreap', sans-serif">
-                                    {{ number_format($mission->final_total, 0, '.', ',') }}</td>
                                 <td style="border: 2px solid black;">
-                                    <div style="display: flex; gap: 5px;">
-                                        <a href="{{ route('missions.edit', $mission->id) }}"
-                                            class="btn btn-primary btn-sm">
-                                            <i class="fas fa-edit"></i>
-                                        </a>
-                                        <form id="delete-form-{{ $mission->id }}"
-                                            action="{{ route('missions.delete', $mission->id) }}" method="POST"
-                                            style="display:inline;">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="button" class="btn btn-danger btn-sm"
-                                                onclick="confirmDelete({{ $mission->id }})">
-                                                <i class="fas fa-trash-alt"></i>
-                                            </button>
-                                        </form>
-                                    </div>
+                                    <strong>{{ number_format($groupedTotals[$letterNumber]['travel_allowance'], 0, '.', ',') }}</strong>
+                                </td>
+                                <td style="border: 2px solid black;"></td>
+                                <td style="border: 2px solid black;">
+                                    <strong>{{ number_format($groupedTotals[$letterNumber]['total_pocket_money'], 0, '.', ',') }}</strong>
+                                </td>
+                                <td style="border: 2px solid black;"></td>
+                                <td style="border: 2px solid black;">
+                                    <strong>{{ number_format($groupedTotals[$letterNumber]['total_meal_money'], 0, '.', ',') }}</strong>
+                                </td>
+                                <td style="border: 2px solid black;"></td>
+                                <td style="border: 2px solid black;">
+                                    <strong>{{ number_format($groupedTotals[$letterNumber]['total_accommodation_money'], 0, '.', ',') }}</strong>
+                                </td>
+                                <td style="border: 2px solid black;"></td>
+                                <td style="border: 2px solid black;">
+                                    <strong>{{ number_format($groupedTotals[$letterNumber]['final_total'], 0, '.', ',') }}</strong>
                                 </td>
                             </tr>
                         @endforeach
                         <tr>
-                            <td colspan="10"
+                            <td colspan="12"
                                 style="border: 2px solid black; font-family: 'Khmer OS Muol Light', sans-serif;">
-                                <strong>{{ 'សរុបរួម' }}</strong></td>
-                            <td style="border: 2px solid black;"></td>
-                            <td style="border: 2px solid black;"></td>
-                            <td style="border: 2px solid black;"><strong>{{ number_format($totals['travel_allowance'], 0, '.', ',') }}</strong></td>
+                                <strong>{{ 'សរុបរួម' }}</strong>
+                            </td>
+                            <td style="border: 2px solid black;">
+                                <strong>{{ number_format($totals['travel_allowance'], 0, '.', ',') }}</strong>
+                            </td>
                             <td style="border: 2px solid black;"></td>
                             <td style="border: 2px solid black;">
-                                <strong>{{ number_format($totals['total_pocket_money'], 0, '.', ',') }}</strong></td>
+                                <strong>{{ number_format($totals['total_pocket_money'], 0, '.', ',') }}</strong>
+                            </td>
                             <td style="border: 2px solid black;"></td>
                             <td style="border: 2px solid black;">
-                                <strong>{{ number_format($totals['total_meal_money'], 0, '.', ',') }}</strong></td>
+                                <strong>{{ number_format($totals['total_meal_money'], 0, '.', ',') }}</strong>
+                            </td>
                             <td style="border: 2px solid black;"></td>
                             <td style="border: 2px solid black;">
-                                <strong>{{ number_format($totals['total_accommodation_money'], 0, '.', ',') }}</strong></td>
+                                <strong>{{ number_format($totals['total_accommodation_money'], 0, '.', ',') }}</strong>
+                            </td>
                             <td style="border: 2px solid black;"></td>
                             <td style="border: 2px solid black;">
                                 <strong>{{ number_format($totals['final_total'], 0, '.', ',') }}</strong>
@@ -238,12 +307,50 @@
                         </tr>
                     </tbody>
                 </table>
-            </div>
 
-            
+                {{-- <div class="d-flex justify-content-between align-items-center mt-4">
+                    <div>
+                        <!-- Custom Pagination -->
+                        <nav aria-label="Page navigation example">
+                            <ul class="pagination">
+                                <li class="page-item{{ $missions->onFirstPage() ? ' disabled' : '' }}">
+                                    <a class="page-link"
+                                        href="{{ $missions->previousPageUrl() }}&per_page={{ request('per_page') }}"
+                                        aria-label="Previous">
+                                        <span aria-hidden="true">&laquo;</span>
+                                        <span class="sr-only">Previous</span>
+                                    </a>
+                                </li>
+                                @for ($i = 1; $i <= $missions->lastPage(); $i++)
+                                    <li class="page-item{{ $missions->currentPage() == $i ? ' active' : '' }}">
+                                        <a class="page-link"
+                                            href="{{ $missions->url($i) }}&per_page={{ request('per_page') }}">{{ $i }}</a>
+                                    </li>
+                                @endfor
+                                <li class="page-item{{ !$missions->hasMorePages() ? ' disabled' : '' }}">
+                                    <a class="page-link"
+                                        href="{{ $missions->nextPageUrl() }}&per_page={{ request('per_page') }}"
+                                        aria-label="Next">
+                                        <span aria-hidden="true">&raquo;</span>
+                                        <span class="sr-only">Next</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </nav>
+                    </div>
+                    <div>
+                        <p class="text-muted">បង្ហាញ {{ $missions->firstItem() }} ដល់ {{ $missions->lastItem() }} នៃ
+                            {{ $missions->total() }} លទ្ធផល</p>
+                    </div>
+                </div> --}}
+            </div>
         </div>
         <div class="d-flex justify-content-end mt-3">
-            <a href="{{ route('table-mission-cambodia') }}?search={{ request('search') }}"
+            <a href="{{ route('table-mission-cambodia', [
+                'search' => request('search'),
+                'start_date' => request('start_date'),
+                'end_date' => request('end_date') ?? '',
+            ]) }}"
                 class="btn btn-danger btn-width mr-2">Export</a>
         </div>
     </div>
@@ -307,6 +414,11 @@
         .third-header {
             text-align: center;
             padding: 10px;
+        }
+
+        .large-checkbox {
+            transform: scale(2);
+            margin: 7px;
         }
     </style>
 @endsection
@@ -392,11 +504,11 @@
 
             function updateButtonIcon() {
                 if (document.fullscreenElement) {
-                    fullscreenButton.innerHTML = '<i class="fas fa-compress"></i>'; // Zoom Out icon
+                    fullscreenButton.innerHTML = '<i class="fas fa-compress"></i>';
                 } else {
-                    fullscreenButton.innerHTML = '<i class="fas fa-expand"></i>'; // Zoom In icon
+                    fullscreenButton.innerHTML = '<i class="fas fa-expand"></i>';
                 }
-            }  
+            }
 
             fullscreenButton.addEventListener('click', function() {
                 toggleFullscreen();
@@ -409,5 +521,14 @@
 
             updateButtonIcon();
         });
+    </script>
+    <script>
+        function clearSearch() {
+            // Reset the form
+            document.querySelector('form').reset();
+
+            // Reload the page without query parameters
+            window.location.href = "{{ url()->current() }}";
+        }
     </script>
 @endsection

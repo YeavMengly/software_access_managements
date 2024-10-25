@@ -23,7 +23,7 @@
                 </div>
 
                 <div class="col-md-4 mb-3">
-                    <a href="" class="btn btn-custom btn-block animate-button">
+                    <a href="{{ route('result-applied-table') }}" class="btn btn-custom btn-block animate-button">
                         <i class="fas fa-list"></i> របាយការណ៍អនុវត្ត
                     </a>
                 </div>

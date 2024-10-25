@@ -24,12 +24,8 @@ return new class extends Migration
                 $table->string('name_report_key')->nullable(); // Allow null if not required
                 $table->decimal('fin_law', 15, 2)->default(0);
                 $table->decimal('current_loan', 15, 2)->default(0);
-                $table->decimal('internal_increase', 15, 2)->default(0);
-                $table->decimal('unexpected_increase', 15, 2)->default(0);
-                $table->decimal('additional_increase', 15, 2)->default(0);
-                $table->decimal('total_increase', 15, 2)->default(0);   // Calculated as sum of the other increases
-                $table->decimal('decrease', 15, 2)->default(0);
-                $table->decimal('editorial', 15, 2)->default(0);
+
+
                 $table->decimal('new_credit_status', 15, 2)->default(0); // Calculated as (current_loan + total_increase - decrease - editorial)
                 $table->decimal('early_balance', 15, 2)->default(0); // Sumif calculation
                 $table->decimal('apply', 15, 2)->default(0);
@@ -37,7 +33,6 @@ return new class extends Migration
                 $table->decimal('credit', 15, 2)->default(0); // Calculated as (new_credit_status - deadline_balance)
                 $table->decimal('law_average', 15, 2)->default(0); // Calculated as (fin_law / deadline_balance)
                 $table->decimal('law_correction', 15, 2)->default(0); // Calculated as (new_credit_status / deadline_balance)
-
                 // Unique constraint for the combination of sub_account_key and report_key
                 $table->unique(['sub_account_key', 'report_key']);
 

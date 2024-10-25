@@ -73,6 +73,8 @@
                     @yield('result-general-pay')
                     @yield('result-administrative-plan')
                     @yield('result-total-summaries')
+                    @yield('result-total-apply')
+                 
 
                     @yield('content-mission')
                     @yield('content-table-mission-cambodia')
@@ -98,6 +100,11 @@
                     @yield('content-report')
                     @yield('form-report-upload')
                     @yield('form-report-edit')
+
+                    @yield('content-loans')
+                    @yield('form-content-loans-upload')
+                    @yield('form-content-loans-edit')
+               
 
                     @yield('form-form-mission')
 
