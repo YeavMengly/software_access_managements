@@ -1,8 +1,7 @@
 @extends('layouts.master')
 
-@section('content-report')
+@section('content-loans')
     <div class="border-wrapper">
-
 
         @if (isset($connectionError) && $connectionError)
             <div class="alert alert-danger" role="alert">
@@ -25,13 +24,13 @@
                         <a class="btn btn-danger" href="{{ url('/') }}">
                             <i class="fas fa-arrow-left"></i> ត្រឡប់ក្រោយ
                         </a>
-                        <h2 style="font-weight: 700;">តារាងរបាយការណ៍បញ្ចូល</h2>
+                        <h2 style="font-weight: 700;">តារាងរបាយការណ៍បញ្ចូលឥណទានដើមឆ្នាំ</h2>
                         <div class="btn-group">
                             <a class="btn btn-success mr-2" href="#" data-bs-toggle="modal"
                                 data-bs-target="#importModal" style="border-radius: 4px;">
                                 Import <i class="fas fa-file-import" style="margin-left: 8px;"></i>
                             </a>
-                            <a class="btn btn-success" href="{{ route('codes.create') }}" style="border-radius: 4px;">
+                            <a class="btn btn-success" href="{{ route('loans.create') }}" style="border-radius: 4px;">
                                 បញ្ចូលទិន្នន័យ <i class="fas fa-plus" style="margin-left: 8px;"></i>
                             </a>
                         </div>
@@ -49,7 +48,7 @@
                                     </button>
                                 </div>
                                 <div class="modal-body">
-                                    <form id="uploadForm" action="{{ route('reports.import') }}" method="POST"
+                                    <form id="uploadForm" action="{{ route('loans.import') }}" method="POST"
                                         enctype="multipart/form-data">
                                         @csrf
                                         <div class="mb-3">
@@ -87,14 +86,7 @@
                     {{-- Field Search --}}
                     <form class="max-w-md mx-auto mt-4" method="GET" action="{{ url()->current() }}">
                         <div class="row">
-                            {{-- <div class="col-md-3">
-                                <input type="text" name="code_id" value="{{ request('code_id') }}"
-                                    class="form-control mb-2" placeholder="លេខជំពូក">
-                            </div>
-                            <div class="col-md-3">
-                                <input type="text" name="account_key_id" value="{{ request('account_key_id') }}"
-                                    class="form-control mb-2" placeholder="លេខគណនី">
-                            </div> --}}
+
                             <div class="col-md-3">
                                 <input type="text" name="sub_account_key_id" value="{{ request('sub_account_key_id') }}"
                                     class="form-control mb-2" placeholder="លេខអនុគណនី">
@@ -103,10 +95,7 @@
                                 <input type="text" name="report_key" value="{{ request('report_key') }}"
                                     class="form-control mb-2" placeholder="លេខកូដកម្មវិធី">
                             </div>
-                            {{-- <div class="col-md-3">
-                                <input type="date" name="date" value="{{ request('date') }}"
-                                    class="form-control mb-2" placeholder="Date (YYYY-MM-DD or YYYY-MM-DD - YYYY-MM-DD)">
-                            </div> --}}
+
                             <div class="col-md-12">
                                 <div class="input-group my-3">
                                     <button type="submit" class="btn btn-primary mr-2" style="width: 150px; height: 40px;">
@@ -174,38 +163,47 @@
                     <tr>
                         <th style="border: 1px solid black; font-size: 14px; max-width: 50px;">លេខអនុគណនី</th>
                         <th style="border: 1px solid black; font-size: 14px; max-width: 60px;">លេខកូដកម្មវិធី</th>
-                        <th style="border: 1px solid black; font-size: 14px; max-width: 80px;">ចំណាត់ថ្នាក់</th>
-                        <th style="border: 1px solid black; font-size: 14px; max-width: 80px;">ច្បាប់ហិរញ្ញវត្ថុ</th>
-                        <th style="border: 1px solid black; font-size: 14px; max-width: 80px;">ឥណទានបច្ចុប្បន្ន</th>
+                        <th style="border: 1px solid black; font-size: 14px; max-width: 80px;">កើនផ្ទៃក្នុង</th>
+                        <th style="border: 1px solid black; font-size: 14px; max-width: 80px;">មិនបានគ្រោងទុក</th>
+                        <th style="border: 1px solid black; font-size: 14px; max-width: 80px;">បំពេញបន្ថែម</th>
+                        <th style="border: 1px solid black; font-size: 14px; max-width: 80px;">សរុប</th>
+                        <th style="border: 1px solid black; font-size: 14px; max-width: 80px;">ថយ</th>
+                        <th style="border: 1px solid black; font-size: 14px; max-width: 80px;">វិចារណកម្ម</th>
                         <th style="border: 1px solid black; font-size: 14px; max-width: 80px;">សកម្មភាព</th>
                     </tr>
                 </thead>
                 <tbody>
-                    @forelse ($reports as $report)
+                    @forelse ($loans as $loan)
                         <tr>
                             <td style="border: 1px solid black; max-width: 80px; text-align: center">
-                                {{ $report->subAccountKey->sub_account_key }}</td>
+                                {{ $loan->subAccountKey->sub_account_key }}</td>
                             <td style="border: 1px solid black; max-width: 80px; text-align: center">
-                                {{ $report->report_key }}</td>
-                            <td style="border: 1px solid black; max-width: 220px; text-align: start;">
-                                {{ $report->name_report_key }}</td>
+                                {{ $loan->reportKey->report_key }}</td>
                             <td style="border: 1px solid black; max-width: 80px; text-align: center">
-                                {{ number_format($report->fin_law, 0, ' ', ' ') }}</td>
+                                {{ number_format($loan->internal_increase, 0, ' ', ' ') }}</td>
                             <td style="border: 1px solid black; max-width: 80px; text-align: center">
-                                {{ number_format($report->current_loan, 0, ' ', ' ') }}</td>
+                                {{ number_format($loan->unexpected_increase, 0, ' ', ' ') }}</td>
+                            <td style="border: 1px solid black; max-width: 80px; text-align: center">
+                                {{ number_format($loan->additional_increase) }}</td>
+                                <td style="border: 1px solid black; max-width: 80px; text-align: center">
+                                    {{ number_format($loan->total_increase) }}</td>
+                            <td style="border: 1px solid black; max-width: 80px; text-align: center">
+                                {{ number_format($loan->decrease, 0, ' ', ' ') }}</td>
+                                <td style="border: 1px solid black; max-width: 80px; text-align: center">
+                                    {{ number_format($loan->editorial, 0, ' ', ' ') }}</td>
 
                             <td style="border: 1px solid black; text-align: center; justify-content: center">
-                                <form id="delete-form-{{ $report->id }}"
-                                    action="{{ route('codes.destroy', $report->id) }}" method="POST"
+                                <form id="delete-form-{{ $loan->id }}"
+                                    action="{{ route('loans.destroy', $loan->id) }}" method="POST"
                                     style="display: none;">
                                     @csrf
                                     @method('DELETE')
                                 </form>
-                                <a class="btn btn-primary" href="{{ route('codes.edit', $report->id) }}">
+                                <a class="btn btn-primary" href="{{ route('loans.edit', $loan->id) }}">
                                     <i class="fas fa-edit" title="Edit"></i>
                                 </a>
                                 <button type="button" class="btn btn-danger"
-                                    onclick="confirmDelete({{ $report->id }})">
+                                    onclick="confirmDelete({{ $loan->id }})">
                                     <i class="fas fa-trash-alt" title="Delete"></i>
                                 </button>
                             </td>
@@ -222,7 +220,7 @@
             <div class="d-flex justify-content-between align-items-center mt-4">
                 <div>
                     <nav aria-label="Page navigation example">
-                        <ul class="pagination">
+                        {{-- <ul class="pagination">
                             <li class="page-item{{ $reports->onFirstPage() ? ' disabled' : '' }}">
                                 <a class="page-link"
                                     href="{{ $reports->previousPageUrl() }}&per_page={{ request('per_page') }}"
@@ -245,12 +243,12 @@
                                     <span class="sr-only">Next</span>
                                 </a>
                             </li>
-                        </ul>
+                        </ul> --}}
                     </nav>
                 </div>
                 <div>
-                    <p class="text-muted">បង្ហាញ {{ $reports->firstItem() }} ដល់ {{ $reports->lastItem() }} នៃ
-                        {{ $reports->total() }} លទ្ធផល</p>
+                    {{-- <p class="text-muted">បង្ហាញ {{ $reports->firstItem() }} ដល់ {{ $reports->lastItem() }} នៃ
+                        {{ $reports->total() }} លទ្ធផល</p> --}}
                 </div>
             </div>
         </div>

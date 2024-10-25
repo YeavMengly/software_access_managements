@@ -18,12 +18,7 @@ class Report extends Model
         'name_report_key',
         'fin_law',
         'current_loan',
-        'internal_increase',
-        'unexpected_increase',
-        'additional_increase',
-        'total_increase',
-        'decrease',
-        'editorial',
+
         'new_credit_status',
         'early_balance',
         'apply',
@@ -49,10 +44,59 @@ class Report extends Model
     }
 
     // Point to certificateData Class
-
-
     public function certificateData()
     {
         return $this->hasMany(CertificateData::class, 'report_key');
+    }
+
+    public function loans()
+    {
+        return $this->hasOne(Loans::class, 'report_key');
+    }
+
+    public static function getReportSql()
+    {
+        return self::select([
+            'keys.name',
+            'keys.code',
+            'ak.account_key as account_key',
+            'ak.name_account_key as name_account_key',
+            'sak.sub_account_key as sub_account_key',
+            'sak.name_sub_account_key as name_sub_account_key',
+            'reports.report_key as report_key',
+            'reports.fin_law as fin_law',
+            'reports.current_loan as current_loan',
+
+            'reports.new_credit_status as new_credit_status',
+            'reports.early_balance as early_balance',
+            'reports.apply as apply',
+            'reports.deadline_balance as deadline_balance',
+            'reports.credit as credit',
+            'reports.law_average as law_average',
+            'reports.law_correction as law_correction',
+
+            'loans.internal_increase',
+            'loans.unexpected_increase',
+            'loans.additional_increase',
+            'loans.total_increase',
+            'loans.decrease',
+            'loans.editorial',
+            // 'loans.new_credit_status',
+            // 'loans.early_balance',
+            // 'loans.apply',
+            // 'loans.deadline_balance',
+            // 'loans.credit',
+            // 'loans.law_average',
+            // 'loans.law_correction',
+            // 'cd.name_certificate',
+            'cd.value_certificate',
+            'cd.amount'
+
+        ])
+            ->join('sub_account_keys as sak', 'sak.id', '=', 'reports.sub_account_key')
+            ->join('account_keys as ak', 'ak.id', '=', 'sak.account_key')
+            ->join('keys', 'keys.code', '=', 'ak.code')
+            ->leftJoin('certificate_data as cd', 'cd.report_key', '=', 'reports.id')
+            ->leftJoin('loans', 'loans.report_key', '=', 'reports.id');
     }
 }

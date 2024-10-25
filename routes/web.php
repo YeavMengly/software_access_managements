@@ -23,7 +23,12 @@ use App\Http\Controllers\Result\ResultSuccess\TotalController;
 use App\Http\Controllers\Result\ResultSummariesController;
 use App\Http\Controllers\Result\ResultTotalController;
 use App\Http\Controllers\Loans\SumReferController;
+<<<<<<< HEAD
 use App\Http\Controllers\ReportMissionController;
+=======
+use App\Http\Controllers\Report\LoansController;
+use App\Http\Controllers\Result\ResultApplyController;
+>>>>>>> 9a3f69cf7c85d1c6420fef57cd823cf1eebbb0ed
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -57,6 +62,7 @@ Route::resource('codes', ReportController::class);
 Route::resource('keys', KeyController::class);
 Route::resource('accounts', AccountKeyController::class);
 Route::resource('sub-account', SubAccountKeyController::class);
+Route::resource('loans', LoansController::class);
 
 //===============================>> Certificate
 Route::resource('certificate', CertificateController::class);
@@ -69,11 +75,12 @@ Route::get('/certificate-amount', [AmountCertificateController::class, 'index'])
 
 //===============================>> Manage Result Operation
 // Route::get('/', [ResultController::class, 'index'])->name('result');
-Route::get('/results', [ResultController::class, 'index'])->name('result.index');
+Route::get('/total_card/results', [ResultController::class, 'index'])->name('result.index');
 Route::get('/result-total', [ResultTotalController::class, 'index'])->name('result-total-table');
 Route::get('/result-total-general', [ResultGeneralController::class, 'index'])->name('result-total-general-table');
 Route::get('/result-operation', [ResultOperationController::class, 'index'])->name('result-total-operation-table');
 Route::get('/result-summaries', [ResultSummariesController::class, 'index'])->name('result-total-summaries-table');
+Route::get('/result-apply', [ResultApplyController::class, 'index'])->name('result-applied-table');
 
 //===============================>> Manage Results Achieved
 Route::get('/result-success', [TotalController::class, 'index'])->name('result-success');
@@ -107,11 +114,25 @@ Route::get('/imported-mission-table', [ReportMissionController::class, 'imported
 Route::post('/reports/import', [ReportController::class, 'show'])->name('reports.import');
 Route::post('/import-excel', [ReportController::class, 'import'])->name('reports.import');
 
+<<<<<<< HEAD
 Route::get('/export', [ResultController::class, 'export'])->name('result.export');
 // Route::get('/report-table/show-import', [ReportMissionController::class, 'showImportForm'])->name('report-table.importForm');
+=======
+Route::get('/loans/import', [LoansController::class, 'showImportForm'])->name('loans.importForm');
+Route::post('/loans/import', [LoansController::class, 'import'])->name('loans.import');
+
+//===============================>> Manage Mission Exports
+Route::get('/mission-cambodia/export', [MissionCambodiaController::class, 'export'])->name('table-mission-cambodia');
+
+Route::get('/results/export', [ResultController::class, 'export'])->name('result.export');
+Route::get('/summaries/export', [ResultSummariesController::class, 'export'])->name('summaries.export');
+>>>>>>> 9a3f69cf7c85d1c6420fef57cd823cf1eebbb0ed
 
 //===============================>> Manage Pdf Print
 Route::get('/results/pdf', [ResultController::class, 'exportPdf'])->name('result.exportPdf');
+Route::get('/summaries/export-pdf', [ResultSummariesController::class, 'exportPdf'])->name('summaries.exportPdf');
+
+
 
 Route::get('/mission-abroad', [MissionAbroadController::class, 'index'])->name('table-mission-abroad');
 // Route::get('mission-abroad/export', [MissionAbroadController::class, 'export'])->name('table-mission-abroad');

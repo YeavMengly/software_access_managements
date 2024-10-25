@@ -55,7 +55,7 @@
         </div>
     </div>
     <div class="d-flex justify-content-end mt-3">
-        <a href="{{ route('result.export') }}" class="btn btn-danger btn-width mr-2">Export</a>
+        <a href="#" class="btn btn-danger btn-width mr-2">Export</a>
         <button type="button" class="btn btn-primary btn-width">Print</button>
     </div>
 </div>

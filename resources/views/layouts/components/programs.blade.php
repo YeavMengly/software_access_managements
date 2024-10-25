@@ -22,17 +22,11 @@
                     </a>
 
                 </div>
-                <div class="col-md-4 mb-3">
-                    <a href="" class="btn btn-custom btn-block animate-button">
-                        <i class="fas fa-cogs"></i> បញ្ចូលទិន្ន័យកម្មវិធី
-                    </a>
-                </div>
 
                 <div class="col-md-4 mb-3">
                     <a href="{{ url('/') }}" class="btn btn-custom btn-block animate-button">
                         <i class="fas fa-sign-out-alt"></i> ចាកចេញ
                     </a>
-
                 </div>
             </div>
         </div>

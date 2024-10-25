@@ -11,35 +11,42 @@
                         <!-- Two-Column Layout for Buttons -->
                         <div class="row">
                             <!-- Your buttons here -->
+
                             <div class="col-md-6 mb-3">
-                                <a href="{{ route('result.index') }}" class="btn btn-custom btn-block animate-button">
+                                <a href="{{route('codes.create')}}" class="btn btn-custom btn-block animate-button">
                                     បញ្ចូលឥណទានអនុម័តដើមឆ្នាំ​ នឹងផែនការរជ្ជទេយ្យ
                                 </a>
                             </div>
                             <div class="col-md-6 mb-3">
                                 <a href="{{ route('programs') }}" class="btn btn-custom btn-block animate-button">
-                                    បញ្ចូល ឬកែសម្រួលមាតិការកម្មវិធី
+                                    កែសម្រួល ជំពូក គណនី អនុគណនី
                                 </a>
                             </div>
                             <div class="col-md-6 mb-3">
-                                <a href="#" class="btn btn-custom btn-block animate-button">
-                                    បញ្ចូល ឬកែសម្រួលអង្គភាពថវិកា <i class="fas fa-lock"></i>
+                                <a href="{{ route('loans.create') }}" class="btn btn-custom btn-block animate-button">
+                                    ចុះបញ្ជីនិយ័តភាពថវិកា
+                                </a>
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <a href="{{route('codes.index')}}" class="btn btn-custom btn-block animate-button">
+                                    កែសម្រួលមាតិកាកម្មវិធី 
 
                                 </a>
                             </div>
                             <div class="col-md-6 mb-3">
-                                <a href="{{ route('reports.index') }}" class="btn btn-custom btn-block animate-button">
-                                    ចុះបញ្ជីនិយ័តភាពថវិកា
+                                <a href="#" class="btn btn-custom btn-block animate-button">
+                                    បញ្ចូលអាណត្តិ
                                 </a>
                             </div>
                             <div class="col-md-6 mb-3">
-                                <a href="{{ route('card_certificate') }}" class="btn btn-custom btn-block animate-button">
+                                <a href="{{ route('certificate-data.index') }}" class="btn btn-custom btn-block animate-button">
+                                   កែសម្រួល អណត្តិ​ សលាកបត្រ
+                                </a>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <a href="{{ route('certificate-data.create') }}" class="btn btn-custom btn-block animate-button">
                                     ចុះបញ្ជីសលាកប័ត្រចំណាយថវិកា
-                                </a>
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                <a href="{{ route('result.index') }}" class="btn btn-custom btn-block animate-button">
-                                    ចុះបញ្ជីអាណត្តិបើកប្រាក់
                                 </a>
                             </div>
                             <div class="col-md-6 mb-3">

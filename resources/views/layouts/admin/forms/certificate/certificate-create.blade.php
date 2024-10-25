@@ -21,7 +21,7 @@
                         </div>
                     @endif
 
-                    @if ($errors->any())
+                    {{-- @if ($errors->any())
                         <div class="alert alert-danger alert-popup show" id="error-alert">
                             <strong>Whoops!</strong> There were some problems with your input.<br><br>
                             <ul>
@@ -31,7 +31,8 @@
                             </ul>
                             <button type="button" class="btn-close" aria-label="Close"></button>
                         </div>
-                    @endif
+                    @endif --}}
+
                 </div>
 
                 <div class="border-wrapper">
@@ -48,6 +49,7 @@
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
                             </div>
+
 
                             <div class="d-flex align-items-center">
                                 <button type="submit" class="btn btn-primary ml-auto">បានរក្សាទុក</button>
@@ -89,6 +91,13 @@
         .alert-popup.show {
             opacity: 1;
             transform: translateY(0);
+        }
+
+        h3,
+        label,
+        .invalid-feedback {
+            font-family: 'Khmer OS Siemreap', sans-serif;
+            font-size: 16px;
         }
 
         .alert-popup .btn-close {
