@@ -23,6 +23,7 @@ use App\Http\Controllers\Result\ResultSuccess\TotalController;
 use App\Http\Controllers\Result\ResultSummariesController;
 use App\Http\Controllers\Result\ResultTotalController;
 use App\Http\Controllers\Loans\SumReferController;
+use App\Http\Controllers\ReportMissionController;
 use App\Http\Controllers\Report\LoansController;
 use App\Http\Controllers\Result\ResultApplyController;
 use Illuminate\Support\Facades\Route;
@@ -38,17 +39,15 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-// Route::get('/', function () {
-//     return view('welcome');
-// });
-
 Route::get('/', function () {
     return view('dashboard.dashboardui');
 });
 
-// Route::get('/', function () {
-//     return view('layouts.master');
-// });
+// Route to display report-mission view
+Route::get('/report-mission', function () {
+    return view('layouts.table.table-mission.report-mission');
+})->name('report-mission');
+
 
 // Route Components Grid
 Route::get('/programs', [TotalProgramsController::class, 'index'])->name('programs');
@@ -69,6 +68,7 @@ Route::get('/certificate-amount', [AmountCertificateController::class, 'index'])
 
 //===============================>> Manage Mission
 // Route::resource('missions', ResultMissionController::class);
+// Route to display the form for creating a new report-mission
 
 //===============================>> Manage Result Operation
 // Route::get('/', [ResultController::class, 'index'])->name('result');
@@ -92,17 +92,23 @@ Route::get('/result-sum-refer', [SumReferController::class, 'index'])->name('res
 // In routes/web.php
 Route::get('/reports', [ReportController::class, 'index'])->name('reports.index');
 
-// Route::resource('missions', ResultMissionController::class);
+// ==========>> Mission Cambodia <<=============
 Route::resource('/mission-cam', MissionCambodiaController::class);
 Route::get('/mission-cam/{id}/edit', [MissionCambodiaController::class, 'edit'])->name('missions.edit');
 Route::put('/mission-cam/{id}', [MissionCambodiaController::class, 'update'])->name('missions.update');
 Route::delete('/mission-cam/{mission}', [MissionCambodiaController::class, 'delete'])->name('missions.delete');
+//==================>> Manage Mission Exports and Imports
+Route::get('/mission-cambodia/export', [MissionCambodiaController::class, 'export'])->name('table-mission-cambodia');
+Route::resource('/reports-missions', ReportMissionController::class);
+Route::post('/report-mission', [ReportMissionController::class, 'storeMission'])->name('report-mission.store');
+Route::post('/report-table/import', [ReportMissionController::class, 'import'])->name('report-table.import');
+Route::get('/imported-mission-table', [ReportMissionController::class, 'importedMissionTable'])->name('imported-mission-table');
 
 //===============================>> Manage Exports
 // Route::get('/import-data',[ReportController::class, 'import'])->name('import-data');
 // Route::get('/import', [ReportController::class, 'import'])->name('import.form');
 
-Route::post('/reports/import', [ReportController::class, 'importExcelData'])->name('reports.import');
+Route::post('/reports/import', [ReportController::class, 'show'])->name('reports.import');
 Route::post('/import-excel', [ReportController::class, 'import'])->name('reports.import');
 
 Route::get('/loans/import', [LoansController::class, 'showImportForm'])->name('loans.importForm');
@@ -124,3 +130,5 @@ Route::get('/mission-abroad', [MissionAbroadController::class, 'index'])->name('
 // Route::get('mission-abroad/export', [MissionAbroadController::class, 'export'])->name('table-mission-abroad');
 
 Route::get('mission-abroad/export', [MissionAbroadController::class, 'export'])->name('table-mission-abroad');
+
+// Route::get('/report-mission', [ReportMissionController::class, 'showReportMissionForm'])->name('report-mission');

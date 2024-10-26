@@ -69,27 +69,30 @@
                                                 <option value="អនុរដ្ឋលេខាធិការ"
                                                     {{ old('role', $missions->role ?? '') == 'អនុរដ្ឋលេខាធិការ' ? 'selected' : '' }}>
                                                     អនុរដ្ឋលេខាធិការ</option>
-                                                <option value="អគ្កាធិការរង"
-                                                    {{ old('role', $missions->role ?? '') == 'អគ្កាធិការរង' ? 'selected' : '' }}>
-                                                    អគ្កាធិការរង</option>
+                                                <option value="អគ្គាធិការរង"
+                                                    {{ old('role', $missions->role ?? '') == 'អគ្គាធិការរង' ? 'selected' : '' }}>
+                                                    អគ្គាធិការរង</option>
                                                 <option value="អគ្គនាយករង"
                                                     {{ old('role', $missions->role ?? '') == 'អគ្គនាយករង' ? 'selected' : '' }}>
                                                     អគ្គនាយករង</option>
                                                 <option value="អគ្គលេខាធិការរង"
                                                     {{ old('role', $missions->role ?? '') == 'អគ្គលេខាធិការរង' ? 'selected' : '' }}>
                                                     អគ្គលេខាធិការរង</option>
-                                                <option value="ប្រ.នាយកដ្ឋាន"
-                                                    {{ old('role', $missions->role ?? '') == 'ប្រ.នាយកដ្ឋាន' ? 'selected' : '' }}>
-                                                    ប្រ.នាយកដ្ឋាន</option>
-                                                <option value="អនុ.នាយកដ្ឋាន"
-                                                    {{ old('role', $missions->role ?? '') == 'អនុ.នាយកដ្ឋាន' ? 'selected' : '' }}>
-                                                    អនុ.នាយកដ្ឋាន</option>
-                                                <option value="ប្រ.ការិយាល័យ"
-                                                    {{ old('role', $missions->role ?? '') == 'ប្រ.ការិយាល័យ' ? 'selected' : '' }}>
-                                                    ប្រ.ការិយាល័យ</option>
-                                                <option value="អនុ.ការិយាល័យ"
-                                                    {{ old('role', $missions->role ?? '') == 'អនុ.ការិយាល័យ' ? 'selected' : '' }}>
-                                                    អនុ.ការិយាល័យ</option>
+                                                <option value="នាយកវិទ្យាស្ថាន"
+                                                    {{ old('role', $missions->role ?? '') == 'នាយកវិទ្យាស្ថាន' ? 'selected' : '' }}>
+                                                    នាយកវិទ្យាស្ថាន</option>
+                                                <option value="ប្រធាននាយកដ្ឋាន"
+                                                    {{ old('role', $missions->role ?? '') == 'ប្រធាននាយកដ្ឋាន' ? 'selected' : '' }}>
+                                                    ប្រធាននាយកដ្ឋាន</option>
+                                                <option value="អនុប្រធាននាយកដ្ឋាន"
+                                                    {{ old('role', $missions->role ?? '') == 'អនុប្រធាននាយកដ្ឋាន' ? 'selected' : '' }}>
+                                                    អនុប្រធាននាយកដ្ឋាន</option>
+                                                <option value="ប្រធានការិយាល័យ"
+                                                    {{ old('role', $missions->role ?? '') == 'ប្រធានការិយាល័យ' ? 'selected' : '' }}>
+                                                    ប្រធានការិយាល័យ</option>
+                                                <option value="អនុប្រធានការិយាល័យ"
+                                                    {{ old('role', $missions->role ?? '') == 'អនុប្រធានការិយាល័យ' ? 'selected' : '' }}>
+                                                    អនុប្រធានការិយាល័យ</option>
                                                 <option value="ប្រធានផ្នែក"
                                                     {{ old('role', $missions->role ?? '') == 'ប្រធានផ្នែក' ? 'selected' : '' }}>
                                                     ប្រធានផ្នែក</option>
@@ -249,9 +252,9 @@
                                     <option value="កោះកុង"
                                         {{ old('location', $missions->location ?? '') == 'កោះកុង' ? 'selected' : '' }}>
                                         កោះកុង</option>
-                                    <option value="កំពង់ស្ពី"
-                                        {{ old('location', $missions->location ?? '') == 'កំពង់ស្ពី' ? 'selected' : '' }}>
-                                        កំពង់ស្ពី</option>
+                                    <option value="កំពង់ស្ពឺ"
+                                        {{ old('location', $missions->location ?? '') == 'កំពង់ស្ពឺ' ? 'selected' : '' }}>
+                                        កំពង់ស្ពឺ</option> 
                                     <option value="ស្ទឹងត្រែង"
                                         {{ old('location', $missions->location ?? '') == 'ស្ទឹងត្រែង' ? 'selected' : '' }}>
                                         ស្ទឹងត្រែង</option>

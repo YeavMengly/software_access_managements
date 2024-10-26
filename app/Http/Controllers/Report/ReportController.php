@@ -208,7 +208,6 @@ class ReportController extends Controller
         return redirect()->route('codes.index')->with('success', 'Report updated successfully.');
     }
 
-
     public function destroy($id)
     {
         $reportKey = Report::findOrFail($id);

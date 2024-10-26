@@ -176,8 +176,19 @@ class CertificateDataController extends Controller
         // Calculate credit
         $credit = $report->new_credit_status - $report->deadline_balance;
         $report->credit = $credit;
+        // Recalculate deadline_balance and credit
+        $report->deadline_balance = $report->early_balance - $report->apply;
+        $report->credit = $report->new_credit_status - $report->deadline_balance;
 
-        // Save the updated report
+        // Calculate law_average and law_correction
+        $law_average = $report->deadline_balance > 0 ? ($report->deadline_balance / $report->fin_law) * 100 : 0;
+        $law_correction =  $report->deadline_balance > 0 ? ($report->deadline_balance /  $report->new_credit_status) * 100 : 0;
+
+        // Cap values between 0 and 100
+        // $report->law_average = min(max($law_average, 0), 100);
+        // $report->law_correction = min(max($law_correction, 0), 100);
+
+        // Save updated report values
         $report->save();
     }
 }

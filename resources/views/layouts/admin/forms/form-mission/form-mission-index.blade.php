@@ -92,7 +92,7 @@
                             <div style="display: flex; gap: 5px;">
                                 <a href="{{ route('missions.edit', $mission->id) }}" class="btn btn-primary btn-sm">
                                     <i class="fas fa-edit"></i>
-                                </a>
+                                </a>  
                                 <form id="delete-form-{{ $mission->id }}"
                                     action="{{ route('missions.delete', $mission->id) }}" method="POST"
                                     style="display:inline;">

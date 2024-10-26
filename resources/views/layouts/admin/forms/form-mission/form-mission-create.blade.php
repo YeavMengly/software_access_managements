@@ -6,7 +6,8 @@
                 <div class="d-flex justify-content-between align-items-center"
                     style="font-family: 'Khmer OS Siemreap', sans-serif;">
                     <h3 class="card-title">បញ្ចូលតារាងរបាយការណ៏ចំណាយបេសកកម្មក្នុងប្រទេស ឆ្នាំ២០២៤</h3>
-                    <a class="btn btn-primary" href="{{ route('mission-cam.index') }}">ត្រឡប់ក្រោយ</a>
+                    <a class="btn btn-danger" href="{{ route('mission-cam.index') }}"><i class="fas fa-arrow-left"></i>
+                        ត្រឡប់ក្រោយ</a>
                 </div>
             </div>
         </div>
@@ -19,15 +20,22 @@
         @endif
 
         @if ($errors->any())
-            <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                <strong>Whoops!</strong><br><br>
-                <ul>
-                    @foreach ($errors->all() as $error)
-                        <li>{{ $error }}</li>
-                    @endforeach
-                </ul>
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-            </div>
+            <script>
+                document.addEventListener('DOMContentLoaded', function() {
+                    Swal.fire({
+                        title: 'Whoops!',
+                        html: `
+                    <ul style="text-align: left;">
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                `,
+                        icon: 'error',
+                        confirmButtonText: 'Okay'
+                    });
+                });
+            </script>
         @endif
 
         <div class="border-wrapper">
@@ -41,7 +49,7 @@
                                 <label for="num_people">ចំនួនមនុស្ស:</label>
                                 <select id="num_people" class="form-control centered-text" required>
                                     <option value="">ជ្រើសរើសចំនួនមនុស្ស</option>
-                                    @for ($i = 1; $i <= 5; $i++)
+                                    @for ($i = 1; $i <= 10; $i++)
                                         <option value="{{ $i }}">{{ $i }}</option>
                                     @endfor
                                 </select>
@@ -107,7 +115,7 @@
                                     <option value="រតនគីរី">រតនគីរី</option>
                                     <option value="កណ្ដាល">កណ្ដាល</option>
                                     <option value="កោះកុង">កោះកុង</option>
-                                    <option value="កំពង់ស្ពី">កំពង់ស្ពី</option>
+                                    <option value="កំពង់ស្ពឺ">កំពង់ស្ពឺ</option>
                                     <option value="ស្ទឹងត្រែង">ស្ទឹងត្រែង</option>
                                     <option value="ព្រះវិហារ">ព្រះវិហារ</option>
                                     <option value="កំពង់ឆ្នាំង">កំពង់ឆ្នាំង</option>
@@ -135,7 +143,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="d-flex align-items-center">
+                    <div class="d-flex align-items-center" style="font-family: 'Khmer OS Siemreap', sans-serif;">
                         <button type="submit" class="btn btn-primary ml-auto">បានរក្សាទុក</button>
                     </div>
                 </form>
@@ -286,16 +294,17 @@
                                 <option value="ទីប្រឹក្សាអមក្រសួង">ទីប្រឹក្សាអមក្រសួង</option>
                                 <option value="រដ្ឋលេខាធិការ">រដ្ឋលេខាធិការ</option>
                                 <option value="អនុរដ្ឋលេខាធិការ">អនុរដ្ឋលេខាធិការ</option>
-                                <option value="អគ្កាធិការ">អគ្កាធិការ</option>
-                                <option value="អគ្កាធិការរង">អគ្កាធិការរង</option>
+                                <option value="អគ្គាធិការ">អគ្គាធិការ</option>
+                                <option value="អគ្គាធិការរង">អគ្គាធិការរង</option>
                                 <option value="អគ្គនាយក">អគ្គនាយក</option>
                                 <option value="អគ្គនាយករង">អគ្គនាយករង</option>
                                 <option value="អគ្គលេខាធិការ">អគ្គលេខាធិការ</option>
                                 <option value="អគ្គលេខាធិការរង">អគ្គលេខាធិការរង</option>
-                                <option value="ប្រ.នាយកដ្ឋាន">ប្រ.នាយកដ្ឋាន</option>
-                                <option value="អនុ.នាយកដ្ឋាន">អនុ.នាយកដ្ឋាន</option>
-                                <option value="ប្រ.ការិយាល័យ">ប្រ.ការិយាល័យ</option>
-                                <option value="អនុ.ការិយាល័យ">អនុ.ការិយាល័យ</option>
+                                <option value="នាយកវិទ្យាស្ថាន">នាយកវិទ្យាស្ថាន</option>
+                                <option value="ប្រធាននាយកដ្ឋាន">ប្រធាននាយកដ្ឋាន</option>
+                                <option value="អនុប្រធាននាយកដ្ឋាន">អនុប្រធាននាយកដ្ឋាន</option>
+                                <option value="ប្រធានការិយាល័យ">ប្រធានការិយាល័យ</option>
+                                <option value="អនុប្រធានការិយាល័យ">អនុប្រធានការិយាល័យ</option>
                                 <option value="ប្រធានផ្នែក">ប្រធានផ្នែក</option>
                                 <option value="អនុប្រធានផ្នែក">អនុប្រធានផ្នែក</option>
                                 <option value="មន្ត្រី">មន្ត្រី</option>
