@@ -11,20 +11,22 @@ class CertificateController extends Controller
     public function index(Request $request)
     {
         $search = $request->input('search');
-
-        $perPage = $request->input('per_page', 5);
-
+        $perPage = $request->input('per_page', 25);
+    
+        // Get sort parameters with default values
+        $sortField = $request->input('sort_field', 'name_certificate'); // Default sort field
+        $sortDirection = $request->input('sort_direction', 'asc'); // Default sorting direction
+    
         $certificates = Certificate::when($search, function ($query, $search) {
-            return $query->where('name_certificate', 'like', "%{$search}%");
-        })->paginate($perPage);
-
-
-        // Pass the message if no certificates are found
-        // $message = $certificates->isEmpty() ? 'គ្មានទិន្ន័យសលាកបត្រ.' : null;
-
-        return view('layouts.admin.forms.certificate.certificate-index', compact('certificates', ));
+                return $query->where('name_certificate', 'like', "%{$search}%");
+            })
+            ->orderBy($sortField, $sortDirection) // Apply sorting
+            ->paginate($perPage);
+    
+        return view('layouts.admin.forms.certificate.certificate-index', compact('certificates', 'sortField', 'sortDirection'));
     }
-
+    
+    
     public function create()
     {
         return view('layouts.admin.forms.certificate.certificate-create');
@@ -32,9 +34,13 @@ class CertificateController extends Controller
 
     public function store(Request $request)
     {
-        $validated = $request->validate(['name_certificate' => 'required|string']);
+        $validated = $request->validate([
+            'name_certificate' => 'required|string|unique:certificates,name_certificate',
+        ], [
+            'name_certificate.unique' => 'ឈ្មោះសលាកបត្របានប្រើរួចរាល់។', // Custom error message
+        ]);
         Certificate::create($validated);
-        return redirect()->route('certificate.index')->with('success', 'Certificate created successfully.');
+        return redirect()->route('certificate.index')->with('success', 'ឈ្មោះសលាកបត្របានដោយជោគជ័យ');
     }
     public function show($id)
     {
@@ -53,13 +59,13 @@ class CertificateController extends Controller
         $validated = $request->validate(['name_certificate' => 'required']);
         $certificates = Certificate::findOrFail($id);
         $certificates->update($validated);
-        return redirect()->route('certificate.index')->with('success', 'Certificate updated successfully.');
+        return redirect()->route('certificate.index')->with('success', 'ឈ្មោះសលាកបត្របានកែដោយជោគជ័យ');
     }
 
     public function destroy($id)
     {
         $certificate = Certificate::findOrFail($id);
         $certificate->delete();
-        return redirect()->route('certificate.index')->with('success', 'Certificate deleted successfully.');
+        return redirect()->route('certificate.index')->with('success', 'ឈ្មោះសលាកបត្របានលុបដោយជោគជ័យ');
     }
 }

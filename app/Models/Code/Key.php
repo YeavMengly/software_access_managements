@@ -20,8 +20,9 @@ class Key extends Model
     // Point to accountKey class
     public function accountKey()
     {
-        return $this->hasMany(AccountKey::class, 'code',);
+        return $this->hasMany(AccountKey::class, 'code'); // Ensure 'code' is used for both keys
     }
+    
 
     public function certificateData()
     {

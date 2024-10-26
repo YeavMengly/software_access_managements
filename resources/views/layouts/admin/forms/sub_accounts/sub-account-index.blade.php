@@ -9,12 +9,13 @@
                         <a class="btn btn-danger" href="{{ route('programs') }}">
                             <i class="fas fa-arrow-left"></i> ត្រឡប់ក្រោយ
                         </a>
-                        <h2 style="font-weight: 700;">តារាងលេខកូដអនុគណនី</h2>
+                        <h2 class="mx-auto" style="font-weight: 700;">តារាងលេខកូដអនុគណនី</h2>
                         <a class="btn btn-success" href="{{ route('sub-account.create') }}">
                             បញ្ចូលទិន្នន័យ <i class="fas fa-plus" style="margin-left: 8px;"></i>
                         </a>
                     </div>
 
+                    {{-- Field Search --}}
                     <form class="max-w-md mx-auto mt-3" method="GET" action="">
                         <div class="row">
                             <div class="col-md-6">
@@ -36,8 +37,8 @@
                 </div>
             </div>
 
+            {{-- Dropdown for showing number of items per page --}}
             <div class="d-flex justify-content-end mb-2">
-                <!-- Dropdown for showing number of items per page -->
                 <div style="width: 120px;">
                     <select name="per_page" class="form-control" onchange="window.location.href=this.value;">
                         <option value="{{ url()->current() }}?per_page=25"
@@ -50,28 +51,10 @@
                 </div>
             </div>
 
+            {{-- Table --}}
             <table class="table table-striped table-hover">
                 <thead>
                     <tr>
-                        <th style="border: 1px solid black;">លេខរៀង</th>
-                        <th style="border: 1px solid black;">
-                            <a
-                                href="{{ route('sub-account.index', ['sort' => 'code', 'direction' => request('direction') === 'asc' ? 'desc' : 'asc', 'search' => request('search')]) }}">
-                                លេខជំពូក
-                                @if (request('sort') === 'code')
-                                    <span>{{ request('direction') === 'asc' ? '▲' : '▼' }}</span>
-                                @endif
-                            </a>
-                        </th>
-                        <th style="border: 1px solid black;">
-                            <a
-                                href="{{ route('sub-account.index', ['sort' => 'account_key', 'direction' => request('direction') === 'asc' ? 'desc' : 'asc', 'search' => request('search')]) }}">
-                                លេខគណនី
-                                @if (request('sort') === 'account_key')
-                                    <span>{{ request('direction') === 'asc' ? '▲' : '▼' }}</span>
-                                @endif
-                            </a>
-                        </th>
                         <th style="border: 1px solid black;">
                             <a
                                 href="{{ route('sub-account.index', ['sort' => 'sub_account_key', 'direction' => request('direction') === 'asc' ? 'desc' : 'asc', 'search' => request('search')]) }}">
@@ -88,14 +71,9 @@
                 <tbody>
                     @forelse ($subAccountKeys as $subAccountKey)
                         <tr>
-                            <td style="border: 1px solid black; text-align: center;">{{ $loop->iteration }}</td>
-                            <td style="border: 1px solid black; text-align: center;">
-                                {{ $subAccountKey->accountKey->key->code }}</td>
-                            <td style="border: 1px solid black; text-align: center;">
-                                {{ $subAccountKey->accountKey->account_key }}</td>
                             <td style="border: 1px solid black; text-align: center;">{{ $subAccountKey->sub_account_key }}
                             </td>
-                            <td style="border: 1px solid black; text-align: center;">
+                            <td style="border: 1px solid black; text-align: start; padding-left: 2%;">
                                 {{ $subAccountKey->name_sub_account_key }}</td>
                             <td style="border: 1px solid black; text-align: center; justify-content: center">
                                 <form id="delete-form-{{ $subAccountKey->id }}"
@@ -121,8 +99,8 @@
                 </tbody>
             </table>
 
+            {{-- Custom Pagination --}}
             <div class="d-flex justify-content-between align-items-center mt-4">
-                <!-- Custom Pagination Links -->
                 <nav aria-label="Page navigation example">
                     <ul class="pagination">
                         @if ($subAccountKeys->onFirstPage())
@@ -182,23 +160,7 @@
 @endsection
 
 @section('styles')
-    <style>
-        .border-wrapper {
-            /* border: 2px solid black; */
-            padding: 32px;
-        }
-
-        .description {
-            height: 220px;
-            overflow-y: auto;
-        }
-
-        .table-container {
-            width: 100%;
-        }
-    </style>
-
-    <!-- Add this CSS to style the modal and file input -->
+    {{-- Custom style here --}}
     <style>
         .modal-content {
             border-radius: 10px;
@@ -215,6 +177,19 @@
 
         .btn-link {
             font-size: 1.5rem;
+        }
+
+        .border-wrapper {
+            padding: 32px;
+        }
+
+        .description {
+            height: 220px;
+            overflow-y: auto;
+        }
+
+        .table-container {
+            width: 100%;
         }
 
         .btn,
@@ -286,6 +261,7 @@
 @endsection
 
 @section('scripts')
+    {{-- Include SweetAlert2 --}}
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     @if (Session::has('success'))
