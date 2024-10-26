@@ -176,7 +176,13 @@
                     @forelse ($loans as $loan)
                         <tr>
                             <td style="border: 1px solid black; max-width: 80px; text-align: center">
-                                {{ $loan->subAccountKey->sub_account_key }}</td>
+                                @if ($loan->reportKey && $loan->reportKey->subAccountKey)
+                                    {{ $loan->reportKey->subAccountKey->sub_account_key }}
+                                @else
+                                    N/A
+                                @endif
+                            </td>
+
                             <td style="border: 1px solid black; max-width: 80px; text-align: center">
                                 {{ $loan->reportKey->report_key }}</td>
                             <td style="border: 1px solid black; max-width: 80px; text-align: center">
@@ -185,12 +191,12 @@
                                 {{ number_format($loan->unexpected_increase, 0, ' ', ' ') }}</td>
                             <td style="border: 1px solid black; max-width: 80px; text-align: center">
                                 {{ number_format($loan->additional_increase) }}</td>
-                                <td style="border: 1px solid black; max-width: 80px; text-align: center">
-                                    {{ number_format($loan->total_increase) }}</td>
+                            <td style="border: 1px solid black; max-width: 80px; text-align: center">
+                                {{ number_format($loan->total_increase) }}</td>
                             <td style="border: 1px solid black; max-width: 80px; text-align: center">
                                 {{ number_format($loan->decrease, 0, ' ', ' ') }}</td>
-                                <td style="border: 1px solid black; max-width: 80px; text-align: center">
-                                    {{ number_format($loan->editorial, 0, ' ', ' ') }}</td>
+                            <td style="border: 1px solid black; max-width: 80px; text-align: center">
+                                {{ number_format($loan->editorial, 0, ' ', ' ') }}</td>
 
                             <td style="border: 1px solid black; text-align: center; justify-content: center">
                                 <form id="delete-form-{{ $loan->id }}"

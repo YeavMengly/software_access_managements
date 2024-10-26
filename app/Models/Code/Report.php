@@ -99,4 +99,16 @@ class Report extends Model
             ->leftJoin('certificate_data as cd', 'cd.report_key', '=', 'reports.id')
             ->leftJoin('loans', 'loans.report_key', '=', 'reports.id');
     }
+
+    public function delete()
+    {
+        if($this->loans()->exists()){
+            $this->loans()->delete();
+        }
+        
+        if($this->certificateData()->exists()){
+            $this->certificateData()->delete();
+        }
+        return parent::delete();   // Then delete the report
+    }
 }

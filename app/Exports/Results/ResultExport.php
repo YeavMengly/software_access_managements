@@ -2,7 +2,7 @@
 
 namespace App\Exports\Results;
 
-use App\Models\Result; // Adjust according to your model namespace
+use Carbon\Carbon;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use PhpOffice\PhpSpreadsheet\Style\Fill;
@@ -24,7 +24,39 @@ class ResultExport
         $templatePath = public_path('result_export_template.xlsx');
         $spreadsheet = IOFactory::load($templatePath);
         $sheet = $spreadsheet->getActiveSheet();
+        if (request('start_date') && request('end_date')) {
+            $startDate = Carbon::parse(request('start_date'));
+            $endDate = Carbon::parse(request('end_date'));
+            $dateRangeText = convertToKhmerNumber($startDate->day) . ' ' . getKhmerMonth($startDate->month) . ' ' . convertToKhmerNumber($startDate->year) . ' ដល់ ' . convertToKhmerNumber($endDate->day) . ' ' . getKhmerMonth($endDate->month) . ' ' . convertToKhmerNumber($endDate->year);
+        } else {
+            $currentMonth = date('n');
+            $currentYear = date('Y');
+            $dateRangeText = 'ប្រចាំ​ ខែ ' . getKhmerMonth($currentMonth) . ' ឆ្នាំ ' . convertToKhmerNumber($currentYear);
+        }
 
+        $row = 10;
+        $sheet->getStyle("A{$row}:T{$row}")->applyFromArray([
+            'font' => [
+                'bold' => true,
+                'color' => ['rgb' => '000000'], // Black text
+                'size' => 12,
+            ],
+            'alignment' => [
+                'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
+                'vertical' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER,
+            ],
+            'borders' => [
+                'allBorders' => [
+                    'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                    'color' => ['rgb' => '000000'],
+                ],
+            ],
+            
+        ]);
+        
+        // Optionally, add the date range text to a cell in row 10
+        $sheet->setCellValue("A{$row}", $dateRangeText);
+        $sheet->mergeCells("A{$row}:T{$row}"); // Merge cells a
         $row = 14; // Start from row 14
 
         // Group reports by code
@@ -75,14 +107,15 @@ class ResultExport
                     $codeTotals['additional_increase'] += (float)$loan->additional_increase;
                     $codeTotals['decrease'] += (float)$loan->decrease;
                     $codeTotals['editorial'] += (float)$loan->editorial;
-                    $codeTotals['new_credit_status'] += (float)$loan->new_credit_status;
-                    $codeTotals['early_balance'] += (float)$loan->early_balance;
-                    $codeTotals['apply'] += (float)$loan->apply;
-                    $codeTotals['deadline_balance'] += (float)$loan->deadline_balance;
-                    $codeTotals['credit'] += (float)$loan->credit;
-                    $codeTotals['law_average'] += (float)$loan->law_average;
-                    $codeTotals['law_correction'] += (float)$loan->law_correction;
                 }
+
+                $codeTotals['new_credit_status'] += (float)$result->new_credit_status;
+                $codeTotals['early_balance'] += (float)$result->early_balance;
+                $codeTotals['apply'] += (float)$result->apply;
+                $codeTotals['deadline_balance'] += (float)$result->deadline_balance;
+                $codeTotals['credit'] += (float)$result->credit;
+                $codeTotals['law_average'] += (float)$result->law_average;
+                $codeTotals['law_correction'] += (float)$result->law_correction;
 
                 // Calculate Law Average and Law Correction
                 if ($codeTotals['fin_law'] != 0) {
@@ -153,7 +186,7 @@ class ResultExport
                 $sheet->getRowDimension($row)->setRowHeight(-1);
             }
 
-           
+
 
             // Group by accountKey within each code
             $groupedByAccountKey = $reportsByCode->groupBy(function ($result) {
@@ -193,14 +226,14 @@ class ResultExport
                         $accountTotals['additional_increase'] += (float)$loan->additional_increase;
                         $accountTotals['decrease'] += (float)$loan->decrease;
                         $accountTotals['editorial'] += (float)$loan->editorial;
-                        $accountTotals['new_credit_status'] += (float)$loan->new_credit_status;
-                        $accountTotals['early_balance'] += (float)$loan->early_balance;
-                        $accountTotals['apply'] += (float)$loan->apply;
-                        $accountTotals['deadline_balance'] += (float)$loan->deadline_balance;
-                        $accountTotals['credit'] += (float)$loan->credit;
-                        $accountTotals['law_average'] += (float)$loan->law_average;
-                        $accountTotals['law_correction'] += (float)$loan->law_correction;
                     }
+                    $accountTotals['new_credit_status'] += (float)$result->new_credit_status;
+                    $accountTotals['early_balance'] += (float)$result->early_balance;
+                    $accountTotals['apply'] += (float)$result->apply;
+                    $accountTotals['deadline_balance'] += (float)$result->deadline_balance;
+                    $accountTotals['credit'] += (float)$result->credit;
+                    $accountTotals['law_average'] += (float)$result->law_average;
+                    $accountTotals['law_correction'] += (float)$result->law_correction;
 
                     // Calculate Law Average and Law Correction
                     if ($accountTotals['fin_law'] != 0) {
@@ -303,14 +336,14 @@ class ResultExport
                             $subAccountTotals['additional_increase'] += (float)$loan->additional_increase;
                             $subAccountTotals['decrease'] += (float)$loan->decrease;
                             $subAccountTotals['editorial'] += (float)$loan->editorial;
-                            $subAccountTotals['new_credit_status'] += (float)$loan->new_credit_status;
-                            $subAccountTotals['early_balance'] += (float)$loan->early_balance;
-                            $subAccountTotals['apply'] += (float)$loan->apply;
-                            $subAccountTotals['deadline_balance'] += (float)$loan->deadline_balance;
-                            $subAccountTotals['credit'] += (float)$loan->credit;
-                            $subAccountTotals['law_average'] += (float)$loan->law_average;
-                            $subAccountTotals['law_correction'] += (float)$loan->law_correction;
                         }
+                        $subAccountTotals['new_credit_status'] += (float)$result->new_credit_status;
+                        $subAccountTotals['early_balance'] += (float)$result->early_balance;
+                        $subAccountTotals['apply'] += (float)$result->apply;
+                        $subAccountTotals['deadline_balance'] += (float)$result->deadline_balance;
+                        $subAccountTotals['credit'] += (float)$result->credit;
+                        $subAccountTotals['law_average'] += (float)$result->law_average;
+                        $subAccountTotals['law_correction'] += (float)$result->law_correction;
 
                         // Calculate Law Average and Law Correction
                         if ($subAccountTotals['fin_law'] != 0) {
@@ -349,27 +382,71 @@ class ResultExport
                         $row++;
                     }
 
-                    // Process each report within the sub-account key and hide repeated values
                     foreach ($reportsBySubAccountKey as $result) {
-                        $sheet->setCellValue('D' . $row, $subAccountKeyId); // Sub Account Key ID
-                        $sheet->setCellValue('E' . $row, $subAccountKeyName); // Sub Account Key Name
-                        $sheet->setCellValue('F' . $row, $subAccountTotals['fin_law']);
-                        $sheet->setCellValue('G' . $row, $subAccountTotals['current_loan']);
-                        $sheet->setCellValue('H' . $row, $subAccountTotals['internal_increase']);
-                        $sheet->setCellValue('I' . $row, $subAccountTotals['unexpected_increase']);
-                        $sheet->setCellValue('J' . $row, $subAccountTotals['additional_increase']);
-                        $sheet->setCellValue('K' . $row, $subAccountTotals['internal_increase'] + $subAccountTotals['unexpected_increase'] + $subAccountTotals['additional_increase']);
-                        $sheet->setCellValue('L' . $row, $subAccountTotals['decrease']);
-                        $sheet->setCellValue('M' . $row, $subAccountTotals['editorial']);
-                        $sheet->setCellValue('N' . $row, $subAccountTotals['new_credit_status']);
-                        $sheet->setCellValue('O' . $row, $subAccountTotals['early_balance']);
-                        $sheet->setCellValue('P' . $row, $subAccountTotals['apply']);
-                        $sheet->setCellValue('Q' . $row, $subAccountTotals['deadline_balance']);
-                        $sheet->setCellValue('R' . $row, $subAccountTotals['credit']);
-                        $sheet->setCellValue('S' . $row, $subAccountTotals['law_average']);
-                        $sheet->setCellValue('T' . $row, $subAccountTotals['law_correction']);
+                        $loan = $result->loans;
 
-                        $sheet->getRowDimension($row)->setRowHeight(-1);
+                        // Set values from the result object
+                        $sheet->setCellValue('D' . $row, $result->report_key);
+                        $sheet->setCellValue('E' . $row, $result->name_report_key);
+                        $sheet->setCellValue('F' . $row, $result->fin_law);
+                        $sheet->setCellValue('G' . $row, $result->current_loan);
+
+
+
+                        // Check if loan is not empty and set values accordingly
+
+                        if (!empty($loan)) {
+                            $sheet->setCellValue('H' . $row, $loan->internal_increase);
+                            $sheet->setCellValue('I' . $row, $loan->unexpected_increase);
+                            $sheet->setCellValue('J' . $row, $loan->additional_increase);
+                            $sheet->setCellValue('K' . $row, $loan->internal_increase + $loan->unexpected_increase + $loan->additional_increase);
+                            $sheet->setCellValue('L' . $row, $loan->decrease);
+                            $sheet->setCellValue('M' . $row, $loan->editorial);
+                            $sheet->setCellValue('N' . $row, $loan->new_credit_status);
+                            $sheet->setCellValue('O' . $row, $loan->early_balance);
+                            $sheet->setCellValue('P' . $row, $loan->apply);
+                            $sheet->setCellValue('Q' . $row, $loan->deadline_balance);
+                            $sheet->setCellValue('R' . $row, $loan->credit);
+                            $sheet->setCellValue('S' . $row, $loan->law_average);
+                            $sheet->setCellValue('T' . $row, $loan->law_correction);
+                        } else {
+                            // Set default values or leave empty if loan is not available
+                            $sheet->setCellValue('H' . $row, 0);
+                            $sheet->setCellValue('I' . $row, 0);
+                            $sheet->setCellValue('J' . $row, 0);
+                            $sheet->setCellValue('K' . $row, 0);
+                            $sheet->setCellValue('L' . $row, 0);
+                            $sheet->setCellValue('M' . $row, 0);
+                            $sheet->setCellValue('N' . $row, 0);
+                            $sheet->setCellValue('O' . $row, 0);
+                            $sheet->setCellValue('P' . $row, 0);
+                            $sheet->setCellValue('Q' . $row, 0);
+                            $sheet->setCellValue('R' . $row, 0);
+                            $sheet->setCellValue('S' . $row, 0);
+                            $sheet->setCellValue('T' . $row, 0);
+                        }
+
+                        $sheet->setCellValue('N' . $row, $result->new_credit_status);
+                        $sheet->setCellValue('O' . $row, $result->early_balance);
+                        $sheet->setCellValue('P' . $row, $result->apply);
+                        $sheet->setCellValue('Q' . $row, $result->deadline_balance);
+                        $sheet->setCellValue('R' . $row, $result->credit);
+
+                        if ($result->fin_law != 0) {
+                            $law_average = $result->deadline_balance / $result->fin_law;
+                        } else {
+                            $law_average = 0;
+                        }
+
+                        if ($result->new_credit_status != 0) {
+                            $law_correction = $result->deadline_balance / $result->new_credit_status;
+                        } else {
+                            $law_correction = 0;
+                        }
+
+                        // Set values in the sheet, ensuring no negatives are shown
+                        $sheet->setCellValue('S' . $row, max(0, $law_average));
+                        $sheet->setCellValue('T' . $row, max(0, $law_correction));
 
                         $row++; // Move to the next row
                     }

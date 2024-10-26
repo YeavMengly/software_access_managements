@@ -22,17 +22,18 @@
                 <div class="col-lg-12 margin-tb">
 
                     <div class="d-flex justify-content-between align-items-center">
-                        <a class="btn btn-danger" href="{{ url('/') }}">
-                            <i class="fas fa-arrow-left"></i> ត្រឡប់ក្រោយ
+                        <a class="btn btn-danger d-flex justify-content-center align-items-center" href="{{ url('/') }}" style="width: 160px; height: 50px;">
+                            <i class="fas fa-arrow-left"></i> &nbsp;&nbsp;ត្រឡប់ក្រោយ
                         </a>
                         <h2 style="font-weight: 700;">តារាងរបាយការណ៍បញ្ចូល</h2>
                         <div class="btn-group">
-                            <a class="btn btn-success mr-2" href="#" data-bs-toggle="modal"
-                                data-bs-target="#importModal" style="border-radius: 4px;">
-                                Import <i class="fas fa-file-import" style="margin-left: 8px;"></i>
+                            <a class="btn btn-success d-flex justify-content-center align-items-center" href="#" data-bs-toggle="modal"
+                                data-bs-target="#importModal"  style="width: 160px; height: 50px; border-radius: 4px;">
+                                Import  &nbsp;&nbsp;<i class="fas fa-file-import" style="margin-left: 8px;"></i>
                             </a>
-                            <a class="btn btn-success" href="{{ route('codes.create') }}" style="border-radius: 4px;">
-                                បញ្ចូលទិន្នន័យ <i class="fas fa-plus" style="margin-left: 8px;"></i>
+                            &nbsp;&nbsp;
+                            <a class="btn btn-success d-flex justify-content-center align-items-center" href="{{ route('codes.create') }}" style="width: 160px; height: 50px; border-radius: 4px;">
+                                បញ្ចូលទិន្នន័យ  &nbsp;&nbsp;<i class="fas fa-plus" style="margin-left: 8px;"></i>
                             </a>
                         </div>
                     </div>
