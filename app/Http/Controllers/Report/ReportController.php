@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Report;
 use App\Http\Controllers\Controller;
 use App\Imports\ReportsImport;
 use App\Models\Certificates\CertificateData;
-use App\Models\Code\Loans;
 use App\Models\Code\Report;
 use App\Models\Code\SubAccountKey;
 use Illuminate\Http\Request;
@@ -207,7 +206,11 @@ class ReportController extends Controller
 
         return redirect()->route('codes.index')->with('success', 'Report updated successfully.');
     }
+<<<<<<< HEAD
+ 
+=======
 
+>>>>>>> 307b6364ea92696bcd64cc9dd0662a50e8c237bd
     public function destroy($id)
     {
         $reportKey = Report::findOrFail($id);

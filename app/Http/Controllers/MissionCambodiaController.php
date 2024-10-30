@@ -172,13 +172,17 @@ class MissionCambodiaController extends Controller
             'names.*' => 'required|string|max:255',
             'people.*.role' => ['required', 'string', Rule::in($roles)],
             'people.*.position_type' => 'required|string|in:ក,ខ១,ខ២,គ,ឃ,ង',
-            'letter_number' => 'required|string|max:255',
+            'letter_number' => 'required|integer|min:0',
+            'full_letter_number' => 'required|string|max:255',
             'letter_date' => 'required|date',
             'mission_objective' => 'required|string',
             'location' => 'required',
             'mission_start_date' => 'required|date',
             'mission_end_date' => 'required|date|after_or_equal:mission_start_date',
         ]);
+
+        // Retrieve the combined letter number and format
+        $fullLetterNumber = $request->input('full_letter_number');
 
         // Calculate the duration of the mission
         $missionStartDate = new \DateTime($request->mission_start_date);
@@ -189,6 +193,7 @@ class MissionCambodiaController extends Controller
         // Prepare data for the mission (this will be used for all persons)
         $missionData = [
             'letter_number' => $request->letter_number,
+            'letter_number' => $fullLetterNumber,
             'letter_date' => $request->letter_date,
             'mission_objective' => $request->mission_objective,
             'location' => $request->location,
@@ -288,11 +293,9 @@ class MissionCambodiaController extends Controller
                 // Update the final total for the first person
                 $personData['final_total'] += $travelAllowance;
             }
-
             // Store each person's mission data in ResultMission
             $missions = CambodiaMission::create(array_merge($missionData, $personData))->id;
         }
-
         // Redirect or return a response
         return redirect()->route('mission-cam.index')->with('success', 'Mission created successfully.');
     }
@@ -300,7 +303,6 @@ class MissionCambodiaController extends Controller
     // Example method to calculate travel allowance (you can adjust this as needed)
     protected function calculateTravelAllowance($location)
     {
-
         // Define travel allowances based on location (example logic)
         $travelAllowanceRates = [
             'កំពង់ធំ' => 268800,
@@ -364,7 +366,8 @@ class MissionCambodiaController extends Controller
             'name' => 'required|string|max:255',
             'role' => 'required|string|max:255',
             'position_type' => 'required|string|max:255',
-            'letter_number' => 'required|numeric',
+            'letter_number' => 'required|numeric|min:0',
+            'letter_format' => 'required|string|max:255',
             'letter_date' => 'required|date',
             'mission_objective' => 'required|string',
             'location' => 'nullable|string',
@@ -372,6 +375,9 @@ class MissionCambodiaController extends Controller
             'mission_end_date' => 'required|date|after_or_equal:mission_start_date',
             'travel_allowance' => 'required|numeric|min:0',
         ]);
+
+        // Construct the full letter number
+        $fullLetterNumber = trim($validatedData['letter_format'] . '/' . $validatedData['letter_number']);
 
         $name = $validatedData['name']; // Retrieve name from the validated data
 
@@ -516,6 +522,8 @@ class MissionCambodiaController extends Controller
             'role' => $validatedData['role'],
             'position_type' => $validatedData['position_type'],
             'letter_number' => $validatedData['letter_number'],
+            'letter_format' => $validatedData['letter_format'], 
+            'full_letter_number' => $fullLetterNumber,
             'letter_date' => $validatedData['letter_date'],
             'mission_objective' => $validatedData['mission_objective'],
             'location' => $request->location,
@@ -534,6 +542,7 @@ class MissionCambodiaController extends Controller
         ];
 
         // Update the mission record
+        $mission = CambodiaMission::findOrFail($id);
         $mission->update($updateData);
 
         // Redirect with success message
