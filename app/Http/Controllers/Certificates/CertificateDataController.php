@@ -191,3 +191,4 @@ class CertificateDataController extends Controller
         $report->save();
     }
 }
+    

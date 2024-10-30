@@ -22,17 +22,37 @@
                 @endif
 
                 @if ($errors->any())
+                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                        <strong>Whoops!</strong> There were some problems with your input.<br><br>
                     <div class="alert alert-danger">
                         <ul>
                             @foreach ($errors->all() as $error)
                                 <li>{{ $error }}</li>
                             @endforeach
                         </ul>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                     </div>
                 @endif
 
                 <div class="border-wrapper">
                     <div class="form-container">
+                        <form action="{{ route('loans.update', $loan->id) }}" method="POST"
+                            enctype="multipart/form-data">
+                            @csrf
+                            @method('PUT')
+
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <!-- Sub Account Key Input -->
+                                    <div class="form-group">
+                                        <strong>លេខអនុគណនី:</strong>
+                                        <select name="sub_account_key" class="form-control">
+                                            @foreach ($subAccountKeys as $subAccountKey)
+                                                <option value="{{ $subAccountKey->id }}"
+                                                    {{ $subAccountKey->id == $loan->sub_account_key ? 'selected' : '' }}>
+                                                    {{ $subAccountKey->accountKey->key->code }} -
+                                                    {{ $subAccountKey->accountKey->account_key }} -
+                                                    {{ $subAccountKey->sub_account_key }}
                         <form action="{{ route('loans.update', $loan->id) }}" method="POST" enctype="multipart/form-data">
                             @csrf
                             @method('PUT') <!-- Indicate that this is an update request -->
@@ -67,6 +87,58 @@
                                             @endforeach
                                         </select>
                                     </div>
+                                    <!-- Report Key Input -->
+                                    <div class="form-group">
+                                        <label for="report_key">លេខកូដកម្មវិធី:</label>
+                                        <input type="number" name="report_key" id="report_key"
+                                            value="{{ old('report_key', $loan->report_key) }}"
+                                            class="form-control @error('report_key') is-invalid @enderror">
+                                        @error('report_key')
+                                            <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+
+                                    <!-- Name Report Key Input -->
+                                    <div class="form-group">
+                                        <label for="name_report_key">ចំណាត់ថ្នាក់:</label>
+                                        <input type="text" name="name_report_key" id="name_report_key"
+                                            value="{{ old('name_report_key', $loan->name_report_key) }}"
+                                            class="form-control @error('name_report_key') is-invalid @enderror">
+                                        @error('name_report_key')
+                                            <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+
+                                    <!-- Financial Law Input -->
+                                    <div class="form-group">
+                                        <label for="fin_law">ច្បាប់ហិរញ្ញវត្ថុ:</label>
+                                        <input type="number" name="fin_law" id="fin_law"
+                                            value="{{ old('fin_law', $loan->fin_law) }}"
+                                            class="form-control @error('fin_law') is-invalid @enderror"
+                                            oninput="updateCurrentLoan(this)">
+                                        @error('fin_law')
+                                            <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <label for="current_loan">ឥណទានបច្ចុប្បន្ន:</label>
+                                        <input type="number" name="current_loan" id="current_loan"
+                                            value="{{ old('current_loan', $loan->current_loan) }}"
+                                            class="form-control @error('current_loan') is-invalid @enderror">
+                                        @error('current_loan')
+                                            <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                            <div class="d-flex align-items-center">
+                                <button type="submit" class="btn btn-primary ml-auto">បានរក្សាទុក</button>
+                            </div>
+                        </form>
                                 </div>
 
 
@@ -216,6 +288,29 @@
     </script>
 
     <script>
+        function updateApplyValue() {
+            let finLaw = parseFloat(document.getElementById('fin_law').value) || 0;
+            let internalIncrease = parseFloat(document.getElementById('internal_increase').value) || 0;
+            let unexpectedIncrease = parseFloat(document.getElementById('unexpected_increase').value) || 0;
+            let additionalIncrease = parseFloat(document.getElementById('additional_increase').value) || 0;
+            let decrease = parseFloat(document.getElementById('decrease').value) || 0;
+
+            // Calculate total_increase and new_credit_status
+            let totalIncrease = internalIncrease + unexpectedIncrease + additionalIncrease;
+            let newCreditStatus = finLaw + totalIncrease - decrease;
+
+            // Update the apply field (if needed)
+            document.getElementById('apply').value = newCreditStatus;
+
+            // You can add other calculations if needed here
+        }
+
+        // Attach the event listeners to the fields that affect the calculations
+        document.getElementById('fin_law').addEventListener('input', updateApplyValue);
+        document.getElementById('internal_increase').addEventListener('input', updateApplyValue);
+        document.getElementById('unexpected_increase').addEventListener('input', updateApplyValue);
+        document.getElementById('additional_increase').addEventListener('input', updateApplyValue);
+        document.getElementById('decrease').addEventListener('input', updateApplyValue);
         // Function to filter report keys based on user input
         function filterReportKeys(event) {
             const searchValue = event.target.value.toLowerCase();

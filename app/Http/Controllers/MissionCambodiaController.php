@@ -8,6 +8,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\Rule;
+use PgSql\Lob;
 
 class MissionCambodiaController extends Controller
 {
@@ -48,9 +49,9 @@ class MissionCambodiaController extends Controller
 
         // Initialize query builder
         $query = CambodiaMission::query();
-
         // Ensure pagination is used
         $missions = CambodiaMission::paginate(20);
+
 
         // Filter by text search if provided
         if ($search) {
@@ -98,6 +99,9 @@ class MissionCambodiaController extends Controller
         // Fetch missions
         $missions = $query->get();
 
+        // $perPage = $request->get('per_page', 25); // Get per_page from request or default to 25
+        // $missions = CambodiaMission::paginate($perPage); // Assuming 'ResultMission' is the model
+
         // Calculate totals
         $totals = [
             'travel_allowance' => $missions->sum('travel_allowance'),
@@ -139,12 +143,18 @@ class MissionCambodiaController extends Controller
             'ទីប្រឹក្សាអមក្រសួង',
             'រដ្ឋលេខាធិការ',
             'អនុរដ្ឋលេខាធិការ',
+            'អគ្កាធិការ',
+            'អគ្កាធិការរង',
             'អគ្គាធិការ',
             'អគ្គាធិការរង',
             'អគ្គនាយក',
             'អគ្គនាយករង',
             'អគ្គលេខាធិការ',
             'អគ្គលេខាធិការរង',
+            'ប្រ.នាយកដ្ឋាន',
+            'អនុ.នាយកដ្ឋាន',
+            'ប្រ.ការិយាល័យ',
+            'អនុ.ការិយាល័យ',
             'នាយកវិទ្យាស្ថាន',
             'ប្រធាននាយកដ្ឋាន',
             'អនុប្រធាននាយកដ្ឋាន',
@@ -172,13 +182,17 @@ class MissionCambodiaController extends Controller
             'names.*' => 'required|string|max:255',
             'people.*.role' => ['required', 'string', Rule::in($roles)],
             'people.*.position_type' => 'required|string|in:ក,ខ១,ខ២,គ,ឃ,ង',
-            'letter_number' => 'required|string|max:255',
+            'letter_number' => 'required|integer|min:0',
+            'full_letter_number' => 'required|string|max:255',
             'letter_date' => 'required|date',
             'mission_objective' => 'required|string',
             'location' => 'required',
             'mission_start_date' => 'required|date',
             'mission_end_date' => 'required|date|after_or_equal:mission_start_date',
         ]);
+
+        // Retrieve the combined letter number and format
+        $fullLetterNumber = $request->input('full_letter_number');
 
         // Calculate the duration of the mission
         $missionStartDate = new \DateTime($request->mission_start_date);
@@ -189,6 +203,7 @@ class MissionCambodiaController extends Controller
         // Prepare data for the mission (this will be used for all persons)
         $missionData = [
             'letter_number' => $request->letter_number,
+            'letter_number' => $fullLetterNumber,
             'letter_date' => $request->letter_date,
             'mission_objective' => $request->mission_objective,
             'location' => $request->location,
@@ -288,11 +303,9 @@ class MissionCambodiaController extends Controller
                 // Update the final total for the first person
                 $personData['final_total'] += $travelAllowance;
             }
-
             // Store each person's mission data in ResultMission
             $missions = CambodiaMission::create(array_merge($missionData, $personData))->id;
         }
-
         // Redirect or return a response
         return redirect()->route('mission-cam.index')->with('success', 'Mission created successfully.');
     }
@@ -300,7 +313,6 @@ class MissionCambodiaController extends Controller
     // Example method to calculate travel allowance (you can adjust this as needed)
     protected function calculateTravelAllowance($location)
     {
-
         // Define travel allowances based on location (example logic)
         $travelAllowanceRates = [
             'កំពង់ធំ' => 268800,
@@ -365,6 +377,8 @@ class MissionCambodiaController extends Controller
             'role' => 'required|string|max:255',
             'position_type' => 'required|string|max:255',
             'letter_number' => 'required|numeric',
+            'letter_number' => 'required|numeric|min:0',
+            'letter_format' => 'required|string|max:255',
             'letter_date' => 'required|date',
             'mission_objective' => 'required|string',
             'location' => 'nullable|string',
@@ -372,6 +386,9 @@ class MissionCambodiaController extends Controller
             'mission_end_date' => 'required|date|after_or_equal:mission_start_date',
             'travel_allowance' => 'required|numeric|min:0',
         ]);
+
+        // Construct the full letter number
+        $fullLetterNumber = trim($validatedData['letter_format'] . '/' . $validatedData['letter_number']);
 
         $name = $validatedData['name']; // Retrieve name from the validated data
 
@@ -516,6 +533,8 @@ class MissionCambodiaController extends Controller
             'role' => $validatedData['role'],
             'position_type' => $validatedData['position_type'],
             'letter_number' => $validatedData['letter_number'],
+            'letter_format' => $validatedData['letter_format'], 
+            'full_letter_number' => $fullLetterNumber,
             'letter_date' => $validatedData['letter_date'],
             'mission_objective' => $validatedData['mission_objective'],
             'location' => $request->location,
@@ -534,6 +553,7 @@ class MissionCambodiaController extends Controller
         ];
 
         // Update the mission record
+        $mission = CambodiaMission::findOrFail($id);
         $mission->update($updateData);
 
         // Redirect with success message

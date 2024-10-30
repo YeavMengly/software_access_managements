@@ -43,6 +43,7 @@
                                     <div class="form-group">
                                         <strong>លេខកូដកម្មវិធី:</strong>
                                         <input type="text" id="searchReportKey" class="form-control"
+                                            placeholder="ស្វែងរកលេខកូដកម្មវិធី..." onkeyup="filterReportKeys(event)"
                                             placeholder="ស្វែងរកលេខកូដ អនុគណនី​ នឹងកម្មវិធី..." onkeyup="filterReportKeys(event)"
                                             style="width: 420px; height: 60px; text-align: center; line-height: 60px;">
                                         <p id="resultCount" style="font-weight: bold;">ចំនួន: 0</p>

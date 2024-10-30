@@ -56,11 +56,14 @@
                                     ពិនិត្យរបាយការណ៍
                                 </a>
                             </div>
+
                             <div class="col-md-6 mb-3">
                                 <a href="{{ route('mission-cam.create') }}"
                                     class="btn btn-custom btn-block animate-button">
                                     បញ្ចូលបេសកម្ម </a>
                             </div>
+
+
                             <div class="col-md-12 mb-3">
                                 <button class="btn btn-custom btn-block animate-button" onclick="openAndCloseWindow()">
                                     ចាកចេញពីកម្មវិធី <i class="fas fa-sign-out-alt"></i>

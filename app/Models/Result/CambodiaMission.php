@@ -32,4 +32,5 @@ class CambodiaMission extends Model
         'other_allowances',
         'final_total',
     ];
+    
 }

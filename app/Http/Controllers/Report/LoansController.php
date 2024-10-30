@@ -87,6 +87,8 @@ class LoansController extends Controller
         // Retrieve the current loan value from the existing report
         $current_loan = $existingReport->current_loan;
 
+
+
         // Calculate new_credit_status
         $new_credit_status = $current_loan + $total_increase - $validatedData['decrease'] - $validatedData['editorial'];
 
@@ -177,6 +179,7 @@ class LoansController extends Controller
             ])->withInput();
         }
 
+
         // Retrieve the current loan value and the fin_law value from the existing report
         $current_loan = $existingReport->current_loan;
         $fin_law = $existingReport->fin_law; // Retrieve fin_law from the report
@@ -254,6 +257,7 @@ class LoansController extends Controller
             // Recalculate law_average and law_correction
             $law_average = $report->fin_law ? max(-100, min(100, ($deadline_balance / $report->fin_law) * 100)) : 0;
             $law_correction = $new_credit_status ? max(-100, min(100, ($deadline_balance / $new_credit_status) * 100)) : 0;
+            
 
             // Update the report with the recalculated values
             $report->update([
@@ -352,3 +356,4 @@ class LoansController extends Controller
         return $totalEarlyBalance;
     }
 }
+

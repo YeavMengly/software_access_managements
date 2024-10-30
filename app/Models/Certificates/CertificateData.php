@@ -45,6 +45,7 @@ class CertificateData extends Model
     }
 
     public function loans(){
+        return $this->belongsTo(Loans::class, 'report_key');
         return $this->hasOne(Loans::class, 'report_key','report_key');
     }
 

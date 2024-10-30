@@ -100,6 +100,7 @@ class ReportController extends Controller
         $validatedData['decrease'] = $validatedData['decrease'] ?? 0;
         $validatedData['editorial'] = $validatedData['editorial'] ?? 0;
 
+
         $total_increase = $validatedData['internal_increase'] + $validatedData['unexpected_increase'] + $validatedData['additional_increase'];
 
         $new_credit_status = $validatedData['current_loan'] + $total_increase - $validatedData['decrease'] - $validatedData['editorial'];
@@ -180,6 +181,7 @@ class ReportController extends Controller
         // Recalculate the total increase and credit status
         $total_increase = $validatedData['internal_increase'] + $validatedData['unexpected_increase'] + $validatedData['additional_increase'];
         $new_credit_status = $validatedData['current_loan'] + $total_increase - $validatedData['decrease'] - $validatedData['editorial'];
+
 
         // Calculate certificate-related fields
         $currentApplyTotal = CertificateData::where('report_key', $validatedData['report_key'])->sum('value_certificate');
@@ -272,3 +274,4 @@ class ReportController extends Controller
         $report->save();
     }
 }
+

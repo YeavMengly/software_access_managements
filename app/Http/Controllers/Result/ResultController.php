@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Result;
 
 use App\Exports\Results\ResultExport;
 use App\Http\Controllers\Controller;
-use App\Models\Certificates\Certificate;
 use App\Models\Certificates\CertificateData;
 use App\Models\Code\Loans;
 use App\Models\Code\Report;
@@ -95,6 +94,7 @@ class ResultController extends Controller
         }
     }
 
+
     private function applyDateFilter($query, $startDate, $endDate)
     {
         // Apply date range filter
@@ -169,6 +169,7 @@ class ResultController extends Controller
             }
         }
     }
+
 
     private function calculateTotals($reports)
     {
@@ -282,6 +283,7 @@ class ResultController extends Controller
             foreach ($groupedByAccountKey as $accountKeyId => $loansByAccountKey) {
                 $totals['accountKey'][$codeId][$accountKeyId] = $this->calculateSumFields($loansByAccountKey);
                 $totals['accountKey'][$codeId][$accountKeyId]['name_account_key'] = $loansByAccountKey->first()->subAccountKey->accountKey->name_account_key ?? 'Unknown';
+                
 
                 $groupedBySubAccountKey = $loansByAccountKey->groupBy(function ($loan) {
                     return $loan->subAccountKey->sub_account_key ?? 'Unknown';
@@ -357,3 +359,6 @@ class ResultController extends Controller
         return $sumFields;
     }
 }
+
+
+

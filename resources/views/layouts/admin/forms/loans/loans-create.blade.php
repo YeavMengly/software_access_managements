@@ -40,6 +40,21 @@
 
                             <div class="row d-flex justify-content-center ">
                                 <!-- First Row -->
+                                <div class="col-md-3  d-flex flex-column align-items-center">
+                                    <!-- Sub Account Key Input -->
+                                    <div class="form-group">
+                                        <strong>លេខអនុគណនី:</strong>
+                                        <input type="text" id="searchSubAccountKey" class="form-control"
+                                            placeholder="ស្វែងរកលេខអនុគណនី..." onkeyup="filterSubAccountKeys(event)"
+                                            style="width: 420px; height: 60px; text-align: center;"
+                                            oninput="resetSubAccountSelection()">
+                                        <p id="resultCount" style="font-weight: bold;">ចំនួន: 0</p>
+                                        <select name="sub_account_key" id="subAccountKeySelect" class="form-control"
+                                            size="5" onclick="getSelectedValue()"
+                                            style="width: 420px; height: 260px;">
+                                            @foreach ($subAccountKeys as $subAccountKey)
+                                                <option value="{{ $subAccountKey->id }}">
+                                                    {{ $subAccountKey->sub_account_key }}
 
                                 <div class="col-md-3 d-flex flex-column align-items-center">
                                     <!-- Report Key Input -->
@@ -62,6 +77,7 @@
                                                 <option value="{{ $report->id }}">
                                                     {{ $report->subAccountKey->sub_account_key }} >
                                                     {{ $report->report_key }}
+>>>>>>> 1ecd59fca302d5e6dde112f4d29c92858f9a1262
                                                 </option>
                                             @endforeach
                                         </select>
@@ -69,6 +85,30 @@
                                 </div>
 
                                 <div class="col-md-3  d-flex flex-column align-items-center">
+                                    <!-- Sub Account Key Input -->
+                                    <div class="form-group">
+                                        <strong>លេខកូដកម្មវិធី:</strong>
+
+                                        <input type="text" id="searchReportKey" class="form-control"
+                                            placeholder="ស្វែងរកលេខកូដកម្មវិធី..." onkeyup="filterReportKeys(event)"
+                                            style="width: 420px; height: 60px;" oninput="resetReportKeySelection()">
+                                        <p id="reportResultCount" style="font-weight: bold;">ចំនួន: 0</p>
+
+                                        <select name="report_key" id="reportKeySelect" class="form-control" size="5"
+                                            onclick="getSelectedReportKey()"
+                                            style="width: 420px; height: 260px; text-align: left;">
+                                            @foreach ($reports as $report)
+                                                <option value="{{ $report->id }}">{{ $report->report_key }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+
+                                </div>
+
+                                <div class="col-md-3  d-flex flex-column align-items-center">
+                                    <!-- Internal Increase Input -->
+                                    <div class="form-group">
+                                        <strong>កើនផ្ទៃក្នុង:</strong>
                                     <!-- Internal Increase Input -->
                                     <div class="form-group">
                                         <label for=""> <strong>កើនផ្ទៃក្នុង:</strong></label>
@@ -81,6 +121,7 @@
                                     </div>
 
                                     <div class="form-group">
+                                        <strong>មិនបានគ្រោងទុក:</strong>
                                         <label for=""> <strong>មិនបានគ្រោងទុក:</strong></label>
                                         <input type="number" name="unexpected_increase" id="unexpected_increase"
                                             class="form-control @error('unexpected_increase') is-invalid @enderror"
@@ -91,6 +132,7 @@
                                     </div>
 
                                     <div class="form-group">
+                                        <strong>បំពេញបន្ថែម</strong>
                                         <label for=""> <strong>បំពេញបន្ថែម</strong></label>
                                         <input type="number" name="additional_increase" id="additional_increase"
                                             class="form-control @error('additional_increase') is-invalid @enderror"
@@ -105,6 +147,7 @@
                                 <div class="col-md-3  d-flex flex-column align-items-center">
                                     <!-- Report Key Input -->
                                     <div class="form-group">
+                                        <strong>ថយ</strong>
                                         <label for=""> <strong>ថយ</strong></label>
                                         <input type="number" name="decrease" id="decrease"
                                             class="form-control @error('decrease') is-invalid @enderror" min="0"
@@ -115,6 +158,7 @@
                                     </div>
 
                                     <div class="form-group">
+                                        <strong>វិចារណកម្ម</strong>
                                         <label for=""><strong>វិចារណកម្ម</strong></label>
                                         <input type="number" name="editorial" id="editorial"
                                             class="form-control @error('editorial') is-invalid @enderror" min="0"
@@ -152,6 +196,8 @@
 
 
                             <div class="d-flex align-items-center">
+                                <button type="submit" class="btn btn-primary ml-auto">
+                                    <i class="fas fa-save"></i> បានរក្សាទុក
                                 <button type="submit" class="btn btn-primary ml-auto"
                                     style="width: 300px; height: 60px;">
 
@@ -271,6 +317,84 @@
             // Optional: You can add formatting logic if necessary
             const value = input.value;
             input.value = value.replace(/\D/g, ''); // This example strips non-numeric characters
+        }
+    </script>
+    <script>
+        let selectedIndex = -1;
+
+        // Function to filter sub-account keys
+        function filterSubAccountKeys(event) {
+            var input = document.getElementById('searchSubAccountKey').value.toLowerCase();
+            var select = document.getElementById('subAccountKeySelect');
+            var options = select.options;
+            var count = 0;
+
+            // Loop through options to filter them
+            for (var i = 0; i < options.length; i++) {
+                var optionText = options[i].textContent.toLowerCase();
+                if (optionText.includes(input)) {
+                    options[i].style.display = ''; // Show matching option
+                    count++;
+                } else {
+                    options[i].style.display = 'none'; // Hide non-matching option
+                }
+            }
+
+            // Update the result count
+            document.getElementById('resultCount').innerText = 'ចំនួន: ' + count;
+
+            // Handle arrow key navigation
+            if (event.key === 'ArrowDown') {
+                if (selectedIndex < options.length - 1) {
+                    selectedIndex++;
+                    while (options[selectedIndex].style.display === 'none') {
+                        selectedIndex++;
+                        if (selectedIndex >= options.length) {
+                            selectedIndex = options.length - 1;
+                            break;
+                        }
+                    }
+                    options[selectedIndex].selected = true;
+                    updateSubAccountInputField();
+                }
+            } else if (event.key === 'ArrowUp') {
+                if (selectedIndex > 0) {
+                    selectedIndex--;
+                    while (options[selectedIndex].style.display === 'none') {
+                        selectedIndex--;
+                        if (selectedIndex < 0) {
+                            selectedIndex = 0;
+                            break;
+                        }
+                    }
+                    options[selectedIndex].selected = true;
+                    updateSubAccountInputField();
+                }
+            } else if (event.key === 'Enter') {
+                updateSubAccountInputField();
+            }
+        }
+
+        // Function to reset the selection if input changes
+        function resetSubAccountSelection() {
+            selectedIndex = -1;
+            var select = document.getElementById('subAccountKeySelect');
+            select.selectedIndex = -1; // Deselect any selected option
+        }
+
+        // Function to update input field with the selected dropdown value
+        function updateSubAccountInputField() {
+            var select = document.getElementById('subAccountKeySelect');
+            var selectedOption = select.options[select.selectedIndex];
+
+            if (selectedOption) {
+                document.getElementById('searchSubAccountKey').value = selectedOption.textContent;
+            }
+        }
+
+        // Function to handle selection
+        function getSelectedValue() {
+            updateSubAccountInputField();
         }
     </script>
 

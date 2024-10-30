@@ -62,7 +62,6 @@
                     transition: background-color 0.3s ease;">
                     សម្អាតទិន្នន័យ
                 </button>
-
                 <!-- Report Mission -->
                 <button type="button" class="btn btn-secondary ml-3"
                     onclick="window.location.href='{{ route('reports-missions.index') }}'"
@@ -76,6 +75,19 @@
                 </button>
             </div>
         </form>
+        {{-- <div class="d-flex justify-content-end mb-2">
+            <!-- Dropdown for showing number of items per page -->
+            <div style="width: 120px;">
+                <select name="per_page" class="form-control" onchange="window.location.href=this.value;">
+                    <option value="{{ url()->current() }}?per_page=25" {{ request('per_page') == 25 ? 'selected' : '' }}>
+                        បង្ហាញ 25</option>
+                    <option value="{{ url()->current() }}?per_page=50" {{ request('per_page') == 50 ? 'selected' : '' }}>
+                        បង្ហាញ 50</option>
+                    <option value="{{ url()->current() }}?per_page=100" {{ request('per_page') == 100 ? 'selected' : '' }}>
+                        បង្ហាញ 100</option>
+                </select>
+            </div>
+        </div> --}}
     </div>
 
     <div class="border-wrapper mt-3">
@@ -306,6 +318,41 @@
                         </tr>
                     </tbody>
                 </table>
+                {{-- <div class="d-flex justify-content-between align-items-center mt-4">
+                    <div>
+                        <!-- Custom Pagination -->
+                        <nav aria-label="Page navigation example">
+                            <ul class="pagination">
+                                <li class="page-item{{ $missions->onFirstPage() ? ' disabled' : '' }}">
+                                    <a class="page-link"
+                                        href="{{ $missions->previousPageUrl() }}&per_page={{ request('per_page') }}"
+                                        aria-label="Previous">
+                                        <span aria-hidden="true">&laquo;</span>
+                                        <span class="sr-only">Previous</span>
+                                    </a>
+                                </li>
+                                @for ($i = 1; $i <= $missions->lastPage(); $i++)
+                                    <li class="page-item{{ $missions->currentPage() == $i ? ' active' : '' }}">
+                                        <a class="page-link"
+                                            href="{{ $missions->url($i) }}&per_page={{ request('per_page') }}">{{ $i }}</a>
+                                    </li>
+                                @endfor
+                                <li class="page-item{{ !$missions->hasMorePages() ? ' disabled' : '' }}">
+                                    <a class="page-link"
+                                        href="{{ $missions->nextPageUrl() }}&per_page={{ request('per_page') }}"
+                                        aria-label="Next">
+                                        <span aria-hidden="true">&raquo;</span>
+                                        <span class="sr-only">Next</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </nav>
+                    </div>
+                    <div>
+                        <p class="text-muted">បង្ហាញ {{ $missions->firstItem() }} ដល់ {{ $missions->lastItem() }} នៃ
+                            {{ $missions->total() }} លទ្ធផល</p>
+                    </div>
+                </div> --}}
             </div>
         </div>
         <div class="d-flex justify-content-end mt-3">

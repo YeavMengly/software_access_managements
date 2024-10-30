@@ -26,6 +26,9 @@
                     <div class="col-md-6">
                         <div class="input-group my-3" style="width: 40%;">
                             <input type="search" name="search" value="{{ request('search') }}" class="form-control"
+                                placeholder="ស្វែងរកទិន្នន័យសលាកបត្រ" aria-label="Search Address">
+                            <button type="submit" class="btn btn-primary">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 50 50">
                                 placeholder="ស្វែងរកទិន្នន័យសលាកបត្រ" aria-label="Search Address"
                                 style=" height: 50px;">
                             <button type="submit" class="btn btn-primary" style="height: 50px; width: 120px;" >
@@ -50,6 +53,7 @@
                 <!-- Dropdown for showing number of items per page -->
                 <div style="width: 120px;">
                     <select name="per_page" class="form-control" onchange="window.location.href=this.value;">
+                        <option value="{{ url()->current() }}?per_page=25" {{ request('per_page') == 25 ? 'selected' : '' }}>
                         <option value="{{ url()->current() }}?per_page=25"
                             {{ request('per_page') == 25 ? 'selected' : '' }}>
                             បង្ហាញ 25</option>
@@ -280,3 +284,4 @@
         });
     </script>
 @endsection
+

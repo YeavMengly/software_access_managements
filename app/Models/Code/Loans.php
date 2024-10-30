@@ -20,7 +20,13 @@ class Loans extends Model
         'total_increase',
         'decrease',
         'editorial',
-
+        // 'new_credit_status',
+        // 'early_balance',
+        // 'apply',
+        // 'deadline_balance',
+        // 'credit',
+        // 'law_average',
+        // 'law_correction',
     ];
 
     public function subAccountKey()
