@@ -17,18 +17,6 @@
                 onsubmit="return validateDateField()">
                 <div class="row mb-3">
 
-                    {{-- Filter Code --}}
-                    {{-- <div class="col-md-3">
-                        <input type="text" name="code_id" value="{{ request('code_id') }}" class="form-control mb-2"
-                            placeholder="ជំពូក">
-                    </div> --}}
-
-                    {{-- Filter Account --}}
-                    {{-- <div class="col-md-3">
-                        <input type="text" name="account_key_id" value="{{ request('account_key_id') }}"
-                            class="form-control mb-2" placeholder="គណនី">
-                    </div> --}}
-
                     {{-- Filter Sub-Account --}}
                     <div class="col-md-2">
                         <input type="text" name="sub_account_key_id" value="{{ request('sub_account_key_id') }}"
@@ -81,6 +69,36 @@
                         </div>
                     </div>
                     {{--        End btn search and reset       --}}
+
+                    <div class="d-flex justify-content-end mb-2">
+                        <div style="width: 120px;">
+                            <select name="month" class="form-control" onchange="window.location.href=this.value;">
+                                <option value="{{ url()->current() }}?month={{ now()->month }}&year={{ now()->year }}"
+                                    {{ request('month') == now()->month && request('year') == now()->year ? 'selected' : '' }}>
+                                    ខែបច្ចុប្បន្ន
+                                </option>
+                                @for ($m = 1; $m <= 12; $m++)
+                                    <option
+                                        value="{{ url()->current() }}?month={{ $m }}&year={{ now()->year }}"
+                                        {{ request('month') == $m ? 'selected' : '' }}>
+                                        {{ getKhmerMonth($m) }}
+                                    </option>
+                                @endfor
+                            </select>
+                        </div>
+                        <div style="width: 120px; margin-left: 10px;">
+                            <select name="year" class="form-control" onchange="window.location.href=this.value;">
+                                @for ($y = now()->year; $y >= 2020; $y--)
+                                    <option
+                                        value="{{ url()->current() }}?month={{ request('month', now()->month) }}&year={{ $y }}"
+                                        {{ request('year') == $y ? 'selected' : '' }}>
+                                        {{ convertToKhmerNumber($y) }}
+                                    </option>
+                                @endfor
+                            </select>
+                        </div>
+                    </div>
+
                 </div>
             </form>
             {{--                    End Form Search                      --}}
@@ -141,6 +159,7 @@
                             return strtr($number, $khmerNumbers);
                         }
                         ?>
+
                         <h4>
                             ប្រចាំ
                             @if (request('start_date') && request('end_date'))

@@ -14,7 +14,12 @@ return new class extends Migration
         if (!Schema::hasTable('certificates')) {
             Schema::create('certificates', function (Blueprint $table) {
                 $table->increments('id', true);
-                $table->string('name_certificate')->nullable();
+
+                $table->unsignedBigInteger('report_key')->change();
+                $table->foreignId('report_key')->references('id')->on('reports')->onDelete('cascade');
+                
+                $table->string('early_balance')->nullable();
+                
                 $table->timestamps();
             });
         }

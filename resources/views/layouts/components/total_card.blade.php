@@ -11,12 +11,6 @@
                 </div>
 
                 <div class="col-md-4 mb-3">
-                    <a href="{{ route('result-total-table') }}" class="btn btn-custom btn-block animate-button">
-                        <i class="fas fa-file-alt"></i> របាយការណ៍សកម្មភាព
-                    </a>
-                </div>
-
-                <div class="col-md-4 mb-3">
                     <a href="{{ route('result-total-summaries-table') }}" class="btn btn-custom btn-block animate-button">
                         <i class="fas fa-book"></i> របាយការណ៍សង្ខេប
                     </a>
@@ -43,6 +37,12 @@
                 <div class="col-md-4 mb-3">
                     <a href="{{ route('result-new-loan') }}" class="btn btn-custom btn-block animate-button">
                         <i class="fas fa-briefcase"></i> ឥណទានសុប
+                    </a>
+                </div>
+
+                <div class="col-md-4 mb-3">
+                    <a href="{{ route('mission-cam.index') }}" class="btn btn-custom btn-block animate-button">
+                        <i class="fas fa-file-alt"></i> តារាងបេសកម្ម
                     </a>
                 </div>
 

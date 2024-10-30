@@ -2,6 +2,7 @@
 
 namespace App\Models\Code;
 
+use App\Models\Certificates\Certificate;
 use App\Models\Certificates\CertificateData;
 use App\Models\Totals\Total;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -49,6 +50,10 @@ class Report extends Model
         return $this->hasMany(CertificateData::class, 'report_key');
     }
 
+    public function certificate(){
+        return $this->hasOne(Certificate::class, 'early_balance');
+    }
+
     public function loans()
     {
         return $this->hasOne(Loans::class, 'report_key');
@@ -81,14 +86,6 @@ class Report extends Model
             'loans.total_increase',
             'loans.decrease',
             'loans.editorial',
-            // 'loans.new_credit_status',
-            // 'loans.early_balance',
-            // 'loans.apply',
-            // 'loans.deadline_balance',
-            // 'loans.credit',
-            // 'loans.law_average',
-            // 'loans.law_correction',
-            // 'cd.name_certificate',
             'cd.value_certificate',
             'cd.amount'
 

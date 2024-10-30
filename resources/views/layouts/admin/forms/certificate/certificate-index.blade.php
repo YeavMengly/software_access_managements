@@ -5,16 +5,18 @@
         <div class="col-lg-12 margin-tb mb-4">
 
             <div class="d-flex justify-content-between align-items-center mb-4">
-                <a class="btn btn-danger" href="{{ url('/card_certificate') }}"> <i class="fas fa-arrow-left"></i>
-                    ត្រឡប់ក្រោយ</a>
+                <a class="btn btn-danger  d-flex align-items-center justify-content-center"
+                    href="{{ url('/card_certificate') }}" style="width: 160px; height: 50px;"> <i
+                        class="fas fa-arrow-left"></i>
+                    &nbsp; ត្រឡប់ក្រោយ</a>
             </div>
 
             <div class="d-flex justify-content-between align-items-center">
-                <h2 class="flex-grow-1 text-center" style="font-weight: 700;">តារាងឈ្មោះសលាកបត្រ</h2>
+                <h2 class="flex-grow-1 text-center" style="font-weight: 700;">តារាងដើមគ្រា</h2>
                 <div class="btn-container">
-                    <a id="submit-button" class="btn btn-success justify-content-between"
-                        href="{{ route('certificate.create') }}">
-                        បញ្ចូលទិន្ន័យ
+                    <a id="submit-button" class="btn btn-success  d-flex align-items-center justify-content-center"
+                        href="{{ route('certificate.create') }}" style="width: 160px; height: 50px;">
+                       បញ្ចូលទិន្ន័យ &nbsp;
                         <i id="plus-icon" class="fas fa-plus"></i>
                         <div id="loader" class="loader" style="display: none;"></div>
                     </a>
@@ -65,6 +67,12 @@
                         <th style="border: 1px solid black; font-size: 14px; width: 180px;">
                             លេខរៀង
                         </th>
+                        <th style="border: 1px solid black; font-size: 14px; width: 180px;">
+                            អនុគណនី​
+                        </th>
+                        <th style="border: 1px solid black; font-size: 14px; width: 180px;">
+                            កូដកម្មវិធី
+                        </th>
 
                         <!-- Sort by Name Certificate -->
                         <th style="border: 1px solid black; font-size: 14px; width:260px;">
@@ -75,7 +83,7 @@
                                     'sort_field' => 'name_certificate',
                                     'sort_direction' => $sortField === 'name_certificate' && $sortDirection === 'asc' ? 'desc' : 'asc',
                                 ]) }}">
-                                ឈ្មោះសលាកបត្រ
+                                ទឹកប្រាក់ដើមគ្រា
                                 <!-- Display sort icon based on current sort direction -->
                                 @if ($sortField === 'name_certificate')
                                     <i class="fas fa-sort-{{ $sortDirection === 'asc' ? 'up' : 'down' }}"></i>
@@ -91,7 +99,14 @@
                     @forelse ($certificates as $certificate)
                         <tr>
                             <td style="border: 1px solid black; text-align: center;">{{ $loop->iteration }}</td>
-                            <td style="border: 1px solid black; text-align: center;">{{ $certificate->name_certificate }}
+                            <td style="border: 1px solid black; text-align: center;">
+                                {{ $certificate->report && $certificate->report->subAccountKey ? $certificate->report->sub_account_key : 'N/A' }}
+                            </td>
+                            <td style="border: 1px solid black; text-align: center;">
+                                {{ $certificate->report ? $certificate->report->report_key : 'N/A' }}
+                            </td>
+                            <td style="border: 1px solid black; text-align: center;">
+                                {{ number_format($certificate->early_balance, 0, ' ', ' ') }}
                             </td>
                             <td style="border: 1px solid black; text-align: center;">
                                 <form id="delete-form-{{ $certificate->id }}"
@@ -111,7 +126,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="3" style="text-align: center;">គ្មានទិន្នន័យ</td>
+                            <td colspan="5" style="text-align: center;">គ្មានទិន្នន័យ</td>
                         </tr>
                     @endforelse
                 </tbody>
@@ -168,9 +183,9 @@
         }
 
         /* .result-total-table-container {
-                max-height: 100vh;
-                overflow-y: auto;
-            } */
+                        max-height: 100vh;
+                        overflow-y: auto;
+                    } */
 
         .btn,
         .form-control,

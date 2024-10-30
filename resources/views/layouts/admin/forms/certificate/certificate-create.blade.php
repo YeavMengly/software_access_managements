@@ -7,8 +7,8 @@
                 <div class="row">
                     <div class="col-lg-12 margin-tb mb-4">
                         <div class="d-flex justify-content-between align-items-center">
-                            <h3 class="card-title">បង្កើតសលាកបត្រ</h3>
-                            <a class="btn btn-primary" href="{{ route('certificate.index') }}">ត្រឡប់ក្រោយ</a>
+                            <h3 class="card-title">កែដើមគ្រា</h3>
+                            <a class="btn btn-danger  d-flex align-items-center justify-content-center" href="{{ route('certificate.index') }}" style="width: 160px; height: 50px;">  <i class="fas fa-arrow-left"></i> &nbsp;ត្រឡប់ក្រោយ</a>
                         </div>
                     </div>
                 </div>
@@ -21,18 +21,6 @@
                         </div>
                     @endif
 
-                    {{-- @if ($errors->any())
-                        <div class="alert alert-danger alert-popup show" id="error-alert">
-                            <strong>Whoops!</strong> There were some problems with your input.<br><br>
-                            <ul>
-                                @foreach ($errors->all() as $error)
-                                    <li>{{ $error }}</li>
-                                @endforeach
-                            </ul>
-                            <button type="button" class="btn-close" aria-label="Close"></button>
-                        </div>
-                    @endif --}}
-
                 </div>
 
                 <div class="border-wrapper">
@@ -41,18 +29,45 @@
                         <form action="{{ route('certificate.store') }}" method="POST" enctype="multipart/form-data">
                             @csrf
 
-                            <div class="form-group">
-                                <label for="report_key">ឈ្មោះសលាកបត្រ:</label>
-                                <input type="text" name="name_certificate" id="name_certificate"
-                                    class="form-control @error('name_certificate') is-invalid @enderror">
-                                @error('name_certificate')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                @enderror
-                            </div>
+                            <div class="row d-flex justify-content-center ">
+                                <!-- First Row -->
+                                <div class="col-md-3  d-flex flex-column align-items-center">
+                                    <div class="form-group">
+                                        <label for=""> <strong>លេខកូដកម្មវិធី:</strong></label>
+                                        <input type="text" id="searchReportKey" class="form-control"
+                                            placeholder="ស្វែងរកលេខកូដ អនុគណនី​ នឹងកម្មវិធី..."
+                                            onkeyup="filterReportKeys(event)"
+                                            style="width: 420px; height: 60px; text-align: center; line-height: 60px;">
+                                        <p id="resultCount" style="font-weight: bold;">ចំនួន: 0</p>
 
+                                        <select name="report_key" id="reportKeySelect" class="form-control" size="5"
+                                            onchange="updateReportInputField()" style="width: 420px; height: 260px;">
+                                            @foreach ($reports as $report)
+                                                <option value="{{ $report->id }}">
+                                                    {{ $report->subAccountKey->sub_account_key }} >
+                                                    {{ $report->report_key }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
 
-                            <div class="d-flex align-items-center">
-                                <button type="submit" class="btn btn-primary ml-auto">បានរក្សាទុក</button>
+                                <div class="col-md-3  d-flex flex-column align-items-center">
+                                    <div class="form-group">
+                                        <label for="report_key"><strong>ទឹកប្រាក់ដើមគ្រា:</strong></label>
+                                        <input type="text" name="early_balance" id="early_balance"
+                                            class="form-control @error('early_balance') is-invalid @enderror"
+                                            style="width: 420px; height: 60px; text-align: center; line-height: 60px;">
+                                        @error('early_balance')
+                                            <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+
+                                </div>
+
+                                <div class="d-flex align-items-center">
+                                    <button type="submit" class="btn btn-primary ml-auto"  style="width: 300px; height: 60px;">បានរក្សាទុក</button>
+                                </div>
                             </div>
                         </form>
                     </div>
@@ -183,5 +198,65 @@
             });
 
         })(jQuery); // End of use strict
+    </script>
+
+    <script>
+        function filterReportKeys(event) {
+            var input = document.getElementById('searchReportKey').value.toLowerCase();
+            var select = document.getElementById('reportKeySelect');
+            var options = select.options;
+            var count = 0;
+
+            for (var i = 0; i < options.length; i++) {
+                var optionText = options[i].textContent.toLowerCase();
+                if (optionText.includes(input)) {
+                    options[i].style.display = ''; // Show matching option
+                    count++;
+                } else {
+                    options[i].style.display = 'none'; // Hide non-matching option
+                }
+            }
+
+            document.getElementById('resultCount').innerText = 'ចំនួន: ' + count;
+
+            // Handle arrow key navigation
+            if (event.key === 'ArrowDown') {
+                if (selectedIndex < options.length - 1) {
+                    selectedIndex++;
+                    while (options[selectedIndex].style.display === 'none') {
+                        selectedIndex++;
+                        if (selectedIndex >= options.length) {
+                            selectedIndex = options.length - 1;
+                            break;
+                        }
+                    }
+                    options[selectedIndex].selected = true;
+                    updateReportInputField();
+                }
+            } else if (event.key === 'ArrowUp') {
+                if (selectedIndex > 0) {
+                    selectedIndex--;
+                    while (options[selectedIndex].style.display === 'none') {
+                        selectedIndex--;
+                        if (selectedIndex < 0) {
+                            selectedIndex = 0;
+                            break;
+                        }
+                    }
+                    options[selectedIndex].selected = true;
+                    updateReportInputField();
+                }
+            } else if (event.key === 'Enter') {
+                updateReportInputField();
+            }
+        }
+
+        function updateReportInputField() {
+            var select = document.getElementById('reportKeySelect');
+            var selectedOption = select.options[select.selectedIndex];
+            if (selectedOption) {
+                document.getElementById('searchReportKey').value = selectedOption.textContent;
+            }
+        }
     </script>
 @endsection

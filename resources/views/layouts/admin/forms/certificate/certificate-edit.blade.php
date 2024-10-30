@@ -6,7 +6,8 @@
             <div class="col-lg-12 margin-tb mb-4">
                 <div class="d-flex justify-content-between align-items-center">
                     <h3 class="card-title">កែសម្រួលសលាកបត្រ</h3>
-                    <a class="btn btn-primary" href="{{ route('certificate.index') }}">ត្រឡប់ក្រោយ</a>
+                    <a class="btn btn-primary  d-flex align-items-center justify-content-center" href="{{ route('certificate.index') }}"
+                    style="width: 160px; height: 50px;">  <i class="fas fa-arrow-left"></i> &nbsp; ត្រឡប់ក្រោយ</a>
                 </div>
             </div>
         </div>
@@ -40,9 +41,9 @@
 
                     <div class="form-group">
                         <label for="name_certificate">ឈ្មោះសលាកបត្រ:</label>
-                        <input type="text" name="name_certificate" id="name_certificate" value="{{ old('name_certificate', $certificates->name_certificate) }}"
-                            class="form-control @error('name_certificate') is-invalid @enderror">
-                        @error('name_certificate')
+                        <input type="text" name="early_balance" id="early_balance" value="{{ old('early_balance', $certificates->early_balance) }}"
+                            class="form-control @error('early_balance') is-invalid @enderror">
+                        @error('early_balance')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>

@@ -113,5 +113,82 @@ class CertificateDataController extends Controller
         if (empty($report)) {
             return redirect()->route('certificate-data.index')->with('error', 'SubAccountKey not found for the selected report.');
         }
-     }
+
+        $oldReport->new_credit_status = $oldReport->new_credit_status + $oldApply;
+        $oldReport->apply = $oldReport->apply - $oldApply;
+        $oldReport->deadline_balance = $oldReport->deadline_balance - $oldApply;
+        $oldReport->save();
+        $certificateData->value_certificate = $validated['value_certificate'];
+        $certificateData->report_key = $validated['report_key'];
+        $certificateData->save();
+
+        // Recalculate and save report values
+        $this->recalculateAndSaveReport($report);
+
+        return redirect()->route('certificate-data.index')->with('success', 'Certificate data updated successfully.');
+    }
+
+
+    public function destroy($id)
+    {
+        $certificateData = CertificateData::findOrFail($id);
+        $report = Report::findOrFail($certificateData->report_key);
+
+        $certificateData->delete();
+        // Set default values for nullable fields if not provided
+        $validatedData['internal_increase'] = $validatedData['internal_increase'] ?? 0;
+        $validatedData['unexpected_increase'] = $validatedData['unexpected_increase'] ?? 0;
+        $validatedData['additional_increase'] = $validatedData['additional_increase'] ?? 0;
+        $validatedData['decrease'] = $validatedData['decrease'] ?? 0;
+        $validatedData['editorial'] = $validatedData['editorial'] ?? 0;
+
+        $current_loan = $report->current_loan;
+
+        // Calculate total_increase
+        $total_increase = $validatedData['internal_increase'] + $validatedData['unexpected_increase'] + $validatedData['additional_increase'];
+
+        // Calculate new_credit_status
+        $new_credit_status = $current_loan + $total_increase - $validatedData['decrease'] - $validatedData['editorial'];
+
+        // Recalculate the total value_certificate for the report
+        $newApplyTotal = CertificateData::where('report_key', $report->id)->sum('value_certificate');
+        $report->apply = $newApplyTotal > 0 ? $newApplyTotal : 0;
+        $report->deadline_balance = $report->early_balance + $report->apply;
+        $credit = $new_credit_status -  $report->deadline_balance;
+        $report->update([
+            $credit
+        ]);
+        $report->save();
+        $this->recalculateAndSaveReport($report);
+        return redirect()->route('certificate-data.index')->with('success', 'Certificate data deleted successfully.');
+    }
+
+    private function recalculateAndSaveReport(Report $report)
+    {
+        // Recalculate apply total
+        $newApplyTotal = CertificateData::where('report_key', $report->id)->sum('value_certificate');
+        $report->apply = $newApplyTotal; 
+
+        // Recalculate deadline_balance
+        // $report->deadline_balance = $report->early_balance + $report->apply;
+
+        // Calculate credit
+        $credit = $report->new_credit_status - $report->deadline_balance;
+        $report->credit = $credit;
+        // Recalculate deadline_balance and credit
+        $report->deadline_balance = $report->early_balance + $report->apply;
+        $report->credit = $report->new_credit_status - $report->deadline_balance;
+
+        // Calculate law_average and law_correction
+        $law_average = $report->deadline_balance > 0 ? ($report->deadline_balance / $report->fin_law) * 100 : 0;
+        $law_correction =  $report->deadline_balance > 0 ? ($report->deadline_balance /  $report->new_credit_status) * 100 : 0;
+
+        // Cap values between 0 and 100
+        // $report->law_average = min(max($law_average, 0), 100);
+        // $report->law_correction = min(max($law_correction, 0), 100);
+
+        // Save updated report values
+        $report->save();
+    }
 }
+    
