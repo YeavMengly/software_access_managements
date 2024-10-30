@@ -146,14 +146,33 @@
                                 <label for="mission_letter">លិខិតបញ្ជាបេសកកម្ម:</label>
                                 <div class="form-subgroup">
                                     <label for="letter_number">លេខ:</label>
-                                    <input type="number" name="letter_number" id="letter_number"
-                                        class="form-control @error('letter_number') is-invalid @enderror"
-                                        value="{{ old('letter_number', $missions->letter_number) }}"
-                                        oninput="formatNumber(this)">
+                                    <div class="input-group">
+                                        {{-- @dd($missions->letter_number) --}}
+                                        <input type="number" name="letter_number" id="letter_number"
+                                            class="form-control @error('letter_number') is-invalid @enderror" min="0"
+                                            placeholder="Enter number"
+                                            value="{{ old('letter_number', $missions->letter_number) }}"
+                                            oninput="updateFullLetterNumber()">
+
+                                        <select id="letter_format" name="letter_format" class="form-select mx-3"
+                                            onchange="updateFullLetterNumber()">
+                                            <option value=" កប/ល.ទ.ខ"
+                                                {{ $missions->letter_format === ' កប/ល.ទ.ខ' ? 'selected' : '' }}>កប/ល.ទ.ខ
+                                            </option>
+                                            <option value=" កប/ឧ.ប.ទ.ឃ"
+                                                {{ $missions->letter_format === ' កប/ឧ.ប.ទ.ឃ' ? 'selected' : '' }}>
+                                                កប/ឧ.ប.ទ.ឃ</option>
+                                        </select>
+                                    </div>
+
+                                    <input type="hidden" name="full_letter_number" id="full_letter_number"
+                                        value="{{ old('full_letter_number', $missions->full_letter_number) }}">
+
                                     @error('letter_number')
                                         <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
                                 </div>
+
                                 <div class="form-subgroup">
                                     <label for="letter_date">កាលបរិច្ឆេទ:</label>
                                     <input type="date" name="letter_date" id="letter_date"
@@ -181,13 +200,12 @@
                             <div class="form-group">
                                 <label for="mission_objective">កម្មវត្ថុនៃការចុះបេសកកម្ម:</label>
                                 <textarea name="mission_objective" id="mission_objective" rows="5"
-                                          class="form-control @error('mission_objective') is-invalid @enderror"
-                                          oninput="updateCurrentLoan(this)"
-                                          style="resize: vertical; font-family: 'Khmer OS Siemreap', sans-serif;">{{ old('mission_objective', $missions->mission_objective) }}</textarea>
+                                    class="form-control @error('mission_objective') is-invalid @enderror" oninput="updateCurrentLoan(this)"
+                                    style="resize: vertical; font-family: 'Khmer OS Siemreap', sans-serif;">{{ old('mission_objective', $missions->mission_objective) }}</textarea>
                                 @error('mission_objective')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
-                            </div>                            
+                            </div>
                             <div class="form-group">
                                 <label for="location">ជ្រើសរើសខេត្ត:</label>
                                 <select name="location" id="location" class="form-control centered-text">
@@ -254,7 +272,7 @@
                                         កោះកុង</option>
                                     <option value="កំពង់ស្ពឺ"
                                         {{ old('location', $missions->location ?? '') == 'កំពង់ស្ពឺ' ? 'selected' : '' }}>
-                                        កំពង់ស្ពឺ</option> 
+                                        កំពង់ស្ពឺ</option>
                                     <option value="ស្ទឹងត្រែង"
                                         {{ old('location', $missions->location ?? '') == 'ស្ទឹងត្រែង' ? 'selected' : '' }}>
                                         ស្ទឹងត្រែង</option>
@@ -436,5 +454,14 @@
             });
 
         })(jQuery);
+
+        function updateFullLetterNumber() {
+            const letterNumber = document.getElementById('letter_number').value;
+            const letterFormat = document.getElementById('letter_format').value;
+            const fullLetterNumberInput = document.getElementById('full_letter_number');
+
+            // Update the hidden input with the concatenated value
+            fullLetterNumberInput.value = `${letterFormat}/${letterNumber}`;
+        }
     </script>
 @endsection

@@ -23,12 +23,11 @@ use App\Http\Controllers\Result\ResultSuccess\TotalController;
 use App\Http\Controllers\Result\ResultSummariesController;
 use App\Http\Controllers\Result\ResultTotalController;
 use App\Http\Controllers\Loans\SumReferController;
-<<<<<<< HEAD
+
 use App\Http\Controllers\ReportMissionController;
-=======
+
 use App\Http\Controllers\Report\LoansController;
 use App\Http\Controllers\Result\ResultApplyController;
->>>>>>> 9a3f69cf7c85d1c6420fef57cd823cf1eebbb0ed
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -114,10 +113,10 @@ Route::get('/imported-mission-table', [ReportMissionController::class, 'imported
 Route::post('/reports/import', [ReportController::class, 'show'])->name('reports.import');
 Route::post('/import-excel', [ReportController::class, 'import'])->name('reports.import');
 
-<<<<<<< HEAD
+
 Route::get('/export', [ResultController::class, 'export'])->name('result.export');
 // Route::get('/report-table/show-import', [ReportMissionController::class, 'showImportForm'])->name('report-table.importForm');
-=======
+
 Route::get('/loans/import', [LoansController::class, 'showImportForm'])->name('loans.importForm');
 Route::post('/loans/import', [LoansController::class, 'import'])->name('loans.import');
 
@@ -126,7 +125,7 @@ Route::get('/mission-cambodia/export', [MissionCambodiaController::class, 'expor
 
 Route::get('/results/export', [ResultController::class, 'export'])->name('result.export');
 Route::get('/summaries/export', [ResultSummariesController::class, 'export'])->name('summaries.export');
->>>>>>> 9a3f69cf7c85d1c6420fef57cd823cf1eebbb0ed
+
 
 //===============================>> Manage Pdf Print
 Route::get('/results/pdf', [ResultController::class, 'exportPdf'])->name('result.exportPdf');

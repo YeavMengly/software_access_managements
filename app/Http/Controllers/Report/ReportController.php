@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Report;
 use App\Http\Controllers\Controller;
 use App\Imports\ReportsImport;
 use App\Models\Certificates\CertificateData;
-use App\Models\Code\Loans;
 use App\Models\Code\Report;
 use App\Models\Code\SubAccountKey;
 use Illuminate\Http\Request;
@@ -238,13 +237,7 @@ class ReportController extends Controller
         // Redirect back to the index page with success message
         return redirect()->route('codes.index', $id)->with('success', 'របាយការណ៍បានកែប្រែដោយជោគជ័យ');
     }
-
-<<<<<<< HEAD
-=======
-
-
-
->>>>>>> 9a3f69cf7c85d1c6420fef57cd823cf1eebbb0ed
+ 
     public function destroy($id)
     {
         $reportKey = Report::findOrFail($id);

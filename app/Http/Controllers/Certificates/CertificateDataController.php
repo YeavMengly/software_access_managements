@@ -213,7 +213,7 @@ class CertificateDataController extends Controller
         $credit = $report->new_credit_status - $report->deadline_balance;
         $report->credit = $credit;
 
-<<<<<<< HEAD
+
         // Recalculate deadline_balance and credit
         $report->deadline_balance = $report->early_balance - $report->apply;
         $report->credit = $report->new_credit_status - $report->deadline_balance;
@@ -227,9 +227,7 @@ class CertificateDataController extends Controller
         // $report->law_correction = min(max($law_correction, 0), 100);
 
         // Save updated report values
-=======
         // Save the updated report
->>>>>>> 9a3f69cf7c85d1c6420fef57cd823cf1eebbb0ed
         $report->save();
     }
 }

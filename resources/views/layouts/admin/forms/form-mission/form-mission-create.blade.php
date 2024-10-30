@@ -62,13 +62,28 @@
                                 <label for="mission_letter">លិខិតបញ្ជាបេសកកម្ម:</label>
                                 <div class="form-subgroup">
                                     <label for="letter_number">លេខ:</label>
-                                    <input type="number" name="letter_number" id="letter_number"
-                                        class="form-control form-number @error('letter_number') is-invalid @enderror"
-                                        min="0" oninput="this.value = this.value.replace(/[^0-9]/g, '');">
+                                    <div class="input-group">
+                                        <!-- Number input -->
+                                        <input type="number" name="letter_number" id="letter_number"
+                                            class="form-control @error('letter_number') is-invalid @enderror" min="0"
+                                            placeholder="Enter number" oninput="updateFullLetterNumber()">
+
+                                        <!-- Format selection dropdown -->
+                                        <select id="letter_format" class="form-select mx-3"
+                                            onchange="updateFullLetterNumber()">
+                                            <option value=" កប/ល.ទ.ខ">កប/ល.ទ.ខ</option>
+                                            <option value=" កប/ឧ.ប.ទ.ឃ">កប/ឧ.ប.ទ.ឃ</option>
+                                        </select>
+                                    </div>
+
+                                    <!-- Hidden input to store the full value (number + format) -->
+                                    <input type="hidden" name="full_letter_number" id="full_letter_number">
+
                                     @error('letter_number')
                                         <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
                                 </div>
+
                                 <div class="form-subgroup">
                                     <label for="letter_date">កាលបរិច្ឆេទ:</label>
                                     <input type="date" name="letter_date" id="letter_date"
@@ -334,5 +349,15 @@
             });
             document.getElementById('place').addEventListener('change', updateLocationOptions);
         });
+    </script>
+    <script>
+        function updateFullLetterNumber() {
+            // Get values from letter number and format dropdown
+            const letterNumber = document.getElementById('letter_number').value;
+            const letterFormat = document.getElementById('letter_format').value;
+
+            // Combine values and update hidden input
+            document.getElementById('full_letter_number').value = letterNumber + letterFormat;
+        }
     </script>
 @endsection
