@@ -23,9 +23,13 @@ use App\Http\Controllers\Result\ResultSuccess\TotalController;
 use App\Http\Controllers\Result\ResultSummariesController;
 use App\Http\Controllers\Result\ResultTotalController;
 use App\Http\Controllers\Loans\SumReferController;
+<<<<<<< HEAD
 
 use App\Http\Controllers\ReportMissionController;
 
+=======
+use App\Http\Controllers\ReportMissionController;
+>>>>>>> 307b6364ea92696bcd64cc9dd0662a50e8c237bd
 use App\Http\Controllers\Report\LoansController;
 use App\Http\Controllers\Result\ResultApplyController;
 use Illuminate\Support\Facades\Route;
@@ -113,10 +117,13 @@ Route::get('/imported-mission-table', [ReportMissionController::class, 'imported
 Route::post('/reports/import', [ReportController::class, 'show'])->name('reports.import');
 Route::post('/import-excel', [ReportController::class, 'import'])->name('reports.import');
 
+<<<<<<< HEAD
 
 Route::get('/export', [ResultController::class, 'export'])->name('result.export');
 // Route::get('/report-table/show-import', [ReportMissionController::class, 'showImportForm'])->name('report-table.importForm');
 
+=======
+>>>>>>> 307b6364ea92696bcd64cc9dd0662a50e8c237bd
 Route::get('/loans/import', [LoansController::class, 'showImportForm'])->name('loans.importForm');
 Route::post('/loans/import', [LoansController::class, 'import'])->name('loans.import');
 
@@ -125,7 +132,10 @@ Route::get('/mission-cambodia/export', [MissionCambodiaController::class, 'expor
 
 Route::get('/results/export', [ResultController::class, 'export'])->name('result.export');
 Route::get('/summaries/export', [ResultSummariesController::class, 'export'])->name('summaries.export');
+<<<<<<< HEAD
 
+=======
+>>>>>>> 307b6364ea92696bcd64cc9dd0662a50e8c237bd
 
 //===============================>> Manage Pdf Print
 Route::get('/results/pdf', [ResultController::class, 'exportPdf'])->name('result.exportPdf');

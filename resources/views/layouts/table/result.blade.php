@@ -30,15 +30,15 @@
                     </div> --}}
 
                     {{-- Filter Sub-Account --}}
-                    <div class="col-md-3">
+                    <div class="col-md-2">
                         <input type="text" name="sub_account_key_id" value="{{ request('sub_account_key_id') }}"
-                            class="form-control mb-2" placeholder="អនុគណនី">
+                            class="form-control mb-2" placeholder="អនុគណនី" style="width: 60; height: 60px;">
                     </div>
 
                     {{-- Filter Report --}}
-                    <div class="col-md-3">
+                    <div class="col-md-2">
                         <input type="text" name="report_key" value="{{ request('report_key') }}"
-                            class="form-control mb-2" placeholder="កូដកម្មវិធី">
+                            class="form-control mb-2" placeholder="កូដកម្មវិធី" style="width: 60; height: 60px;">
                     </div>
 
                     {{-- Filter Date --}}
@@ -102,46 +102,7 @@
 
                     <div class="second-header text-center">
                         <h3>របាយការណ៍ធានាចំណាយថវិកាក្រសួងការងារ និងបណ្តុះបណ្តាលវិជ្ជាជីវៈ</h3>
-                        <?php
-                        function getKhmerMonth($month)
-                        {
-                            $months = [
-                                1 => 'មករា',
-                                2 => 'កុម្ភៈ',
-                                3 => 'មិនាឆ្នាំ',
-                                4 => 'មេសា',
-                                5 => 'ឧសភា',
-                                6 => 'មិថុនា',
-                                7 => 'កក្កដា',
-                                8 => 'សីហា',
-                                9 => 'កញ្ញា',
-                                10 => 'តុលា',
-                                11 => 'វិច្ឆិកា',
-                                12 => 'ធ្នូ',
-                            ];
-                        
-                            return $months[$month] ?? '';
-                        }
-                        
-                        function convertToKhmerNumber($number)
-                        {
-                            $khmerNumbers = [
-                                '0' => '០',
-                                '1' => '១',
-                                '2' => '២',
-                                '3' => '៣',
-                                '4' => '៤',
-                                '5' => '៥',
-                                '6' => '៦',
-                                '7' => '៧',
-                                '8' => '៨',
-                                '9' => '៩',
-                            ];
-                        
-                            return strtr($number, $khmerNumbers);
-                        }
-                        ?>
-
+                       
                         <h4>
                             ប្រចាំ
                             @if (request('start_date') && request('end_date'))
@@ -233,7 +194,8 @@
                                         <td style="color: {{ $totalsByCode['editorial'] < 0 ? 'red' : 'black' }};">
                                             {{ number_format($totalsByCode['editorial'], 0, ' ', ' ') }}
                                         </td>
-                                        <td style="color: {{ $totalsByCode['new_credit_status'] < 0 ? 'red' : 'black' }};">
+                                        <td
+                                            style="color: {{ $totalsByCode['new_credit_status'] < 0 ? 'red' : 'black' }};">
                                             {{ number_format($totalsByCode['new_credit_status'], 0, ' ', ' ') }}
                                         </td>
                                         <td style="color: {{ $totalsByCode['early_balance'] < 0 ? 'red' : 'black' }};">
