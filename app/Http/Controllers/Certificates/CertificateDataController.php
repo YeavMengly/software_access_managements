@@ -17,21 +17,20 @@ class CertificateDataController extends Controller
     public function index(Request $request)
     {
         $search = $request->input('search');
-        $sortField = $request->input('sort_field', 'value_certificate'); // Default to another valid column
+        $sortField = $request->input('sort_field', 'value_certificate'); // Default to a valid column
         $sortDirection = $request->input('sort_direction', 'asc');
         $perPage = $request->input('per_page', 25);
 
         // Ensure the sort field is valid
-        if (!in_array($sortField, ['value_certificate', 'other_valid_column'])) {
+        if (!in_array($sortField, ['value_certificate', 'report_key'])) {
             $sortField = 'value_certificate'; // Default to a valid column
         }
 
-        // Fetch certificate data with an optional search filter and sorting
-        $certificatesData = CertificateData::with(['certificate', 'report.subAccountKey.accountKey.key'])
+        // Fetch certificate data with search by report_key and sorting
+        $certificatesData = CertificateData::with(['report.subAccountKey.accountKey.key'])
             ->when($search, function ($query, $search) {
-                return $query->whereHas('certificate', function ($query) use ($search) {
-                    // Remove name_certificate search, or change it to a valid field
-                    return $query->where('other_valid_column', 'like', "%{$search}%"); // Change this to a valid column if necessary
+                return $query->whereHas('report', function ($query) use ($search) {
+                    return $query->where('report_key', 'like', "%{$search}%"); // Search by report_key
                 });
             })
             ->orderBy($sortField, $sortDirection)
@@ -41,7 +40,6 @@ class CertificateDataController extends Controller
 
         return view('layouts.admin.forms.certificate.certificate-data-index', compact('certificatesData', 'dataAvailable'));
     }
-
 
 
     public function create()
@@ -54,83 +52,24 @@ class CertificateDataController extends Controller
         return view('layouts.admin.forms.certificate.certificate-data-create', compact('reports', 'subAccountKeys', 'accountKeys', 'keys'));
     }
 
-    // public function store(Request $request)
-    // {
-    //     $validated = $request->validate([
-    //         'report_key' => 'required|exists:reports,id',
-    //         'name_certificate' => 'required|exists:certificates,id',
-    //         'value_certificate' => 'required|numeric',
-    //     ]);
-
-    //     // Retrieve or create a Loans record for the given report_key
-    //     $loans = Loans::where('report_key', $validated['report_key'])->first();
-
-    //     // If no Loans found, create a new one
-    //     if (empty($loans)) {
-    //         $loans = new Loans();
-    //         $loans->report_key = $validated['report_key']; // Ensure the report_key is assigned
-    //         $loans->early_balance = 0; // You may need to set an initial early_balance
-    //         $loans->apply = 0; // Initialize apply or set it based on your logic
-    //         $loans->deadline_balance = 0; // Initialize deadline_balance
-    //         $loans->new_credit_status = 0; // Initialize new_credit_status if applicable
-    //         // Save the new loans record before proceeding
-    //         $loans->save();
-    //     }
-
-    //     // Check for uniqueness of name_certificate within the same report_key
-    //     $existingCertificateData = CertificateData::where('report_key', $validated['report_key'])
-    //         ->where('name_certificate', $validated['name_certificate'])
-    //         ->first();
-
-    //     if ($existingCertificateData) {
-    //         return redirect()->back()->withErrors(['name_certificate' => 'The name_certificate must be unique within the same report.'])->withInput();
-    //     }
-
-    //     // Create the certificate data
-    //     CertificateData::create([
-    //         'report_key' => $validated['report_key'],
-    //         'name_certificate' => $validated['name_certificate'],
-    //         'value_certificate' => $validated['value_certificate'],
-    //     ]);
-
-    //     // Recalculate and save report values
-    //     $this->recalculateAndSaveReport($loans);
-
-    //     return redirect()->route('certificate-data.index')->with('success', 'Certificate data created successfully.');
-    // }
     public function store(Request $request)
     {
         $validated = $request->validate([
             'report_key' => 'required|exists:reports,id',
-            // 'name_certificate' => 'required|exists:certificates,id',
             'value_certificate' => 'required|numeric',
         ]);
 
         $report = Report::findOrFail($validated['report_key']);
-        // $certificate = Certificate::findOrFail($validated['name_certificate']);
 
         if (!$report || !$report->subAccountKey) {
             return redirect()->back()->withErrors(['error' => 'Invalid report or sub-account key.']);
         }
 
-        // Check for uniqueness of name_certificate within the same report_key
-        // $existingCertificateData = CertificateData::where('report_key', $validated['report_key'])
-        //     // ->where('name_certificate', $validated['name_certificate'])
-        //     ->first();
-
-        // if ($existingCertificateData) {
-        //     return redirect()->back()->withErrors(['name_certificate' => 'The name_certificate must be unique within the same report.'])->withInput();
-        // }
-
-        // Create the certificate data
         CertificateData::create([
             'report_key' => $validated['report_key'],
             // 'name_certificate' => $validated['name_certificate'],
             'value_certificate' => $validated['value_certificate'],
         ]);
-
-        // Recalculate and save report values
-        // Recalculate and save report values
         $this->recalculateAndSaveReport($report);
 
         return redirect()->route('certificate-data.index')->with('success', 'Certificate data created successfully.');
@@ -146,74 +85,33 @@ class CertificateDataController extends Controller
     public function edit($id)
     {
         $certificateData = CertificateData::findOrFail($id);
-        $certificates = Certificate::all();
         $reports = Report::all();
         $subAccountKeys = SubAccountKey::all();
-        $accountKeys = AccountKey::all();
-        $keys = Key::all();
 
-        return view('layouts.admin.forms.certificate.certificate-data-edit', compact('certificateData', 'certificates', 'reports', 'subAccountKeys', 'accountKeys', 'keys'));
+        return view('layouts.admin.forms.certificate.certificate-data-edit', compact('certificateData', 'reports', 'subAccountKeys'));
     }
 
 
 
     public function update(Request $request, $id)
     {
+
         $validated = $request->validate([
             'report_key' => 'required|exists:reports,id',
-            'name_certificate' => 'required|exists:certificates,id',
             'value_certificate' => 'required|numeric',
         ]);
 
-        $certificateData = CertificateData::findOrFail($id);
-        $loans = Loans::findOrFail($validated['report_key']);
 
-        if (!$loans->subAccountKey) {
+
+        $certificateData = CertificateData::findOrFail($id);
+        $report = Report::find($validated['report_key']);
+        $oldReport = $certificateData->report;
+        $oldApply = $certificateData->value_certificate;
+    
+
+
+        if (empty($report)) {
             return redirect()->route('certificate-data.index')->with('error', 'SubAccountKey not found for the selected report.');
         }
-
-        $certificateData->update([
-            'report_key' => $validated['report_key'],
-            'name_certificate' => $validated['name_certificate'],
-            'value_certificate' => $validated['value_certificate'],
-        ]);
-
-        // Recalculate and save report values
-        $this->recalculateAndSaveReport($loans);
-
-        return redirect()->route('certificate-data.index')->with('success', 'Certificate data updated successfully.');
-    }
-
-    public function destroy($id)
-    {
-        $certificateData = CertificateData::findOrFail($id);
-        $report = Report::findOrFail($certificateData->report_key);
-
-        $certificateData->delete();
-
-        // Recalculate the total value_certificate for the report
-        $newApplyTotal = CertificateData::where('report_key', $report->id)->sum('value_certificate');
-        $report->apply = $newApplyTotal > 0 ? $newApplyTotal : 0;
-        $report->deadline_balance = $report->early_balance + $report->apply;
-        $report->save();
-
-        return redirect()->route('certificate-data.index')->with('success', 'Certificate data deleted successfully.');
-    }
-
-    private function recalculateAndSaveReport(Report $report)
-    {
-        // Recalculate apply total
-        $newApplyTotal = CertificateData::where('report_key', $report->id)->sum('value_certificate');
-        $report->apply = $newApplyTotal;
-
-        // Recalculate deadline_balance
-        $report->deadline_balance = $report->early_balance + $report->apply;
-
-        // Calculate credit
-        $credit = $report->new_credit_status - $report->deadline_balance;
-        $report->credit = $credit;
-
-        // Save the updated report
-        $report->save();
-    }
+     }
 }

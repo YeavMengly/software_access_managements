@@ -17,7 +17,6 @@
                     <div class="input-group my-3" style="width: 70%; font-family: 'Khmer OS Siemreap', sans-serif">
                         <input type="search" name="search" value="{{ request('search') }}" class="form-control"
                             placeholder="ស្វែងរកទិន្នន័យ" aria-label="Search Address">
-
                     </div>
                     <!-- Search by date -->
                     <div class="input-group mt-3 my-3" style="width: 70%; font-family: 'Khmer OS Siemreap', sans-serif">
@@ -46,6 +45,7 @@
                     style="background-color: #007bff;
                     padding: 10px 40px; 
                     font-size: 18px; 
+                    width: 200px;
                     font-family: 'Khmer OS Siemreap', sans-serif; 
                     transition: background-color 0.3s ease, transform 0.3s ease; 
                     box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);">
@@ -56,12 +56,23 @@
                 <button type="button" class="btn btn-secondary ml-3" onclick="clearSearch()"
                     style="padding: 10px 40px;
                     font-size: 18px;
+                    width: 200px;
                     font-family: 'Khmer OS Siemreap', sans-serif;
                     background-color: #6c757d;
                     transition: background-color 0.3s ease;">
                     សម្អាតទិន្នន័យ
                 </button>
-
+                <!-- Report Mission -->
+                <button type="button" class="btn btn-secondary ml-3"
+                    onclick="window.location.href='{{ route('reports-missions.index') }}'"
+                    style="padding: 10px 40px;
+                    font-size: 18px;
+                    font-family: 'Khmer OS Siemreap', sans-serif;
+                    background-color: #df5bad;
+                    width: 200px;
+                    transition: background-color 0.3s ease;">
+                    តារាងទូទាត់
+                </button>
             </div>
         </form>
         {{-- <div class="d-flex justify-content-end mb-2">
@@ -117,7 +128,7 @@
                                 លិខិតបញ្ជាបេសកកម្ម</th>
                             <th rowspan="2"
                                 style="border: 2px solid black; font-family: 'Khmer OS Siemreap', sans-serif; font-weight: bold;">
-                                កម្មវត្ថុនៃការចុះបេសកកមម្ម</th>
+                                កម្មវត្ថុនៃការចុះបេសកកម្ម</th>
                             <th rowspan="2"
                                 style="border: 2px solid black; font-family: 'Khmer OS Siemreap', sans-serif; font-weight: bold;">
                                 ទីកន្លែង</th>
@@ -307,7 +318,6 @@
                         </tr>
                     </tbody>
                 </table>
-
                 {{-- <div class="d-flex justify-content-between align-items-center mt-4">
                     <div>
                         <!-- Custom Pagination -->

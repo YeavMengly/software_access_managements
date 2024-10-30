@@ -30,15 +30,15 @@
                     </div> --}}
 
                     {{-- Filter Sub-Account --}}
-                    <div class="col-md-3">
+                    <div class="col-md-2">
                         <input type="text" name="sub_account_key_id" value="{{ request('sub_account_key_id') }}"
-                            class="form-control mb-2" placeholder="អនុគណនី">
+                            class="form-control mb-2" placeholder="អនុគណនី" style="width: 60; height: 60px;">
                     </div>
 
                     {{-- Filter Report --}}
-                    <div class="col-md-3">
+                    <div class="col-md-2">
                         <input type="text" name="report_key" value="{{ request('report_key') }}"
-                            class="form-control mb-2" placeholder="កូដកម្មវិធី">
+                            class="form-control mb-2" placeholder="កូដកម្មវិធី" style="width: 60; height: 60px;">
                     </div>
 
                     {{-- Filter Date --}}
@@ -141,7 +141,6 @@
                             return strtr($number, $khmerNumbers);
                         }
                         ?>
-
                         <h4>
                             ប្រចាំ
                             @if (request('start_date') && request('end_date'))

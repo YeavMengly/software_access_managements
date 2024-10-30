@@ -44,6 +44,7 @@
                                         <strong>លេខកូដកម្មវិធី:</strong>
                                         <input type="text" id="searchReportKey" class="form-control"
                                             placeholder="ស្វែងរកលេខកូដកម្មវិធី..." onkeyup="filterReportKeys(event)"
+                                            placeholder="ស្វែងរកលេខកូដ អនុគណនី​ នឹងកម្មវិធី..." onkeyup="filterReportKeys(event)"
                                             style="width: 420px; height: 60px; text-align: center; line-height: 60px;">
                                         <p id="resultCount" style="font-weight: bold;">ចំនួន: 0</p>
 
@@ -73,7 +74,9 @@
                             </div>
 
                             <div class="d-flex align-items-center">
-                                <button type="submit" class="btn btn-primary ml-auto">បានរក្សាទុក</button>
+                                <button type="submit" class="btn btn-primary ml-auto"
+                                style="width: 300px; height: 60px;">
+                                <i class="fas fa-save"></i> រក្សាទុក</button>
                             </div>
                         </form>
                     </div>

@@ -11,7 +11,12 @@
                             <h3 class="card-title">បង្កើតទិន្នន័យ</h3>
                             <a class="btn btn-danger" href="{{ url('/') }}"> <i class="fas fa-arrow-left"></i>
                                 ត្រឡប់ក្រោយ</a>
+                            <a class="btn btn-danger d-flex justify-content-center align-items-center" href="{{ url('/') }}" style="width: 160px; height: 50px;">
+                                <i class="fas fa-arrow-left"></i> &nbsp;&nbsp;ត្រឡប់ក្រោយ
+                            </a>
+                            <h3 class="card-title mx-auto text-center">បង្កើតទិន្នន័យ</h3>
                         </div>
+                        
                     </div>
                 </div>
 
@@ -47,6 +52,13 @@
                                                 <input type="text" id="searchSubAccountKey" class="form-control mt-2 text-center"
                                                     placeholder="ស្វែងរកលេខអនុគណនី..." onkeyup="filterSubAccountKeys(event)"
                                                     oninput="resetSubAccountSelection()" style="width: 420px; height: 60px;">
+                                                <label for="searchSubAccountKey"
+                                                    class="font-weight-bold"><strong>លេខអនុគណនី:</strong></label>
+                                                <input type="text" id="searchSubAccountKey"
+                                                    class="form-control text-center" placeholder="ស្វែងរកលេខអនុគណនី..."
+                                                    onkeyup="filterSubAccountKeys(event)"
+                                                    oninput="resetSubAccountSelection()"
+                                                    style="width: 420px; height: 60px;">
                                                 <p id="resultCount" style="font-weight: bold; margin-top: 8px;">ចំនួន: 0</p>
                                                 <select name="sub_account_key" id="subAccountKeySelect" class="form-control"
                                                     size="5" onclick="getSelectedValue()"
@@ -61,7 +73,7 @@
                                         </div>
                                         
                                         <div class="col-md-6">
-
+                                        <div class="col-md-6">
 
                                             <div class="form-group">
                                                 <label for="report_key"><strong>លេខកូដកម្មវិធី:</strong></label>
@@ -97,7 +109,6 @@
 
                                     <div class="row">
                                         <!-- Financial Law Input (Second row, first column) -->
-                                        
                                     </div>
                                 </div>
 
@@ -106,8 +117,13 @@
                                     <div class="form-group">
                                         <label for="name_report_key"><strong>ចំណាត់ថ្នាក់:</strong></label>
                                         <textarea name="name_report_key" id="name_report_key"
+<<<<<<< HEAD
                                             class="form-control @error('name_report_key') is-invalid @enderror"
                                             style="height: 270px; text-align: left;" placeholder="សូមបញ្ចូលចំណាត់ថ្នាក់នៅនេះ..."></textarea>
+=======
+                                            class="form-control @error('name_report_key') is-invalid @enderror" style="height: 270px; text-align: left;"
+                                            placeholder="សូមបញ្ចូលចំណាត់ថ្នាក់នៅនេះ..."></textarea>
+>>>>>>> 1ecd59fca302d5e6dde112f4d29c92858f9a1262
                                         @error('name_report_key')
                                             <div class="invalid-feedback">{{ $message }}</div>
                                         @enderror
@@ -118,6 +134,8 @@
                             <div class="d-flex align-items-center">
                                 <button type="submit" class="btn btn-primary ml-auto">
                                     <i class="fas fa-save"></i> បានរក្សាទុក
+                                <button type="submit" class="btn btn-primary ml-auto" style="width: 300px; height: 60px;">
+                                    <i class="fas fa-save"></i> រក្សាទុក
                                 </button>
                             </div>
                         </form>

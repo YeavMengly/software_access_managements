@@ -71,11 +71,7 @@ class ReportController extends Controller
                 return redirect()->back()->withErrors(['date' => 'Invalid date format. Please use YYYY-MM-DD or a date range (YYYY-MM-DD - YYYY-MM-DD).']);
             }
         }
-
-        // Paginate the results
         $reports = $query->paginate($perPage);
-
-        // Return the view with the filtered reports
         return view('layouts.admin.forms.code.report-index', compact('reports'));
     }
 
@@ -102,15 +98,17 @@ class ReportController extends Controller
         $validatedData['unexpected_increase'] = $validatedData['unexpected_increase'] ?? 0;
         $validatedData['additional_increase'] = $validatedData['additional_increase'] ?? 0;
         $validatedData['decrease'] = $validatedData['decrease'] ?? 0;
+        $validatedData['editorial'] = $validatedData['editorial'] ?? 0;
+
 
         $total_increase = $validatedData['internal_increase'] + $validatedData['unexpected_increase'] + $validatedData['additional_increase'];
 
-        $new_credit_status = $validatedData['current_loan'] + $total_increase - $validatedData['decrease'];
+        $new_credit_status = $validatedData['current_loan'] + $total_increase - $validatedData['decrease'] - $validatedData['editorial'];
 
         // Check for existing records with the same sub_account_key and report_key
         $existingRecord = Report::where('sub_account_key', $request->input('sub_account_key'))
             ->where('report_key', $request->input('report_key'))
-            ->first();
+            ->get();
 
         if ($existingRecord) {
             return redirect()->back()->withErrors([
@@ -124,7 +122,7 @@ class ReportController extends Controller
         // Ensure early_balance is set to 0 if no previous records exist
         $early_balance = $currentApplyTotal > 0 ? $currentApplyTotal : 0;
 
-        $deadline_balance = $early_balance - $currentApplyTotal;
+        $deadline_balance = $early_balance + $currentApplyTotal;
         $credit = $new_credit_status - $deadline_balance;
 
         // Calculate law_average and law_correction
@@ -132,7 +130,7 @@ class ReportController extends Controller
         $law_correction = $early_balance ? max(-100, min(100, ($deadline_balance / $early_balance) * 100)) : 0;
 
         // Create the new report
-        Report::create([
+        $existingRecord = Report::create([
             ...$validatedData,
             'total_increase' => $total_increase,
             'new_credit_status' => $new_credit_status,
@@ -143,56 +141,9 @@ class ReportController extends Controller
             'law_correction' => $law_correction,
         ]);
 
+        $this->recalculateAndSaveReport($existingRecord);
         return redirect()->route('codes.create')->with('success', 'Report created successfully.');
     }
-
-    // public function store(Request $request)
-    // {
-    //     $validatedData = $request->validate([
-    //         'sub_account_key' => 'required|exists:sub_account_keys,id',
-    //         'report_key' => 'required|string|max:255',
-    //         'name_report_key' => 'required|string|max:255',
-    //         'fin_law' => 'required|numeric|min:0',
-    //         'current_loan' => 'required|numeric|min:0',
-    //     ]);
-
-    //     // Debugging: Log validated data
-    //     Log::info('Validated Data: ', $validatedData);
-
-    //     // Find the loan using report_key and sub_account_key
-    //     $loans = Loans::where('report_key', $validatedData['report_key'])
-    //                   ->where('sub_account_key', $validatedData['sub_account_key'])
-    //                   ->first();
-
-    //     if (!$loans) {
-    //         Log::error('Loan not found for report_key: ' . $validatedData['report_key'] . ' and sub_account_key: ' . $validatedData['sub_account_key']);
-    //         return redirect()->back()->withErrors(['loan' => 'Loan not found.']);
-    //     }
-
-    //     // Calculate balances
-    //     $deadline_balance = $loans->deadline_balance;
-    //     $early_balance = $loans->early_balance;
-
-    //     // Perform calculations
-    //     $fin_law = $validatedData['fin_law'];
-    //     $law_average = $fin_law ? max(-100, min(100, ($deadline_balance / $fin_law) * 100)) : 0;
-    //     $law_correction = $early_balance ? max(-100, min(100, ($deadline_balance / $early_balance) * 100)) : 0;
-
-    //     // Attempt to create the report
-    //     try {
-    //         Report::create([
-    //             ...$validatedData,
-    //             'law_average' => $law_average,
-    //             'law_correction' => $law_correction,
-    //         ]);
-    //     } catch (\Exception $e) {
-    //         return redirect()->back()->withErrors(['error' => 'Failed to create report: ' . $e->getMessage()]);
-    //     }
-
-    //     return redirect()->route('codes.index')->with('success', 'ទិន្ន័យកម្មវិធីបានបង្កើតដោយជោគជ័យ។');
-    // }
-
-
 
     public function edit($id)
     {
@@ -206,45 +157,63 @@ class ReportController extends Controller
         return view('layouts.admin.forms.code.report-edit', compact('report', 'subAccountKeys'));
     }
 
+
     public function update(Request $request, $id)
     {
         // Validate the incoming request data
         $validatedData = $request->validate([
             'sub_account_key' => 'required|exists:sub_account_keys,id',
             'report_key' => 'required|string|max:255',
-            'name_report_key' => 'required|string|max:999',
+            'name_report_key' => 'required|string|max:255',
             'fin_law' => 'required|numeric|min:0',
-            'current_loan' => 'nullable|numeric|min:0',
+            'current_loan' => 'required|numeric|min:0',
         ]);
 
-        // Find the report by ID
         $report = Report::findOrFail($id);
+        $loan = $report->loans;
+        // Set default values for nullable fields if not provided
+        $validatedData['internal_increase'] = $loan->internal_increase ?? 0;
+        $validatedData['unexpected_increase'] = $loan->unexpected_increase ?? 0;
+        $validatedData['additional_increase'] = $loan->additional_increase?? 0;
+        $validatedData['decrease'] = $loan->decreas ?? 0;
+        $validatedData['editorial'] = $loan->editorial ?? 0;
 
-        // Update report fields
-        $report->fill($validatedData);
-        $report->current_loan = $validatedData['current_loan'] ?? $validatedData['fin_law']; // Default to fin_law if not provided
-
-        // Fetch the sum of value_certificate from CertificateData related to the report
-        $totalValueCertificate = CertificateData::where('report_key', $report->report_key)
-            ->whereNotNull('value_certificate')
-            ->sum('value_certificate');
-
-        // $report->deadline_balance =   $report->early_balance + $totalValueCertificate;
+        // Recalculate the total increase and credit status
+        $total_increase = $validatedData['internal_increase'] + $validatedData['unexpected_increase'] + $validatedData['additional_increase'];
+        $new_credit_status = $validatedData['current_loan'] + $total_increase - $validatedData['decrease'] - $validatedData['editorial'];
 
 
-        // Save the updated report
-        $report->save();
+        // Calculate certificate-related fields
+        $currentApplyTotal = CertificateData::where('report_key', $validatedData['report_key'])->sum('value_certificate');
+        $early_balance = $currentApplyTotal > 0 ? $currentApplyTotal : 0;
+        $deadline_balance = $early_balance + $currentApplyTotal;
+        $credit = $new_credit_status - $deadline_balance;
 
-        // Redirect back to the index page with success message
-        return redirect()->route('codes.index', $id)->with('success', 'របាយការណ៍បានកែប្រែដោយជោគជ័យ');
+        // Calculate law_average and law_correction
+        $law_average = $validatedData['fin_law'] ? max(-100, min(100, ($deadline_balance / $validatedData['fin_law']) * 100)) : 0;
+        $law_correction = $early_balance ? max(-100, min(100, ($deadline_balance / $early_balance) * 100)) : 0;
+
+        // Update the report with the new calculated values
+        $report->update([
+            ...$validatedData,
+            'total_increase' => $total_increase,
+            'new_credit_status' => $new_credit_status,
+            'apply' => $currentApplyTotal,
+            'deadline_balance' => $deadline_balance,
+            'credit' => $credit,
+            'law_average' => $law_average,
+            'law_correction' => $law_correction,
+        ]);
+
+        $this->recalculateAndSaveReport($report);
+
+        return redirect()->route('codes.index')->with('success', 'Report updated successfully.');
     }
-
-
-
 
     public function destroy($id)
     {
         $reportKey = Report::findOrFail($id);
+
         $reportKey->delete();
 
         return redirect()->route('codes.index')->with('success', 'របាយការណ៍បានលុបដោយជោគជ័យ');
@@ -288,4 +257,21 @@ class ReportController extends Controller
         // Return the calculated balance, or 0 if no valid certificates
         return $totalEarlyBalance;
     }
+    private function recalculateAndSaveReport(Report $report)
+    {
+        // Recalculate apply total
+        $newApplyTotal = CertificateData::where('report_key', $report->id)->sum('value_certificate');
+        $report->apply = $newApplyTotal;
+
+        // Recalculate deadline_balance
+        $report->deadline_balance = $report->early_balance + $report->apply;
+
+        // Calculate credit
+        $credit = $report->new_credit_status - $report->deadline_balance;
+        $report->credit = $credit;
+
+        // Save the updated report
+        $report->save();
+    }
 }
+

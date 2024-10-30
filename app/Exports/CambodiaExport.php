@@ -96,14 +96,13 @@ class CambodiaExport
 
         foreach ($missions as $index => $mission) {
             $currentLetterNumber = $mission->letter_number;
-
             /*
             |-------------------------------------------------------------------------------
             | Check and merge letter_number and related columns
             |-------------------------------------------------------------------------------
             */
             if ($prevLetterNumber !== null && $currentLetterNumber !== $prevLetterNumber) {
-
+                // Check if previous group had more than one person or just one person
                 if ($mergeStartRowLetter !== null && $mergeStartRowLetter !== $row - 1) {
                     // Merge cells for the previous group
                     $sheet->mergeCells("A{$row}:J{$row}");
@@ -157,7 +156,50 @@ class CambodiaExport
 
                     // Increment the counter for the next "Total" row
                     $totalCounter++;
+                } else {
+                    // Handle the case of a single-person group, no merging needed
+                    $sheet->mergeCells("A{$row}:J{$row}");
                 }
+
+                // Add totals in a new row
+                $sheet->setCellValue('A' . $row, 'សរុប' . str_pad($totalCounter, 2, '0', STR_PAD_LEFT));
+                $sheet->setCellValue('M' . $row, number_format($totalTravelAllowance, 0, '.', ','));
+                $sheet->setCellValue('O' . $row, number_format($totalPocketMoney, 0, '.', ','));
+                $sheet->setCellValue('Q' . $row, number_format($totalMealMoney, 0, '.', ','));
+                $sheet->setCellValue('S' . $row, number_format($totalAccommodationMoney, 0, '.', ','));
+                $sheet->setCellValue('U' . $row, number_format($finalTotal, 0, '.', ','));
+
+                // Center the text in the cell
+                $sheet->getStyle('A' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+
+                // Apply font styles with bold
+                $styleArray = [
+                    'font' => [
+                        'name' => 'Khmer OS Muol Light',
+                        'bold' => true,
+                    ],
+                    'fill' => [
+                        'fillType' => Fill::FILL_SOLID,
+                        'startColor' => [
+                            'argb' => 'D3D3D3',
+                        ],
+                    ],
+                ];
+
+                // Apply style to a range of cells
+                $sheet->getStyle('A' . $row . ':U' . $row)->applyFromArray($styleArray);
+
+                $row++;
+
+                // Reset totals for the next group
+                $totalTravelAllowance = 0;
+                $totalPocketMoney = 0;
+                $totalMealMoney = 0;
+                $totalAccommodationMoney = 0;
+                $finalTotal = 0;
+
+                // Increment the counter for the next "Total" row
+                $totalCounter++;
                 $mergeStartRowLetter = $row;
             }
 
@@ -165,8 +207,8 @@ class CambodiaExport
             if ($prevLetterNumber === null || $currentLetterNumber !== $prevLetterNumber) {
                 $mergeStartRowLetter = $row;
             }
-
-            /*
+        
+            /* 
             |-------------------------------------------------------------------------------
             | Populate data
             |-------------------------------------------------------------------------------
@@ -216,7 +258,6 @@ class CambodiaExport
             $prevLetterNumber = $currentLetterNumber;
             $row++;
         }
-
         /*
         |-------------------------------------------------------------------------------
         | Merge and add totals for the last group if needed
@@ -229,6 +270,18 @@ class CambodiaExport
             $sheet->mergeCells("G{$mergeStartRowLetter}:G" . ($row - 1));
             $sheet->mergeCells("H{$mergeStartRowLetter}:H" . ($row - 1));
             $sheet->mergeCells("A{$row}:J{$row}");
+        // Handle the last group (single or multi-person group)
+        if ($prevLetterNumber !== null) {
+            if ($mergeStartRowLetter !== null && $mergeStartRowLetter !== $row - 1) {
+                $sheet->mergeCells("A{$row}:J{$row}");
+                $sheet->mergeCells("E{$mergeStartRowLetter}:E" . ($row - 1));
+                $sheet->mergeCells("F{$mergeStartRowLetter}:F" . ($row - 1));
+                $sheet->mergeCells("G{$mergeStartRowLetter}:G" . ($row - 1));
+                $sheet->mergeCells("H{$mergeStartRowLetter}:H" . ($row - 1));
+            } else {
+                // Single person group, no merging
+                $sheet->mergeCells("A{$row}:J{$row}");
+            }
 
             // Add totals for the last group
             $sheet->setCellValue('A' . $row, 'សរុប' . str_pad($totalCounter, 2, '0', STR_PAD_LEFT));
@@ -237,7 +290,6 @@ class CambodiaExport
             $sheet->setCellValue('Q' . $row, number_format($totalMealMoney, 0, '.', ','));
             $sheet->setCellValue('S' . $row, number_format($totalAccommodationMoney, 0, '.', ','));
             $sheet->setCellValue('U' . $row, number_format($finalTotal, 0, '.', ','));
-
             // Center the text in the cell
             $sheet->getStyle('A' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
 
@@ -263,7 +315,64 @@ class CambodiaExport
             $sheet->getStyle('Q' . $row)->applyFromArray($styleArray);
             $sheet->getStyle('S' . $row)->applyFromArray($styleArray);
             $sheet->getStyle('U' . $row)->applyFromArray($styleArray);
+            // Apply styles to the last total row
+            $sheet->getStyle('A' . $row . ':U' . $row)->applyFromArray($styleArray);
         }
+
+
+        /*
+        |-------------------------------------------------------------------------------
+        | Merge and add totals for the last group if needed
+        |-------------------------------------------------------------------------------
+        */
+        if ($mergeStartRowLetter !== null) {
+            // Check if the group has more than one person, or if it's a single person group
+            if ($mergeStartRowLetter !== $row - 1 || $mergeStartRowLetter === $row - 1) {
+                // Merge columns for multi-row groups
+                if ($mergeStartRowLetter !== $row - 1) {
+                    $sheet->mergeCells("E{$mergeStartRowLetter}:E" . ($row - 1));
+                    $sheet->mergeCells("F{$mergeStartRowLetter}:F" . ($row - 1));
+                    $sheet->mergeCells("G{$mergeStartRowLetter}:G" . ($row - 1));
+                    $sheet->mergeCells("H{$mergeStartRowLetter}:H" . ($row - 1));
+                }
+
+                // Add totals for the group (including single person group)
+                $sheet->mergeCells("A{$row}:J{$row}");
+                $sheet->setCellValue('A' . $row, 'សរុប' . str_pad($totalCounter, 2, '0', STR_PAD_LEFT));
+                $sheet->setCellValue('M' . $row, number_format($totalTravelAllowance, 0, '.', ','));
+                $sheet->setCellValue('O' . $row, number_format($totalPocketMoney, 0, '.', ','));
+                $sheet->setCellValue('Q' . $row, number_format($totalMealMoney, 0, '.', ','));
+                $sheet->setCellValue('S' . $row, number_format($totalAccommodationMoney, 0, '.', ','));
+                $sheet->setCellValue('U' . $row, number_format($finalTotal, 0, '.', ','));
+
+                // Center the text in the cell
+                $sheet->getStyle('A' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+
+                // Apply font styles with bold
+                $styleArray = [
+                    'font' => [
+                        'name' => 'Khmer OS Muol Light',
+                        'bold' => true,
+                    ],
+                    'fill' => [
+                        'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
+                        'startColor' => [
+                            'argb' => 'D3D3D3',
+                        ],
+                    ],
+                ];
+
+                // Apply the style to the range of cells
+                $sheet->getStyle('A' . $row . ':U' . $row)->applyFromArray($styleArray);
+                $sheet->getStyle('A' . $row)->applyFromArray($styleArray);
+                $sheet->getStyle('M' . $row)->applyFromArray($styleArray);
+                $sheet->getStyle('O' . $row)->applyFromArray($styleArray);
+                $sheet->getStyle('Q' . $row)->applyFromArray($styleArray);
+                $sheet->getStyle('S' . $row)->applyFromArray($styleArray);
+                $sheet->getStyle('U' . $row)->applyFromArray($styleArray);
+            }
+        }
+
 
         // Save the modified spreadsheet as a new file or download directly
         $fileName = 'cambodia_export.xlsx';
@@ -277,5 +386,6 @@ class CambodiaExport
             'Content-Disposition' => 'attachment; filename="' . $fileName . '"',
             'Cache-Control' => 'max-age=0',
         ]);
+    }
     }
 }

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Result;
 
 use App\Exports\Results\ResultExport;
 use App\Http\Controllers\Controller;
+use App\Models\Certificates\CertificateData;
 use App\Models\Code\Loans;
 use App\Models\Code\Report;
 use Illuminate\Http\Request;
@@ -42,44 +43,6 @@ class ResultController extends Controller
         // Return the view with results and totals for both Report and Loans
         return view('layouts.table.result', compact('totals', 'reports', 'loans'));
     }
-
-
-    // public function index(Request $request)
-    // {
-    //     // Initialize query builder for Report and Loans models
-    //     $reportQuery = Report::query();
-    //     $loanQuery = Loans::query();
-
-    //     // Apply filters based on request input
-    //     $this->applyFilters($reportQuery, $request);
-    //     $this->applyFilters($loanQuery, $request);
-
-    //     // Check if export is requested
-    //     if ($request->has('export')) {
-    //         // Combine results for export
-    //         $combinedResults = $reportQuery->get()->merge($loanQuery->get());
-
-    //         // Return Excel file download
-    //         return Excel::download(new ResultExport($combinedResults), 'results.xlsx');
-    //     }
-
-    //     // Retrieve filtered results for both Report and Loans
-    //     $reports = $reportQuery->get();
-    //     $loans = $loanQuery->get();
-
-    //     // Calculate totals for reports and loans separately
-    //     $reportTotals = $this->calculateTotals($reports);
-    //     $loanTotals = $this->calculateTotals($loans);
-
-    //     // Combine the totals
-    //     $totals = [
-    //         'reports' => $reportTotals,
-    //         'loans' => $loanTotals
-    //     ];
-
-    //     // Return the view with both reports, loans, and their totals
-    //     return view('layouts.table.result', compact('totals', 'reports', 'loans'));
-    // }
 
 
     public function export(Request $request)
@@ -131,6 +94,7 @@ class ResultController extends Controller
         }
     }
 
+
     private function applyDateFilter($query, $startDate, $endDate)
     {
         // Apply date range filter
@@ -138,7 +102,9 @@ class ResultController extends Controller
             try {
                 $startDate = Carbon::createFromFormat('Y-m-d', $startDate)->startOfDay()->toDateTimeString();
                 $endDate = Carbon::createFromFormat('Y-m-d', $endDate)->endOfDay()->toDateTimeString();
-                $query->whereBetween('created_at', [$startDate, $endDate]);
+                $reports = CertificateData::whereBetween('created_at', [$startDate, $endDate])->get(['report_key']);
+                $reports = !empty($reports) ? $reports->toArray() : [];
+                $query->whereIn('id', $reports);
             } catch (\Exception $e) {
                 // Handle invalid date format error
                 Log::error('Invalid date format: ' . $e->getMessage());
@@ -149,6 +115,8 @@ class ResultController extends Controller
         elseif ($startDate) {
             try {
                 $startDate = Carbon::createFromFormat('Y-m-d', $startDate)->startOfDay()->toDateTimeString();
+                $reports = CertificateData::where('created_at', '>=', $startDate)->get(['report_key']);
+                $reports = !empty($reports) ? $reports->toArray() : [];
                 $query->where('created_at', '>=', $startDate);
             } catch (\Exception $e) {
                 // Handle invalid date format error
@@ -167,14 +135,23 @@ class ResultController extends Controller
         $startDate = $request->input('start_date');
         $endDate = $request->input('end_date');
 
-        $this->applyCodeFilter($query, $codeId, 'code', 2, 'subAccountKey.accountKey.key');
-        $this->applyCodeFilter($query, $accountKeyId, 'account_key', 4, 'subAccountKey.accountKey');
-        $this->applyCodeFilter($query, $subAccountKeyId, 'sub_account_key', 5, 'subAccountKey');
-        $this->applyCodeFilter($query, $reportKey, 'report_key', 7);
+
+        // Apply code filters only for queries that can handle them
+        if ($query->getModel() instanceof Loans) {
+            // Apply filters that are relevant for the Loans model
+            // Adjust this part if loans have relevant fields to filter
+        } elseif ($query->getModel() instanceof Report) {
+            // Apply filters specific to Report model
+            $this->applyCodeFilter($query, $codeId, 'code', 2, 'subAccountKey.accountKey.key');
+            $this->applyCodeFilter($query, $accountKeyId, 'account_key', 4, 'subAccountKey.accountKey');
+            $this->applyCodeFilter($query, $subAccountKeyId, 'sub_account_key', 5, 'subAccountKey');
+            $this->applyCodeFilter($query, $reportKey, 'report_key', 7);
+        }
 
         // Apply date filter based on provided inputs
         $this->applyDateFilter($query, $startDate, $endDate);
     }
+
 
     private function applyCodeFilter($query, $input, $column, $length, $relation = null)
     {
@@ -192,6 +169,7 @@ class ResultController extends Controller
             }
         }
     }
+
 
     private function calculateTotals($reports)
     {
@@ -269,8 +247,6 @@ class ResultController extends Controller
                 $totals['reportKey'][$codeId][$accountKeyId][$subAccountKeyId][$reportKeyId]['apply'] += $result->apply;
                 $totals['reportKey'][$codeId][$accountKeyId][$subAccountKeyId][$reportKeyId]['deadline_balance'] += $result->deadline_balance;
                 $totals['reportKey'][$codeId][$accountKeyId][$subAccountKeyId][$reportKeyId]['credit'] += $result->credit;
-                // $totals['reportKey'][$codeId][$accountKeyId][$subAccountKeyId][$reportKeyId]['law_average'] += $loan->law_average;
-                // $totals['reportKey'][$codeId][$accountKeyId][$subAccountKeyId][$reportKeyId]['law_correction'] += $loan->law_correction;
                 $totals['internal_increase'] += $loan->internal_increase ?? 0;
                 $totals['unexpected_increase'] += $loan->unexpected_increase ?? 0;
                 $totals['additional_increase'] += $loan->additional_increase ?? 0;
@@ -287,9 +263,8 @@ class ResultController extends Controller
             $totals['credit'] += $result->credit ?? 0;
         }
 
-        $totals['law_average'] = $totals['fin_law'] > 0  ? ($totals['deadline_balance'] / $totals['fin_law']) * 100 : 0;
-        $totals['law_correction'] =   $totals['new_credit_status'] > 0 ? ($totals['deadline_balance'] / $totals['new_credit_status']) * 100 : 0;
-
+        $totals['law_average'] = $totals['fin_law'] > 0 || $totals['fin_law'] > 0  ? ($totals['deadline_balance'] / $totals['fin_law']) * 100 : 0;
+        $totals['law_correction'] =   $totals['new_credit_status'] > 0 ||  $totals['new_credit_status'] ? ($totals['deadline_balance'] / $totals['new_credit_status']) * 100 : 0;
 
         // Group reports and loans by code
         $groupedByCode = $reports->groupBy(function ($loan) {
@@ -308,6 +283,7 @@ class ResultController extends Controller
             foreach ($groupedByAccountKey as $accountKeyId => $loansByAccountKey) {
                 $totals['accountKey'][$codeId][$accountKeyId] = $this->calculateSumFields($loansByAccountKey);
                 $totals['accountKey'][$codeId][$accountKeyId]['name_account_key'] = $loansByAccountKey->first()->subAccountKey->accountKey->name_account_key ?? 'Unknown';
+                
 
                 $groupedBySubAccountKey = $loansByAccountKey->groupBy(function ($loan) {
                     return $loan->subAccountKey->sub_account_key ?? 'Unknown';
@@ -363,7 +339,6 @@ class ResultController extends Controller
                 $sumFields['additional_increase'] += $loan->additional_increase;
                 $sumFields['decrease'] += $loan->decrease;
                 $sumFields['editorial'] += $loan->editorial;
-   
             }
             $sumFields['new_credit_status'] += $report->new_credit_status;
             $sumFields['early_balance'] += $report->early_balance;
@@ -375,12 +350,15 @@ class ResultController extends Controller
         // Calculate the 'total_increase' as the sum of 'internal_increase', 'unexpected_increase', and 'additional_increase'
         $sumFields['total_increase'] = $sumFields['internal_increase'] + $sumFields['unexpected_increase'] + $sumFields['additional_increase'];
 
-        $sumFields['law_average'] = ($sumFields['fin_law'] > 0 && $sumFields['deadline_balance'] > 0) ?
+        $sumFields['law_average'] = ($sumFields['fin_law'] < 0 || $sumFields['deadline_balance'] > 0) ?
             ($sumFields['deadline_balance'] / $sumFields['fin_law']) * 100 : null;
 
-        $sumFields['law_correction'] = ($sumFields['new_credit_status'] > 0 && $sumFields['deadline_balance'] > 0) ?
+        $sumFields['law_correction'] = ($sumFields['new_credit_status'] < 0 || $sumFields['deadline_balance'] > 0) ?
             ($sumFields['deadline_balance'] / $sumFields['new_credit_status']) * 100 : null;
 
         return $sumFields;
     }
 }
+
+
+

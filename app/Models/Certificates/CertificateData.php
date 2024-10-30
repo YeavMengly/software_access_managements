@@ -36,9 +36,9 @@ class CertificateData extends Model
         
     }
 
-    public function subAccountKey(){
-        return $this->belongsTo(SubAccountKey::class, 'sub_account_key');
-    }
+    // public function subAccountKey(){
+    //     return $this->belongsTo(SubAccountKey::class, 'sub_account_key');
+    // }
 
     public function key(){
         return $this->belongsTo(Key::class, 'code');
@@ -46,6 +46,7 @@ class CertificateData extends Model
 
     public function loans(){
         return $this->belongsTo(Loans::class, 'report_key');
+        return $this->hasOne(Loans::class, 'report_key','report_key');
     }
 
 }

@@ -24,6 +24,7 @@
                 @if ($errors->any())
                     <div class="alert alert-danger alert-dismissible fade show" role="alert">
                         <strong>Whoops!</strong> There were some problems with your input.<br><br>
+                    <div class="alert alert-danger">
                         <ul>
                             @foreach ($errors->all() as $error)
                                 <li>{{ $error }}</li>
@@ -52,11 +53,40 @@
                                                     {{ $subAccountKey->accountKey->key->code }} -
                                                     {{ $subAccountKey->accountKey->account_key }} -
                                                     {{ $subAccountKey->sub_account_key }}
+                        <form action="{{ route('loans.update', $loan->id) }}" method="POST" enctype="multipart/form-data">
+                            @csrf
+                            @method('PUT') <!-- Indicate that this is an update request -->
+
+                            <div class="row d-flex justify-content-center">
+                                <!-- First Row -->
+                                <div class="col-md-3 d-flex flex-column align-items-center">
+                                    <!-- Report Key Input -->
+                                    <div class="form-group">
+                                        <label for="searchReportKey"
+                                            class="font-weight-bold"><strong>លេខកូដកម្មវិធី:</strong></label>
+
+                                        <input type="text" id="searchReportKey" class="form-control"
+                                            placeholder="ស្វែងរកលេខកូដ អនុគណនី​ នឹងកម្មវិធី..."
+                                            onkeyup="filterReportKeys(event)"
+                                            style="width: 420px; height: 60px; text-align: center;"
+                                            oninput="resetReportKeySelection()">
+
+                                        <p id="reportResultCount" style="font-weight: bold; margin-top: 8px;">ចំនួន: 0</p>
+
+                                        <select name="report_key" id="reportKeySelect" class="form-control" size="5"
+                                            onclick="getSelectedReportKey()"
+                                            style="height: 260px; width: 420px; text-align: left;">
+                                            @foreach ($reports as $report)
+                                                <!-- Changed from $loans to $reports -->
+                                                <option value="{{ $report->id }}"
+                                                    {{ $report->id == $loan->report_key ? 'selected' : '' }}>
+                                                    <!-- Check against the loan's report_key -->
+                                                    {{ $report->subAccountKey->sub_account_key }} >
+                                                    {{ $report->report_key }}
                                                 </option>
                                             @endforeach
                                         </select>
                                     </div>
-
                                     <!-- Report Key Input -->
                                     <div class="form-group">
                                         <label for="report_key">លេខកូដកម្មវិធី:</label>
@@ -109,7 +139,81 @@
                                 <button type="submit" class="btn btn-primary ml-auto">បានរក្សាទុក</button>
                             </div>
                         </form>
+                                </div>
 
+
+                                <div class="col-md-3 d-flex flex-column align-items-center">
+                                    <!-- Internal Increase Input -->
+                                    <div class="form-group">
+                                        <label for=""><strong>កើនផ្ទៃក្នុង:</strong></label>
+                                        <input type="number" name="internal_increase" id="internal_increase"
+                                            class="form-control @error('internal_increase') is-invalid @enderror"
+                                            style="width: 420px; height: 60px;" min="0"
+                                            value="{{ old('internal_increase', $loan->internal_increase) }}"
+                                            oninput="formatNumber(this)">
+                                        @error('internal_increase')
+                                            <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for=""> <strong>មិនបានគ្រោងទុក:</strong></label>
+                                        <input type="number" name="unexpected_increase" id="unexpected_increase"
+                                            class="form-control @error('unexpected_increase') is-invalid @enderror"
+                                            style="width: 420px; height: 60px;" min="0"
+                                            value="{{ old('unexpected_increase', $loan->unexpected_increase) }}"
+                                            oninput="formatNumber(this)">
+                                        @error('unexpected_increase')
+                                            <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for=""> <strong>បំពេញបន្ថែម</strong></label>
+                                        <input type="number" name="additional_increase" id="additional_increase"
+                                            class="form-control @error('additional_increase') is-invalid @enderror"
+                                            style="width: 420px; height: 60px;" min="0"
+                                            value="{{ old('additional_increase', $loan->additional_increase) }}"
+                                            oninput="formatNumber(this)">
+                                        @error('additional_increase')
+                                            <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+                                </div>
+
+                                <div class="col-md-3 d-flex flex-column align-items-center">
+                                    <!-- Decrease Input -->
+                                    <div class="form-group">
+                                        <label for=""><strong>ថយ</strong></label>
+                                        <input type="number" name="decrease" id="decrease"
+                                            class="form-control @error('decrease') is-invalid @enderror" min="0"
+                                            style="width: 420px; height: 60px;"
+                                            value="{{ old('decrease', $loan->decrease) }}" oninput="formatNumber(this)">
+                                        @error('decrease')
+                                            <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for=""> <strong>វិចារណកម្ម</strong></label>
+                                        <input type="number" name="editorial" id="editorial"
+                                            class="form-control @error('editorial') is-invalid @enderror" min="0"
+                                            style="width: 420px; height: 60px;"
+                                            value="{{ old('editorial', $loan->editorial) }}" oninput="formatNumber(this)">
+                                        @error('editorial')
+                                            <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="d-flex align-items-center">
+                                <button type="submit" class="btn btn-primary ml-auto"
+                                    style="width: 300px; height: 60px;">
+                                    <i class="fas fa-save"></i> បានរក្សាទុក
+                                </button>
+                            </div>
+                        </form>
                     </div>
                 </div>
             </div>
@@ -207,5 +311,37 @@
         document.getElementById('unexpected_increase').addEventListener('input', updateApplyValue);
         document.getElementById('additional_increase').addEventListener('input', updateApplyValue);
         document.getElementById('decrease').addEventListener('input', updateApplyValue);
+        // Function to filter report keys based on user input
+        function filterReportKeys(event) {
+            const searchValue = event.target.value.toLowerCase();
+            const selectElement = document.getElementById('reportKeySelect');
+            const options = selectElement.options;
+
+            let count = 0; // To count the matched results
+            for (let i = 0; i < options.length; i++) {
+                const optionText = options[i].text.toLowerCase();
+                const isMatch = optionText.includes(searchValue);
+
+                // Show or hide options based on search
+                options[i].style.display = isMatch ? 'block' : 'none';
+                if (isMatch) count++;
+            }
+
+            // Update the result count display
+            document.getElementById('reportResultCount').innerText = `ចំនួន: ${count}`;
+        }
+
+        // Reset the selection in the dropdown when input changes
+        function resetReportKeySelection() {
+            const selectElement = document.getElementById('reportKeySelect');
+            selectElement.selectedIndex = -1; // Deselect any selected option
+        }
+
+        // Function to handle the selected report key (optional)
+        function getSelectedReportKey() {
+            const selectElement = document.getElementById('reportKeySelect');
+            const selectedValue = selectElement.value;
+            console.log('Selected Report Key ID:', selectedValue); // For debugging
+        }
     </script>
 @endsection

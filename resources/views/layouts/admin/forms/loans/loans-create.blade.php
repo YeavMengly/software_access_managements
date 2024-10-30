@@ -55,6 +55,29 @@
                                             @foreach ($subAccountKeys as $subAccountKey)
                                                 <option value="{{ $subAccountKey->id }}">
                                                     {{ $subAccountKey->sub_account_key }}
+
+                                <div class="col-md-3 d-flex flex-column align-items-center">
+                                    <!-- Report Key Input -->
+                                    <div class="form-group">
+                                        <label for="searchReportKey"
+                                            class="font-weight-bold"><strong>លេខកូដកម្មវិធី:</strong></label>
+
+                                        <input type="text" id="searchReportKey" class="form-control"
+                                            placeholder="ស្វែងរកលេខកូដ អនុគណនី​ នឹងកម្មវិធី..."
+                                            onkeyup="filterReportKeys(event)"
+                                            style="width: 420px; height: 60px; text-align: center;"
+                                            oninput="resetReportKeySelection()">
+
+                                        <p id="reportResultCount" style="font-weight: bold; margin-top: 8px;">ចំនួន: 0</p>
+
+                                        <select name="report_key" id="reportKeySelect" class="form-control" size="5"
+                                            onclick="getSelectedReportKey()"
+                                            style="height: 260px; width: 420px; text-align: left;">
+                                            @foreach ($reports as $report)
+                                                <option value="{{ $report->id }}">
+                                                    {{ $report->subAccountKey->sub_account_key }} >
+                                                    {{ $report->report_key }}
+>>>>>>> 1ecd59fca302d5e6dde112f4d29c92858f9a1262
                                                 </option>
                                             @endforeach
                                         </select>
@@ -86,6 +109,9 @@
                                     <!-- Internal Increase Input -->
                                     <div class="form-group">
                                         <strong>កើនផ្ទៃក្នុង:</strong>
+                                    <!-- Internal Increase Input -->
+                                    <div class="form-group">
+                                        <label for=""> <strong>កើនផ្ទៃក្នុង:</strong></label>
                                         <input type="number" name="internal_increase" id="internal_increase"
                                             class="form-control @error('internal_increase') is-invalid @enderror"
                                             style="width: 420px; height: 60px;" min="0" oninput="formatNumber(this)">
@@ -96,6 +122,7 @@
 
                                     <div class="form-group">
                                         <strong>មិនបានគ្រោងទុក:</strong>
+                                        <label for=""> <strong>មិនបានគ្រោងទុក:</strong></label>
                                         <input type="number" name="unexpected_increase" id="unexpected_increase"
                                             class="form-control @error('unexpected_increase') is-invalid @enderror"
                                             style="width: 420px; height: 60px;" min="0" oninput="formatNumber(this)">
@@ -106,6 +133,7 @@
 
                                     <div class="form-group">
                                         <strong>បំពេញបន្ថែម</strong>
+                                        <label for=""> <strong>បំពេញបន្ថែម</strong></label>
                                         <input type="number" name="additional_increase" id="additional_increase"
                                             class="form-control @error('additional_increase') is-invalid @enderror"
                                             style="width: 420px; height: 60px;" min="0" oninput="formatNumber(this)">
@@ -120,6 +148,7 @@
                                     <!-- Report Key Input -->
                                     <div class="form-group">
                                         <strong>ថយ</strong>
+                                        <label for=""> <strong>ថយ</strong></label>
                                         <input type="number" name="decrease" id="decrease"
                                             class="form-control @error('decrease') is-invalid @enderror" min="0"
                                             style="width: 420px; height: 60px;" oninput="formatNumber(this)">
@@ -130,6 +159,7 @@
 
                                     <div class="form-group">
                                         <strong>វិចារណកម្ម</strong>
+                                        <label for=""><strong>វិចារណកម្ម</strong></label>
                                         <input type="number" name="editorial" id="editorial"
                                             class="form-control @error('editorial') is-invalid @enderror" min="0"
                                             style="width: 420px; height: 60px;" oninput="formatNumber(this)">
@@ -168,6 +198,10 @@
                             <div class="d-flex align-items-center">
                                 <button type="submit" class="btn btn-primary ml-auto">
                                     <i class="fas fa-save"></i> បានរក្សាទុក
+                                <button type="submit" class="btn btn-primary ml-auto"
+                                    style="width: 300px; height: 60px;">
+
+                                    <i class="fas fa-save"></i> រក្សាទុក
                                 </button>
                             </div>
                         </form>

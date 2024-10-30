@@ -17,7 +17,6 @@ return new class extends Migration
                 // Foreign key column
                 $table->unsignedBigInteger('sub_account_key')->change();
                 $table->foreignId('sub_account_key')->references('id')->on('sub_account_keys')->onDelete('cascade');
-
                 $table->unsignedBigInteger('report_key')->change();
                 $table->foreignId('report_key')->references('id')->on('reports')->onDelete('cascade');
 
@@ -34,7 +33,6 @@ return new class extends Migration
                 // $table->decimal('credit', 15, 2)->default(0); // Calculated as (new_credit_status - deadline_balance)
                 // $table->decimal('law_average', 15, 2)->default(0); // Calculated as (fin_law / deadline_balance)
                 // $table->decimal('law_correction', 15, 2)->default(0); // Calculated as (new_credit_status / deadline_balance)
-
                 $table->timestamps();
             });
         }

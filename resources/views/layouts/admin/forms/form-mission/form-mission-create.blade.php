@@ -6,7 +6,8 @@
                 <div class="d-flex justify-content-between align-items-center"
                     style="font-family: 'Khmer OS Siemreap', sans-serif;">
                     <h3 class="card-title">បញ្ចូលតារាងរបាយការណ៏ចំណាយបេសកកម្មក្នុងប្រទេស ឆ្នាំ២០២៤</h3>
-                    <a class="btn btn-primary" href="{{ route('mission-cam.index') }}">ត្រឡប់ក្រោយ</a>
+                    <a class="btn btn-danger" href="{{ route('mission-cam.index') }}"><i class="fas fa-arrow-left"></i>
+                        ត្រឡប់ក្រោយ</a>
                 </div>
             </div>
         </div>
@@ -19,15 +20,22 @@
         @endif
 
         @if ($errors->any())
-            <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                <strong>Whoops!</strong><br><br>
-                <ul>
-                    @foreach ($errors->all() as $error)
-                        <li>{{ $error }}</li>
-                    @endforeach
-                </ul>
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-            </div>
+            <script>
+                document.addEventListener('DOMContentLoaded', function() {
+                    Swal.fire({
+                        title: 'Whoops!',
+                        html: `
+                    <ul style="text-align: left;">
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                `,
+                        icon: 'error',
+                        confirmButtonText: 'Okay'
+                    });
+                });
+            </script>
         @endif
 
         <div class="border-wrapper">
@@ -41,7 +49,7 @@
                                 <label for="num_people">ចំនួនមនុស្ស:</label>
                                 <select id="num_people" class="form-control centered-text" required>
                                     <option value="">ជ្រើសរើសចំនួនមនុស្ស</option>
-                                    @for ($i = 1; $i <= 5; $i++)
+                                    @for ($i = 1; $i <= 10; $i++)
                                         <option value="{{ $i }}">{{ $i }}</option>
                                     @endfor
                                 </select>
@@ -57,10 +65,27 @@
                                     <input type="number" name="letter_number" id="letter_number"
                                         class="form-control form-number @error('letter_number') is-invalid @enderror"
                                         min="0" oninput="this.value = this.value.replace(/[^0-9]/g, '');">
+                                    <div class="input-group">
+                                        <!-- Number input -->
+                                        <input type="number" name="letter_number" id="letter_number"
+                                            class="form-control @error('letter_number') is-invalid @enderror" min="0"
+                                            placeholder="Enter number" oninput="updateFullLetterNumber()">
+
+                                        <!-- Format selection dropdown -->
+                                        <select id="letter_format" class="form-select mx-3"
+                                            onchange="updateFullLetterNumber()">
+                                            <option value=" កប/ល.ទ.ខ">កប/ល.ទ.ខ</option>
+                                            <option value=" កប/ឧ.ប.ទ.ឃ">កប/ឧ.ប.ទ.ឃ</option>
+                                        </select>
+                                    </div>
+
+                                    <!-- Hidden input to store the full value (number + format) -->
+                                    <input type="hidden" name="full_letter_number" id="full_letter_number">
                                     @error('letter_number')
                                         <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
                                 </div>
+
                                 <div class="form-subgroup">
                                     <label for="letter_date">កាលបរិច្ឆេទ:</label>
                                     <input type="date" name="letter_date" id="letter_date"
@@ -107,7 +132,7 @@
                                     <option value="រតនគីរី">រតនគីរី</option>
                                     <option value="កណ្ដាល">កណ្ដាល</option>
                                     <option value="កោះកុង">កោះកុង</option>
-                                    <option value="កំពង់ស្ពី">កំពង់ស្ពី</option>
+                                    <option value="កំពង់ស្ពឺ">កំពង់ស្ពឺ</option>
                                     <option value="ស្ទឹងត្រែង">ស្ទឹងត្រែង</option>
                                     <option value="ព្រះវិហារ">ព្រះវិហារ</option>
                                     <option value="កំពង់ឆ្នាំង">កំពង់ឆ្នាំង</option>
@@ -135,7 +160,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="d-flex align-items-center">
+                    <div class="d-flex align-items-center" style="font-family: 'Khmer OS Siemreap', sans-serif;">
                         <button type="submit" class="btn btn-primary ml-auto">បានរក្សាទុក</button>
                     </div>
                 </form>
@@ -288,6 +313,8 @@
                                 <option value="អនុរដ្ឋលេខាធិការ">អនុរដ្ឋលេខាធិការ</option>
                                 <option value="អគ្កាធិការ">អគ្កាធិការ</option>
                                 <option value="អគ្កាធិការរង">អគ្កាធិការរង</option>
+                                <option value="អគ្គាធិការ">អគ្គាធិការ</option>
+                                <option value="អគ្គាធិការរង">អគ្គាធិការរង</option>
                                 <option value="អគ្គនាយក">អគ្គនាយក</option>
                                 <option value="អគ្គនាយករង">អគ្គនាយករង</option>
                                 <option value="អគ្គលេខាធិការ">អគ្គលេខាធិការ</option>
@@ -296,6 +323,11 @@
                                 <option value="អនុ.នាយកដ្ឋាន">អនុ.នាយកដ្ឋាន</option>
                                 <option value="ប្រ.ការិយាល័យ">ប្រ.ការិយាល័យ</option>
                                 <option value="អនុ.ការិយាល័យ">អនុ.ការិយាល័យ</option>
+                                <option value="នាយកវិទ្យាស្ថាន">នាយកវិទ្យាស្ថាន</option>
+                                <option value="ប្រធាននាយកដ្ឋាន">ប្រធាននាយកដ្ឋាន</option>
+                                <option value="អនុប្រធាននាយកដ្ឋាន">អនុប្រធាននាយកដ្ឋាន</option>
+                                <option value="ប្រធានការិយាល័យ">ប្រធានការិយាល័យ</option>
+                                <option value="អនុប្រធានការិយាល័យ">អនុប្រធានការិយាល័យ</option>
                                 <option value="ប្រធានផ្នែក">ប្រធានផ្នែក</option>
                                 <option value="អនុប្រធានផ្នែក">អនុប្រធានផ្នែក</option>
                                 <option value="មន្ត្រី">មន្ត្រី</option>
@@ -325,5 +357,15 @@
             });
             document.getElementById('place').addEventListener('change', updateLocationOptions);
         });
+    </script>
+    <script>
+        function updateFullLetterNumber() {
+            // Get values from letter number and format dropdown
+            const letterNumber = document.getElementById('letter_number').value;
+            const letterFormat = document.getElementById('letter_format').value;
+
+            // Combine values and update hidden input
+            document.getElementById('full_letter_number').value = letterNumber + letterFormat;
+        }
     </script>
 @endsection
