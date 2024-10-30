@@ -13,7 +13,7 @@
                             <!-- Your buttons here -->
 
                             <div class="col-md-6 mb-3">
-                                <a href="{{route('codes.create')}}" class="btn btn-custom btn-block animate-button">
+                                <a href="{{ route('codes.create') }}" class="btn btn-custom btn-block animate-button">
                                     បញ្ចូលឥណទានអនុម័តដើមឆ្នាំ​ នឹងផែនការរជ្ជទេយ្យ
                                 </a>
                             </div>
@@ -29,8 +29,8 @@
                             </div>
 
                             <div class="col-md-6 mb-3">
-                                <a href="{{route('codes.index')}}" class="btn btn-custom btn-block animate-button">
-                                    កែសម្រួលមាតិកាកម្មវិធី 
+                                <a href="{{ route('codes.index') }}" class="btn btn-custom btn-block animate-button">
+                                    កែសម្រួលមាតិកាកម្មវិធី
 
                                 </a>
                             </div>
@@ -40,12 +40,14 @@
                                 </a>
                             </div>
                             <div class="col-md-6 mb-3">
-                                <a href="{{ route('certificate-data.index') }}" class="btn btn-custom btn-block animate-button">
-                                   កែសម្រួល អណត្តិ​ សលាកបត្រ
+                                <a href="{{ route('certificate-data.index') }}"
+                                    class="btn btn-custom btn-block animate-button">
+                                    កែសម្រួល អណត្តិ​ សលាកបត្រ
                                 </a>
                             </div>
                             <div class="col-md-6 mb-3">
-                                <a href="{{ route('certificate-data.create') }}" class="btn btn-custom btn-block animate-button">
+                                <a href="{{ route('certificate-data.create') }}"
+                                    class="btn btn-custom btn-block animate-button">
                                     ចុះបញ្ជីសលាកប័ត្រចំណាយថវិកា
                                 </a>
                             </div>
@@ -53,6 +55,11 @@
                                 <a href="{{ route('total_card') }}" class="btn btn-custom btn-block animate-button">
                                     ពិនិត្យរបាយការណ៍
                                 </a>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <a href="{{ route('mission-cam.create') }}"
+                                    class="btn btn-custom btn-block animate-button">
+                                    បញ្ចូលបេសកម្ម </a>
                             </div>
                             <div class="col-md-12 mb-3">
                                 <button class="btn btn-custom btn-block animate-button" onclick="openAndCloseWindow()">

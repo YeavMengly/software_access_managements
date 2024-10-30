@@ -107,7 +107,7 @@ class ReportController extends Controller
         // Check for existing records with the same sub_account_key and report_key
         $existingRecord = Report::where('sub_account_key', $request->input('sub_account_key'))
             ->where('report_key', $request->input('report_key'))
-            ->first();
+            ->get();
 
         if ($existingRecord) {
             return redirect()->back()->withErrors([

@@ -60,7 +60,6 @@ class CertificateDataController extends Controller
         ]);
 
         $report = Report::findOrFail($validated['report_key']);
-        // $certificate = Certificate::findOrFail($validated['name_certificate']);
 
         if (!$report || !$report->subAccountKey) {
             return redirect()->back()->withErrors(['error' => 'Invalid report or sub-account key.']);
@@ -171,13 +170,13 @@ class CertificateDataController extends Controller
         $report->apply = $newApplyTotal; 
 
         // Recalculate deadline_balance
-        $report->deadline_balance = $report->early_balance + $report->apply;
+        // $report->deadline_balance = $report->early_balance + $report->apply;
 
         // Calculate credit
         $credit = $report->new_credit_status - $report->deadline_balance;
         $report->credit = $credit;
         // Recalculate deadline_balance and credit
-        $report->deadline_balance = $report->early_balance - $report->apply;
+        $report->deadline_balance = $report->early_balance + $report->apply;
         $report->credit = $report->new_credit_status - $report->deadline_balance;
 
         // Calculate law_average and law_correction

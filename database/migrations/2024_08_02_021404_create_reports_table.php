@@ -34,7 +34,7 @@ return new class extends Migration
                 $table->decimal('law_average', 15, 2)->default(0); // Calculated as (fin_law / deadline_balance)
                 $table->decimal('law_correction', 15, 2)->default(0); // Calculated as (new_credit_status / deadline_balance)
                 // Unique constraint for the combination of sub_account_key and report_key
-                $table->unique(['sub_account_key', 'report_key']);
+                // $table->unique(['sub_account_key', 'report_key']);
 
                 $table->timestamps();
             });

@@ -23,43 +23,30 @@ class LoansController extends Controller
         $date = $request->input('date');
         $perPage = $request->input('per_page', 25);
 
-        // Initialize the query for Loans
         $query = Loans::query();
-
-        // Filter by SubAccountKey if provided
         if ($subAccountKeyId) {
             $query->whereHas('subAccountKey', function ($q) use ($subAccountKeyId) {
                 $q->where('sub_account_key_column_in_related_table', 'like', "%{$subAccountKeyId}%");
             });
         }
-
-        // Filter by ReportKey if provided, using the relationship
         if ($reportKey) {
             $query->whereHas('reportKey', function ($q) use ($reportKey) {
                 $q->where('report_key_column_in_related_table', 'like', "%{$reportKey}%");
             });
         }
-
-        // Optional: Add date filtering logic here if needed
-
-        // Paginate the results
         $loans = $query->paginate($perPage);
 
-        // Return the view with loans data
         return view('layouts.admin.forms.loans.loans-index', compact('loans'));
     }
 
-    // Show the form for creating a new loan
     public function create()
     {
-        // Fetch all available sub-account keys for the dropdown
         $subAccountKeys = SubAccountKey::all();
         $reports = Report::all();
 
         return view('layouts.admin.forms.loans.loans-create', compact('subAccountKeys', 'reports'));
     }
 
-    // Store a newly created loan in the database
     public function store(Request $request)
     {
         // Validate the incoming request data
