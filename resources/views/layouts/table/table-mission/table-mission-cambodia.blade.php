@@ -122,7 +122,7 @@
                                 តួនាទី</th>
                             <th rowspan="2"
                                 style="border: 2px solid black; font-family: 'Khmer OS Siemreap', sans-serif; font-weight: bold;">
-                                ប្រភេទមុខតំណែង</th>
+                                ប្រភេទមុខតំណែង</th> 
                             <th colspan="2"
                                 style="border: 2px solid black; font-family: 'Khmer OS Siemreap', sans-serif; font-weight: bold;">
                                 លិខិតបញ្ជាបេសកកម្ម</th>
@@ -208,9 +208,8 @@
                                     <td style="border: 2px solid black; font-family: 'Khmer OS Siemreap', sans-serif">
                                         {{ $mission->position_type }}</td>
                                     <td style="border: 2px solid black; font-family: 'Khmer OS Siemreap', sans-serif">
-                                        {{ $mission->letter_number }}</td>
-                                    <td
-                                        style="border: 2px solid black; width: 110px; font-family: 'Khmer OS Siemreap', sans-serif">
+                                        {{ $mission->letter_number }} {{ $mission->letter_format }}</td>
+                                    <td style="border: 2px solid black; width: 110px; font-family: 'Khmer OS Siemreap', sans-serif">
                                         {{ $mission->letter_date }}</td>
                                     <td style="border: 2px solid black; font-family: 'Khmer OS Siemreap', sans-serif">
                                         {{ $mission->mission_objective }}</td>
@@ -219,7 +218,7 @@
                                     <td
                                         style="border: 2px solid black; width: 110px; font-family: 'Khmer OS Siemreap', sans-serif">
                                         {{ $mission->mission_start_date }}</td>
-                                    <td
+                                    <td 
                                         style="border: 2px solid black; width: 110px; font-family: 'Khmer OS Siemreap', sans-serif">
                                         {{ $mission->mission_end_date }}</td>
                                     <td style="border: 2px solid black; font-family: 'Khmer OS Siemreap', sans-serif">

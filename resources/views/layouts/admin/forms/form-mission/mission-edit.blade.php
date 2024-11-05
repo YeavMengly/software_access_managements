@@ -69,12 +69,42 @@
                                                 <option value="អនុរដ្ឋលេខាធិការ"
                                                     {{ old('role', $missions->role ?? '') == 'អនុរដ្ឋលេខាធិការ' ? 'selected' : '' }}>
                                                     អនុរដ្ឋលេខាធិការ</option>
+                                                <option value="អគ្កាធិការ"
+                                                    {{ old('role', $missions->role ?? '') == 'អគ្កាធិការ' ? 'selected' : '' }}>
+                                                    អគ្កាធិការ</option>
+                                                <option value="អគ្កាធិការរង"
+                                                    {{ old('role', $missions->role ?? '') == 'អគ្កាធិការរង' ? 'selected' : '' }}>
+                                                    អគ្កាធិការរង</option>
+                                                <option value="អគ្គនាយក"
+                                                    {{ old('role', $missions->role ?? '') == 'អគ្គនាយក' ? 'selected' : '' }}>
+                                                    អគ្គនាយក</option>
+                                                <option value="អគ្គនាយករង"
+                                                    {{ old('role', $missions->role ?? '') == 'អគ្គនាយករង' ? 'selected' : '' }}>
+                                                    អគ្គនាយករង</option>
+                                                <option value="អគ្គលេខាធិការ"
+                                                    {{ old('role', $missions->role ?? '') == 'អគ្គលេខាធិការ' ? 'selected' : '' }}>
+                                                    អគ្គលេខាធិការ</option>
+                                                <option value="អគ្គលេខាធិការរង"
+                                                    {{ old('role', $missions->role ?? '') == 'អគ្គលេខាធិការរង' ? 'selected' : '' }}>
+                                                    អគ្គលេខាធិការរង</option>
+                                                <option value="ប្រ.នាយកដ្ឋាន"
+                                                    {{ old('role', $missions->role ?? '') == 'ប្រ.នាយកដ្ឋាន' ? 'selected' : '' }}>
+                                                    ប្រ.នាយកដ្ឋាន</option>
+                                                <option value="អនុ.នាយកដ្ឋាន"
+                                                    {{ old('role', $missions->role ?? '') == 'អនុ.នាយកដ្ឋាន' ? 'selected' : '' }}>
+                                                    អនុ.នាយកដ្ឋាន</option>
                                                 <option value="ប្រ.ការិយាល័យ"
                                                     {{ old('role', $missions->role ?? '') == 'ប្រ.ការិយាល័យ' ? 'selected' : '' }}>
                                                     ប្រ.ការិយាល័យ</option>
                                                 <option value="អនុ.ការិយាល័យ"
                                                     {{ old('role', $missions->role ?? '') == 'អនុ.ការិយាល័យ' ? 'selected' : '' }}>
                                                     អនុ.ការិយាល័យ</option>
+                                                <option value="នាយកវិទ្យាស្ថាន"
+                                                    {{ old('role', $missions->role ?? '') == 'នាយកវិទ្យាស្ថាន' ? 'selected' : '' }}>
+                                                    នាយកវិទ្យាស្ថាន</option>
+                                                <option value="ប្រធានផ្នែក"
+                                                    {{ old('role', $missions->role ?? '') == 'ប្រធានផ្នែក' ? 'selected' : '' }}>
+                                                    ប្រធានផ្នែក</option>
                                                 <option value="អនុប្រធានផ្នែក"
                                                     {{ old('role', $missions->role ?? '') == 'អនុប្រធានផ្នែក' ? 'selected' : '' }}>
                                                     អនុប្រធានផ្នែក</option>
@@ -126,27 +156,23 @@
                                 <div class="form-subgroup">
                                     <label for="letter_number">លេខ:</label>
                                     <div class="input-group">
-                                        {{-- @dd($missions->letter_number) --}}
                                         <input type="number" name="letter_number" id="letter_number"
-                                            class="form-control @error('letter_number') is-invalid @enderror" min="0"
-                                            placeholder="Enter number"
-                                            value="{{ old('letter_number', $missions->letter_number) }}"
-                                            oninput="updateFullLetterNumber()">
+                                            class="form-control @error('letter_number') is-invalid @enderror"
+                                            value="{{ old('letter_number', $missions->letter_number) }}">
 
                                         <select id="letter_format" name="letter_format" class="form-select mx-3"
                                             onchange="updateFullLetterNumber()">
-                                            <option value=" កប/ល.ទ.ខ"
-                                                {{ $missions->letter_format === ' កប/ល.ទ.ខ' ? 'selected' : '' }}>កប/ល.ទ.ខ
-                                            </option>
-                                            <option value=" កប/ឧ.ប.ទ.ឃ"
-                                                {{ $missions->letter_format === ' កប/ឧ.ប.ទ.ឃ' ? 'selected' : '' }}>
+                                            <option value="កប/ល.ទ.ខ"
+                                                {{ old('letter_format', $missions->letter_format) === 'កប/ល.ទ.ខ' ? 'selected' : '' }}>
+                                                កប/ល.ទ.ខ</option>
+                                            <option value="កប/ឧ.ប.ទ.ឃ"
+                                                {{ old('letter_format', $missions->letter_format) === 'កប/ឧ.ប.ទ.ឃ' ? 'selected' : '' }}>
                                                 កប/ឧ.ប.ទ.ឃ</option>
                                         </select>
                                     </div>
 
                                     <input type="hidden" name="full_letter_number" id="full_letter_number"
                                         value="{{ old('full_letter_number', $missions->full_letter_number) }}">
-
                                     @error('letter_number')
                                         <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
@@ -172,9 +198,8 @@
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
                             </div>
-
                         </div>
-
+                        
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label for="mission_objective">កម្មវត្ថុនៃការចុះបេសកកម្ម:</label>
@@ -435,14 +460,15 @@
             });
 
         })(jQuery);
-
+    </script>
+    <script>
         function updateFullLetterNumber() {
             const letterNumber = document.getElementById('letter_number').value;
             const letterFormat = document.getElementById('letter_format').value;
-            const fullLetterNumberInput = document.getElementById('full_letter_number');
-
-            // Update the hidden input with the concatenated value
-            fullLetterNumberInput.value = `${letterFormat}/${letterNumber}`;
+            const fullLetterNumber = document.getElementById('full_letter_number');
+    
+            // Combine letter number and selected format
+            fullLetterNumber.value = letterNumber + letterFormat;
         }
     </script>
 @endsection

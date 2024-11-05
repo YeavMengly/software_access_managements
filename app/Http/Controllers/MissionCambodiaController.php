@@ -8,7 +8,6 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\Rule;
-use PgSql\Lob;
 
 class MissionCambodiaController extends Controller
 {
@@ -145,8 +144,6 @@ class MissionCambodiaController extends Controller
             'អនុរដ្ឋលេខាធិការ',
             'អគ្កាធិការ',
             'អគ្កាធិការរង',
-            'អគ្គាធិការ',
-            'អគ្គាធិការរង',
             'អគ្គនាយក',
             'អគ្គនាយករង',
             'អគ្គលេខាធិការ',
@@ -156,10 +153,6 @@ class MissionCambodiaController extends Controller
             'ប្រ.ការិយាល័យ',
             'អនុ.ការិយាល័យ',
             'នាយកវិទ្យាស្ថាន',
-            'ប្រធាននាយកដ្ឋាន',
-            'អនុប្រធាននាយកដ្ឋាន',
-            'ប្រធានការិយាល័យ',
-            'អនុប្រធានការិយាល័យ',
             'ប្រធានផ្នែក',
             'អនុប្រធានផ្នែក',
             'មន្ត្រី',
@@ -182,8 +175,8 @@ class MissionCambodiaController extends Controller
             'names.*' => 'required|string|max:255',
             'people.*.role' => ['required', 'string', Rule::in($roles)],
             'people.*.position_type' => 'required|string|in:ក,ខ១,ខ២,គ,ឃ,ង',
-            'letter_number' => 'required|integer|min:0',
-            'full_letter_number' => 'required|string|max:255',
+            'letter_number' => 'required|numeric',
+            'full_letter_number' => 'required|string',
             'letter_date' => 'required|date',
             'mission_objective' => 'required|string',
             'location' => 'required',
@@ -350,11 +343,11 @@ class MissionCambodiaController extends Controller
         $missions = CambodiaMission::findOrFail($id);
 
         // Get existing people associated with the mission
-        $person = CambodiaMission::where('id', $id)->first();
+        $people = CambodiaMission::where('id', $id)->first()->people;
         // Pass data to the view
         return view('layouts.admin.forms.form-mission.mission-edit', [
             'missions' => $missions,
-            'people' => $person,
+            'people' => $people,
             'locations' => $this->locations,
         ]);
     }
@@ -377,7 +370,6 @@ class MissionCambodiaController extends Controller
             'role' => 'required|string|max:255',
             'position_type' => 'required|string|max:255',
             'letter_number' => 'required|numeric',
-            'letter_number' => 'required|numeric|min:0',
             'letter_format' => 'required|string|max:255',
             'letter_date' => 'required|date',
             'mission_objective' => 'required|string',
@@ -508,7 +500,7 @@ class MissionCambodiaController extends Controller
         $pocketMoneyTotal = $pocketMoneyPerDay * $daysCount;
         $mealMoneyTotal = $mealMoneyPerDay * $daysCount;
         $accommodationMoneyTotal = $accommodationMoneyPerNight * $nightsCount;
- 
+
         // Check if location has changed
         if ($request->location !== $mission->location) {
             // Calculate travel allowance based on the new location
@@ -533,7 +525,7 @@ class MissionCambodiaController extends Controller
             'role' => $validatedData['role'],
             'position_type' => $validatedData['position_type'],
             'letter_number' => $validatedData['letter_number'],
-            'letter_format' => $validatedData['letter_format'], 
+            'letter_format' => $validatedData['letter_format'],
             'full_letter_number' => $fullLetterNumber,
             'letter_date' => $validatedData['letter_date'],
             'mission_objective' => $validatedData['mission_objective'],
