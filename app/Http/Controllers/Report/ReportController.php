@@ -25,6 +25,10 @@ class ReportController extends Controller
         $date = $request->input('date'); // Date filter input
         $perPage = $request->input('per_page', 25); // Default to 25 if not specified
 
+        // Set default sorting column and direction if not provided
+        $sortColumn = $request->input('sort_column', 'created_at'); // Default to 'created_at'
+        $sortDirection = $request->input('sort_direction', 'asc'); // Default to ascending order
+
         // Start building the query
         $query = Report::query();
 
@@ -71,9 +75,16 @@ class ReportController extends Controller
                 return redirect()->back()->withErrors(['date' => 'Invalid date format. Please use YYYY-MM-DD or a date range (YYYY-MM-DD - YYYY-MM-DD).']);
             }
         }
+
+        // Apply sorting based on input
+        $query->orderBy($sortColumn, $sortDirection);
+
+        // Paginate results
         $reports = $query->paginate($perPage);
+
         return view('layouts.admin.forms.code.report-index', compact('reports'));
     }
+
 
     public function create()
     {
@@ -100,7 +111,6 @@ class ReportController extends Controller
         $validatedData['decrease'] = $validatedData['decrease'] ?? 0;
         $validatedData['editorial'] = $validatedData['editorial'] ?? 0;
 
-
         $total_increase = $validatedData['internal_increase'] + $validatedData['unexpected_increase'] + $validatedData['additional_increase'];
 
         $new_credit_status = $validatedData['current_loan'] + $total_increase - $validatedData['decrease'] - $validatedData['editorial'];
@@ -108,7 +118,7 @@ class ReportController extends Controller
         // Check for existing records with the same sub_account_key and report_key
         $existingRecord = Report::where('sub_account_key', $request->input('sub_account_key'))
             ->where('report_key', $request->input('report_key'))
-            ->get();
+            ->exists();
 
         if ($existingRecord) {
             return redirect()->back()->withErrors([
@@ -144,7 +154,68 @@ class ReportController extends Controller
         $this->recalculateAndSaveReport($existingRecord);
         return redirect()->route('codes.create')->with('success', 'Report created successfully.');
     }
+    // public function store(Request $request)
+    // {
+    //     $validatedData = $request->validate([
+    //         'sub_account_key' => 'required|exists:sub_account_keys,id',
+    //         'report_key' => 'required|string|max:255',
+    //         'name_report_key' => 'required|string|max:255',
+    //         'fin_law' => 'required|numeric|min:0',
+    //         'current_loan' => 'required|numeric|min:0',
+    //     ]);
 
+    //     // Set default values for nullable fields
+    //     $validatedData['internal_increase'] = $request->input('internal_increase', 0);
+    //     $validatedData['unexpected_increase'] = $request->input('unexpected_increase', 0);
+    //     $validatedData['additional_increase'] = $request->input('additional_increase', 0);
+    //     $validatedData['decrease'] = $request->input('decrease', 0);
+    //     $validatedData['editorial'] = $request->input('editorial', 0);
+
+    //     $total_increase = $validatedData['internal_increase'] + $validatedData['unexpected_increase'] + $validatedData['additional_increase'];
+
+    //     $new_credit_status = $validatedData['current_loan'] + $total_increase - $validatedData['decrease'] - $validatedData['editorial'];
+
+    //     // Check for existing records with the same sub_account_key and report_key
+    //     $existingRecord = Report::where('sub_account_key', $request->input('sub_account_key'))
+    //         ->where('report_key', $request->input('report_key'))
+    //         ->exists();
+
+    //     if ($existingRecord) {
+    //         return redirect()->back()->withErrors([
+    //             'report_key' => 'The combination of Sub-Account Key ID and Report Key already exists.'
+    //         ])->withInput();
+    //     }
+
+    //     // Calculate certificate-related fields
+    //     $currentApplyTotal = CertificateData::where('report_key', $validatedData['report_key'])->sum('value_certificate');
+
+    //     // Ensure early_balance is set to 0 if no previous records exist
+    //     $early_balance = $currentApplyTotal > 0 ? $currentApplyTotal : 0;
+
+    //     $deadline_balance = $early_balance + $currentApplyTotal;
+    //     $credit = $new_credit_status - $deadline_balance;
+
+    //     // Calculate law_average and law_correction
+    //     $law_average = $validatedData['fin_law'] ? max(-100, min(100, ($deadline_balance / $validatedData['fin_law']) * 100)) : 0;
+    //     $law_correction = $early_balance ? max(-100, min(100, ($deadline_balance / $early_balance) * 100)) : 0;
+
+    //     // Create the new report
+    //     $newReport = Report::create([
+    //         ...$validatedData,
+    //         'total_increase' => $total_increase,
+    //         'new_credit_status' => $new_credit_status,
+    //         'apply' => $currentApplyTotal,
+    //         'deadline_balance' => $deadline_balance,
+    //         'credit' => $credit,
+    //         'law_average' => $law_average,
+    //         'law_correction' => $law_correction,
+    //     ]);
+
+    //     // Call the recalculation method
+    //     $this->recalculateAndSaveReport($newReport);
+
+    //     return redirect()->route('codes.create')->with('success', 'Report created successfully.');
+    // }
     public function edit($id)
     {
         // Fetch the record by ID
@@ -174,14 +245,13 @@ class ReportController extends Controller
         // Set default values for nullable fields if not provided
         $validatedData['internal_increase'] = $loan->internal_increase ?? 0;
         $validatedData['unexpected_increase'] = $loan->unexpected_increase ?? 0;
-        $validatedData['additional_increase'] = $loan->additional_increase?? 0;
+        $validatedData['additional_increase'] = $loan->additional_increase ?? 0;
         $validatedData['decrease'] = $loan->decreas ?? 0;
         $validatedData['editorial'] = $loan->editorial ?? 0;
 
         // Recalculate the total increase and credit status
         $total_increase = $validatedData['internal_increase'] + $validatedData['unexpected_increase'] + $validatedData['additional_increase'];
         $new_credit_status = $validatedData['current_loan'] + $total_increase - $validatedData['decrease'] - $validatedData['editorial'];
-
 
         // Calculate certificate-related fields
         $currentApplyTotal = CertificateData::where('report_key', $validatedData['report_key'])->sum('value_certificate');
@@ -274,4 +344,3 @@ class ReportController extends Controller
         $report->save();
     }
 }
-

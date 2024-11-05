@@ -50,7 +50,8 @@ class Report extends Model
         return $this->hasMany(CertificateData::class, 'report_key');
     }
 
-    public function certificate(){
+    public function certificate()
+    {
         return $this->hasOne(Certificate::class, 'early_balance');
     }
 
@@ -99,11 +100,11 @@ class Report extends Model
 
     public function delete()
     {
-        if($this->loans()->exists()){
+        if ($this->loans()->exists()) {
             $this->loans()->delete();
         }
-        
-        if($this->certificateData()->exists()){
+
+        if ($this->certificateData()->exists()) {
             $this->certificateData()->delete();
         }
         return parent::delete();   // Then delete the report

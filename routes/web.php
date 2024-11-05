@@ -67,8 +67,7 @@ Route::resource('certificate-data', CertificateDataController::class);
 Route::get('/certificate-amount', [AmountCertificateController::class, 'index'])->name('certificate-amount');
 
 //===============================>> Manage Mission
-// Route::resource('missions', ResultMissionController::class);
-// Route to display the form for creating a new report-mission
+Route::get('/reports/{id}/early-balance', [CertificateDataController::class, 'getEarlyBalance']);
 
 //===============================>> Manage Result Operation
 // Route::get('/', [ResultController::class, 'index'])->name('result');
@@ -110,7 +109,7 @@ Route::get('/imported-mission-table', [ReportMissionController::class, 'imported
 
 Route::post('/reports/import', [ReportController::class, 'show'])->name('reports.import');
 Route::post('/import-excel', [ReportController::class, 'import'])->name('reports.import');
-Route::get('/export', [ResultController::class, 'export'])->name('result.export');
+// Route::get('/export', [ResultController::class, 'export'])->name('result.export');
 // Route::get('/report-table/show-import', [ReportMissionController::class, 'showImportForm'])->name('report-table.importForm');
 Route::get('/loans/import', [LoansController::class, 'showImportForm'])->name('loans.importForm');
 Route::post('/loans/import', [LoansController::class, 'import'])->name('loans.import');

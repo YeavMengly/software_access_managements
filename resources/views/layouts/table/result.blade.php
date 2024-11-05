@@ -17,6 +17,18 @@
                 onsubmit="return validateDateField()">
                 <div class="row mb-3">
 
+                    {{-- Filter Code --}}
+                    {{-- <div class="col-md-3">
+                        <input type="text" name="code_id" value="{{ request('code_id') }}" class="form-control mb-2"
+                            placeholder="ជំពូក">
+                    </div> --}}
+
+                    {{-- Filter Account --}}
+                    {{-- <div class="col-md-3">
+                        <input type="text" name="account_key_id" value="{{ request('account_key_id') }}"
+                            class="form-control mb-2" placeholder="គណនី">
+                    </div> --}}
+
                     {{-- Filter Sub-Account --}}
                     <div class="col-md-2">
                         <input type="text" name="sub_account_key_id" value="{{ request('sub_account_key_id') }}"
@@ -48,7 +60,7 @@
                     {{--        Start btn search and reset       --}}
                     <div class="col-md-12">
                         <div class="input-group my-3">
-                            <button type="submit" class="btn btn-primary mr-2" style="width: 150px; height: 40px;">
+                            <button type="submit" class="btn btn-primary mr-2" style="width: 150px; height: 50px;">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 50 50">
                                     <path
                                         d="M 21 3 C 11.621094 3 4 10.621094 4 20 C 4 29.378906 11.621094 37 21 37 C 24.710938 37 28.140625 35.804688 30.9375 33.78125 L 44.09375 46.90625 L 46.90625 44.09375 L 33.90625 31.0625 C 36.460938 28.085938 38 24.222656 38 20 C 38 10.621094 30.378906 3 21 3 Z M 21 5 C 29.296875 5 36 11.703125 36 20 C 36 28.296875 29.296875 35 21 35 C 12.703125 35 6 28.296875 6 20 C 6 11.703125 12.703125 5 21 5 Z">
@@ -57,7 +69,7 @@
                                 ស្វែងរក
                             </button>
                             <button type="button" id="resetBtn" class="btn btn-danger"
-                                style="width: 150px; height: 40px;">
+                                style="width: 150px; height: 50px;">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                                     class="bi bi-x-circle" viewBox="0 0 16 16">
                                     <path
@@ -69,36 +81,6 @@
                         </div>
                     </div>
                     {{--        End btn search and reset       --}}
-
-                    <div class="d-flex justify-content-end mb-2">
-                        <div style="width: 120px;">
-                            <select name="month" class="form-control" onchange="window.location.href=this.value;">
-                                <option value="{{ url()->current() }}?month={{ now()->month }}&year={{ now()->year }}"
-                                    {{ request('month') == now()->month && request('year') == now()->year ? 'selected' : '' }}>
-                                    ខែបច្ចុប្បន្ន
-                                </option>
-                                @for ($m = 1; $m <= 12; $m++)
-                                    <option
-                                        value="{{ url()->current() }}?month={{ $m }}&year={{ now()->year }}"
-                                        {{ request('month') == $m ? 'selected' : '' }}>
-                                        {{ getKhmerMonth($m) }}
-                                    </option>
-                                @endfor
-                            </select>
-                        </div>
-                        <div style="width: 120px; margin-left: 10px;">
-                            <select name="year" class="form-control" onchange="window.location.href=this.value;">
-                                @for ($y = now()->year; $y >= 2020; $y--)
-                                    <option
-                                        value="{{ url()->current() }}?month={{ request('month', now()->month) }}&year={{ $y }}"
-                                        {{ request('year') == $y ? 'selected' : '' }}>
-                                        {{ convertToKhmerNumber($y) }}
-                                    </option>
-                                @endfor
-                            </select>
-                        </div>
-                    </div>
-
                 </div>
             </form>
             {{--                    End Form Search                      --}}
@@ -120,46 +102,7 @@
 
                     <div class="second-header text-center">
                         <h3>របាយការណ៍ធានាចំណាយថវិកាក្រសួងការងារ និងបណ្តុះបណ្តាលវិជ្ជាជីវៈ</h3>
-                        <?php
-                        function getKhmerMonth($month)
-                        {
-                            $months = [
-                                1 => 'មករា',
-                                2 => 'កុម្ភៈ',
-                                3 => 'មិនាឆ្នាំ',
-                                4 => 'មេសា',
-                                5 => 'ឧសភា',
-                                6 => 'មិថុនា',
-                                7 => 'កក្កដា',
-                                8 => 'សីហា',
-                                9 => 'កញ្ញា',
-                                10 => 'តុលា',
-                                11 => 'វិច្ឆិកា',
-                                12 => 'ធ្នូ',
-                            ];
-                        
-                            return $months[$month] ?? '';
-                        }
-                        
-                        function convertToKhmerNumber($number)
-                        {
-                            $khmerNumbers = [
-                                '0' => '០',
-                                '1' => '១',
-                                '2' => '២',
-                                '3' => '៣',
-                                '4' => '៤',
-                                '5' => '៥',
-                                '6' => '៦',
-                                '7' => '៧',
-                                '8' => '៨',
-                                '9' => '៩',
-                            ];
-                        
-                            return strtr($number, $khmerNumbers);
-                        }
-                        ?>
-
+                       
                         <h4>
                             ប្រចាំ
                             @if (request('start_date') && request('end_date'))
@@ -251,7 +194,8 @@
                                         <td style="color: {{ $totalsByCode['editorial'] < 0 ? 'red' : 'black' }};">
                                             {{ number_format($totalsByCode['editorial'], 0, ' ', ' ') }}
                                         </td>
-                                        <td style="color: {{ $totalsByCode['new_credit_status'] < 0 ? 'red' : 'black' }};">
+                                        <td
+                                            style="color: {{ $totalsByCode['new_credit_status'] < 0 ? 'red' : 'black' }};">
                                             {{ number_format($totalsByCode['new_credit_status'], 0, ' ', ' ') }}
                                         </td>
                                         <td style="color: {{ $totalsByCode['early_balance'] < 0 ? 'red' : 'black' }};">
