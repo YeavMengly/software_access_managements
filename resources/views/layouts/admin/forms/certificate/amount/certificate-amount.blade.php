@@ -8,23 +8,6 @@
                     <i class="fas fa-arrow-left"></i> ត្រឡប់ក្រោយ
                 </a>
             </div>
-            {{-- <form class="max-w-md mx-auto mt-3" method="GET" action="{{ route('certificate-amount') }}">
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="input-group my-3" style="width: 70%;">
-                            <input type="search" name="search" value="{{ request('search') }}" class="form-control"
-                                placeholder="ស្វែងរកទិន្នន័យ" aria-label="Search Address">
-                            <button type="submit" class="btn btn-primary">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 50 50">
-                                    <path
-                                        d="M21 3C11.621094 3 4 10.621094 4 20C4 29.378906 11.621094 37 21 37C24.710938 37 28.140625 35.804688 30.9375 33.78125L44.09375 46.90625L46.90625 44.09375L33.90625 31.0625C36.460938 28.085938 38 24.222656 38 20C38 10.621094 30.378906 3 21 3ZM21 5C29.296875 5 36 11.703125 36 20C36 28.296875 29.296875 35 21 35C12.703125 35 6 28.296875 6 20C6 11.703125 12.703125 5 21 5Z">
-                                    </path>
-                                </svg>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </form> --}}
         </div>
     </div>
 
@@ -51,8 +34,6 @@
                                     លេខសម្គាល់កម្មវិធី
                                 </a>
                             </th>
-
-                            {{-- <th style="border: 1px solid black; font-size: 14px;">ឈ្មោះសលាកបត្រ</th> --}}
                             <th style="border: 1px solid black; font-size: 14px;">ចំនួនទឹកប្រាក់</th>
                         </tr>
                     </thead>
@@ -113,62 +94,6 @@
                             @endforeach
                         @endforeach
 
-
-
-                        {{-- Sum Report-Key --}}
-                        {{-- @foreach ($totals['total_amount_by_report_key'] as $reportKey => $total)
-                            <tr>
-                                <td colspan="3" style="border: 1px solid black; text-align: center;">
-                                    <strong>សរុប</strong>: ការរាយការណ៍ ({{ $reportKey }})
-                                </td>
-                                <td style="border: 1px solid black; text-align: center;">
-                                    {{ number_format($total, 0, ' ', ' ') }}
-                                </td>
-                            </tr>
-                        @endforeach --}}
-
-
-                        {{-- Sum Sub-Account-Key --}}
-                        {{-- @foreach ($totals['total_amount_by_group'] as $groupSubAccountKey => $subAccountTotals)
-                            @foreach ($subAccountTotals as $subAccountKey => $total)
-                                <tr>
-                                    <td colspan="3" style="border: 1px solid black; text-align: center;">
-                                        <strong>សរុប</strong> អនុគណនី({{ $groupSubAccountKey }} - {{ $subAccountKey }})
-                                    </td>
-                                    <td style="border: 1px solid black; text-align: center;">
-                                        {{ number_format($total, 0, ' ', ' ') }}
-                                    </td>
-                                </tr>
-                            @endforeach
-                        @endforeach --}}
-
-                        {{-- Sum Account-Key --}}
-                        {{-- @foreach ($totals['total_amount_by_account_key'] as $groupAccountKey => $accountTotals)
-                            @foreach ($accountTotals as $accountKey => $total)
-                                <tr>
-                                    <td colspan="3" style="border: 1px solid black; text-align: center;">
-                                        <strong>សរុប</strong> គណនី({{ $groupAccountKey }} - {{ $accountKey }})
-                                    </td>
-                                    <td style="border: 1px solid black; text-align: center;">
-                                        {{ number_format($total, 0, ' ', ' ') }}
-                                    </td>
-                                </tr>
-                            @endforeach
-                        @endforeach --}}
-
-                        {{-- Sum Key --}}
-                        {{-- @foreach ($totals['total_amount_by_key'] as $key => $total)
-                            <tr>
-                                <td colspan="3" style="border: 1px solid black; text-align: center;">
-                                    <strong>សរុប</strong>: ជំពូក{{ $key }}
-                                </td>
-                                <td style="border: 1px solid black; text-align: center;">
-                                    {{ number_format($total, 0, ' ', ' ') }}
-                                </td>
-                            </tr>
-                        @endforeach --}}
-
-                        {{-- Sum Total --}}
                         <tr>
                             <td colspan="4" style="border: 1px solid black; text-align: center;">
                                 <strong>សរុបទាំងអស់</strong>

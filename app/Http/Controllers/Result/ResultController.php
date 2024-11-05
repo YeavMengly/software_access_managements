@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Result;
 
 use App\Exports\Results\ResultExport;
 use App\Http\Controllers\Controller;
+use App\Models\Certificates\Certificate;
 use App\Models\Certificates\CertificateData;
 use App\Models\Code\Loans;
 use App\Models\Code\Report;
@@ -44,7 +45,6 @@ class ResultController extends Controller
         return view('layouts.table.result', compact('totals', 'reports', 'loans'));
     }
 
-
     public function export(Request $request)
     {
         try {
@@ -55,12 +55,23 @@ class ResultController extends Controller
             $this->applyFilters($query, $request);
 
             // Retrieve the filtered data
+         
             $results = $query->get();
+
+            // Log the count of retrieved results for debugging
+            Log::info('Exported Report Results Count: ' . $results->count());
+
+            // Check if any results were retrieved
+            if ($results->isEmpty()) {
+                Log::warning('No results found for export.');
+                return response()->json(['error' => 'No results found to export.'], 404);
+            }
 
             // Create an instance of ResultExport and call the export method
             $resultExport = new ResultExport($results);
             return $resultExport->export($request);
         } catch (\Exception $e) {
+            Log::error('Export Error: ' . $e->getMessage());
             return response()->json(['error' => $e->getMessage()], 500);
         }
     }
@@ -93,7 +104,6 @@ class ResultController extends Controller
             return response()->json(['error' => $e->getMessage()], 500);
         }
     }
-
 
     private function applyDateFilter($query, $startDate, $endDate)
     {
@@ -169,7 +179,6 @@ class ResultController extends Controller
             }
         }
     }
-
 
     private function calculateTotals($reports)
     {
@@ -283,7 +292,6 @@ class ResultController extends Controller
             foreach ($groupedByAccountKey as $accountKeyId => $loansByAccountKey) {
                 $totals['accountKey'][$codeId][$accountKeyId] = $this->calculateSumFields($loansByAccountKey);
                 $totals['accountKey'][$codeId][$accountKeyId]['name_account_key'] = $loansByAccountKey->first()->subAccountKey->accountKey->name_account_key ?? 'Unknown';
-                
 
                 $groupedBySubAccountKey = $loansByAccountKey->groupBy(function ($loan) {
                     return $loan->subAccountKey->sub_account_key ?? 'Unknown';
@@ -359,6 +367,3 @@ class ResultController extends Controller
         return $sumFields;
     }
 }
-
-
-

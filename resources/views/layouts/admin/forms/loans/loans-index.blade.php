@@ -21,18 +21,23 @@
                 <div class="col-lg-12 margin-tb">
 
                     <div class="d-flex justify-content-between align-items-center">
-                        <a class="btn btn-danger" href="{{ url('/') }}">
-                            <i class="fas fa-arrow-left"></i> ត្រឡប់ក្រោយ
+                        <a class="btn btn-danger d-flex justify-content-center align-items-center" href="{{ url('/') }}"
+                            style="width: 160px; height: 50px; border-radius: 4px;">
+                            <i class="fas fa-arrow-left"></i>&nbsp; ត្រឡប់ក្រោយ
                         </a>
                         <h2 style="font-weight: 700;">តារាងរបាយការណ៍បញ្ចូលឥណទានដើមឆ្នាំ</h2>
                         <div class="btn-group">
-                            <a class="btn btn-success mr-2" href="#" data-bs-toggle="modal"
-                                data-bs-target="#importModal" style="border-radius: 4px;">
-                                Import <i class="fas fa-file-import" style="margin-left: 8px;"></i>
+                            <a class="btn btn-success d-flex justify-content-center align-items-center " href="#"
+                                data-bs-toggle="modal" data-bs-target="#importModal"
+                                style="border-radius: 4px; width: 160px; height: 50px;">
+                                Import &nbsp;<i class="fas fa-file-import"></i>
                             </a>
-                            <a class="btn btn-success" href="{{ route('loans.create') }}" style="border-radius: 4px;">
-                                បញ្ចូលទិន្នន័យ <i class="fas fa-plus" style="margin-left: 8px;"></i>
+                            &nbsp;
+                            <a class="btn btn-success d-flex justify-content-center align-items-center mr-2"
+                                href="{{ route('loans.create') }}" style="width: 160px; height: 50px; border-radius: 4px;">
+                                បញ្ចូលទិន្នន័យ &nbsp;<i class="fas fa-plus"></i>
                             </a>
+
                         </div>
                     </div>
 
@@ -98,7 +103,7 @@
 
                             <div class="col-md-12">
                                 <div class="input-group my-3">
-                                    <button type="submit" class="btn btn-primary mr-2" style="width: 150px; height: 40px;">
+                                    <button type="submit" class="btn btn-primary mr-2" style="width: 150px; height: 50px;">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
                                             viewBox="0 0 50 50">
                                             <path
@@ -108,7 +113,7 @@
                                         ស្វែងរក
                                     </button>
                                     <button type="button" id="resetBtn" class="btn btn-danger"
-                                        style="width: 150px; height: 40px;">
+                                        style="width: 150px; height: 50px;">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
                                             fill="currentColor" class="bi bi-x-circle" viewBox="0 0 16 16">
                                             <path
@@ -176,7 +181,6 @@
                     @forelse ($loans as $loan)
                         <tr>
                             <td style="border: 1px solid black; max-width: 80px; text-align: center">
-                                {{ $loan->subAccountKey->sub_account_key }}</td>
                                 @if ($loan->reportKey && $loan->reportKey->subAccountKey)
                                     {{ $loan->reportKey->subAccountKey->sub_account_key }}
                                 @else
@@ -184,26 +188,26 @@
                                 @endif
                             </td>
                             <td style="border: 1px solid black; max-width: 80px; text-align: center">
-                                {{ $loan->reportKey->report_key }}</td>
+                                {{ $loan->reportKey->report_key }}
+                            </td>
                             <td style="border: 1px solid black; max-width: 80px; text-align: center">
-                                {{ number_format($loan->internal_increase, 0, ' ', ' ') }}</td>
+                                {{ number_format($loan->internal_increase, 0, ' ', ' ') }}
+                            </td>
                             <td style="border: 1px solid black; max-width: 80px; text-align: center">
-                                {{ number_format($loan->unexpected_increase, 0, ' ', ' ') }}</td>
+                                {{ number_format($loan->unexpected_increase, 0, ' ', ' ') }}
+                            </td>
                             <td style="border: 1px solid black; max-width: 80px; text-align: center">
-                                {{ number_format($loan->additional_increase) }}</td>
-                                <td style="border: 1px solid black; max-width: 80px; text-align: center">
-                                    {{ number_format($loan->total_increase) }}</td>
+                                {{ number_format($loan->additional_increase) }}
+                            </td>
                             <td style="border: 1px solid black; max-width: 80px; text-align: center">
-                                {{ number_format($loan->decrease, 0, ' ', ' ') }}</td>
-                                <td style="border: 1px solid black; max-width: 80px; text-align: center">
-                                    {{ number_format($loan->editorial, 0, ' ', ' ') }}</td>
+                                {{ number_format($loan->total_increase) }}
+                            </td>
                             <td style="border: 1px solid black; max-width: 80px; text-align: center">
-                                {{ number_format($loan->total_increase) }}</td>
+                                {{ number_format($loan->decrease, 0, ' ', ' ') }}
+                            </td>
                             <td style="border: 1px solid black; max-width: 80px; text-align: center">
-                                {{ number_format($loan->decrease, 0, ' ', ' ') }}</td>
-                            <td style="border: 1px solid black; max-width: 80px; text-align: center">
-                                {{ number_format($loan->editorial, 0, ' ', ' ') }}</td>
-
+                                {{ number_format($loan->editorial, 0, ' ', ' ') }}
+                            </td>
                             <td style="border: 1px solid black; text-align: center; justify-content: center">
                                 <form id="delete-form-{{ $loan->id }}"
                                     action="{{ route('loans.destroy', $loan->id) }}" method="POST"
@@ -222,12 +226,12 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="13" style="text-align: center;">គ្មានទិន្នន័យ</td>
+                            <td colspan="9" style="text-align: center;">គ្មានទិន្នន័យ</td>
                         </tr>
                     @endforelse
-
                 </tbody>
             </table>
+
             {{-- Custom Pagination --}}
             <div class="d-flex justify-content-between align-items-center mt-4">
                 <div>

@@ -1,12 +1,14 @@
 @extends('layouts.master')
 
 @section('form-certificate-data-edit')
-    <div class="container-fluid">
+    <div class="container-fluid mt-2">
         <div class="row">
             <div class="col-lg-12 margin-tb mb-4">
                 <div class="d-flex justify-content-between align-items-center">
                     <h3 class="card-title">កែសម្រួលសលាកបត្រ</h3>
-                    <a class="btn btn-primary" href="{{ route('certificate-data.index') }}">ត្រឡប់ក្រោយ</a>
+                    <a class="btn btn-danger d-flex justify-content-center align-items-center mr-2" href="{{ route('certificate-data.index') }}"
+                        style="width: 160px; height: 50px;"><i
+                        class="fas fa-arrow-left"></i> &nbsp;&nbsp;ត្រឡប់ក្រោយ</a>
                 </div>
             </div>
         </div>
