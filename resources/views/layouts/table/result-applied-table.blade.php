@@ -23,7 +23,6 @@
                     <thead class="header-border">
                         <tr>
                             <th rowspan="2">កម្មវិធី</th>
-
                             <th rowspan="2">ច្បាប់ហិរញ្ញវត្ថុ​ </th>
                             <th rowspan="2">ស្ថានភាព</th>
                             <th rowspan="2">កើន</th>

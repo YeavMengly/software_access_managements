@@ -55,7 +55,6 @@ class CambodiaExport
             }
         }
 
-
         $missions = $query->get();
 
         /*
@@ -145,7 +144,9 @@ class CambodiaExport
                     $sheet->getStyle('S' . $row)->applyFromArray($styleArray);
                     $sheet->getStyle('U' . $row)->applyFromArray($styleArray);
 
+                    // Move to the next row and increment total counter
                     $row++;
+                    $totalCounter++;
 
                     // Reset totals for the next group
                     $totalTravelAllowance = 0;
@@ -153,61 +154,64 @@ class CambodiaExport
                     $totalMealMoney = 0;
                     $totalAccommodationMoney = 0;
                     $finalTotal = 0;
-
-                    // Increment the counter for the next "Total" row
-                    $totalCounter++;
                 } else {
-                    // Handle the case of a single-person group, no merging needed
-                    $sheet->mergeCells("A{$row}:J{$row}");
+                    // Handle a single-person group without merging
+                    $sheet->setCellValue('M' . ($row - 1), number_format($totalTravelAllowance, 0, '.', ','));
+                    $sheet->setCellValue('O' . ($row - 1), number_format($totalPocketMoney, 0, '.', ','));
+                    $sheet->setCellValue('Q' . ($row - 1), number_format($totalMealMoney, 0, '.', ','));
+                    $sheet->setCellValue('S' . ($row - 1), number_format($totalAccommodationMoney, 0, '.', ','));
+                    $sheet->setCellValue('U' . ($row - 1), number_format($finalTotal, 0, '.', ','));
+
+                    // Add totals for a single-person group in a new row
+                    $sheet->setCellValue('A' . $row, 'សរុប' . str_pad($totalCounter, 2, '0', STR_PAD_LEFT));
+                    $sheet->setCellValue('M' . $row, number_format($totalTravelAllowance, 0, '.', ','));
+                    $sheet->setCellValue('O' . $row, number_format($totalPocketMoney, 0, '.', ','));
+                    $sheet->setCellValue('Q' . $row, number_format($totalMealMoney, 0, '.', ','));
+                    $sheet->setCellValue('S' . $row, number_format($totalAccommodationMoney, 0, '.', ','));
+                    $sheet->setCellValue('U' . $row, number_format($finalTotal, 0, '.', ','));
+
+                    // Center the text in cell 'A' and merge across the specified columns
+                    $sheet->mergeCells("A{$row}:J{$row}"); // Adjust if you want to merge across a different range
+                    $sheet->getStyle('A' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+                    $sheet->getStyle('A' . $row)->getAlignment()->setVertical(\PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER);
+
+                    // Apply font styles with bold
+                    $styleArray = [
+                        'font' => [
+                            'name' => 'Khmer OS Muol Light',
+                            'bold' => true,
+                        ],
+                        'fill' => [
+                            'fillType' => Fill::FILL_SOLID,
+                            'startColor' => [
+                                'argb' => 'D3D3D3',
+                            ],
+                        ],
+                    ];
+
+                    // Apply style to a range of cells
+                    $sheet->getStyle('A' . $row . ':U' . $row)->applyFromArray($styleArray);
+                    
+                    // Increment the row for the next entry or total
+                    $row++;
+                    $totalCounter++;
+
+                    // Reset totals
+                    $totalTravelAllowance = 0;
+                    $totalPocketMoney = 0;
+                    $totalMealMoney = 0;
+                    $totalAccommodationMoney = 0;
+                    $finalTotal = 0;
                 }
 
-                // Add totals in a new row
-                $sheet->setCellValue('A' . $row, 'សរុប' . str_pad($totalCounter, 2, '0', STR_PAD_LEFT));
-                $sheet->setCellValue('M' . $row, number_format($totalTravelAllowance, 0, '.', ','));
-                $sheet->setCellValue('O' . $row, number_format($totalPocketMoney, 0, '.', ','));
-                $sheet->setCellValue('Q' . $row, number_format($totalMealMoney, 0, '.', ','));
-                $sheet->setCellValue('S' . $row, number_format($totalAccommodationMoney, 0, '.', ','));
-                $sheet->setCellValue('U' . $row, number_format($finalTotal, 0, '.', ','));
-
-                // Center the text in the cell
-                $sheet->getStyle('A' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
-
-                // Apply font styles with bold
-                $styleArray = [
-                    'font' => [
-                        'name' => 'Khmer OS Muol Light',
-                        'bold' => true,
-                    ],
-                    'fill' => [
-                        'fillType' => Fill::FILL_SOLID,
-                        'startColor' => [
-                            'argb' => 'D3D3D3',
-                        ],
-                    ],
-                ];
-
-                // Apply style to a range of cells
-                $sheet->getStyle('A' . $row . ':U' . $row)->applyFromArray($styleArray);
-
-                $row++;
-
-                // Reset totals for the next group
-                $totalTravelAllowance = 0;
-                $totalPocketMoney = 0;
-                $totalMealMoney = 0;
-                $totalAccommodationMoney = 0;
-                $finalTotal = 0;
-
-                // Increment the counter for the next "Total" row
-                $totalCounter++;
                 $mergeStartRowLetter = $row;
             }
 
-            // If it's the first time, set the mergeStartRowLetter
+            // Set starting row for merging if new letter number group
             if ($prevLetterNumber === null || $currentLetterNumber !== $prevLetterNumber) {
                 $mergeStartRowLetter = $row;
             }
-        
+
             /* 
             |-------------------------------------------------------------------------------
             | Populate data
@@ -258,20 +262,10 @@ class CambodiaExport
             $prevLetterNumber = $currentLetterNumber;
             $row++;
         }
-        /*
-        |-------------------------------------------------------------------------------
-        | Merge and add totals for the last group if needed
-        |-------------------------------------------------------------------------------
-        */
-        if ($mergeStartRowLetter !== null && $mergeStartRowLetter !== $row - 1) {
-            // Merge the last group's columns
-            $sheet->mergeCells("E{$mergeStartRowLetter}:E" . ($row - 1));
-            $sheet->mergeCells("F{$mergeStartRowLetter}:F" . ($row - 1));
-            $sheet->mergeCells("G{$mergeStartRowLetter}:G" . ($row - 1));
-            $sheet->mergeCells("H{$mergeStartRowLetter}:H" . ($row - 1));
-            $sheet->mergeCells("A{$row}:J{$row}");
+
         // Handle the last group (single or multi-person group)
         if ($prevLetterNumber !== null) {
+            // Check if merging is needed for multi-row groups
             if ($mergeStartRowLetter !== null && $mergeStartRowLetter !== $row - 1) {
                 $sheet->mergeCells("A{$row}:J{$row}");
                 $sheet->mergeCells("E{$mergeStartRowLetter}:E" . ($row - 1));
@@ -290,6 +284,7 @@ class CambodiaExport
             $sheet->setCellValue('Q' . $row, number_format($totalMealMoney, 0, '.', ','));
             $sheet->setCellValue('S' . $row, number_format($totalAccommodationMoney, 0, '.', ','));
             $sheet->setCellValue('U' . $row, number_format($finalTotal, 0, '.', ','));
+
             // Center the text in the cell
             $sheet->getStyle('A' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
 
@@ -307,71 +302,62 @@ class CambodiaExport
                 ],
             ];
 
-            // Apply the style to the range of cells
+            // Apply the style to the entire total row
             $sheet->getStyle('A' . $row . ':U' . $row)->applyFromArray($styleArray);
-            $sheet->getStyle('A' . $row)->applyFromArray($styleArray);
-            $sheet->getStyle('M' . $row)->applyFromArray($styleArray);
-            $sheet->getStyle('O' . $row)->applyFromArray($styleArray);
-            $sheet->getStyle('Q' . $row)->applyFromArray($styleArray);
-            $sheet->getStyle('S' . $row)->applyFromArray($styleArray);
-            $sheet->getStyle('U' . $row)->applyFromArray($styleArray);
-            // Apply styles to the last total row
-            $sheet->getStyle('A' . $row . ':U' . $row)->applyFromArray($styleArray);
-        }
 
+            // Increment total counter for the next group
+            $totalCounter++;
+        }
 
         /*
         |-------------------------------------------------------------------------------
         | Merge and add totals for the last group if needed
         |-------------------------------------------------------------------------------
         */
-        if ($mergeStartRowLetter !== null) {
-            // Check if the group has more than one person, or if it's a single person group
-            if ($mergeStartRowLetter !== $row - 1 || $mergeStartRowLetter === $row - 1) {
-                // Merge columns for multi-row groups
-                if ($mergeStartRowLetter !== $row - 1) {
-                    $sheet->mergeCells("E{$mergeStartRowLetter}:E" . ($row - 1));
-                    $sheet->mergeCells("F{$mergeStartRowLetter}:F" . ($row - 1));
-                    $sheet->mergeCells("G{$mergeStartRowLetter}:G" . ($row - 1));
-                    $sheet->mergeCells("H{$mergeStartRowLetter}:H" . ($row - 1));
-                }
+        // if ($mergeStartRowLetter !== null) {
+        //     // Check if the group has more than one person, or if it's a single person group
+        //     if ($mergeStartRowLetter !== $row - 1 || $mergeStartRowLetter === $row - 1) {
+        //         // Merge columns for multi-row groups
+        //         if ($mergeStartRowLetter !== $row - 1) {
+        //             $sheet->mergeCells("E{$mergeStartRowLetter}:E" . ($row - 1));
+        //             $sheet->mergeCells("F{$mergeStartRowLetter}:F" . ($row - 1));
+        //             $sheet->mergeCells("G{$mergeStartRowLetter}:G" . ($row - 1));
+        //             $sheet->mergeCells("H{$mergeStartRowLetter}:H" . ($row - 1));
+        //         }
 
-                // Add totals for the group (including single person group)
-                $sheet->mergeCells("A{$row}:J{$row}");
-                $sheet->setCellValue('A' . $row, 'សរុប' . str_pad($totalCounter, 2, '0', STR_PAD_LEFT));
-                $sheet->setCellValue('M' . $row, number_format($totalTravelAllowance, 0, '.', ','));
-                $sheet->setCellValue('O' . $row, number_format($totalPocketMoney, 0, '.', ','));
-                $sheet->setCellValue('Q' . $row, number_format($totalMealMoney, 0, '.', ','));
-                $sheet->setCellValue('S' . $row, number_format($totalAccommodationMoney, 0, '.', ','));
-                $sheet->setCellValue('U' . $row, number_format($finalTotal, 0, '.', ','));
+        //         // Add totals for the group (including single person group)
+        //         $sheet->mergeCells("A{$row}:J{$row}");
+        //         $sheet->setCellValue('A' . $row, 'សរុប' . str_pad($totalCounter, 2, '0', STR_PAD_LEFT));
+        //         $sheet->setCellValue('M' . $row, number_format($totalTravelAllowance, 0, '.', ','));
+        //         $sheet->setCellValue('O' . $row, number_format($totalPocketMoney, 0, '.', ','));
+        //         $sheet->setCellValue('Q' . $row, number_format($totalMealMoney, 0, '.', ','));
+        //         $sheet->setCellValue('S' . $row, number_format($totalAccommodationMoney, 0, '.', ','));
+        //         $sheet->setCellValue('U' . $row, number_format($finalTotal, 0, '.', ','));
 
-                // Center the text in the cell
-                $sheet->getStyle('A' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+        //         // Center the text in the cell
+        //         $sheet->getStyle('A' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
 
-                // Apply font styles with bold
-                $styleArray = [
-                    'font' => [
-                        'name' => 'Khmer OS Muol Light',
-                        'bold' => true,
-                    ],
-                    'fill' => [
-                        'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
-                        'startColor' => [
-                            'argb' => 'D3D3D3',
-                        ],
-                    ],
-                ];
+        //         // Apply font styles with bold
+        //         $styleArray = [
+        //             'font' => [
+        //                 'name' => 'Khmer OS Muol Light',
+        //                 'bold' => true,
+        //             ],
+        //             'fill' => [
+        //                 'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
+        //                 'startColor' => [
+        //                     'argb' => 'D3D3D3',
+        //                 ],
+        //             ],
+        //         ];
 
-                // Apply the style to the range of cells
-                $sheet->getStyle('A' . $row . ':U' . $row)->applyFromArray($styleArray);
-                $sheet->getStyle('A' . $row)->applyFromArray($styleArray);
-                $sheet->getStyle('M' . $row)->applyFromArray($styleArray);
-                $sheet->getStyle('O' . $row)->applyFromArray($styleArray);
-                $sheet->getStyle('Q' . $row)->applyFromArray($styleArray);
-                $sheet->getStyle('S' . $row)->applyFromArray($styleArray);
-                $sheet->getStyle('U' . $row)->applyFromArray($styleArray);
-            }
-        }
+        //         // Apply the style to the range of cells for the totals row
+        //         $sheet->getStyle('A' . $row . ':U' . $row)->applyFromArray($styleArray);
+
+        //         // Increment total counter for the next group
+        //         $totalCounter++;
+        //     }
+        // }
 
 
         // Save the modified spreadsheet as a new file or download directly
@@ -386,6 +372,5 @@ class CambodiaExport
             'Content-Disposition' => 'attachment; filename="' . $fileName . '"',
             'Cache-Control' => 'max-age=0',
         ]);
-    }
     }
 }

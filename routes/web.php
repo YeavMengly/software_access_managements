@@ -116,8 +116,7 @@ Route::get('/loans/import', [LoansController::class, 'showImportForm'])->name('l
 Route::post('/loans/import', [LoansController::class, 'import'])->name('loans.import');
 
 //===============================>> Manage Mission Exports
-Route::get('/mission-cambodia/export', [MissionCambodiaController::class, 'export'])->name('table-mission-cambodia');
-
+// Route::get('/mission-cambodia/export', [MissionCambodiaController::class, 'export'])->name('table-mission-cambodia');
 Route::get('/results/export', [ResultController::class, 'export'])->name('result.export');
 Route::get('/summaries/export', [ResultSummariesController::class, 'export'])->name('summaries.export');
 

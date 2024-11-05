@@ -62,10 +62,7 @@
                                 <label for="mission_letter">លិខិតបញ្ជាបេសកកម្ម:</label>
                                 <div class="form-subgroup">
                                     <label for="letter_number">លេខ:</label>
-                                    <input type="number" name="letter_number" id="letter_number"
-                                        class="form-control form-number @error('letter_number') is-invalid @enderror"
-                                        min="0" oninput="this.value = this.value.replace(/[^0-9]/g, '');">
-                                    <div class="input-group">
+                                    <div class="input-group mx-3">
                                         <!-- Number input -->
                                         <input type="number" name="letter_number" id="letter_number"
                                             class="form-control @error('letter_number') is-invalid @enderror" min="0"
@@ -74,16 +71,14 @@
                                         <!-- Format selection dropdown -->
                                         <select id="letter_format" class="form-select mx-3"
                                             onchange="updateFullLetterNumber()">
+                                            <option value=""></option>
                                             <option value=" កប/ល.ទ.ខ">កប/ល.ទ.ខ</option>
                                             <option value=" កប/ឧ.ប.ទ.ឃ">កប/ឧ.ប.ទ.ឃ</option>
                                         </select>
-                                    </div>
 
-                                    <!-- Hidden input to store the full value (number + format) -->
-                                    <input type="hidden" name="full_letter_number" id="full_letter_number">
-                                    @error('letter_number')
-                                        <div class="invalid-feedback">{{ $message }}</div>
-                                    @enderror
+                                        <!-- Hidden input to store the combined value -->
+                                        <input type="hidden" name="full_letter_number" id="full_letter_number">
+                                    </div>
                                 </div>
 
                                 <div class="form-subgroup">
@@ -313,8 +308,6 @@
                                 <option value="អនុរដ្ឋលេខាធិការ">អនុរដ្ឋលេខាធិការ</option>
                                 <option value="អគ្កាធិការ">អគ្កាធិការ</option>
                                 <option value="អគ្កាធិការរង">អគ្កាធិការរង</option>
-                                <option value="អគ្គាធិការ">អគ្គាធិការ</option>
-                                <option value="អគ្គាធិការរង">អគ្គាធិការរង</option>
                                 <option value="អគ្គនាយក">អគ្គនាយក</option>
                                 <option value="អគ្គនាយករង">អគ្គនាយករង</option>
                                 <option value="អគ្គលេខាធិការ">អគ្គលេខាធិការ</option>
@@ -324,10 +317,6 @@
                                 <option value="ប្រ.ការិយាល័យ">ប្រ.ការិយាល័យ</option>
                                 <option value="អនុ.ការិយាល័យ">អនុ.ការិយាល័យ</option>
                                 <option value="នាយកវិទ្យាស្ថាន">នាយកវិទ្យាស្ថាន</option>
-                                <option value="ប្រធាននាយកដ្ឋាន">ប្រធាននាយកដ្ឋាន</option>
-                                <option value="អនុប្រធាននាយកដ្ឋាន">អនុប្រធាននាយកដ្ឋាន</option>
-                                <option value="ប្រធានការិយាល័យ">ប្រធានការិយាល័យ</option>
-                                <option value="អនុប្រធានការិយាល័យ">អនុប្រធានការិយាល័យ</option>
                                 <option value="ប្រធានផ្នែក">ប្រធានផ្នែក</option>
                                 <option value="អនុប្រធានផ្នែក">អនុប្រធានផ្នែក</option>
                                 <option value="មន្ត្រី">មន្ត្រី</option>
@@ -360,11 +349,8 @@
     </script>
     <script>
         function updateFullLetterNumber() {
-            // Get values from letter number and format dropdown
             const letterNumber = document.getElementById('letter_number').value;
             const letterFormat = document.getElementById('letter_format').value;
-
-            // Combine values and update hidden input
             document.getElementById('full_letter_number').value = letterNumber + letterFormat;
         }
     </script>
