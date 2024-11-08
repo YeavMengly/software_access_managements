@@ -3,15 +3,11 @@
 @section('dashboardui')
     <div class="container-fluid fullscreen-container d-flex flex-column pt-4"
         style="font-family: 'Khmer OS Siemreap', sans-serif;">
-        <!-- Main content which should scroll if necessary -->
         <div class="main-content flex-grow-1">
             <div class="row justify-content-center d-flex align-items-center">
                 <div class="col-md-10 col-lg-8">
                     <div class="container-box animate-box mt-3">
-                        <!-- Two-Column Layout for Buttons -->
                         <div class="row">
-                            <!-- Your buttons here -->
-
                             <div class="col-md-6 mb-3">
                                 <a href="{{ route('codes.create') }}" class="btn btn-custom btn-block animate-button">
                                     បញ្ចូលឥណទានអនុម័តដើមឆ្នាំ​ នឹងផែនការរជ្ជទេយ្យ
@@ -27,11 +23,9 @@
                                     ចុះបញ្ជីនិយ័តភាពថវិកា
                                 </a>
                             </div>
-
                             <div class="col-md-6 mb-3">
                                 <a href="{{ route('codes.index') }}" class="btn btn-custom btn-block animate-button">
                                     កែសម្រួលមាតិកាកម្មវិធី
-
                                 </a>
                             </div>
                             <div class="col-md-6 mb-3">
@@ -56,28 +50,20 @@
                                     ពិនិត្យរបាយការណ៍
                                 </a>
                             </div>
-
                             <div class="col-md-6 mb-3">
-                                <a href="{{ route('mission-cam.create') }}"
-                                    class="btn btn-custom btn-block animate-button">
+                                <a href="{{ route('mission-cam.create') }}" class="btn btn-custom btn-block animate-button">
                                     បញ្ចូលបេសកម្ម </a>
                             </div>
-
-
                             <div class="col-md-12 mb-3">
                                 <button class="btn btn-custom btn-block animate-button" onclick="openAndCloseWindow()">
                                     ចាកចេញពីកម្មវិធី <i class="fas fa-sign-out-alt"></i>
                                 </button>
                             </div>
-
-                            <!-- Other buttons... -->
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-        <!-- Footer content -->
-
+        </div> 
         <div class="footer-section text-center text-center justify-content-center align-items-center">
             <p> @២០២៤ រក្សាសិទ្ធគ្រប់យ៉ាងដោយ នាយកដ្ឋានហិរញ្ញវត្ថុ និងទ្រព្យសម្បត្តិរដ្ឋ</p>
         </div>

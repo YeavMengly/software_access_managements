@@ -12,7 +12,6 @@
             <!-- Existing content -->
             <div class="result-total-table-container">
                 <div class="row">
-                    <!-- Your existing form, table, and pagination code -->
                 </div>
             </div>
         @endif
@@ -38,7 +37,6 @@
                         </div>
                     </div>
 
-                    {{-- Import Modal --}}
                     <div class="modal fade" id="importModal" tabindex="-1" aria-labelledby="importModalLabel"
                         aria-hidden="true">
                         <div class="modal-dialog modal-dialog-centered">
@@ -66,7 +64,6 @@
                                             <small id="fileSizeWarning" class="text-danger d-none">File size exceeds 5 MB
                                                 limit.</small>
                                             <div id="fileNameDisplay" class="mt-2"></div>
-                                            <!-- Display chosen file name here -->
                                         </div>
                                         <div class="mb-3 text-center">
                                             <button type="submit" id="uploadButton" class="btn btn-primary">
@@ -104,10 +101,7 @@
                                 <input type="text" name="report_key" value="{{ request('report_key') }}"
                                     class="form-control mb-2" placeholder="លេខកូដកម្មវិធី">
                             </div>
-                            {{-- <div class="col-md-3">
-                                <input type="date" name="date" value="{{ request('date') }}"
-                                    class="form-control mb-2" placeholder="Date (YYYY-MM-DD or YYYY-MM-DD - YYYY-MM-DD)">
-                            </div> --}}
+
                             <div class="col-md-12">
                                 <div class="input-group my-3">
                                     <button type="submit" class="btn btn-primary mr-2" style="width: 150px; height: 40px;">
@@ -130,10 +124,8 @@
                                     </button>
                                 </div>
                             </div>
-
                         </div>
                     </form>
-
                 </div>
             </div>
 

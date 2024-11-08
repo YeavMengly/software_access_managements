@@ -85,24 +85,36 @@
             </form>
             {{--                    End Form Search                      --}}
 
+            {{--        Start action btn export and print        --}}
+            <div class="d-flex justify-content-end mt-3 mb-3 mr-2">
+                <a href="{{ route('result.export', request()->query()) }}"
+                    class="btn btn-danger btn-width mr-2 d-flex align-items-center justify-content-center"
+                    style="width: 150px; height: 50px; text-align: center;">
+                    <i class="fas fa-download"></i> <span class="ml-2">Export</span>
+                </a>
+                <a href="{{ route('result.exportPdf', request()->query()) }}"
+                    class="btn btn-primary btn-width mr-2 d-flex align-items-center justify-content-center"
+                    style="width: 150px; height: 50px; text-align: center;">
+                    <i class="fas fa-print"></i> <span class="ml-2">Print</span>
+                </a>
+            </div>
+
+            {{--        Start action btn export and print        --}}
 
             <div class="border-wrapper">
                 <div class="result-total-table-container mt-4">
-
                     <div class="first-header text-center">
                         <h2>ព្រះរាជាណាចក្រកម្ពុជា</h2>
                         <h3>ជាតិ សាសនា ព្រះមហាក្សត្រ</h3>
-                        <h3>3</h3>
+                        {{-- <h3>3</h3> --}}
                     </div>
                     <h3>ក្រសួងការងារ​ នឹងបណ្ដុះបណ្ដាលវិជ្ជាជីវៈ</h3>
                     <h3>នាយកដ្ខានរដ្ខាបាល និងហិរញ្ញវត្ថុ</h3>
                     <h3>នាយកដ្ខានហិរញ្ញវត្ថុ និងទ្រព្យសម្បត្តិរដ្ឋ</h3>
                     <h3>ការិយាល័យហិរញ្ញវត្ថុ</h3>
 
-
                     <div class="second-header text-center">
                         <h3>របាយការណ៍ធានាចំណាយថវិកាក្រសួងការងារ និងបណ្តុះបណ្តាលវិជ្ជាជីវៈ</h3>
-                       
                         <h4>
                             ប្រចាំ
                             @if (request('start_date') && request('end_date'))
@@ -128,10 +140,6 @@
                                     ឆ្នាំ{{ convertToKhmerNumber($currentYear) }}</span> {{-- Default text for current month dynamically --}}
                             @endif
                         </h4>
-
-
-
-
                     </div>
                     <div class="table-container">
 
@@ -174,7 +182,6 @@
                                 {{-- Group Code --}}
                                 @foreach ($totals['code'] as $codeId => $totalsByCode)
                                     <tr style="background-color: rgb(181, 245, 86);">
-                                        {{-- <td>{{ $loop->iteration }}</td> --}}
                                         <td colspan="1"> {{ $codeId }} </td>
                                         <td colspan="1"></td>
                                         <td colspan="1"></td>
@@ -187,7 +194,6 @@
                                         <td>{{ number_format($totalsByCode['unexpected_increase'], 0, ' ', ' ') }}</td>
                                         <td>{{ number_format($totalsByCode['additional_increase'], 0, ' ', ' ') }}</td>
                                         <td>{{ number_format($totalsByCode['total_increase'], 0, ' ', ' ') }}</td>
-
                                         <td style="color: {{ $totalsByCode['decrease'] < 0 ? 'red' : 'black' }};">
                                             {{ number_format($totalsByCode['decrease'], 0, ' ', ' ') }}
                                         </td>
@@ -215,10 +221,8 @@
                                         <td style="color: {{ $totalsByCode['law_correction'] < 0 ? 'red' : 'black' }};">
                                             {{ number_format($totalsByCode['law_correction'], 2, '.', ' ') }} %</td>
                                     </tr>
-                                    {{-- Group Account --}}
                                     @foreach ($totals['accountKey'][$codeId] as $accountKeyId => $totalsByAccountKey)
                                         <tr>
-                                            {{-- <td></td> --}}
                                             <td></td>
                                             <td colspan="1">{{ $accountKeyId }}</td>
                                             <td></td>
@@ -233,7 +237,6 @@
                                             </td>
                                             <td>{{ number_format($totalsByAccountKey['additional_increase'], 0, ' ', ' ') }}
                                             </td>
-
                                             <td>{{ number_format($totalsByAccountKey['total_increase'], 0, ' ', ' ') }}
                                             </td>
                                             <td
@@ -270,11 +273,8 @@
                                                 {{ number_format($totalsByAccountKey['law_correction'], 2, '.', ' ') }} %
                                             </td>
                                         </tr>
-
-                                        {{-- Group Sub Account --}}
                                         @foreach ($totals['subAccountKey'][$codeId][$accountKeyId] as $subAccountKeyId => $totalsBySubAccountKey)
                                             <tr>
-                                                {{-- <td></td> --}}
                                                 <td></td>
                                                 <td></td>
                                                 <td colspan="1">{{ $subAccountKeyId }}</td>
@@ -291,7 +291,6 @@
                                                 </td>
                                                 <td>{{ number_format($totalsBySubAccountKey['additional_increase'], 0, ' ', ' ') }}
                                                 </td>
-
                                                 <td>{{ number_format($totalsBySubAccountKey['total_increase'], 0, ' ', ' ') }}
                                                 </td>
                                                 <td
@@ -331,11 +330,8 @@
                                                     {{ number_format($totalsBySubAccountKey['law_correction'], 2, '.', ' ') }}
                                                     %</td>
                                             </tr>
-
-                                            {{-- Listing Data Report --}}
                                             @foreach ($totals['reportKey'][$codeId][$accountKeyId][$subAccountKeyId] as $reportKeyId => $totalsByReportKey)
                                                 <tr>
-                                                    {{-- <td></td> --}}
                                                     <td></td>
                                                     <td></td>
                                                     <td></td>
@@ -451,28 +447,11 @@
                                     </td>
 
                                 </tr>
-                                {{-- End import data --}}
+                                {{-- End Total --}}
                             </tbody>
                         </table>
-                        {{--            Table           --}}
-
                     </div>
                 </div>
-
-                {{--        Start action btn export and print        --}}
-                <div class="d-flex justify-content-end mt-3 mb-3 mr-2">
-                    <a href="{{ route('result.export', request()->query()) }}" class="btn btn-danger btn-width mr-2">
-                        <i class="fas fa-download"></i> Export
-                    </a>
-                    <a href="{{ route('result.exportPdf', request()->query()) }}"
-                        class="btn btn-primary btn-width mr-2">
-                        <i class="fas fa-print"></i> Print
-                    </a>
-                </div>
-
-
-                {{--        Start action btn export and print        --}}
-
             </div>
         </div>
     </div>

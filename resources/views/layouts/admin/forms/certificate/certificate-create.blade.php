@@ -43,9 +43,7 @@
                                         <select name="report_key" id="reportKeySelect" class="form-control" size="5"
                                             onchange="updateReportInputField()" style="width: 420px; height: 260px;">
                                             @foreach ($reports as $report)
-                                                <option value="{{ $report->id }}">
-                                                    {{ $report->subAccountKey->sub_account_key }} >
-                                                    {{ $report->report_key }}
+                                                <option value="{{ $report->id }}">{{ $report->subAccountKey->sub_account_key }} > {{ $report->report_key }}
                                                 </option>
                                             @endforeach
                                         </select>

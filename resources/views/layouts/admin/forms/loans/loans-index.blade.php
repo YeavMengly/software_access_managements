@@ -8,10 +8,8 @@
                 <strong>No internet connection:</strong> Please check your network settings and try again.
             </div>
         @else
-            <!-- Existing content -->
             <div class="result-total-table-container">
                 <div class="row">
-                    <!-- Your existing form, table, and pagination code -->
                 </div>
             </div>
         @endif
@@ -19,7 +17,6 @@
         <div class="result-total-table-container">
             <div class="row">
                 <div class="col-lg-12 margin-tb">
-
                     <div class="d-flex justify-content-between align-items-center">
                         <a class="btn btn-danger d-flex justify-content-center align-items-center" href="{{ url('/') }}"
                             style="width: 160px; height: 50px; border-radius: 4px;">
@@ -123,7 +120,6 @@
                                     </button>
                                 </div>
                             </div>
-
                         </div>
                     </form>
 
@@ -236,35 +232,35 @@
             <div class="d-flex justify-content-between align-items-center mt-4">
                 <div>
                     <nav aria-label="Page navigation example">
-                        {{-- <ul class="pagination">
-                            <li class="page-item{{ $reports->onFirstPage() ? ' disabled' : '' }}">
+                        <ul class="pagination">
+                            <li class="page-item{{ $loans->onFirstPage() ? ' disabled' : '' }}">
                                 <a class="page-link"
-                                    href="{{ $reports->previousPageUrl() }}&per_page={{ request('per_page') }}"
+                                    href="{{ $loans->previousPageUrl() }}&per_page={{ request('per_page') }}"
                                     aria-label="Previous">
                                     <span aria-hidden="true">&laquo;</span>
                                     <span class="sr-only">Previous</span>
                                 </a>
                             </li>
-                            @for ($i = 1; $i <= $reports->lastPage(); $i++)
-                                <li class="page-item{{ $reports->currentPage() == $i ? ' active' : '' }}">
+                            @for ($i = 1; $i <= $loans->lastPage(); $i++)
+                                <li class="page-item{{ $loans->currentPage() == $i ? ' active' : '' }}">
                                     <a class="page-link"
-                                        href="{{ $reports->url($i) }}&per_page={{ request('per_page') }}">{{ $i }}</a>
+                                        href="{{ $loans->url($i) }}&per_page={{ request('per_page') }}">{{ $i }}</a>
                                 </li>
                             @endfor
-                            <li class="page-item{{ !$reports->hasMorePages() ? ' disabled' : '' }}">
+                            <li class="page-item{{ !$loans->hasMorePages() ? ' disabled' : '' }}">
                                 <a class="page-link"
-                                    href="{{ $reports->nextPageUrl() }}&per_page={{ request('per_page') }}"
+                                    href="{{ $loans->nextPageUrl() }}&per_page={{ request('per_page') }}"
                                     aria-label="Next">
                                     <span aria-hidden="true">&raquo;</span>
                                     <span class="sr-only">Next</span>
                                 </a>
                             </li>
-                        </ul> --}}
+                        </ul>
                     </nav>
                 </div>
                 <div>
-                    {{-- <p class="text-muted">បង្ហាញ {{ $reports->firstItem() }} ដល់ {{ $reports->lastItem() }} នៃ
-                        {{ $reports->total() }} លទ្ធផល</p> --}}
+                    <p class="text-muted">បង្ហាញ {{ $loans->firstItem() }} ដល់ {{ $loans->lastItem() }} នៃ
+                        {{ $loans->total() }} លទ្ធផល</p>
                 </div>
             </div>
         </div>
@@ -272,7 +268,6 @@
 @endsection
 
 @section('styles')
-    {{-- Custom style here --}}
 
     <style>
         .modal-content {
@@ -371,6 +366,7 @@
             transition: width 0.4s ease;
         }
     </style>
+
 @endsection
 
 @section('scripts')
@@ -412,7 +408,6 @@
             const progressBar = document.getElementById('progressBar');
             const progressText = document.getElementById('progressText');
 
-            // Check file size (5 MB limit)
             const file = fileInput.files[0];
             if (file && file.size > 5 * 1024 * 1024) { // 5 MB in bytes
                 fileSizeWarning.classList.remove('d-none');
@@ -421,14 +416,11 @@
                 fileSizeWarning.classList.add('d-none');
             }
 
-            // Show loading spinner and hide success message
             loadingMessage.classList.remove('d-none');
             successMessage.classList.add('d-none');
 
-            // Create FormData object to send file
             const formData = new FormData(document.getElementById('uploadForm'));
 
-            // Create XMLHttpRequest object
             const xhr = new XMLHttpRequest();
 
             xhr.upload.addEventListener('progress', function(e) {

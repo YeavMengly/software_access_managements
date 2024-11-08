@@ -7,7 +7,8 @@
                 <div class="row">
                     <div class="col-lg-12 margin-tb mb-4">
                         <div class="d-flex justify-content-between align-items-center">
-                            <h3 class="card-title">កែប្រែទិន្នន័យ</h3>
+                            <span></span>
+                            <h3 class="card-title" style="font-weight: 700;">កែប្រែទិន្នន័យ</h3>
                             <a class="btn btn-danger d-flex justify-content-center align-items-center mr-2"
                                 href="{{ route('codes.index') }}" style="width: 160px; height: 50px;"> <i
                                     class="fas fa-arrow-left"></i> &nbsp;
@@ -44,7 +45,6 @@
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="row">
-                                        <!-- Sub Account Key Input -->
                                         <div class="col-md-6">
                                             <div class="form-group">
                                                 <label for="combinedField"
@@ -69,7 +69,6 @@
                                             </div>
                                         </div>
 
-                                        <!-- Report Key and Financial Inputs -->
                                         <div class="col-md-6">
                                             <div class="form-group">
                                                 <label for="report_key"><strong>លេខកូដកម្មវិធី:</strong></label>
@@ -108,12 +107,10 @@
                                     </div>
 
                                     <div class="row">
-                                        <!-- Additional financial fields can be added here if needed -->
                                     </div>
                                 </div>
 
                                 <div class="col-md-6">
-                                    <!-- Name Report Key Input -->
                                     <div class="form-group">
                                         <label for="name_report_key"><strong>ចំណាត់ថ្នាក់:</strong></label>
                                         <textarea name="name_report_key" id="name_report_key"
@@ -133,8 +130,6 @@
                                 </button>
                             </div>
                         </form>
-
-
                     </div>
                 </div>
             </div>

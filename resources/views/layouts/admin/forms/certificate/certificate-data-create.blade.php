@@ -8,9 +8,9 @@
                     <div class="col-lg-12 margin-tb mb-4">
                         <div class="d-flex justify-content-between align-items-center">
                             <h3 class="card-title">បង្កើតសលាកបត្រ</h3>
-                            <a class="btn btn-danger d-flex justify-content-center align-items-center mr-2" href="{{ route('certificate-data.index') }}"
-                                style="width: 160px; height: 50px;"><i
-                                class="fas fa-arrow-left"></i> &nbsp; ត្រឡប់ក្រោយ</a>
+                            <a class="btn btn-danger d-flex justify-content-center align-items-center mr-2"
+                                href="{{ route('certificate-data.index') }}" style="width: 160px; height: 50px;"><i
+                                    class="fas fa-arrow-left"></i> &nbsp; ត្រឡប់ក្រោយ</a>
                         </div>
                     </div>
                 </div>
@@ -42,7 +42,6 @@
                                     @csrf
 
                                     <div class="row justify-content-center">
-
                                         <div class="col-md-6 d-flex flex-column align-items-center">
                                             <div class="form-group">
                                                 <strong>លេខកូដកម្មវិធី:</strong>
@@ -67,7 +66,8 @@
                                                 <strong>ចំនួនទឹកប្រាក់:</strong>
                                                 <input type="number" name="value_certificate" id="value_certificate"
                                                     class="form-control @error('value_certificate') is-invalid @enderror"
-                                                    style="width: 320px; height: 60px; text-align: center; line-height: 60px;">
+                                                    style="width: 320px; height: 60px; text-align: center; line-height: 60px;"
+                                                    oninput="updateApplyValue()">
                                                 @error('value_certificate')
                                                     <div class="invalid-feedback">{{ $message }}</div>
                                                 @enderror
@@ -95,6 +95,7 @@
                             <span id="credit_movement" class="form-control"
                                 style="width: 320px; height: 60px; text-align: center;">0</span>
                         </div>
+
                         <div class="form-group text-center d-flex flex-column align-items-center">
                             <strong class="d-block mb-2">ស្ថានភាពឥណទានថ្មី:</strong>
                             <span id="new_credit_status" class="form-control"
@@ -116,7 +117,7 @@
 
                         <div class="form-group text-center d-flex flex-column align-items-center">
                             <strong class="d-block mb-2">ស្នើរសុំលើកនេះ:</strong>
-                            <span id="apply" class="form-control"
+                            <span id="applying" class="form-control"
                                 style="width: 320px; height: 60px; text-align: center;">0</span>
                         </div>
 
@@ -151,179 +152,6 @@
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
-    {{-- <script>
-        let selectedIndex = -1;
-
-        function filterReportKeys(event) {
-            const input = document.getElementById('searchReportKey').value.toLowerCase();
-            const select = document.getElementById('reportKeySelect');
-            const options = select.options;
-            let count = 0;
-
-            // Filter options based on input and reset `selectedIndex`
-            selectedIndex = -1;
-            for (let i = 0; i < options.length; i++) {
-                const optionText = options[i].textContent.toLowerCase();
-                if (optionText.includes(input)) {
-                    options[i].style.display = ''; // Show matching option
-                    count++;
-                } else {
-                    options[i].style.display = 'none'; // Hide non-matching option
-                }
-            }
-
-            document.getElementById('resultCount').innerText = 'ចំនួន: ' + count;
-
-            // Handle arrow key navigation and Enter key selection
-            if (event.key === 'ArrowDown') {
-                navigateOptions('down', options);
-            } else if (event.key === 'ArrowUp') {
-                navigateOptions('up', options);
-            } else if (event.key === 'Enter') {
-                updateReportInputField();
-            }
-        }
-
-        function navigateOptions(direction, options) {
-            const step = direction === 'down' ? 1 : -1;
-            selectedIndex = (selectedIndex + step + options.length) % options.length;
-
-            while (options[selectedIndex].style.display === 'none') {
-                selectedIndex = (selectedIndex + step + options.length) % options.length;
-            }
-
-            options[selectedIndex].selected = true;
-            updateReportInputField();
-        }
-
-        function updateReportInputField() {
-            const select = document.getElementById('reportKeySelect');
-            const selectedOption = select.options[select.selectedIndex];
-
-            if (selectedOption) {
-                document.getElementById('searchReportKey').value = selectedOption.textContent;
-            }
-
-            // Reset all options to be visible
-            for (const option of select.options) {
-                option.style.display = '';
-            }
-
-            // Reset result count after selection
-            document.getElementById('resultCount').innerText = 'ចំនួន: ' + select.options.length;
-        }
-    </script> --}}
-    {{-- <script>
-        function filterReportKeys(event) {
-            const searchValue = event.target.value.toLowerCase();
-            let matchCount = 0;
-
-            // Filter function for each dropdown
-            const filterDropdown = (dropdown) => {
-                const options = dropdown.options;
-                for (let i = 0; i < options.length; i++) {
-                    const optionText = options[i].text.toLowerCase();
-                    options[i].style.display = optionText.includes(searchValue) ? 'block' : 'none';
-                    if (optionText.includes(searchValue)) matchCount++;
-                }
-            };
-
-            // Apply filter to both dropdowns
-            filterDropdown(document.getElementById("reportKeySelect1"));
-            filterDropdown(document.getElementById("reportKeySelect2"));
-
-            // Update result count
-            document.getElementById("resultCount").innerText = `ចំនួន: ${matchCount}`;
-        }
-   
-    </script> --}}
-    {{--  --}}
-    {{-- <script>
-        function filterReportKeys(event) {
-            var input = document.getElementById('searchReportKey').value.toLowerCase();
-            var select = document.getElementById('reportKeySelect');
-            var options = select.options;
-            var count = 0;
-
-            for (var i = 0; i < options.length; i++) {
-                var optionText = options[i].textContent.toLowerCase();
-                if (optionText.includes(input)) {
-                    options[i].style.display = ''; // Show matching option
-                    count++;
-                } else {
-                    options[i].style.display = 'none'; // Hide non-matching option
-                }
-            }
-
-            document.getElementById('resultCount').innerText = 'ចំនួន: ' + count;
-
-            // Handle arrow key navigation
-            if (event.key === 'ArrowDown') {
-                if (selectedIndex < options.length - 1) {
-                    selectedIndex++;
-                    while (options[selectedIndex].style.display === 'none') {
-                        selectedIndex++;
-                        if (selectedIndex >= options.length) {
-                            selectedIndex = options.length - 1;
-                            break;
-                        }
-                    }
-                    options[selectedIndex].selected = true;
-                    updateReportInputField();
-                }
-            } else if (event.key === 'ArrowUp') {
-                if (selectedIndex > 0) {
-                    selectedIndex--;
-                    while (options[selectedIndex].style.display === 'none') {
-                        selectedIndex--;
-                        if (selectedIndex < 0) {
-                            selectedIndex = 0;
-                            break;
-                        }
-                    }
-                    options[selectedIndex].selected = true;
-                    updateReportInputField();
-                }
-            } else if (event.key === 'Enter') {
-                updateReportInputField();
-            }
-        }
-
-        function updateReportInputField() {
-            var select = document.getElementById('reportKeySelect');
-            var selectedOption = select.options[select.selectedIndex];
-            if (selectedOption) {
-                document.getElementById('searchReportKey').value = selectedOption.textContent;
-            }
-        }
-    </script> --}}
-    {{-- <script>
-        function formatNumber(num) {
-            return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-        }
-
-        // Example function to update the fields with formatted numbers
-        function updateReportInputField() {
-            const reportKeySelect = document.getElementById('reportKeySelect');
-            const reportKeyId = reportKeySelect.value;
-
-            if (reportKeyId) {
-                fetch(`/reports/${reportKeyId}/early-balance`)
-                    .then(response => response.json())
-                    .then(data => {
-                        document.getElementById('fin_law').textContent = formatNumber(data.fin_law);
-                        document.getElementById('credit_movement').textContent = formatNumber(data.credit_movement);
-                        document.getElementById('new_credit_status').textContent = formatNumber(data.new_credit_status);
-                        document.getElementById('credit').textContent = formatNumber(data.credit);
-                        document.getElementById('deadline_balance').textContent = formatNumber(data.deadline_balance);
-                        document.getElementById('apply').textContent = formatNumber(data.apply);
-                        document.getElementById('remaining_credit').textContent = formatNumber(data.credit - data
-                            .apply); // Example calculation
-                    })
-                    .catch(error => console.error('Error fetching report data:', error));
-            }
-        }
-    </script> --}}
     <script>
         // Initialize selectedIndex for keyboard navigation
         let selectedIndex = -1;
@@ -373,36 +201,79 @@
                 updateReportInputField();
             }
         }
+    </script>
+    <script>
+        let credit = 0;
 
         function updateReportInputField() {
             const select = document.getElementById('reportKeySelect');
             const selectedOption = select.options[select.selectedIndex];
 
             if (selectedOption) {
-                // Update input field with selected option text
                 document.getElementById('searchReportKey').value = selectedOption.textContent;
 
-                // Optionally fetch related data based on the selected report key
                 const reportKeyId = selectedOption.value;
                 fetch(`/reports/${reportKeyId}/early-balance`)
                     .then(response => response.json())
                     .then(data => {
-                        // Assume you have elements to display these values
+                        credit = data.credit;
                         document.getElementById('fin_law').textContent = formatNumber(data.fin_law);
                         document.getElementById('credit_movement').textContent = formatNumber(data.credit_movement);
                         document.getElementById('new_credit_status').textContent = formatNumber(data.new_credit_status);
                         document.getElementById('credit').textContent = formatNumber(data.credit);
                         document.getElementById('deadline_balance').textContent = formatNumber(data.deadline_balance);
-                        document.getElementById('apply').textContent = formatNumber(data.apply);
-                        document.getElementById('remaining_credit').textContent = formatNumber(data.credit - data
-                            .apply); // Example calculation
+
+                        // Initial calculation of remaining credit
+                        updateRemainingCredit(data.apply || 0);
                     })
                     .catch(error => console.error('Error fetching report data:', error));
             }
         }
 
+
+        function updateRemainingCredit(apply) {
+            const credit = parseFloat(document.getElementById('credit').textContent.replace(/,/g, '')) || 0;
+            const remainingCredit = credit - apply;
+
+            if (remainingCredit < 0) {
+                // SweetAlert alert if remaining credit is less than 0
+                Swal.fire({
+                    icon: 'error',
+                    title: 'ជូនដំណឹង',
+                    text: 'ឥណទាននៅសល់មិនគ្រប់ចំនួន',
+                    confirmButtonText: 'យល់ព្រម'
+                });
+
+                document.getElementById('remaining_credit').textContent = "0"; // Optionally set to 0
+                return false; // Prevent further action
+            }
+
+            document.getElementById('remaining_credit').textContent = formatNumber(remainingCredit);
+            return true; // Indicate that remaining credit is valid
+        }
+
+        function updateApplyValue() {
+            // Get the value from the input field
+            const apply = parseFloat(document.getElementById('value_certificate').value) || 0;
+
+            // Update the apply span
+            document.getElementById('applying').textContent = formatNumber(apply);
+
+            // Check and update remaining credit with SweetAlert
+            updateRemainingCredit(apply);
+        }
+
+
         function formatNumber(num) {
-            return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+
+            // Remove decimal if the number is an integer or ends in .00
+            if (Number.isInteger(num) || num % 1 === 0) {
+                return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+            } else {
+                // Format with two decimal places
+                return num.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+            }
+            return formattedNum.endsWith(".00") ? formattedNum.slice(0, -3) : formattedNum;
         }
     </script>
 @endsection

@@ -100,7 +100,7 @@
                         <tr>
                             <td style="border: 1px solid black; text-align: center;">{{ $loop->iteration }}</td>
                             <td style="border: 1px solid black; text-align: center;">
-                                {{ $certificate->report && $certificate->report->subAccountKey ? $certificate->report->sub_account_key : 'N/A' }}
+                                {{ $certificate->report && $certificate->report->subAccountKey ? $certificate->report->subAccountKey->sub_account_key : 'N/A' }}
                             </td>
                             <td style="border: 1px solid black; text-align: center;">
                                 {{ $certificate->report ? $certificate->report->report_key : 'N/A' }}

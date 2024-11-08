@@ -8,7 +8,7 @@
                 <div class="row">
                     <div class="col-lg-12 margin-tb mb-4">
                         <div class="d-flex justify-content-between align-items-center">
-                            <h3 class="card-title">បង្កើតទិន្នន័យ</h3>
+                            <h3 class="card-title" style="font-weight: 700;">បង្កើតទិន្នន័យ</h3>
                             <a class="btn btn-danger d-flex justify-content-center align-items-center mr-2"
                             href="{{ url('/') }}" style="width: 160px; height: 50px;"> <i
                                 class="fas fa-arrow-left"></i> &nbsp;
@@ -41,9 +41,7 @@
                             @csrf
 
                             <div class="row d-flex justify-content-center">
-
                                 <div class="col-md-3 d-flex flex-column align-items-center">
-                                    <!-- Report Key Input -->
                                     <div class="form-group">
                                         <label for="searchReportKey"
                                             class="font-weight-bold"><strong>លេខកូដកម្មវិធី:</strong></label>
@@ -65,7 +63,6 @@
                                 </div>
 
                                 <div class="col-md-3 d-flex flex-column align-items-center">
-                                    <!-- Internal Increase Input -->
                                     <div class="form-group">
                                         <label for=""> <strong>កើនផ្ទៃក្នុង:</strong></label>
                                         <input type="number" name="internal_increase" id="internal_increase"
@@ -100,7 +97,6 @@
                                 </div>
 
                                 <div class="col-md-3 d-flex flex-column align-items-center">
-                                    <!-- Decrease Input -->
                                     <div class="form-group">
                                         <label for="">
                                             <strong>ថយ:</strong>
@@ -142,8 +138,6 @@
 @endsection
 
 @section('styles')
-    {{-- Custom style here --}}
-
     <style>
         .border-wrapper {
             border: 2px solid black;
@@ -325,7 +319,6 @@
             updateSubAccountInputField();
         }
     </script>
-
     <script>
         let reportSelectedIndex = -1;
 
