@@ -1,14 +1,14 @@
-<nav class="navbar d-flex sticky navbar-expand-lg navbar-light bg-white topbar static-top shadow ", style="height: 90px;">
+<nav class="navbar d-flex sticky navbar-expand-lg navbar-light bg-white topbar static-top shadow ", style="height: 60px;">
 
     <div class="first-header d-flex align-items-center" style="font-family: 'Khmer OS Muol Light', sans-serif;">
-        <a class="sidebar-brand d-flex align-items-center" style="text-decoration: none" href="{{ url('/') }}">
-            <div class="logo-mlvt">
-                <img src="/img/MLVT.jpg" alt="MLVT Logo" style="width: 70px; height: 70px;">
+        <a class="sidebar-brand d-flex align-items-center" style="text-decoration: none" href="{{ route('back') }}">
+            <div class="logo-mlvt ml-4">
+                <img src="/img/MLVT.png" alt="MLVT Logo" style="width: 48px; height: 48px;">
             </div>
-            <div class="header-text ml-4">
-                <h1" style="font-size: 28px; font-weight: 800; font-family: 'Khmer OS Muol Light' ">
+            <div class="header-text ml-2">
+                <h1" style="font-size: 18px; font-weight: 800; font-family: 'Khmer OS Muol Light' ">
                     នាយកដ្ឋានហិរញ្ញវត្ថុ​ និងទ្រព្យសម្បត្តិរដ្ឋ
-                </h1>
+                    </h1>
             </div>
         </a>
     </div>
@@ -40,8 +40,8 @@
         </li>
 
         <!-- Centered Fullscreen Button -->
-        <a id="fullscreen-btn" class="btn btn-dark d-flex justify-content-center align-items-center mr-2 mt-2"
-            style="height: 50px; width: 50px;">
+        <a id="fullscreen-btn" class="btn btn-dark d-flex justify-content-center align-items-center mr-2 mt-3"
+            style="height: 36px; width: 36px;">
             <i class="fas fa-expand"></i>
         </a>
 
@@ -138,11 +138,24 @@
 
         <div class="topbar-divider d-none d-sm-block"></div>
 
+
+
         <!-- Nav Item - User Information -->
         <li class="nav-item dropdown no-arrow">
             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                <span class="mr-2 d-none d-lg-inline text-gray-600 small">Douglas McGee</span>
+                {{-- <span class="mr-2 d-none d-lg-inline text-gray-600 small">
+                    {{ Auth::user()->name }}
+                </span> --}}
+                @auth
+                    <span class="mr-2 d-none d-lg-inline text-gray-600 small">
+                        {{ Auth::user()->name }}
+                    </span>
+                @else
+                    <span class="mr-2 d-none d-lg-inline text-gray-600 small">
+                        Guest
+                    </span>
+                @endauth
                 <img class="img-profile rounded-circle" src="/img/undraw_profile.svg">
             </a>
             <!-- Dropdown - User Information -->
@@ -160,10 +173,11 @@
                     Activity Log
                 </a>
                 <div class="dropdown-divider"></div>
-                <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
+                <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal"> 
                     <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
                     Logout
                 </a>
+                
             </div>
         </li>
     </ul>

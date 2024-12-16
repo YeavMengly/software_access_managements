@@ -5,9 +5,9 @@ namespace App\Http\Controllers\Report;
 use App\Http\Controllers\Controller;
 use App\Imports\ReportsImport;
 use App\Models\Certificates\CertificateData;
-use App\Models\Code\Loans;
 use App\Models\Code\Report;
 use App\Models\Code\SubAccountKey;
+use App\Models\Code\Year;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Maatwebsite\Excel\Facades\Excel;
@@ -22,10 +22,11 @@ class ReportController extends Controller
         $subAccountKeyId = $request->input('sub_account_key_id');
         $reportKey = $request->input('report_key');
         $date = $request->input('date');
-        $perPage = $request->input('per_page', 25); 
-        $sortColumn = $request->input('sort_column', 'created_at'); 
-        $sortDirection = $request->input('sort_direction', 'asc'); 
+        $perPage = $request->input('per_page', 25);
+        $sortColumn = $request->input('sort_column', 'created_at');
+        $sortDirection = $request->input('sort_direction', 'asc');
         $query = Report::query();
+        $years = Year::all();
 
         if ($codeId) {
             $query->whereHas('subAccountKey.accountKey.key', function ($q) use ($codeId) {
@@ -68,49 +69,120 @@ class ReportController extends Controller
         $query->orderBy($sortColumn, $sortDirection);
         $reports = $query->paginate($perPage);
 
-        return view('layouts.admin.forms.code.report-index', compact('reports'));
+        return view('layouts.admin.forms.code.report-index', compact('reports', 'years'));
     }
 
     public function create()
     {
         $subAccountKeys = SubAccountKey::all();
+        $report = null;
+        $years = Year::all();  // Fetch all years from the database
 
-        return view('layouts.admin.forms.code.report-create', compact('subAccountKeys',));
+        return view('layouts.admin.forms.code.report-create', compact('subAccountKeys', 'report', 'years'));
     }
 
     public function store(Request $request)
     {
+        // $validatedData = $request->validate([
+        //     'sub_account_key' => 'required|exists:sub_account_keys,id',
+        //     'report_key' => 'required|string|max:255',
+        //     'name_report_key' => 'required|string|max:255',
+        //     'fin_law' => 'required|numeric|min:0',
+        //     'current_loan' => 'required|numeric|min:0',
+        //     'date_year' => 'required|exists:years,id',
+        // ]);
+
+        // // dd($validatedData);
+
+        // // Retrieve the selected year
+        // $year = Year::find($validatedData['date_year']);
+        // if (!$year) {
+        //     return redirect()->back()->withErrors(['date_year' => 'Invalid year selected.'])->withInput();
+        // }
+
+        // // Check if the selected year matches the current year
+        // $currentYear = now()->year; // Get the current year
+        // if ($year->date_year->year !== $currentYear) {
+        //     return redirect()->back()->withErrors([
+        //         'date_year' => 'The selected year does not match the current year (' . $currentYear . ').',
+        //     ])->withInput();
+        // }
         $validatedData = $request->validate([
             'sub_account_key' => 'required|exists:sub_account_keys,id',
-            'report_key' => 'required|string|max:255',
+            'report_key' => 'required|string|max:255|unique:reports,report_key,NULL,id,sub_account_key,' . $request->input('sub_account_key'),
             'name_report_key' => 'required|string|max:255',
             'fin_law' => 'required|numeric|min:0',
             'current_loan' => 'required|numeric|min:0',
+            'date_year' => 'required|exists:years,id',
+        ], [
+            'sub_account_key.required' => 'សូមជ្រើសរើសគណនីបន្ទាប់។',
+            'report_key.unique' => 'គន្លឹះរបាយការណ៍នេះមានរួចហើយសម្រាប់គណនីបន្ទាប់នេះ។',
+            'date_year.required' => 'សូមជ្រើសរើសឆ្នាំ។',
+            'fin_law.numeric' => 'តម្លៃច្បាប់ហិរញ្ញវត្ថុត្រូវតែជាលេខ។',
         ]);
+    
+        // Retrieve the selected year
+        $year = Year::find($validatedData['date_year']);
+        if (!$year) {
+            return redirect()->back()->withErrors(['date_year' => 'ឆ្នាំដែលបានជ្រើសរើសមិនត្រឹមត្រូវ។'])->withInput();
+        }
+    
+        // Check if the selected year matches the current year
+        $currentYear = now()->year; // Get the current year
+        if ($year->date_year->year !== $currentYear) {
+            return redirect()->back()->withErrors([
+                'date_year' => 'ឆ្នាំដែលបានជ្រើសរើសមិនដូចនឹងឆ្នាំបច្ចុប្បន្ន (' . $currentYear . ')។',
+            ])->withInput();
+        }
+    
+        // Additional validations for logical consistency
+        if ($request->input('current_loan') < 0) {
+            return redirect()->back()->withErrors([
+                'current_loan' => 'ចំនួនទុនបងវិញមិនអាចមានតម្លៃអវិជ្ជមាន។',
+            ])->withInput();
+        }
+    
+        if ($request->input('fin_law') < $request->input('current_loan')) {
+            return redirect()->back()->withErrors([
+                'fin_law' => 'ច្បាប់ហិរញ្ញវត្ថុត្រូវតែធំជាងឬស្មើចំនួនទុនបងវិញ។',
+            ])->withInput();
+        }
 
+        // Default values for optional fields
         $validatedData['internal_increase'] = $validatedData['internal_increase'] ?? 0;
         $validatedData['unexpected_increase'] = $validatedData['unexpected_increase'] ?? 0;
         $validatedData['additional_increase'] = $validatedData['additional_increase'] ?? 0;
         $validatedData['decrease'] = $validatedData['decrease'] ?? 0;
         $validatedData['editorial'] = $validatedData['editorial'] ?? 0;
+
+        // Calculate totals and balances
         $total_increase = $validatedData['internal_increase'] + $validatedData['unexpected_increase'] + $validatedData['additional_increase'];
         $new_credit_status = $validatedData['current_loan'] + $total_increase - $validatedData['decrease'] - $validatedData['editorial'];
+
+        // Check for duplicate entries
         $existingRecord = Report::where('sub_account_key', $request->input('sub_account_key'))
             ->where('report_key', $request->input('report_key'))
+            ->where('date_year', $request->input('date_year'))
             ->exists();
+
         if ($existingRecord) {
             return redirect()->back()->withErrors([
-                'report_key' => 'The combination of Sub-Account Key ID and Report Key already exists.'
+                'report_key' => 'The combination of Sub-Account Key ID and Report Key already exists.',
             ])->withInput();
         }
+
+        // Fetch totals from CertificateData
         $currentApplyTotal = CertificateData::where('report_key', $validatedData['report_key'])->sum('value_certificate');
         $early_balance = $currentApplyTotal > 0 ? $currentApplyTotal : 0;
         $deadline_balance = $early_balance + $currentApplyTotal;
         $credit = $new_credit_status - $deadline_balance;
         $law_average = $validatedData['fin_law'] ? max(-100, min(100, ($deadline_balance / $validatedData['fin_law']) * 100)) : 0;
         $law_correction = $early_balance ? max(-100, min(100, ($deadline_balance / $early_balance) * 100)) : 0;
-        $existingRecord = Report::create([
+
+        // Create the report
+        $report = Report::create([
             ...$validatedData,
+            'date_year' => $year->date_year,
             'total_increase' => $total_increase,
             'new_credit_status' => $new_credit_status,
             'apply' => $currentApplyTotal,
@@ -120,7 +192,9 @@ class ReportController extends Controller
             'law_correction' => $law_correction,
         ]);
 
-        $this->recalculateAndSaveReport($existingRecord);
+        // Perform additional recalculations
+        $this->recalculateAndSaveReport($report);
+
         return redirect()->route('codes.create')->with('success', 'ថវិការអនុម័តបានបញ្ចូលដោយជោគជ័យ។');
     }
 

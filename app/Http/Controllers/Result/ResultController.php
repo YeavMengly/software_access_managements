@@ -4,10 +4,10 @@ namespace App\Http\Controllers\Result;
 
 use App\Exports\Results\ResultExport;
 use App\Http\Controllers\Controller;
-use App\Models\Certificates\Certificate;
 use App\Models\Certificates\CertificateData;
 use App\Models\Code\Loans;
 use App\Models\Code\Report;
+use App\Models\Code\Year;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Log;
@@ -15,23 +15,100 @@ use Maatwebsite\Excel\Facades\Excel;
 
 class ResultController extends Controller
 {
+
+    // public function index(Request $request)
+    // {
+    //     $years = Year::all(); // Fetch all years
+    //     $currentYear = \Carbon\Carbon::now()->year;
+    //     $currentMonth = \Carbon\Carbon::now()->month;
+
+    //     // Get selected year or default to current year
+    //     $selectedYearId = $request->get('per_page');
+    //     $selectedYear = Year::find($selectedYearId);
+    //     $year = $selectedYear ? \Carbon\Carbon::parse($selectedYear->date_year)->year : $currentYear;
+
+    //     // Get selected month or default to current month
+    //     $month = $request->get('month', $currentMonth);
+
+    //     // Apply filters
+    //     $reportQuery = Report::query()->whereHas('year', function ($query) use ($year) {
+    //         $query->whereYear('date_year', $year);
+    //     });
+    //     $loanQuery = Loans::query()->whereYear('created_at', $year);
+
+    //     if ($month) {
+    //         $reportQuery->whereMonth('created_at', $month);
+    //         $loanQuery->whereMonth('created_at', $month);
+    //     }
+
+    //     $this->applyFilters($reportQuery, $request);
+    //     $this->applyFilters($loanQuery, $request);
+
+    //     // Handle export functionality
+    //     if ($request->has('export')) {
+    //         $combinedResults = $reportQuery->get()->merge($loanQuery->get());
+    //         return Excel::download(new ResultExport($combinedResults), 'results.xlsx');
+    //     }
+
+    //     // Fetch data
+    //     $reports = $reportQuery->get();
+    //     $loans = $loanQuery->get();
+
+    //     $totals = $this->calculateTotals($reports, $loans);
+
+    //     // Pass variables to view
+    //     return view('layouts.table.result', compact('totals', 'reports', 'loans', 'years', 'currentYear', 'currentMonth', 'selectedYearId', 'month'));
+    // }
     public function index(Request $request)
     {
-        $reportQuery = Report::query();
-        $loanQuery = Loans::query();
+        $years = Year::all(); // Fetch all years
+        $currentYear = date('Y'); // Get the current year
+        $currentMonth = date('m'); // Get the current month
+
+        // Get selected year or default to current year
+        $selectedYearId = $request->get('per_page'); // Assuming 'per_page' is used for year selection
+        $selectedYear = Year::find($selectedYearId);
+        $year = $selectedYear ? $selectedYear->id : null;
+
+        // Get selected month or default to current month
+        $month = $request->get('month', $currentMonth);
+
+        // Apply filters based on the selected year and month
+        $reportQuery = Report::query()->whereHas('year', function ($query) use ($year, $month) {
+            if ($year) {
+                $query->where('id', $year); // Filter by year ID
+            }
+            if ($month) {
+                $query->whereMonth('date_year', $month); // Filter by month
+            }
+        });
+
+        $loanQuery = Report::query()->whereHas('year', function ($query) use ($year, $month) {
+            if ($year) {
+                $query->where('id', $year); // Filter by year ID
+            }
+            if ($month) {
+                $query->whereMonth('date_year', $month); // Filter by month
+            }
+        });
+
         $this->applyFilters($reportQuery, $request);
         $this->applyFilters($loanQuery, $request);
 
+        // Handle export functionality
         if ($request->has('export')) {
             $combinedResults = $reportQuery->get()->merge($loanQuery->get());
-
             return Excel::download(new ResultExport($combinedResults), 'results.xlsx');
         }
+
+        // Fetch data
         $reports = $reportQuery->get();
         $loans = $loanQuery->get();
+
         $totals = $this->calculateTotals($reports, $loans);
 
-        return view('layouts.table.result', compact('totals', 'reports', 'loans'));
+        // Pass variables to view
+        return view('layouts.table.result', compact('totals', 'reports', 'loans', 'years', 'currentYear', 'currentMonth', 'selectedYearId', 'month'));
     }
 
     public function export(Request $request)
@@ -83,8 +160,7 @@ class ResultController extends Controller
                 Log::error('Invalid date format: ' . $e->getMessage());
                 return redirect()->back()->withErrors(['date' => 'Invalid date format. Please use YYYY-MM-DD format.']);
             }
-        }
-        elseif ($startDate) {
+        } elseif ($startDate) {
             try {
                 $startDate = Carbon::createFromFormat('Y-m-d', $startDate)->startOfDay()->toDateTimeString();
                 $reports = CertificateData::where('created_at', '>=', $startDate)->get(['report_key']);
@@ -107,7 +183,6 @@ class ResultController extends Controller
         $endDate = $request->input('end_date');
 
         if ($query->getModel() instanceof Loans) {
-
         } elseif ($query->getModel() instanceof Report) {
             $this->applyCodeFilter($query, $codeId, 'code', 2, 'subAccountKey.accountKey.key');
             $this->applyCodeFilter($query, $accountKeyId, 'account_key', 4, 'subAccountKey.accountKey');

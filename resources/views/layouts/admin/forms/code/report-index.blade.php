@@ -3,7 +3,6 @@
 @section('content-report')
     <div class="border-wrapper">
 
-
         @if (isset($connectionError) && $connectionError)
             <div class="alert alert-danger" role="alert">
                 <strong>No internet connection:</strong> Please check your network settings and try again.
@@ -21,21 +20,25 @@
                 <div class="col-lg-12 margin-tb">
 
                     <div class="d-flex justify-content-between align-items-center">
-                        <a class="btn btn-danger d-flex justify-content-center align-items-center" href="{{ url('/') }}" style="width: 160px; height: 50px;">
-                            <i class="fas fa-arrow-left"></i> &nbsp;&nbsp;ត្រឡប់ក្រោយ
+                        <a class="btn btn-danger d-flex justify-content-center align-items-center" href="{{ route('back') }}"
+                            style="width: 160px; height: 50px;">
+                            <i class="fas fa-arrow-left"></i>&nbsp;&nbsp;ត្រឡប់ក្រោយ
                         </a>
-                        <h2 style="font-weight: 700;">តារាងរបាយការណ៍បញ្ចូល</h2>
+                        <h2 style="font-weight: 700;">តារាងរបាយការណ៍បញ្ចូលឥណទានអនុម័តដើមឆ្នាំ</h2>
                         <div class="btn-group">
-                            <a class="btn btn-success d-flex justify-content-center align-items-center" href="#" data-bs-toggle="modal"
-                                data-bs-target="#importModal"  style="width: 160px; height: 50px; border-radius: 4px;">
-                                Import  &nbsp;&nbsp;<i class="fas fa-file-import" style="margin-left: 8px;"></i>
+                            <a class="btn btn-success d-flex justify-content-center align-items-center" href="#"
+                                data-bs-toggle="modal" data-bs-target="#importModal"
+                                style="width: 160px; height: 50px; border-radius: 4px;">
+                                Import Excel &nbsp;&nbsp;<i class="fas fa-file-import" style="margin-left: 8px;"></i>
                             </a>
                             &nbsp;&nbsp;
-                            <a class="btn btn-success d-flex justify-content-center align-items-center" href="{{ route('codes.create') }}" style="width: 160px; height: 50px; border-radius: 4px;">
-                                បញ្ចូលទិន្នន័យ  &nbsp;&nbsp;<i class="fas fa-plus" style="margin-left: 8px;"></i>
+                            <a class="btn btn-success d-flex justify-content-center align-items-center"
+                                href="{{ route('codes.create') }}" style="width: 160px; height: 50px; border-radius: 4px;">
+                                បញ្ចូលទិន្នន័យ &nbsp;&nbsp;<i class="fas fa-plus" style="margin-left: 8px;"></i>
                             </a>
                         </div>
                     </div>
+
 
                     <div class="modal fade" id="importModal" tabindex="-1" aria-labelledby="importModalLabel"
                         aria-hidden="true">
@@ -66,7 +69,8 @@
                                             <div id="fileNameDisplay" class="mt-2"></div>
                                         </div>
                                         <div class="mb-3 text-center">
-                                            <button type="submit" id="uploadButton" class="btn btn-primary">
+                                            <button type="submit" id="uploadButton" class="btn btn-primary"
+                                                style="height: 60px; width: 100%;">
                                                 <i class="fas fa-upload" style="margin-right: 8px;"></i> Upload
                                             </button>
                                         </div>
@@ -85,23 +89,15 @@
                     {{-- Field Search --}}
                     <form class="max-w-md mx-auto mt-4" method="GET" action="{{ url()->current() }}">
                         <div class="row">
-                            {{-- <div class="col-md-3">
-                                <input type="text" name="code_id" value="{{ request('code_id') }}"
-                                    class="form-control mb-2" placeholder="លេខជំពូក">
-                            </div>
-                            <div class="col-md-3">
-                                <input type="text" name="account_key_id" value="{{ request('account_key_id') }}"
-                                    class="form-control mb-2" placeholder="លេខគណនី">
-                            </div> --}}
-                            <div class="col-md-3">
+                            <div class="col-md-2 d-flex">
                                 <input type="text" name="sub_account_key_id" value="{{ request('sub_account_key_id') }}"
-                                    class="form-control mb-2" placeholder="លេខអនុគណនី">
-                            </div>
-                            <div class="col-md-3">
+                                    class="form-control mb-2" placeholder="លេខអនុគណនី" style="width: 120px; height: 40px;">
+                                &nbsp;
+                                &nbsp;
                                 <input type="text" name="report_key" value="{{ request('report_key') }}"
-                                    class="form-control mb-2" placeholder="លេខកូដកម្មវិធី">
+                                    class="form-control mb-2" placeholder="លេខកូដកម្មវិធី"
+                                    style="width: 120px; height: 40px;">
                             </div>
-
                             <div class="col-md-12">
                                 <div class="input-group my-3">
                                     <button type="submit" class="btn btn-primary mr-2" style="width: 150px; height: 40px;">
@@ -289,12 +285,12 @@
             display: inline-block;
             cursor: pointer;
             width: 100%;
-            height: 250px;
+            height: 100%;
             border: 2px solid #ced4da;
             border-radius: 5px;
-            background-color: #f8f9fa;
+            /* background-color: #3e72a7; */
             text-align: center;
-            line-height: 250px;
+            line-height: 200px;
         }
 
         .custom-file-upload input[type="file"] {

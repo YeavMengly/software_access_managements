@@ -7,9 +7,12 @@
                 <div class="row">
                     <div class="col-lg-12 margin-tb mb-4">
                         <div class="d-flex justify-content-between align-items-center">
+                            <a class="btn btn-danger" href="{{ route('accounts.index') }}"
+                                style="width: 160px; height: 50px; border-radius: 4px; display: flex; align-items: center; justify-content: center;">
+                                <i class="fas fa-arrow-left"></i>
+                                &nbsp;&nbsp;ត្រឡប់ក្រោយ</a>
                             <h3 class="card-title">បង្កើតលេខកូដគណនី</h3>
-                            <a class="btn btn-danger" href="{{ route('accounts.index') }}"><i class="fas fa-arrow-left"></i>
-                                ត្រឡប់ក្រោយ</a>
+                            <span></span>
                         </div>
                     </div>
                 </div>
@@ -37,37 +40,55 @@
                         <form action="{{ route('accounts.store') }}" method="POST" enctype="multipart/form-data">
                             @csrf
 
-                            <div class="form-group">
-                                <strong>លេខជំពូក:</strong>
-                                <select name="code" class="form-control">
-                                    @foreach ($keys as $key)
-                                        <option value="{{ $key->id }}">{{ $key->code }}</option>
-                                    @endforeach
-                                </select>
+                            <div class="row">
+                                <!-- Column 1 -->
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <strong>លេខជំពូក:</strong>
+                                        <select name="code" class="form-control" style="width: 420px; height: 60px;">
+                                            @foreach ($keys as $key)
+                                                <option value="{{ $key->id }}">{{ $key->code }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <!-- Column 2 -->
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label for="account_key">លេខគណនី:</label>
+                                        <input type="number" name="account_key" id="account_key"
+                                            class="form-control @error('account_key') is-invalid @enderror"
+                                            style="width: 420px; height: 60px;">
+                                        @error('account_key')
+                                            <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+                                </div>
+
+                                <!-- Column 3 -->
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label for="name_account_key">ចំណាត់ថ្នាក់:</label>
+                                        <input type="text" name="name_account_key" id="name_account_key"
+                                            class="form-control @error('name_account_key') is-invalid @enderror"
+                                            style="width: 420px; height: 60px;">
+                                        @error('name_account_key')
+                                            <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+                                </div>
                             </div>
 
-                            <div class="form-group">
-                                <label for="account_key">លេខគណនី:</label>
-                                <input type="number" name="account_key" id="account_key"
-                                    class="form-control @error('account_key') is-invalid @enderror">
-                                @error('account_key')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                @enderror
-                            </div>
-
-                            <div class="form-group">
-                                <label for="name_account_key">ចំណាត់ថ្នាក់:</label>
-                                <input type="text" name="name_account_key" id="name_account_key"
-                                    class="form-control @error('name_account_key') is-invalid @enderror">
-                                @error('name_account_key')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                @enderror
-                            </div>
-
-                            <div class="d-flex align-items-center">
-                                <button type="submit" class="btn btn-primary ml-auto">បានរក្សាទុក</button>
+                            <!-- Submit Button -->
+                            <div class="row">
+                                <div class="col-md-12 text-right">
+                                    <button type="submit" class="btn btn-primary" style="width: 300px; height: 60px;"><i
+                                            class="fas fa-save"></i>&nbsp;&nbsp;បានរក្សាទុក</button>
+                                </div>
                             </div>
                         </form>
+
                     </div>
                 </div>
             </div>
@@ -86,7 +107,6 @@
         .container-fluid {
             padding: 16px;
         }
-        
     </style>
 @endsection
 
@@ -126,7 +146,7 @@
                 }
             });
 
-            $(document).on('scroll', function() { 
+            $(document).on('scroll', function() {
                 var scrollDistance = $(this).scrollTop();
                 if (scrollDistance > 100) {
                     $('.scroll-to-top').fadeIn();

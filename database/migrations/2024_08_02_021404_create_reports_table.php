@@ -13,26 +13,31 @@ return new class extends Migration
     {
         if (!Schema::hasTable('reports')) {
             Schema::create('reports', function (Blueprint $table) {
-                $table->increments('id'); 
+                $table->increments('id');
 
                 // Foreign key column
                 $table->unsignedBigInteger('sub_account_key')->change();
                 $table->foreignId('sub_account_key')->references('id')->on('sub_account_keys')->onDelete('cascade');
 
+                // $table->foreign('sub_account_key')->constrained('sub_account_keys')->onDelete('cascade');
+
                 // Other columns
                 $table->string('report_key');
-                $table->string('name_report_key')->nullable(); 
+                $table->string('name_report_key')->nullable();
                 $table->decimal('fin_law', 15, 2)->default(0);
                 $table->decimal('current_loan', 15, 2)->default(0);
 
+                // Foreign key column for year_id
+                $table->unsignedBigInteger('date_year');
+                $table->foreign('date_year')->references('id')->on('years')->onDelete('cascade'); // Reference to years table
 
-                $table->decimal('new_credit_status', 15, 2)->default(0); 
-                $table->decimal('early_balance', 15, 2)->default(0); 
+                $table->decimal('new_credit_status', 15, 2)->default(0);
+                $table->decimal('early_balance', 15, 2)->default(0);
                 $table->decimal('apply', 15, 2)->default(0);
-                $table->decimal('deadline_balance', 15, 2)->default(0); 
+                $table->decimal('deadline_balance', 15, 2)->default(0);
                 $table->decimal('credit', 15, 2)->default(0);
                 $table->decimal('law_average', 15, 2)->default(0);
-                $table->decimal('law_correction', 15, 2)->default(0); 
+                $table->decimal('law_correction', 15, 2)->default(0);
                 $table->unique(['sub_account_key', 'report_key']);
 
                 $table->timestamps();

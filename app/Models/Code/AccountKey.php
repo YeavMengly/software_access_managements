@@ -27,7 +27,7 @@ class AccountKey extends Model
     // Define relationship with SubAccountKey model
     public function subAccountKey()
     {
-        return $this->hasMany(SubAccountKey::class, 'account_key');
+        return $this->hasMany(SubAccountKey::class, 'account_key', 'account_key');
     }
 
     // Define relationship with CertificateData model

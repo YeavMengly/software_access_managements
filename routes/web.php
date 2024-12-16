@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Certificates\AmountCertificateController;
 use App\Http\Controllers\Certificates\CertificateController;
 use App\Http\Controllers\Certificates\CertificateDataController;
@@ -24,8 +25,10 @@ use App\Http\Controllers\Result\ResultSummariesController;
 use App\Http\Controllers\Result\ResultTotalController;
 use App\Http\Controllers\Loans\SumReferController;
 use App\Http\Controllers\Report\LoansController;
+use App\Http\Controllers\Report\YearController;
 use App\Http\Controllers\ReportMissionController;
 use App\Http\Controllers\Result\ResultApplyController;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -40,9 +43,9 @@ use Illuminate\Support\Facades\Route;
 */
 
 //===============================>> Dashboard
-Route::get('/', function () {
-    return view('dashboard.dashboardui');
-});
+// Route::get('/', function () {
+//     return view('dashboard.dashboardui');
+// });
 
 //===============================>> Route to display report-mission view
 Route::get('/report-mission', function () {
@@ -60,6 +63,11 @@ Route::resource('keys', KeyController::class);
 Route::resource('accounts', AccountKeyController::class);
 Route::resource('sub-account', SubAccountKeyController::class);
 Route::resource('loans', LoansController::class);
+Route::resource('years', YearController::class);
+
+//===============================>> Year
+Route::post('/years/{year}/toggle-status', [YearController::class, 'toggleStatus'])->name('date_year_index');
+Route::post('/years/{id}/toggle-status', [YearController::class, 'toggleStatus'])->name('years.toggleStatus');
 
 //===============================>> Certificate
 Route::resource('certificate', CertificateController::class);
@@ -110,7 +118,6 @@ Route::get('/loans/import', [LoansController::class, 'showImportForm'])->name('l
 Route::post('/loans/import', [LoansController::class, 'import'])->name('loans.import');
 
 //===============================>> Manage Mission Exports
-// Route::get('/mission-cambodia/export', [MissionCambodiaController::class, 'export'])->name('table-mission-cambodia');
 Route::get('/results/export', [ResultController::class, 'export'])->name('result.export');
 Route::get('/summaries/export', [ResultSummariesController::class, 'export'])->name('summaries.export');
 
@@ -120,3 +127,48 @@ Route::get('/summaries/export-pdf', [ResultSummariesController::class, 'exportPd
 
 Route::get('/mission-abroad', [MissionAbroadController::class, 'index'])->name('table-mission-abroad');
 Route::get('/mission-abroad/export', [MissionAbroadController::class, 'export'])->name('table-mission-abroad');
+
+
+Route::get('/', function () {
+    return view('layouts.admin.login');
+});
+
+
+//===============================>> Manage Login Authentication
+Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
+Route::post('/login', [AuthController::class, 'login'])->name('login.post');
+Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+
+Route::post('/exit', function () {
+    Auth::logout(); // Log out the user
+    return response()->json(['message' => 'Logged out successfully.']);
+});
+
+//===============================>> Manage Back
+Route::get('/back', function () {
+    $user = auth()->user();
+    if ($user->role === 'admin') {
+        return redirect()->route('admin.dashboard');
+    }
+    if ($user->role === 'user') {
+        return redirect()->route('user.dashboard');
+    }
+    return redirect('/'); // Fallback for unauthenticated users
+})->middleware('auth')->name('back');
+
+
+//===============================>> Manage Role Middlware for admin
+Route::middleware(['auth', 'role:admin'])->group(function () {
+    Route::get('/admin/dashboard', function () {
+        return view('dashboard.dashboardui');
+    })->name('admin.dashboard');
+});
+Route::post('/years/{id}/toggle-status', [YearController::class, 'toggleStatus'])->middleware('auth');
+
+
+//===============================>> Manage Role Middlware for user
+Route::middleware(['auth', 'role:user'])->group(function () {
+    Route::get('/user/dashboard', function () {
+        return view('dashboard.dashboardui');
+    })->name('user.dashboard');
+});

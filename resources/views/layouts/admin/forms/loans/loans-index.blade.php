@@ -18,21 +18,21 @@
             <div class="row">
                 <div class="col-lg-12 margin-tb">
                     <div class="d-flex justify-content-between align-items-center">
-                        <a class="btn btn-danger d-flex justify-content-center align-items-center" href="{{ url('/') }}"
-                            style="width: 160px; height: 50px; border-radius: 4px;">
-                            <i class="fas fa-arrow-left"></i>&nbsp; ត្រឡប់ក្រោយ
+                        <a class="btn btn-danger d-flex justify-content-center align-items-center" href="{{ route('back') }}"
+                            style="width: 120px; height: 40px; border-radius: 4px;">
+                            <i class="fas fa-arrow-left"></i>
                         </a>
-                        <h2 style="font-weight: 700;">តារាងរបាយការណ៍បញ្ចូលឥណទានដើមឆ្នាំ</h2>
+                        <h3 style="font-weight: 500;">តារាងរបាយការណ៍បញ្ចូលនិយ័តថវិកា</h3>
                         <div class="btn-group">
                             <a class="btn btn-success d-flex justify-content-center align-items-center " href="#"
                                 data-bs-toggle="modal" data-bs-target="#importModal"
-                                style="border-radius: 4px; width: 160px; height: 50px;">
+                                style="border-radius: 4px; width: 120px; height: 40px;">
                                 Import &nbsp;<i class="fas fa-file-import"></i>
                             </a>
                             &nbsp;
                             <a class="btn btn-success d-flex justify-content-center align-items-center mr-2"
-                                href="{{ route('loans.create') }}" style="width: 160px; height: 50px; border-radius: 4px;">
-                                បញ្ចូលទិន្នន័យ &nbsp;<i class="fas fa-plus"></i>
+                                href="{{ route('loans.create') }}" style="width: 120px; height: 40px; border-radius: 4px;">
+                                បញ្ចូលទិន្នន័យ
                             </a>
 
                         </div>
@@ -89,20 +89,20 @@
                     <form class="max-w-md mx-auto mt-4" method="GET" action="{{ url()->current() }}">
                         <div class="row">
 
-                            <div class="col-md-3">
+                            <div class="col-md-2 d-flex">
                                 <input type="text" name="sub_account_key_id" value="{{ request('sub_account_key_id') }}"
-                                    class="form-control mb-2" placeholder="លេខអនុគណនី">
-                            </div>
-                            <div class="col-md-3">
+                                    class="form-control mb-2" placeholder="លេខអនុគណនី" style="width: 120px; height: 40px;">
+                                    &nbsp;
+                                    &nbsp;
                                 <input type="text" name="report_key" value="{{ request('report_key') }}"
-                                    class="form-control mb-2" placeholder="លេខកូដកម្មវិធី">
+                                    class="form-control mb-2" placeholder="លេខកូដកម្មវិធី"
+                                    style="width: 120px; height: 40px;">
                             </div>
 
                             <div class="col-md-12">
-                                <div class="input-group my-3">
-                                    <button type="submit" class="btn btn-primary mr-2" style="width: 150px; height: 50px;">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
-                                            viewBox="0 0 50 50">
+                                <div class="input-group ">
+                                    <button type="submit" class="btn btn-primary mr-2" style="width: 120px; height: 40px;">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 50 50">
                                             <path
                                                 d="M 21 3 C 11.621094 3 4 10.621094 4 20 C 4 29.378906 11.621094 37 21 37 C 24.710938 37 28.140625 35.804688 30.9375 33.78125 L 44.09375 46.90625 L 46.90625 44.09375 L 33.90625 31.0625 C 36.460938 28.085938 38 24.222656 38 20 C 38 10.621094 30.378906 3 21 3 Z M 21 5 C 29.296875 5 36 11.703125 36 20 C 36 28.296875 29.296875 35 21 35 C 12.703125 35 6 28.296875 6 20 C 6 11.703125 12.703125 5 21 5 Z">
                                             </path>
@@ -110,14 +110,15 @@
                                         ស្វែងរក
                                     </button>
                                     <button type="button" id="resetBtn" class="btn btn-danger"
-                                        style="width: 150px; height: 50px;">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
-                                            fill="currentColor" class="bi bi-x-circle" viewBox="0 0 16 16">
+                                        style="width: 120px; height: 40px;">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                            class="bi bi-x-circle" viewBox="0 0 16 16">
                                             <path
                                                 d="M8 1a7 7 0 1 0 0 14A7 7 0 0 0 8 1zm3.646 4.646a.5.5 0 0 1 0 .708L8.707 8l2.939 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.939a.5.5 0 1 1-.708-.708L7.293 8 4.354 5.354a.5.5 0 1 1 .708-.708L8 7.293l2.646-2.647a.5.5 0 0 1 .707 0z" />
                                         </svg>
                                         កំណត់ឡើងវិញ
                                     </button>
+        
                                 </div>
                             </div>
                         </div>
@@ -268,7 +269,6 @@
 @endsection
 
 @section('styles')
-
     <style>
         .modal-content {
             border-radius: 10px;
@@ -342,7 +342,7 @@
             text-align: center;
             padding: 5px;
             font-family: 'Khmer OS Siemreap', sans-serif;
-            font-size: 16px;
+            font-size: 14px;
         }
 
         .btn-primary {
@@ -362,11 +362,15 @@
             width: 100%;
         }
 
+        h3 {
+            font-family: 'Khmer OS Muol Light', sans-serif;
+            font-size: 16px;
+        }
+        
         .progress-bar {
             transition: width 0.4s ease;
         }
     </style>
-
 @endsection
 
 @section('scripts')

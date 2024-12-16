@@ -15,12 +15,15 @@ class CertificateController extends Controller
         $search = $request->input('search');
         $perPage = $request->input('per_page', 25);
 
-        $sortField = $request->input('sort_field', 'early_balance'); 
-        $sortDirection = $request->input('sort_direction', 'asc'); 
+        $sortField = $request->input('sort_field', 'early_balance');
+        $sortDirection = $request->input('sort_direction', 'asc');
 
         $certificates = Certificate::when($search, function ($query, $search) {
             return $query->where('early_balance', 'like', "%{$search}%");
         })
+            ->whereHas('report.year', function ($query) {
+                $query->where('status', 'active'); // Only include reports with an active year
+            })
             ->orderBy($sortField, $sortDirection) // Apply sorting
             ->paginate($perPage);
 
@@ -30,8 +33,11 @@ class CertificateController extends Controller
     public function create()
     {
         $subAccountKeys = SubAccountKey::all();
-        $reports = Report::all();
-        return view('layouts.admin.forms.certificate.certificate-create', compact('reports', 'subAccountKeys',));
+        $reports = Report::whereHas('year', function ($query) {
+            $query->where('status', 'active'); // Only include reports with an active year
+        })->get();
+
+        return view('layouts.admin.forms.certificate.certificate-create', compact('reports', 'subAccountKeys'));
     }
 
     public function store(Request $request)
@@ -39,16 +45,25 @@ class CertificateController extends Controller
         $validated = $request->validate([
             'report_key' => 'required|exists:reports,id',
             'early_balance' => 'required|numeric'
-        ],);
+        ]);
 
         $report = Report::findOrFail($validated['report_key']);
-        if (!$report || !$report->subAccountKey) {
+
+        // Ensure the report's associated year is active
+        if (!$report->year || $report->year->status !== 'active') {
+            return redirect()->back()->withErrors(['error' => 'ឆ្នាំដែលទាក់ទងមិនសកម្មទេ។']);
+        }
+
+        // Ensure subAccountKey is associated
+        if (!$report->subAccountKey) {
             return redirect()->back()->withErrors(['error' => 'មិនមានលេខអនុគណនី។']);
         }
+
         Certificate::create([
             'report_key' => $validated['report_key'],
             'early_balance' => $validated['early_balance']
         ]);
+
         $this->recalculateAndSaveReport($report);
 
         return redirect()->route('certificate.store')->with('success', 'ថវិការដើមគ្រាបានបញ្ជូលដោយជោគជ័យ។');
