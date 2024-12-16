@@ -7,11 +7,11 @@
                 <div class="row">
                     <div class="col-lg-12 margin-tb mb-4">
                         <div class="d-flex justify-content-between align-items-center">
-                            <h3 class="card-title">កែប្រែទិន្នន័យ</h3>
+                            <h3 class="card-title" style="font-weight: 700;">កែប្រែទិន្នន័យ</h3>
                             <a class="btn btn-danger d-flex justify-content-center align-items-center mr-2"
-                            href="{{ route('loans.index') }}" style="width: 160px; height: 50px;"> <i
-                                class="fas fa-arrow-left"></i> &nbsp;
-                            ត្រឡប់ក្រោយ</a>
+                                href="{{ route('loans.index') }}" style="width: 160px; height: 50px;"> <i
+                                    class="fas fa-arrow-left"></i> &nbsp;
+                                ត្រឡប់ក្រោយ</a>
                         </div>
                     </div>
                 </div>
@@ -41,20 +41,21 @@
                         <form action="{{ route('loans.update', $loan->id) }}" method="POST" enctype="multipart/form-data">
                             @csrf
                             @method('PUT') <!-- Indicate that this is an update request -->
-                        
+
                             <div class="row d-flex justify-content-center">
-                        
+
                                 <div class="col-md-3 d-flex flex-column align-items-center">
                                     <!-- Report Key Input -->
                                     <div class="form-group">
-                                        <label for="searchReportKey" class="font-weight-bold"><strong>លេខកូដកម្មវិធី:</strong></label>
+                                        <label for="searchReportKey"
+                                            class="font-weight-bold"><strong>លេខកូដកម្មវិធី:</strong></label>
                                         <input type="text" id="searchReportKey" class="form-control"
                                             placeholder="ស្វែងរកលេខកូដ អនុគណនី​ នឹងកម្មវិធី..."
                                             onkeyup="filterReportKeys(event)"
                                             style="width: 420px; height: 60px; text-align: center;"
                                             oninput="resetReportKeySelection()">
                                         <p id="reportResultCount" style="font-weight: bold; margin-top: 8px;">ចំនួន: 0</p>
-                        
+
                                         <select name="report_key" id="reportKeySelect" class="form-control" size="5"
                                             onclick="getSelectedReportKey()"
                                             style="height: 260px; width: 420px; text-align: left;">
@@ -68,9 +69,8 @@
                                         </select>
                                     </div>
                                 </div>
-                        
+
                                 <div class="col-md-3 d-flex flex-column align-items-center">
-                                    <!-- Internal Increase Input -->
                                     <div class="form-group">
                                         <label for="internal_increase"><strong>កើនផ្ទៃក្នុង:</strong></label>
                                         <input type="number" name="internal_increase" id="internal_increase"
@@ -82,7 +82,7 @@
                                             <div class="invalid-feedback">{{ $message }}</div>
                                         @enderror
                                     </div>
-                        
+
                                     <div class="form-group">
                                         <label for="unexpected_increase"><strong>មិនបានគ្រោងទុក:</strong></label>
                                         <input type="number" name="unexpected_increase" id="unexpected_increase"
@@ -94,7 +94,7 @@
                                             <div class="invalid-feedback">{{ $message }}</div>
                                         @enderror
                                     </div>
-                        
+
                                     <div class="form-group">
                                         <label for="additional_increase"><strong>បំពេញបន្ថែម:</strong></label>
                                         <input type="number" name="additional_increase" id="additional_increase"
@@ -107,9 +107,8 @@
                                         @enderror
                                     </div>
                                 </div>
-                        
+
                                 <div class="col-md-3 d-flex flex-column align-items-center">
-                                    <!-- Decrease Input -->
                                     <div class="form-group">
                                         <label for="decrease"><strong>ថយ:</strong></label>
                                         <input type="number" name="decrease" id="decrease"
@@ -120,7 +119,7 @@
                                             <div class="invalid-feedback">{{ $message }}</div>
                                         @enderror
                                     </div>
-                        
+
                                     <div class="form-group">
                                         <label for="editorial"><strong>វិចារណកម្ម:</strong></label>
                                         <input type="number" name="editorial" id="editorial"
@@ -134,14 +133,15 @@
                                     </div>
                                 </div>
                             </div>
-                        
+
                             <div class="d-flex align-items-center">
-                                <button type="submit" class="btn btn-primary ml-auto" style="width: 300px; height: 60px;">
+                                <button type="submit" class="btn btn-primary ml-auto"
+                                    style="width: 300px; height: 60px;">
                                     <i class="fas fa-save"></i> បានរក្សាទុក
                                 </button>
                             </div>
                         </form>
-                        
+
                     </div>
                 </div>
             </div>
@@ -167,9 +167,8 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script>
         (function($) {
-            "use strict"; // Start of use strict
+            "use strict"; 
 
-            // Toggle the side navigation
             $("#sidebarToggle, #sidebarToggleTop").on('click', function(e) {
                 $("body").toggleClass("sidebar-toggled");
                 $(".sidebar").toggleClass("toggled");
@@ -178,13 +177,11 @@
                 }
             });
 
-            // Close any open menu accordions when window is resized below 768px
             $(window).resize(function() {
                 if ($(window).width() < 768) {
                     $('.sidebar .collapse').collapse('hide');
                 }
 
-                // Toggle the side navigation when window is resized below 480px
                 if ($(window).width() < 480 && !$(".sidebar").hasClass("toggled")) {
                     $("body").addClass("sidebar-toggled");
                     $(".sidebar").addClass("toggled");
@@ -192,7 +189,6 @@
                 }
             });
 
-            // Update the current loan field based on fin_law input
             function updateCurrentLoan(input) {
                 var finLawValue = parseFloat(input.value.replace(/,/g, ''));
                 console.log('finLawValue:', finLawValue); // Debugging statement
@@ -230,7 +226,6 @@
             // Update the apply field (if needed)
             document.getElementById('apply').value = newCreditStatus;
 
-            // You can add other calculations if needed here
         }
 
         // Attach the event listeners to the fields that affect the calculations

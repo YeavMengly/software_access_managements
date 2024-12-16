@@ -8,9 +8,12 @@
                 <div class="row">
                     <div class="col-lg-12 margin-tb mb-4">
                         <div class="d-flex justify-content-between align-items-center">
+                            <a class="btn btn-danger" href="{{ route('sub-account.index') }}"
+                                style="width: 160px; height: 50px; border-radius: 4px; display: flex; align-items: center; justify-content: center;">
+                                <i class="fas fa-arrow-left"></i>&nbsp;&nbsp;ត្រឡប់ក្រោយ
+                            </a>
                             <h3 class="card-title">បង្កើតលេខកូដអនុគណនី</h3>
-                            <a class="btn btn-danger" href="{{ route('sub-account.index') }}"><i class="fas fa-arrow-left"></i>
-                                ត្រឡប់ក្រោយ</a>
+                            <span></span>
                         </div>
                     </div>
                 </div>
@@ -39,43 +42,58 @@
                         <form action="{{ route('sub-account.store') }}" method="POST" enctype="multipart/form-data">
                             @csrf
 
-                            <div class="form-group">
-                                <strong>លេខគណនី:</strong>
-                                <input type="text" id="searchAccountKey" class="form-control text-align-left"
-                                    placeholder="ស្វែងរកលេខគណនី..." onkeyup="filterAccountKeys()"
-                                    oninput="resetSelection()">
-                                <p id="accountResultCount" style="font-weight: bold;">ចំនួន: 0</p>
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <strong>លេខគណនី:</strong>
+                                        <input type="text" id="searchAccountKey" class="form-control text-align-left"
+                                            placeholder="ស្វែងរកលេខគណនី..." onkeyup="filterAccountKeys()"
+                                            oninput="resetSelection()" style="width: 420px; height: 60px;">
+                                        <p id="accountResultCount" style="font-weight: bold;">ចំនួន: 0</p>
 
-                                <select name="account_key" id="accountKeySelect" class="form-control" size="5"
-                                    onclick="getSelectedAccountValue()">
-                                    @foreach ($accountKeys as $accountKey)
-                                        <option value="{{ $accountKey->id }}">
-                                            {{ $accountKey->key->code }} < {{ $accountKey->account_key }} </option>
-                                    @endforeach
-                                </select>
+                                        <select name="account_key" id="accountKeySelect" class="form-control" size="5"
+                                            onclick="getSelectedAccountValue()" style="width: 420px; height: 120px;">
+                                            @foreach ($accountKeys as $accountKey)
+                                                <option value="{{ $accountKey->id }}"> {{ $accountKey->account_key }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label for="sub_account_key">លេខអនុគណនី:</label>
+                                        <input type="number" name="sub_account_key" id="sub_account_key"
+                                            class="form-control @error('sub_account_key') is-invalid @enderror"
+                                            style="width: 420px; height: 60px;">
+                                        @error('sub_account_key')
+                                            <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+                                </div>
+
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label for="name_sub_account_key">ចំណាត់ថ្នាក់:</label>
+                                        <input type="text" name="name_sub_account_key" id="name_sub_account_key"
+                                            class="form-control @error('name_sub_account_key') is-invalid @enderror"
+                                            style="width: 420px; height: 60px;">
+                                        @error('name_sub_account_key')
+                                            <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+                                </div>
                             </div>
 
-                            <div class="form-group">
-                                <label for="sub_account_key">លេខអនុគណនី:</label>
-                                <input type="number" name="sub_account_key" id="sub_account_key"
-                                    class="form-control @error('sub_account_key') is-invalid @enderror">
-                                @error('sub_account_key')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                @enderror
-                            </div>
-                            <div class="form-group">
-                                <label for="name_sub_account_key">ចំណាត់ថ្នាក់:</label>
-                                <input type="text" name="name_sub_account_key" id="name_sub_account_key"
-                                    class="form-control @error('name_sub_account_key') is-invalid @enderror">
-                                @error('name_sub_account_key')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                @enderror
-                            </div>
-
-                            <div class="d-flex align-items-center">
-                                <button type="submit" class="btn btn-primary ml-auto">បានរក្សាទុក</button>
+                            <div class="row">
+                                <div class="col-md-12 text-right">
+                                    <button type="submit" class="btn btn-primary" style="width: 300px; height: 60px;">
+                                        <i class="fas fa-save"></i>&nbsp;&nbsp;រក្សាទុក</button>
+                                </div>
                             </div>
                         </form>
+
                     </div>
                 </div>
             </div>
@@ -232,7 +250,7 @@
         function resetSelection() {
             selectedIndex = -1;
             document.getElementById('searchAccountKey').classList.add(
-            'text-align-left'); // Ensure text remains left-aligned
+                'text-align-left'); // Ensure text remains left-aligned
         }
     </script>
 @endsection

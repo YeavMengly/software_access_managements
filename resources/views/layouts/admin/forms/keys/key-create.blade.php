@@ -7,9 +7,12 @@
                 <div class="row">
                     <div class="col-lg-12 margin-tb mb-4">
                         <div class="d-flex justify-content-between align-items-center">
+                            <a class="btn btn-danger" href="{{ route('keys.index') }}"
+                                style="width: 160px; height: 50px; border-radius: 4px; display: flex; align-items: center; justify-content: center;">
+                                <i class="fas fa-arrow-left"></i>&nbsp;&nbsp;ត្រឡប់ក្រោយ
+                            </a>
                             <h3 class="card-title">បង្កើតលេខជំពូក</h3>
-                            <a class="btn btn-danger" href="{{ route('keys.index') }}"> <i class="fas fa-arrow-left"></i>
-                                ត្រឡប់ក្រោយ</a>
+                            <span></span>
                         </div>
                     </div>
                 </div>
@@ -38,26 +41,40 @@
                         <form action="{{ route('keys.store') }}" method="POST" enctype="multipart/form-data">
                             @csrf
 
-                            <div class="form-group">
-                                <label for="code">លេខជំពូក:</label>
-                                <input type="number" name="code" id="code"
-                                    class="form-control @error('code') is-invalid @enderror">
-                                @error('code')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                @enderror
-                            </div>
+                            <div class="row">
+                                <!-- Column 1 -->
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="code">លេខជំពូក:</label>
+                                        <input type="number" name="code" id="code"
+                                            class="form-control @error('code') is-invalid @enderror"
+                                            style="width: 320px; height: 60px;">
 
-                            <div class="form-group">
-                                <label for="name">ចំណាត់ថ្នាក់:</label>
-                                <input type="text" name="name" id="name_account_key"
-                                    class="form-control @error('name') is-invalid @enderror">
-                                @error('name')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                @enderror
-                            </div>
+                                        @error('code')
+                                            <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+                                </div>
 
-                            <div class="d-flex align-items-center">
-                                <button type="submit" class="btn btn-primary ml-auto">បានរក្សាទុក</button>
+                                <!-- Column 2 -->
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="name">ចំណាត់ថ្នាក់:</label>
+                                        <input type="text" name="name" id="name"
+                                            class="form-control @error('name') is-invalid @enderror"
+                                            style="width: 320px; height: 60px;">
+                                        @error('name')
+                                            <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12 text-right">
+                                    <button type="submit"
+                                        class="btn btn-primary ml-auto"style="width: 300px; height: 60px;">
+                                        <i class="fas fa-save"></i>&nbsp;&nbsp;បានរក្សាទុក</button>
+                                </div>
                             </div>
                         </form>
                     </div>
@@ -77,7 +94,6 @@
         .container-fluid {
             padding: 16px;
         }
-        
     </style>
 @endsection
 

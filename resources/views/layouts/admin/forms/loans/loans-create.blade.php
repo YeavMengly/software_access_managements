@@ -8,11 +8,13 @@
                 <div class="row">
                     <div class="col-lg-12 margin-tb mb-4">
                         <div class="d-flex justify-content-between align-items-center">
-                            <h3 class="card-title">បង្កើតទិន្នន័យ</h3>
+
                             <a class="btn btn-danger d-flex justify-content-center align-items-center mr-2"
-                            href="{{ url('/') }}" style="width: 160px; height: 50px;"> <i
-                                class="fas fa-arrow-left"></i> &nbsp;
-                            ត្រឡប់ក្រោយ</a>
+                                href="{{ route('back') }}" style="width: 120px; height: 40px;">
+                                <i class="fas fa-arrow-left"></i>
+                            </a>
+                            <h3 class="card-title" style="font-weight: 500;">បង្កើតទិន្នន័យ</h3>
+                            <span></span>
                         </div>
                     </div>
                 </div>
@@ -41,23 +43,21 @@
                             @csrf
 
                             <div class="row d-flex justify-content-center">
-
                                 <div class="col-md-3 d-flex flex-column align-items-center">
-                                    <!-- Report Key Input -->
                                     <div class="form-group">
                                         <label for="searchReportKey"
                                             class="font-weight-bold"><strong>លេខកូដកម្មវិធី:</strong></label>
                                         <input type="text" id="searchReportKey" class="form-control"
                                             placeholder="ស្វែងរកលេខកូដ អនុគណនី​ នឹងកម្មវិធី..."
                                             onkeyup="filterReportKeys(event)"
-                                            style="width: 420px; height: 60px; text-align: center;"
+                                            style="width: 100%; height: 40px; text-align: center;"
                                             oninput="resetReportKeySelection()">
                                         <p id="reportResultCount" style="font-weight: bold; margin-top: 8px;">ចំនួន: 0</p>
                                         <select name="report_key" id="reportKeySelect" class="form-control" size="5"
                                             onclick="getSelectedReportKey()"
-                                            style="height: 260px; width: 420px; text-align: left;">
+                                            style="height: 130px; width: 100%; text-align: left;">
                                             @foreach ($reports as $report)
-                                                <option value="{{ $report->id }}">{{ $report->subAccountKey->sub_account_key }} > {{ $report->report_key }}
+                                                <option value="{{ $report->id }}"> {{ $report->subAccountKey->sub_account_key }} > {{ $report->report_key }}
                                                 </option>
                                             @endforeach
                                         </select>
@@ -65,12 +65,11 @@
                                 </div>
 
                                 <div class="col-md-3 d-flex flex-column align-items-center">
-                                    <!-- Internal Increase Input -->
                                     <div class="form-group">
                                         <label for=""> <strong>កើនផ្ទៃក្នុង:</strong></label>
                                         <input type="number" name="internal_increase" id="internal_increase"
                                             class="form-control @error('internal_increase') is-invalid @enderror"
-                                            style="width: 420px; height: 60px;" min="0" oninput="formatNumber(this)">
+                                            style="width: 100%; height: 40px;" min="0" oninput="formatNumber(this)">
                                         @error('internal_increase')
                                             <div class="invalid-feedback">{{ $message }}</div>
                                         @enderror
@@ -80,7 +79,7 @@
                                         <label for=""> <strong>មិនបានគ្រោងទុក:</strong></label>
                                         <input type="number" name="unexpected_increase" id="unexpected_increase"
                                             class="form-control @error('unexpected_increase') is-invalid @enderror"
-                                            style="width: 420px; height: 60px;" min="0" oninput="formatNumber(this)">
+                                            style="width: 100%; height: 40px;" min="0" oninput="formatNumber(this)">
                                         @error('unexpected_increase')
                                             <div class="invalid-feedback">{{ $message }}</div>
                                         @enderror
@@ -92,7 +91,7 @@
                                         </label>
                                         <input type="number" name="additional_increase" id="additional_increase"
                                             class="form-control @error('additional_increase') is-invalid @enderror"
-                                            style="width: 420px; height: 60px;" min="0" oninput="formatNumber(this)">
+                                            style="width: 100%; height: 40px;" min="0" oninput="formatNumber(this)">
                                         @error('additional_increase')
                                             <div class="invalid-feedback">{{ $message }}</div>
                                         @enderror
@@ -100,14 +99,13 @@
                                 </div>
 
                                 <div class="col-md-3 d-flex flex-column align-items-center">
-                                    <!-- Decrease Input -->
                                     <div class="form-group">
                                         <label for="">
                                             <strong>ថយ:</strong>
                                         </label>
                                         <input type="number" name="decrease" id="decrease"
                                             class="form-control @error('decrease') is-invalid @enderror" min="0"
-                                            style="width: 420px; height: 60px;" oninput="formatNumber(this)">
+                                            style="width: 100%; height: 40px;" oninput="formatNumber(this)">
                                         @error('decrease')
                                             <div class="invalid-feedback">{{ $message }}</div>
                                         @enderror
@@ -117,7 +115,7 @@
                                         <label for=""> <strong>វិចារណកម្ម:</strong></label>
                                         <input type="number" name="editorial" id="editorial"
                                             class="form-control @error('editorial') is-invalid @enderror" min="0"
-                                            style="width: 420px; height: 60px;" oninput="formatNumber(this)">
+                                            style="width: 100%; height: 40px;" oninput="formatNumber(this)">
                                         @error('editorial')
                                             <div class="invalid-feedback">{{ $message }}</div>
                                         @enderror
@@ -127,8 +125,8 @@
 
                             <div class="d-flex align-items-center">
                                 <button type="submit" class="btn btn-primary ml-auto"
-                                    style="width: 300px; height: 60px;">
-                                    <i class="fas fa-save"></i> រក្សាទុក
+                                    style="width: 200px; height: 50px;">
+                                    <i class="fas fa-save"></i>&nbsp;&nbsp;រក្សាទុក
                                 </button>
                             </div>
                         </form>
@@ -142,8 +140,6 @@
 @endsection
 
 @section('styles')
-    {{-- Custom style here --}}
-
     <style>
         .border-wrapper {
             border: 2px solid black;
@@ -158,15 +154,20 @@
             text-align: left;
         }
 
+        h3 {
+            font-family: 'Khmer OS Muol Light', sans-serif;
+            font-size: 16px;
+        }
+
         .btn,
         .form-control,
         th,
         td {
             border: 1px solid black;
             text-align: center;
-            padding: 5px;
+            padding: 6px;
             font-family: 'Khmer OS Siemreap', sans-serif;
-            font-size: 16px;
+            font-size: 14px;
         }
     </style>
 @endsection
@@ -325,7 +326,6 @@
             updateSubAccountInputField();
         }
     </script>
-
     <script>
         let reportSelectedIndex = -1;
 

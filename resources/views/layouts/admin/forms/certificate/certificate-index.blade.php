@@ -6,7 +6,7 @@
 
             <div class="d-flex justify-content-between align-items-center mb-4">
                 <a class="btn btn-danger  d-flex align-items-center justify-content-center"
-                    href="{{ url('/card_certificate') }}" style="width: 160px; height: 50px;"> <i
+                    href="{{ route('back') }}" style="width: 160px; height: 50px;"> <i
                         class="fas fa-arrow-left"></i>
                     &nbsp; ត្រឡប់ក្រោយ</a>
             </div>
@@ -27,10 +27,11 @@
             <form class="max-w-md mx-auto mt-3" method="GET" action="">
                 <div class="row">
                     <div class="col-md-6">
-                        <div class="input-group my-3" style="width: 70%;">
+                        <div class="input-group my-3" style="width: 30%;">
                             <input type="search" name="search" value="{{ request('search') }}" class="form-control"
-                                placeholder="ស្វែងរកទិន្នន័យ" aria-label="Search Address">
-                            <button type="submit" class="btn btn-primary">
+                                placeholder="ស្វែងរកទិន្នន័យ" aria-label="Search Address"
+                                style="width: 180px; height: 60px;">
+                            <button type="submit" class="btn btn-primary" style="width: 60px">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 50 50">
                                     <path
                                         d="M 21 3 C 11.621094 3 4 10.621094 4 20 C 4 29.378906 11.621094 37 21 37 C 24.710938 37 28.140625 35.804688 30.9375 33.78125 L 44.09375 46.90625 L 46.90625 44.09375 L 33.90625 31.0625 C 36.460938 28.085938 38 24.222656 38 20 C 38 10.621094 30.378906 3 21 3 Z M 21 5 C 29.296875 5 36 11.703125 36 20 C 36 28.296875 29.296875 35 21 35 C 12.703125 35 6 28.296875 6 20 C 6 11.703125 12.703125 5 21 5 Z">
@@ -76,18 +77,18 @@
 
                         <!-- Sort by Name Certificate -->
                         <th style="border: 1px solid black; font-size: 14px; width:260px;">
-                            <a
+                            {{-- <a
                                 href="{{ route('certificate.index', [
                                     'search' => request('search'), // Preserve the search query
                                     'per_page' => request('per_page'), // Preserve items per page
                                     'sort_field' => 'name_certificate',
                                     'sort_direction' => $sortField === 'name_certificate' && $sortDirection === 'asc' ? 'desc' : 'asc',
-                                ]) }}">
+                                ]) }}"> --}}
                                 ទឹកប្រាក់ដើមគ្រា
                                 <!-- Display sort icon based on current sort direction -->
-                                @if ($sortField === 'name_certificate')
+                                {{-- @if ($sortField === 'name_certificate')
                                     <i class="fas fa-sort-{{ $sortDirection === 'asc' ? 'up' : 'down' }}"></i>
-                                @endif
+                                @endif --}}
                             </a>
                         </th>
 
@@ -100,7 +101,7 @@
                         <tr>
                             <td style="border: 1px solid black; text-align: center;">{{ $loop->iteration }}</td>
                             <td style="border: 1px solid black; text-align: center;">
-                                {{ $certificate->report && $certificate->report->subAccountKey ? $certificate->report->sub_account_key : 'N/A' }}
+                                {{ $certificate->report && $certificate->report->subAccountKey ? $certificate->report->subAccountKey->sub_account_key : 'N/A' }}
                             </td>
                             <td style="border: 1px solid black; text-align: center;">
                                 {{ $certificate->report ? $certificate->report->report_key : 'N/A' }}

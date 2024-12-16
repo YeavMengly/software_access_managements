@@ -4,10 +4,10 @@ namespace App\Http\Controllers\Result;
 
 use App\Exports\Results\ResultExport;
 use App\Http\Controllers\Controller;
-use App\Models\Certificates\Certificate;
 use App\Models\Certificates\CertificateData;
 use App\Models\Code\Loans;
 use App\Models\Code\Report;
+use App\Models\Code\Year;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Log;
@@ -15,59 +15,113 @@ use Maatwebsite\Excel\Facades\Excel;
 
 class ResultController extends Controller
 {
+
+    // public function index(Request $request)
+    // {
+    //     $years = Year::all(); // Fetch all years
+    //     $currentYear = \Carbon\Carbon::now()->year;
+    //     $currentMonth = \Carbon\Carbon::now()->month;
+
+    //     // Get selected year or default to current year
+    //     $selectedYearId = $request->get('per_page');
+    //     $selectedYear = Year::find($selectedYearId);
+    //     $year = $selectedYear ? \Carbon\Carbon::parse($selectedYear->date_year)->year : $currentYear;
+
+    //     // Get selected month or default to current month
+    //     $month = $request->get('month', $currentMonth);
+
+    //     // Apply filters
+    //     $reportQuery = Report::query()->whereHas('year', function ($query) use ($year) {
+    //         $query->whereYear('date_year', $year);
+    //     });
+    //     $loanQuery = Loans::query()->whereYear('created_at', $year);
+
+    //     if ($month) {
+    //         $reportQuery->whereMonth('created_at', $month);
+    //         $loanQuery->whereMonth('created_at', $month);
+    //     }
+
+    //     $this->applyFilters($reportQuery, $request);
+    //     $this->applyFilters($loanQuery, $request);
+
+    //     // Handle export functionality
+    //     if ($request->has('export')) {
+    //         $combinedResults = $reportQuery->get()->merge($loanQuery->get());
+    //         return Excel::download(new ResultExport($combinedResults), 'results.xlsx');
+    //     }
+
+    //     // Fetch data
+    //     $reports = $reportQuery->get();
+    //     $loans = $loanQuery->get();
+
+    //     $totals = $this->calculateTotals($reports, $loans);
+
+    //     // Pass variables to view
+    //     return view('layouts.table.result', compact('totals', 'reports', 'loans', 'years', 'currentYear', 'currentMonth', 'selectedYearId', 'month'));
+    // }
     public function index(Request $request)
     {
-        // Initialize query builders for both Report and Loans models
-        $reportQuery = Report::query();
-        $loanQuery = Loans::query();
+        $years = Year::all(); // Fetch all years
+        $currentYear = date('Y'); // Get the current year
+        $currentMonth = date('m'); // Get the current month
 
-        // Apply filters to both Report and Loans based on request input
+        // Get selected year or default to current year
+        $selectedYearId = $request->get('per_page'); // Assuming 'per_page' is used for year selection
+        $selectedYear = Year::find($selectedYearId);
+        $year = $selectedYear ? $selectedYear->id : null;
+
+        // Get selected month or default to current month
+        $month = $request->get('month', $currentMonth);
+
+        // Apply filters based on the selected year and month
+        $reportQuery = Report::query()->whereHas('year', function ($query) use ($year, $month) {
+            if ($year) {
+                $query->where('id', $year); // Filter by year ID
+            }
+            if ($month) {
+                $query->whereMonth('date_year', $month); // Filter by month
+            }
+        });
+
+        $loanQuery = Report::query()->whereHas('year', function ($query) use ($year, $month) {
+            if ($year) {
+                $query->where('id', $year); // Filter by year ID
+            }
+            if ($month) {
+                $query->whereMonth('date_year', $month); // Filter by month
+            }
+        });
+
         $this->applyFilters($reportQuery, $request);
         $this->applyFilters($loanQuery, $request);
 
-        // Check if export is requested
+        // Handle export functionality
         if ($request->has('export')) {
-            // Merge Report and Loans results for export
             $combinedResults = $reportQuery->get()->merge($loanQuery->get());
-
-            // Return Excel file download with the combined results
             return Excel::download(new ResultExport($combinedResults), 'results.xlsx');
         }
 
-        // Retrieve filtered results for both Report and Loans
+        // Fetch data
         $reports = $reportQuery->get();
         $loans = $loanQuery->get();
 
-        // Calculate totals for both Report and Loans results
         $totals = $this->calculateTotals($reports, $loans);
 
-        // Return the view with results and totals for both Report and Loans
-        return view('layouts.table.result', compact('totals', 'reports', 'loans'));
+        // Pass variables to view
+        return view('layouts.table.result', compact('totals', 'reports', 'loans', 'years', 'currentYear', 'currentMonth', 'selectedYearId', 'month'));
     }
 
     public function export(Request $request)
     {
         try {
-            // Initialize query builder for Report model
             $query = Report::query();
-
-            // Apply filters
             $this->applyFilters($query, $request);
-
-            // Retrieve the filtered data
-         
             $results = $query->get();
-
-            // Log the count of retrieved results for debugging
             Log::info('Exported Report Results Count: ' . $results->count());
-
-            // Check if any results were retrieved
             if ($results->isEmpty()) {
                 Log::warning('No results found for export.');
                 return response()->json(['error' => 'No results found to export.'], 404);
             }
-
-            // Create an instance of ResultExport and call the export method
             $resultExport = new ResultExport($results);
             return $resultExport->export($request);
         } catch (\Exception $e) {
@@ -79,26 +133,14 @@ class ResultController extends Controller
     public function exportPdf(Request $request)
     {
         try {
-            // Initialize query builder for Report model
             $query = Report::query();
-
-            // Apply filters
             $this->applyFilters($query, $request);
-
-            // Get data
             $reports = $query->get();
-            // $totals = $this->calculateTotals($reports);
-
-            // Build the HTML content
             $html = view('layouts.pdf.result_pdf', compact('reports', 'totals'))->render();
 
-            // Generate PDF using mPDF
             $mpdf = new \Mpdf\Mpdf(['format' => 'A2-L']);
-
-            // Write the HTML content to the PDF
             $mpdf->WriteHTML($html);
 
-            // Download PDF
             return $mpdf->Output('របាយការណ៍ធានាចំណាយថវិការ.pdf', 'D');
         } catch (\Exception $e) {
             return response()->json(['error' => $e->getMessage()], 500);
@@ -107,7 +149,6 @@ class ResultController extends Controller
 
     private function applyDateFilter($query, $startDate, $endDate)
     {
-        // Apply date range filter
         if ($startDate && $endDate) {
             try {
                 $startDate = Carbon::createFromFormat('Y-m-d', $startDate)->startOfDay()->toDateTimeString();
@@ -116,20 +157,16 @@ class ResultController extends Controller
                 $reports = !empty($reports) ? $reports->toArray() : [];
                 $query->whereIn('id', $reports);
             } catch (\Exception $e) {
-                // Handle invalid date format error
                 Log::error('Invalid date format: ' . $e->getMessage());
                 return redirect()->back()->withErrors(['date' => 'Invalid date format. Please use YYYY-MM-DD format.']);
             }
-        }
-        // Apply single start date filter
-        elseif ($startDate) {
+        } elseif ($startDate) {
             try {
                 $startDate = Carbon::createFromFormat('Y-m-d', $startDate)->startOfDay()->toDateTimeString();
                 $reports = CertificateData::where('created_at', '>=', $startDate)->get(['report_key']);
                 $reports = !empty($reports) ? $reports->toArray() : [];
                 $query->where('created_at', '>=', $startDate);
             } catch (\Exception $e) {
-                // Handle invalid date format error
                 Log::error('Invalid date format: ' . $e->getMessage());
                 return redirect()->back()->withErrors(['date' => 'Invalid date format. Please use YYYY-MM-DD format.']);
             }
@@ -145,27 +182,19 @@ class ResultController extends Controller
         $startDate = $request->input('start_date');
         $endDate = $request->input('end_date');
 
-
-        // Apply code filters only for queries that can handle them
         if ($query->getModel() instanceof Loans) {
-            // Apply filters that are relevant for the Loans model
-            // Adjust this part if loans have relevant fields to filter
         } elseif ($query->getModel() instanceof Report) {
-            // Apply filters specific to Report model
             $this->applyCodeFilter($query, $codeId, 'code', 2, 'subAccountKey.accountKey.key');
             $this->applyCodeFilter($query, $accountKeyId, 'account_key', 4, 'subAccountKey.accountKey');
             $this->applyCodeFilter($query, $subAccountKeyId, 'sub_account_key', 5, 'subAccountKey');
             $this->applyCodeFilter($query, $reportKey, 'report_key', 7);
         }
-
-        // Apply date filter based on provided inputs
         $this->applyDateFilter($query, $startDate, $endDate);
     }
 
 
     private function applyCodeFilter($query, $input, $column, $length, $relation = null)
     {
-        // Check first-digit
         if ($input) {
             $firstDigits = substr($input, 0, $length);
             $condition = function ($q) use ($firstDigits, $column) {
@@ -182,7 +211,6 @@ class ResultController extends Controller
 
     private function calculateTotals($reports)
     {
-        // Initialize the totals array 
         $totals = [
             'fin_law' => 0,
             'current_loan' => 0,
@@ -206,19 +234,16 @@ class ResultController extends Controller
         ];
 
         foreach ($reports as $result) {
-            // Grouping the results for totals
             $codeId = $result->code_id;
             $accountKeyId = $result->account_key_id;
             $subAccountKeyId = $result->sub_account_key_id;
             $reportKeyId = $result->report_key;
             $loan = $result->loans;
 
-            // Initialize arrays if not already set
             if (!isset($totals['reportKey'][$codeId][$accountKeyId][$subAccountKeyId])) {
                 $totals['reportKey'][$codeId][$accountKeyId][$subAccountKeyId] = [];
             }
 
-            // Accumulate totals for each report key
             if (!isset($totals['reportKey'][$codeId][$accountKeyId][$subAccountKeyId][$reportKeyId])) {
                 $totals['reportKey'][$codeId][$accountKeyId][$subAccountKeyId][$reportKeyId] = [
                     'name_report_key' => $result->name_report_key,
@@ -241,9 +266,7 @@ class ResultController extends Controller
             $totals['fin_law'] += $result->fin_law ?? 0;
             $totals['current_loan'] += $result->current_loan ?? 0;
 
-
             if (!empty($loan)) {
-                // Aggregate values
                 $totals['reportKey'][$codeId][$accountKeyId][$subAccountKeyId][$reportKeyId]['fin_law'] += $result->fin_law;
                 $totals['reportKey'][$codeId][$accountKeyId][$subAccountKeyId][$reportKeyId]['current_loan'] += $result->current_loan;
                 $totals['reportKey'][$codeId][$accountKeyId][$subAccountKeyId][$reportKeyId]['internal_increase'] += $loan->internal_increase;
@@ -261,7 +284,6 @@ class ResultController extends Controller
                 $totals['additional_increase'] += $loan->additional_increase ?? 0;
                 $totals['decrease'] += $loan->decrease ?? 0;
                 $totals['editorial'] += $loan->editorial ?? 0;
-
                 $totalIncrease = $loan->internal_increase + $loan->unexpected_increase + $loan->additional_increase;
                 $totals['total_increase'] += $totalIncrease;
             }
@@ -275,12 +297,10 @@ class ResultController extends Controller
         $totals['law_average'] = $totals['fin_law'] > 0 || $totals['fin_law'] > 0  ? ($totals['deadline_balance'] / $totals['fin_law']) * 100 : 0;
         $totals['law_correction'] =   $totals['new_credit_status'] > 0 ||  $totals['new_credit_status'] ? ($totals['deadline_balance'] / $totals['new_credit_status']) * 100 : 0;
 
-        // Group reports and loans by code
         $groupedByCode = $reports->groupBy(function ($loan) {
             return $loan->subAccountKey->accountKey->key->code ?? 'Unknown';
         });
 
-        // Continue grouping by accountKey, subAccountKey, and reportKey for both reports and loans
         foreach ($groupedByCode as $codeId => $loansByCode) {
             $totals['code'][$codeId] = $this->calculateSumFields($loansByCode);
             $totals['code'][$codeId]['name'] = $loansByCode->first()->subAccountKey->accountKey->key->name ?? 'Unknown';
@@ -333,7 +353,6 @@ class ResultController extends Controller
             'credit' => 0,
             'law_average' => 0,
             'law_correction' => 0,
-
         ];
 
         foreach ($reports as $report) {
@@ -354,13 +373,9 @@ class ResultController extends Controller
             $sumFields['deadline_balance'] += $report->deadline_balance;
             $sumFields['credit'] += $report->credit;
         }
-
-        // Calculate the 'total_increase' as the sum of 'internal_increase', 'unexpected_increase', and 'additional_increase'
         $sumFields['total_increase'] = $sumFields['internal_increase'] + $sumFields['unexpected_increase'] + $sumFields['additional_increase'];
-
         $sumFields['law_average'] = ($sumFields['fin_law'] < 0 || $sumFields['deadline_balance'] > 0) ?
             ($sumFields['deadline_balance'] / $sumFields['fin_law']) * 100 : null;
-
         $sumFields['law_correction'] = ($sumFields['new_credit_status'] < 0 || $sumFields['deadline_balance'] > 0) ?
             ($sumFields['deadline_balance'] / $sumFields['new_credit_status']) * 100 : null;
 

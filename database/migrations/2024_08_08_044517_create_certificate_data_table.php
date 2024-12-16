@@ -18,12 +18,8 @@ return new class extends Migration
                 $table->unsignedBigInteger('report_key')->change();
                 $table->foreignId('report_key')->references('id')->on('reports')->onDelete('cascade');
 
-                // $table->unsignedBigInteger('name_certificate')->change();
-                // $table->foreignId('name_certificate')->references('id')->on('certificates')->onDelete('cascade');
-
                 $table->decimal('value_certificate', 15, 2)->default(0);
 
-                // Define precision and scale for amount
                 $table->decimal('amount', 15, 2)->default(0);
 
                 $table->timestamps();
