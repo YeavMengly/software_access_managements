@@ -27,12 +27,12 @@ class CreateAbroadMissionsTable extends Migration
             $table->integer('days_count');
             $table->integer('nights_count');
             $table->decimal('travel_allowance', 8, 2)->default(0);
-            $table->decimal('pocket_money', 12, 2)->default(0); // Changed to accommodate larger values
-            $table->decimal('total_pocket_money', 12, 2)->default(0); // Changed to accommodate larger values
-            $table->decimal('meal_money', 12, 2)->default(0); // Changed to accommodate larger values
-            $table->decimal('total_meal_money', 12, 2)->default(0); // Changed to accommodate larger values
-            $table->decimal('accommodation_money', 12, 2)->default(0); // Changed to accommodate larger values
-            $table->decimal('total_accommodation_money', 12, 2)->default(0); // Changed to accommodate larger values
+            $table->decimal('pocket_money', 12, 2)->default(0); 
+            $table->decimal('total_pocket_money', 12, 2)->default(0);
+            $table->decimal('meal_money', 12, 2)->default(0);
+            $table->decimal('total_meal_money', 12, 2)->default(0); 
+            $table->decimal('accommodation_money', 12, 2)->default(0); 
+            $table->decimal('total_accommodation_money', 12, 2)->default(0); 
             $table->decimal('final_total', 12, 2)->default(0);
             $table->timestamps();
         });

@@ -6,20 +6,17 @@
         <div class="result-total-table-container">
             <div class="container-fluid">
                 <div class="row">
-                    <div class="col-lg-12 margin-tb mb-4">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <h3 class="card-title">បង្កើតទិន្នន័យ</h3>
-                            <a class="btn btn-danger" href="{{ url('/') }}"> <i class="fas fa-arrow-left"></i>
-                                ត្រឡប់ក្រោយ</a>
-                            <a class="btn btn-danger d-flex justify-content-center align-items-center" href="{{ url('/') }}" style="width: 160px; height: 50px;">
-                                <i class="fas fa-arrow-left"></i> &nbsp;&nbsp;ត្រឡប់ក្រោយ
-                            </a>
-                            <h3 class="card-title mx-auto text-center">បង្កើតទិន្នន័យ</h3>
-                        </div>
-                        
+                    <div class="col-lg-12 d-flex justify-content-between align-items-center margin-tb mb-4">
+
+                        <a class="btn btn-danger d-flex justify-content-center align-items-center mr-2"
+                            href="{{ route('back') }}" style="width: 120px; height: 40px;">
+                            <i class="fas fa-arrow-left"></i>
+                        </a>
+                        <h3 class="card-title" style="font-weight: 500;">បង្កើតទិន្នន័យឥណទានអនុម័តដើមឆ្នាំ</h3>
+                        <span></span>
+
                     </div>
                 </div>
-
                 @if (session('success'))
                     <div class="alert alert-success alert-dismissible fade show" role="alert">
                         {{ session('success') }}
@@ -38,122 +35,143 @@
                         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                     </div>
                 @endif
+
                 <div class="border-wrapper">
                     <div class="form-container">
-                        <form action="{{ route('codes.store') }}" method="POST" enctype="multipart/form-data">
+                        <form action="{{ route('codes.store') }}" method="POST" enctype="multipart/form-data"
+                            onsubmit="validateForm(event)">
                             @csrf
                             <div class="row">
-                                <div class="col-md-6">
+                                <div class="col-md-4">
                                     <div class="row">
-                                        <!-- Sub Account Key Input (First row, first column) -->
                                         <div class="col-md-6">
                                             <div class="form-group">
-                                                <label for="searchSubAccountKey" class="font-weight-bold">លេខអនុគណនី:</label>
-                                                <input type="text" id="searchSubAccountKey" class="form-control mt-2 text-center"
-                                                    placeholder="ស្វែងរកលេខអនុគណនី..." onkeyup="filterSubAccountKeys(event)"
-                                                    oninput="resetSubAccountSelection()" style="width: 420px; height: 60px;">
-                                                <label for="searchSubAccountKey"
-                                                    class="font-weight-bold"><strong>លេខអនុគណនី:</strong></label>
+                                                <label for="searchSubAccountKey" class="font-weight-bold">
+                                                    <strong>លេខអនុគណនី:</strong>
+                                                </label>
                                                 <input type="text" id="searchSubAccountKey"
                                                     class="form-control text-center" placeholder="ស្វែងរកលេខអនុគណនី..."
                                                     onkeyup="filterSubAccountKeys(event)"
-                                                    oninput="resetSubAccountSelection()"
-                                                    style="width: 420px; height: 60px;">
+                                                    oninput="resetSubAccountSelection()" style="width: 80%; height: 40px;"
+                                                    value="{{ old('searchSubAccountKey') }}">
                                                 <p id="resultCount" style="font-weight: bold; margin-top: 8px;">ចំនួន: 0</p>
                                                 <select name="sub_account_key" id="subAccountKeySelect" class="form-control"
                                                     size="5" onclick="getSelectedValue()"
-                                                    style="height: 170px; width: 420px;">
+                                                    style="height: 130px; width: 80%;">
                                                     @foreach ($subAccountKeys as $subAccountKey)
-                                                        <option value="{{ $subAccountKey->id }}">
-                                                            {{ $subAccountKey->sub_account_key }}
+                                                        <option value="{{ $subAccountKey->id }}"
+                                                            {{ old('sub_account_key') == $subAccountKey->id ? 'selected' : '' }}>{{ $subAccountKey->sub_account_key }}
                                                         </option>
                                                     @endforeach
                                                 </select>
+                                                <span id="subAccountKeyError" class="text-danger"
+                                                    style="display: none;">បញ្ជាក់ទិន្នន័យ</span>
                                             </div>
                                         </div>
-                                        
                                         <div class="col-md-6">
-                                        <div class="col-md-6">
-
                                             <div class="form-group">
                                                 <label for="report_key"><strong>លេខកូដកម្មវិធី:</strong></label>
                                                 <input type="number" name="report_key" id="report_key"
-                                                    class="form-control @error('destination') is-invalid @enderror"
-                                                    style="width: 420px; height: 60px;">
+                                                    class="form-control @error('report_key') is-invalid @enderror"
+                                                    style="width: 80%; height: 40px;" min="0"
+                                                    value="{{ old('report_key') }}">
                                                 @error('report_key')
                                                     <div class="invalid-feedback">{{ $message }}</div>
                                                 @enderror
+                                                <span id="reportKeyError" class="text-danger"
+                                                    style="display: none;">បញ្ជាក់ទិន្នន័យ</span>
                                             </div>
-
                                             <div class="form-group">
-                                                <label for="fin_law"> <strong>ច្បាប់ហិរញ្ញវត្ថុ:</strong></label>
+                                                <label for="fin_law"><strong>ច្បាប់ហិរញ្ញវត្ថុ:</strong></label>
                                                 <input type="number" name="fin_law" id="fin_law"
                                                     class="form-control @error('fin_law') is-invalid @enderror"
-                                                    style="width: 420px; height: 60px;" min="0"
+                                                    style="width: 80%; height: 40px;" min="0"
+                                                    value="{{ old('fin_law') }}"
                                                     oninput="updateCurrentLoan(this); formatNumber(this)">
                                                 @error('fin_law')
                                                     <div class="invalid-feedback">{{ $message }}</div>
                                                 @enderror
+                                                <span id="finLawError" class="text-danger"
+                                                    style="display: none;">បញ្ជាក់ទិន្នន័យ</span>
                                             </div>
+
                                             <div class="form-group">
                                                 <label for="current_loan"><strong>ឥណទានបច្ចុប្បន្ន:</strong></label>
                                                 <input type="number" name="current_loan" id="current_loan"
                                                     class="form-control @error('current_loan') is-invalid @enderror"
-                                                    style="width: 420px; height: 60px;" min="0">
+                                                    style="width: 80%; height: 40px;" min="0"
+                                                    value="{{ old('current_loan') }}">
                                                 @error('current_loan')
                                                     <div class="invalid-feedback">{{ $message }}</div>
                                                 @enderror
+                                                <span id="currentLoanError" class="text-danger"
+                                                    style="display: none;">បញ្ជាក់ទិន្នន័យ</span>
                                             </div>
                                         </div>
                                     </div>
-
-                                    <div class="row">
-                                        <!-- Financial Law Input (Second row, first column) -->
-                                    </div>
                                 </div>
 
-                                <div class="col-md-6">
-                                    <!-- Name Report Key Input -->
+                                <div class="col-md-4">
                                     <div class="form-group">
                                         <label for="name_report_key"><strong>ចំណាត់ថ្នាក់:</strong></label>
                                         <textarea name="name_report_key" id="name_report_key"
-<<<<<<< HEAD
-                                            class="form-control @error('name_report_key') is-invalid @enderror"
-                                            style="height: 270px; text-align: left;" placeholder="សូមបញ្ចូលចំណាត់ថ្នាក់នៅនេះ..."></textarea>
-=======
-                                            class="form-control @error('name_report_key') is-invalid @enderror" style="height: 270px; text-align: left;"
-                                            placeholder="សូមបញ្ចូលចំណាត់ថ្នាក់នៅនេះ..."></textarea>
->>>>>>> 1ecd59fca302d5e6dde112f4d29c92858f9a1262
+                                            class="form-control @error('name_report_key') is-invalid @enderror" style="height: 220px; text-align: left;"
+                                            placeholder="សូមបញ្ចូលចំណាត់ថ្នាក់នៅនេះ...">{{ old('name_report_key') }}</textarea>
                                         @error('name_report_key')
+                                            <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
+                                        <span id="nameReportKeyError" class="text-danger"
+                                            style="display: none;">បញ្ជាក់ទិន្នន័យ</span>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label for="date_year"><strong>ឆ្នាំចាប់ផ្ដើម</strong></label>
+                                        <select name="date_year" id="date_year"
+                                            class="form-control @error('date_year') is-invalid @enderror"
+                                            style="width: 40%; height: 40px;">
+                                            <option value="">-- ជ្រើសរើសឆ្នាំ --</option>
+                                            @foreach ($years as $year)
+                                                @if ($year->status == 'active')
+                                                    <option value="{{ $year->id }}"
+                                                        {{ old('date_year') == $year->id ? 'selected' : '' }}>
+                                                        @php
+                                                            $date = \Carbon\Carbon::parse($year->date_year);
+                                                            $khmerMonth = getKhmerMonth($date->month);
+                                                            $khmerYear = convertToKhmerNumber($date->year);
+                                                        @endphp
+                                                        {{ $date->day }} {{ $khmerMonth }} {{ $khmerYear }}
+                                                    </option>
+                                                @endif
+                                            @endforeach
+                                        </select>
+                                        @error('date_year')
                                             <div class="invalid-feedback">{{ $message }}</div>
                                         @enderror
                                     </div>
                                 </div>
-                            </div>
 
+                            </div>
                             <div class="d-flex align-items-center">
-                                <button type="submit" class="btn btn-primary ml-auto">
-                                    <i class="fas fa-save"></i> បានរក្សាទុក
-                                <button type="submit" class="btn btn-primary ml-auto" style="width: 300px; height: 60px;">
+                                <button type="submit" class="btn btn-primary ml-auto"
+                                    style="width: 150px; height: 50px;">
                                     <i class="fas fa-save"></i> រក្សាទុក
                                 </button>
                             </div>
                         </form>
+
                     </div>
                 </div>
             </div>
-
         </div>
-
     </div>
 @endsection
 
 @section('styles')
-    {{-- Custom style here --}}
-
     <style>
         .border-wrapper {
-            border: 2px solid black;
+            border: 1px solid rgb(133, 131, 131);
             padding: 10px;
         }
 
@@ -165,28 +183,31 @@
             text-align: left;
         }
 
+        h3 {
+            font-family: 'Khmer OS Muol Light', sans-serif;
+            font-size: 16px;
+        }
+
         .btn,
         .form-control,
         th,
         td {
             border: 1px solid black;
             text-align: center;
-            padding: 5px;
+            padding: 6px;
             font-family: 'Khmer OS Siemreap', sans-serif;
-            font-size: 16px;
+            font-size: 14px;
         }
     </style>
 @endsection
 
 @section('scripts')
-    {{-- Include SweetAlert2 --}}
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-    <script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    {{-- <script>
         (function($) {
-            "use strict"; // Start of use strict
-
-            // Toggle the side navigation
+            "use strict";
             $("#sidebarToggle, #sidebarToggleTop").on('click', function(e) {
                 $("body").toggleClass("sidebar-toggled");
                 $(".sidebar").toggleClass("toggled");
@@ -195,13 +216,13 @@
                 }
             });
 
-            // Close any open menu accordions when window is resized below 768px
+
             $(window).resize(function() {
                 if ($(window).width() < 768) {
                     $('.sidebar .collapse').collapse('hide');
                 }
 
-                // Toggle the side navigation when window is resized below 480px
+
                 if ($(window).width() < 480 && !$(".sidebar").hasClass("toggled")) {
                     $("body").addClass("sidebar-toggled");
                     $(".sidebar").addClass("toggled");
@@ -209,7 +230,7 @@
                 }
             });
 
-            // Prevent the content wrapper from scrolling when the fixed side navigation hovered over
+
             $('body.fixed-nav .sidebar').on('mousewheel DOMMouseScroll wheel', function(e) {
                 if ($(window).width() > 768) {
                     var e0 = e.originalEvent,
@@ -219,7 +240,7 @@
                 }
             });
 
-            // Scroll to top button appear
+
             $(document).on('scroll', function() {
                 var scrollDistance = $(this).scrollTop();
                 if (scrollDistance > 100) {
@@ -229,7 +250,7 @@
                 }
             });
 
-            // Smooth scrolling using jQuery easing
+
             $(document).on('click', 'a.scroll-to-top', function(e) {
                 var $anchor = $(this);
                 $('html, body').stop().animate({
@@ -238,8 +259,8 @@
                 e.preventDefault();
             });
 
-        })(jQuery); // End of use strict
-    </script>
+        })(jQuery);
+    </script> --}}
 
     <script>
         function updateCurrentLoan(finLawInput) {
@@ -249,117 +270,37 @@
         }
 
         function formatNumber(input) {
-            // Optional: You can add formatting logic if necessary
+
             const value = input.value;
-            input.value = value.replace(/\D/g, ''); // This example strips non-numeric characters
+            input.value = value.replace(/\D/g, '');
         }
     </script>
-    {{-- <script>
-        let currentIndex = -1; // Initialize to -1 so no item is selected initially
-
-        document.getElementById('searchSubAccountKey').addEventListener('input', function() {
-            const filter = this.value.toUpperCase();
-            const select = document.getElementById('subAccountKeySelect');
-            const options = select.getElementsByTagName('option');
-            let resultCount = 0;
-
-            // Reset selection index when search input changes
-            currentIndex = -1;
-
-            for (let i = 0; i < options.length; i++) {
-                const optionText = options[i].textContent || options[i].innerText;
-                if (optionText.toUpperCase().indexOf(filter) > -1) {
-                    options[i].style.display = '';
-                    resultCount++;
-                } else {
-                    options[i].style.display = 'none';
-                }
-            }
-
-            document.getElementById('resultCount').textContent = `ចំនួន: ${resultCount}`;
-        });
-
-        // Event listener for pressing "Enter", "ArrowUp", and "ArrowDown" keys
-        document.getElementById('searchSubAccountKey').addEventListener('keydown', function(event) {
-            const select = document.getElementById('subAccountKeySelect');
-            const options = select.getElementsByTagName('option');
-            const visibleOptions = Array.from(options).filter(option => option.style.display !== 'none');
-
-            if (event.key === 'Enter') {
-                event.preventDefault(); // Prevent default action (form submission)
-                if (visibleOptions.length > 0 && currentIndex >= 0) {
-                    // Select the current highlighted option when pressing "Enter"
-                    select.selectedIndex = Array.from(options).indexOf(visibleOptions[currentIndex]);
-                    getSelectedValue(); // Show the selected value in SweetAlert
-                }
-            } else if (event.key === 'ArrowDown') {
-                event.preventDefault();
-                // Move down through the visible options
-                if (currentIndex < visibleOptions.length - 1) {
-                    currentIndex++;
-                    highlightOption(visibleOptions[currentIndex]);
-                }
-            } else if (event.key === 'ArrowUp') {
-                event.preventDefault();
-                // Move up through the visible options
-                if (currentIndex > 0) {
-                    currentIndex--;
-                    highlightOption(visibleOptions[currentIndex]);
-                }
-            }
-        });
-
-        function highlightOption(option) {
-            const select = document.getElementById('subAccountKeySelect');
-            const options = select.getElementsByTagName('option');
-
-            // Remove highlight from all options
-            for (let i = 0; i < options.length; i++) {
-                options[i].style.backgroundColor = ''; // Remove highlight
-            }
-
-            // Highlight the currently selected option
-            option.style.backgroundColor = '#d1e7dd'; // You can choose any highlight color
+    <script>
+        function setSelectedYear() {
+            var selectedYear = document.getElementById('dateYearSelect').value;
+            document.getElementById('date_year').value = selectedYear; // Update the readonly input field
         }
-
-        function getSelectedValue() {
-            const select = document.getElementById('subAccountKeySelect');
-            const selectedValue = select.options[select.selectedIndex].text;
-
-            Swal.fire({
-                title: 'Selected Value',
-                text: `You selected: ${selectedValue}`,
-                icon: 'info',
-                confirmButtonText: 'OK'
-            });
-        }
-    </script> --}}
-
+    </script>
     <script>
         let selectedIndex = -1;
 
-        // Function to filter sub-account keys
         function filterSubAccountKeys(event) {
             var input = document.getElementById('searchSubAccountKey').value.toLowerCase();
             var select = document.getElementById('subAccountKeySelect');
             var options = select.options;
             var count = 0;
-
-            // Loop through options to filter them
             for (var i = 0; i < options.length; i++) {
                 var optionText = options[i].textContent.toLowerCase();
                 if (optionText.includes(input)) {
-                    options[i].style.display = ''; // Show matching option
+                    options[i].style.display = '';
                     count++;
                 } else {
-                    options[i].style.display = 'none'; // Hide non-matching option
+                    options[i].style.display = 'none';
                 }
             }
 
-            // Update the result count
             document.getElementById('resultCount').innerText = 'ចំនួន: ' + count;
 
-            // Handle arrow key navigation
             if (event.key === 'ArrowDown') {
                 if (selectedIndex < options.length - 1) {
                     selectedIndex++;
@@ -391,14 +332,12 @@
             }
         }
 
-        // Function to reset the selection if input changes
         function resetSubAccountSelection() {
             selectedIndex = -1;
             var select = document.getElementById('subAccountKeySelect');
-            select.selectedIndex = -1; // Deselect any selected option
+            select.selectedIndex = -1;
         }
 
-        // Function to update input field with the selected dropdown value
         function updateSubAccountInputField() {
             var select = document.getElementById('subAccountKeySelect');
             var selectedOption = select.options[select.selectedIndex];
@@ -408,9 +347,58 @@
             }
         }
 
-        // Function to handle selection
         function getSelectedValue() {
             updateSubAccountInputField();
+        }
+    </script>
+    <script>
+        function validateForm(event) {
+            let isValid = true;
+            document.getElementById('subAccountKeyError').style.display = 'none';
+            document.getElementById('reportKeyError').style.display = 'none';
+            document.getElementById('finLawError').style.display = 'none';
+            document.getElementById('currentLoanError').style.display = 'none';
+            document.getElementById('nameReportKeyError').style.display = 'none';
+            document.getElementById('yearError').style.display = 'none';
+
+            // Check if 'sub_account_key' is empty
+            if (document.getElementById('subAccountKeySelect').value === "") {
+                isValid = false;
+                document.getElementById('subAccountKeyError').style.display = 'inline'; // Show error message
+            }
+
+            // Check if 'report_key' is empty
+            if (document.getElementById('report_key').value === "") {
+                isValid = false;
+                document.getElementById('reportKeyError').style.display = 'inline'; // Show error message
+            }
+
+            // Check if 'fin_law' is empty
+            if (document.getElementById('fin_law').value === "") {
+                isValid = false;
+                document.getElementById('finLawError').style.display = 'inline'; // Show error message
+            }
+
+            // Check if 'current_loan' is empty
+            if (document.getElementById('current_loan').value === "") {
+                isValid = false;
+                document.getElementById('currentLoanError').style.display = 'inline'; // Show error message
+            }
+
+            // Check if 'name_report_key' is empty
+            if (document.getElementById('name_report_key').value.trim() === "") {
+                isValid = false;
+                document.getElementById('nameReportKeyError').style.display = 'inline'; // Show error message
+            }
+
+            if (document.getElementById('year_id').value.trim() === "") {
+                isValid = false;
+                document.getElementById('yearError').style.display = 'inline'; // Show error message
+            }
+
+            if (!isValid) {
+                event.preventDefault();
+            }
         }
     </script>
 @endsection

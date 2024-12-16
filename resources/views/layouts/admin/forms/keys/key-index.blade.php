@@ -6,17 +6,19 @@
             <div class="row">
                 <div class="col-lg-12 margin-tb mb-4">
                     <div class="d-flex justify-content-between align-items-center">
-                        <a class="btn btn-danger" href="{{ route('programs') }}">
-                            <i class="fas fa-arrow-left"></i> ត្រឡប់ក្រោយ
+                        <a class="btn btn-danger" href="{{ route('programs') }}"
+                            style="width: 160px; height: 50px; border-radius: 4px; display: flex; align-items: center; justify-content: center;">
+                            <i class="fas fa-arrow-left"></i>&nbsp;&nbsp;ត្រឡប់ក្រោយ
                         </a>
-                        
                         <h2 class="mx-auto" style="font-weight: 700;">តារាងលេខជំពូក</h2>
 
-                        {{-- <a id="submit-button" class="btn btn-success" href="{{ route('keys.create') }}">
+                        <a id="submit-button" class="btn btn-success" href="{{ route('keys.create') }}"
+                            style="width: 180px; height: 50px; border-radius: 4px; display: flex; align-items: center; justify-content: center; text-align: center; gap: 8px;">
                             បញ្ចូលទិន្ន័យ
-                            <i id="plus-icon" class="fas fa-plus" style="margin-left: 0px;"></i>
+                            <i id="plus-icon" class="fas fa-plus"></i>
                             <div id="loader" class="loader" style="display: none;"></div>
-                        </a> --}}
+                        </a>
+
 
                     </div>
 
@@ -24,10 +26,11 @@
                     <form class="max-w-md mx-auto mt-3" method="GET" action="{{ route('keys.index') }}">
                         <div class="row">
                             <div class="col-md-6">
-                                <div class="input-group my-3" style="width: 70%;">
+                                <div class="input-group my-3" style="width: 25%;">
                                     <input type="search" name="search" value="{{ request('search') }}"
-                                        class="form-control" placeholder="ស្វែងរកទិន្នន័យ" aria-label="Search Address">
-                                    <button type="submit" class="btn btn-primary">
+                                        class="form-control" placeholder="ស្វែងរកទិន្នន័យ" aria-label="Search Address"
+                                        style="width: 180px; height: 60px;">
+                                    <button type="submit" class="btn btn-primary" style="width: 60px">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
                                             viewBox="0 0 50 50">
                                             <path
@@ -102,7 +105,8 @@
                         @forelse ($keys as $key)
                             <tr>
                                 <td style="border: 1px solid black; text-align: center;">{{ $key->code }}</td>
-                                <td style="border: 1px solid black; text-align: start; padding-left: 2%;">{{ $key->name }}</td>
+                                <td style="border: 1px solid black; text-align: start; padding-left: 2%;">
+                                    {{ $key->name }}</td>
                                 <td style="border: 1px solid black; text-align: center; justify-content: center">
                                     <form id="delete-form-{{ $key->id }}"
                                         action="{{ route('keys.destroy', $key->id) }}" method="POST"

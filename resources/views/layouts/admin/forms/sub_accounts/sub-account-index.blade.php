@@ -6,12 +6,14 @@
             <div class="row">
                 <div class="col-lg-12 margin-tb mb-4">
                     <div class="d-flex justify-content-between align-items-center">
-                        <a class="btn btn-danger" href="{{ route('programs') }}">
-                            <i class="fas fa-arrow-left"></i> ត្រឡប់ក្រោយ
+                        <a class="btn btn-danger" href="{{ route('programs') }}"
+                            style="width: 160px; height: 50px; border-radius: 4px; display: flex; align-items: center; justify-content: center;">
+                            <i class="fas fa-arrow-left"></i>&nbsp;&nbsp;ត្រឡប់ក្រោយ
                         </a>
                         <h2 class="mx-auto" style="font-weight: 700;">តារាងលេខកូដអនុគណនី</h2>
-                        <a class="btn btn-success" href="{{ route('sub-account.create') }}">
-                            បញ្ចូលទិន្នន័យ <i class="fas fa-plus" style="margin-left: 8px;"></i>
+                        <a class="btn btn-success" href="{{ route('sub-account.create') }}"
+                            style="width: 160px; height: 50px; border-radius: 4px; display: flex; align-items: center; justify-content: center;">
+                            បញ្ចូលទិន្នន័យ&nbsp;&nbsp;<i class="fas fa-plus" style="margin-left: 8px;"></i>
                         </a>
                     </div>
 
@@ -19,10 +21,11 @@
                     <form class="max-w-md mx-auto mt-3" method="GET" action="">
                         <div class="row">
                             <div class="col-md-6">
-                                <div class="input-group my-3" style="width: 70%;">
+                                <div class="input-group my-3" style="width: 35%;">
                                     <input type="search" name="search" value="{{ request('search') }}"
-                                        class="form-control" placeholder="ស្វែងរកទិន្នន័យ" aria-label="Search Address">
-                                    <button type="submit" class="btn btn-primary">
+                                        class="form-control" placeholder="ស្វែងរកទិន្នន័យ" aria-label="Search Address"
+                                        style="width: 180px; height: 60px;">
+                                    <button type="submit" class="btn btn-primary" style="width: 60px">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
                                             viewBox="0 0 50 50">
                                             <path

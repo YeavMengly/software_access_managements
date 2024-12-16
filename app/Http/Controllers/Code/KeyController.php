@@ -14,25 +14,19 @@ class KeyController extends Controller
         $sortBy = $request->input('sort_by', 'code');
         $sortOrder = $request->input('sort_order', 'asc');
         $perPage = $request->input('per_page', 25);
-
-
         $query = Key::query();
 
-        // Apply search filter
         if ($search) {
             $query->where('code', 'LIKE', "%{$search}%")
                 ->orWhere('name', 'LIKE', "%{$search}%");
         }
 
-        // Apply sorting
         if ($sortBy === 'code') {
             $query->orderBy('code', $sortOrder);
         } elseif ($sortBy === 'name') {
             $query->orderBy('name', $sortOrder);
         }
-
         $keys = $query->paginate($perPage); 
-
 
         return view('layouts.admin.forms.keys.key-index', compact('keys', 'sortBy', 'sortOrder', 'search'));
     }
@@ -77,7 +71,7 @@ class KeyController extends Controller
 
         $key->update($request->only('code', 'name'));
 
-        return redirect()->route('keys.index')->with('success', 'Code updated successfully.');
+        return redirect()->route('keys.index')->with('success', 'លេខជំពូកបានកែដោយជោគជ័យ។');
     }
 
     public function destroy($id)
@@ -85,6 +79,6 @@ class KeyController extends Controller
         $key = Key::findOrFail($id);
         $key->delete();
 
-        return redirect()->route('keys.index')->with('success', 'Code deleted successfully.');
+        return redirect()->route('keys.index')->with('success', 'លេខជំពូកបានលុបដោយជោគជ័យ។');
     }
 }

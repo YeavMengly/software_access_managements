@@ -4,21 +4,16 @@ namespace App\Http\Controllers\Result;
 
 use App\Http\Controllers\Controller;
 use App\Models\Code\Report;
-use Illuminate\Http\Request;
-use Matrix\Operators\Division;
 
 class ResultTotalController extends Controller
 {
 
-    public int $earlyBalance = 10000;
-    public int $apply = 0;
+    // public int $earlyBalance = 10000;
+    // public int $apply = 0;
 
     public function index()
     {
-        // Retrieve all reports
         $reports = Report::all();
-
-        // Calculate the totals
         $totals = [
             'internal_increase' => $reports->sum('internal_increase'),
             'unexpected_increase' => $reports->sum('unexpected_increase'),

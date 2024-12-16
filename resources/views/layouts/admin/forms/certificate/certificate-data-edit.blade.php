@@ -1,12 +1,14 @@
 @extends('layouts.master')
 
 @section('form-certificate-data-edit')
-    <div class="container-fluid">
+    <div class="container-fluid mt-2">
         <div class="row">
             <div class="col-lg-12 margin-tb mb-4">
                 <div class="d-flex justify-content-between align-items-center">
                     <h3 class="card-title">កែសម្រួលសលាកបត្រ</h3>
-                    <a class="btn btn-primary" href="{{ route('certificate-data.index') }}">ត្រឡប់ក្រោយ</a>
+                    <a class="btn btn-danger d-flex justify-content-center align-items-center mr-2"
+                        href="{{ route('certificate-data.index') }}" style="width: 160px; height: 50px;"><i
+                            class="fas fa-arrow-left"></i> &nbsp;&nbsp;ត្រឡប់ក្រោយ</a>
                 </div>
             </div>
         </div>
@@ -30,119 +32,124 @@
             </div>
         @endif
 
-        <div class="border-wrapper">
-            <div class="form-container">
-                {{-- <form action="{{ route('certificate-data.update', $certificateData->id) }}" method="POST">
-                    @csrf
-                    @method('PUT')
-                    <div class="row d-flex justify-content-center">
-                        <!-- First Row -->
-                        <div class="col-md-3 d-flex flex-column align-items-center">
-                            <div class="form-group">
-                                <label for="searchReportKey"
-                                    class="font-weight-bold"><strong>លេខកូដកម្មវិធី:</strong></label>
+        <div class="row d-flex justify-content-start">
+            <div class="col-md-6">
+                <div class="border-wrapper">
+                    <div class="form-container">
+                        <form action="{{ route('certificate-data.update', $certificateData->id) }}" method="POST">
+                            @csrf
+                            @method('PUT')
+                            <div class="row d-flex justify-content-center">
+                                <!-- First Row -->
+                                <div class="col-md-6 d-flex flex-column align-items-center">
+                                    <div class="form-group">
+                                        <label for="searchReportKey"
+                                            class="font-weight-bold"><strong>លេខកូដកម្មវិធី:</strong></label>
 
-                                <!-- Input field for searching -->
-                                <input type="text" id="searchReportKey" class="form-control"
-                                    placeholder="ស្វែងរកលេខកូដ អនុគណនី​ នឹងកម្មវិធី..." onkeyup="filterReportKeys(event)"
-                                    style="width: 420px; height: 60px; text-align: center;"
-                                    oninput="resetReportKeySelection()">
+                                        <!-- Input field for searching -->
+                                        <input type="text" id="searchReportKey" class="form-control"
+                                            placeholder="ស្វែងរកលេខកូដ អនុគណនី​ នឹងកម្មវិធី..."
+                                            onkeyup="filterReportKeys(event)"
+                                            style="width: 320px; height: 60px; text-align: center;"
+                                            oninput="resetReportKeySelection()">
 
-                                <!-- Display the count of search results -->
-                                <p id="reportResultCount" style="font-weight: bold; margin-top: 8px;">ចំនួន: 0</p>
+                                        <!-- Hidden input to store the selected report key value -->
+                                        <input type="hidden" name="report_key" id="hiddenReportKeyInput"
+                                            value="{{ $certificateData->report_key }}">
 
-                                <!-- Dropdown for selecting the report -->
-                                <select name="report_key" id="reportKeySelect" class="form-control" size="5"
-                                    onclick="getSelectedReportKey()" style="height: 260px; width: 420px; text-align: left;">
-                                    @foreach ($reports as $report)
-                                        <option value="{{ $report->id }}"
-                                            {{ $report->id == $certificateData->report_key ? 'selected' : '' }}>
-                                            {{ $report->subAccountKey->sub_account_key }} > {{ $report->report_key }}
-                                        </option>
-                                    @endforeach
-                                </select>
+                                        <!-- Display the count of search results -->
+                                        <p id="reportResultCount" style="font-weight: bold; margin-top: 8px;">ចំនួន: 0</p>
+
+                                        <!-- Dropdown for selecting the report -->
+                                        <select id="reportKeySelect" class="form-control" size="5"
+                                            onclick="getSelectedReportKey()"
+                                            style="height: 260px; width: 320px; text-align: left; ">
+                                            @foreach ($reports as $report)
+                                                <option value="{{ $report->id }}"
+                                                    {{ $report->id == $certificateData->report_key ? 'selected' : '' }}>
+                                                    {{ $report->subAccountKey->sub_account_key }} >
+                                                    {{ $report->report_key }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6 d-flex flex-column align-items-center">
+                                    <div class="form-group">
+                                        <label for="number_value_certificate"><strong>ចំនួនទឹកប្រាក់:</strong></label>
+                                        <input type="number" name="value_certificate" id="value_certificate"
+                                            value="{{ $certificateData->value_certificate }}"
+                                            class="form-control @error('value_certificate') is-invalid @enderror"
+                                            style="width: 320px; height: 60px;">
+                                        @error('value_certificate')
+                                            <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+                                </div>
                             </div>
 
-                        </div>
-
-                        <div class="col-md-3 d-flex flex-column align-items-center">
-                            <div class="form-group">
-                                <label for="number_value_certificate"> <strong>ចំនួនទឹកប្រាក់:</strong></label>
-                                <input type="number" name="value_certificate" id="value_certificate"
-                                    value="{{ $certificateData->value_certificate }}"
-                                    class="form-control @error('value_certificate') is-invalid @enderror"
-                                    style="width: 420px; height: 60px;">
-                                @error('value_certificate')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                @enderror
+                            <div class="d-flex align-items-center">
+                                <button type="submit" class="btn btn-primary ml-auto" style="width: 300px; height: 60px;">
+                                    <i class="fas fa-save"></i> រក្សាទុក
+                                </button>
                             </div>
-
-
-                        </div>
+                        </form>
                     </div>
-                    <div class="d-flex align-items-center">
-                        <button type="submit" class="btn btn-primary ml-auto" style="width: 300px; height: 60px;">
-                            <i class="fas fa-save"></i> រក្សាទុក</button>
-                    </div>
-                </form> --}}
-                <form action="{{ route('certificate-data.update', $certificateData->id) }}" method="POST">
-                    @csrf
-                    @method('PUT')
-                    <div class="row d-flex justify-content-center">
-                        <!-- First Row -->
-                        <div class="col-md-3 d-flex flex-column align-items-center">
-                            <div class="form-group">
-                                <label for="searchReportKey"
-                                    class="font-weight-bold"><strong>លេខកូដកម្មវិធី:</strong></label>
-
-                                <!-- Input field for searching -->
-                                <input type="text" id="searchReportKey" class="form-control"
-                                    placeholder="ស្វែងរកលេខកូដ អនុគណនី​ នឹងកម្មវិធី..." onkeyup="filterReportKeys(event)"
-                                    style="width: 420px; height: 60px; text-align: center;"
-                                    oninput="resetReportKeySelection()">
-
-                                <!-- Hidden input to store the selected report key value -->
-                                <input type="hidden" name="report_key" id="hiddenReportKeyInput"
-                                    value="{{ $certificateData->report_key }}">
-
-                                <!-- Display the count of search results -->
-                                <p id="reportResultCount" style="font-weight: bold; margin-top: 8px;">ចំនួន: 0</p>
-
-                                <!-- Dropdown for selecting the report -->
-                                <select id="reportKeySelect" class="form-control" size="5"
-                                    onclick="getSelectedReportKey()" style="height: 260px; width: 420px; text-align: left;">
-                                    @foreach ($reports as $report)
-                                        <option value="{{ $report->id }}"
-                                            {{ $report->id == $certificateData->report_key ? 'selected' : '' }}>
-                                            {{ $report->subAccountKey->sub_account_key }} > {{ $report->report_key }}
-                                        </option>
-                                    @endforeach
-                                </select>
-                            </div>
-                        </div>
-
-                        <div class="col-md-3 d-flex flex-column align-items-center">
-                            <div class="form-group">
-                                <label for="number_value_certificate"><strong>ចំនួនទឹកប្រាក់:</strong></label>
-                                <input type="number" name="value_certificate" id="value_certificate"
-                                    value="{{ $certificateData->value_certificate }}"
-                                    class="form-control @error('value_certificate') is-invalid @enderror"
-                                    style="width: 420px; height: 60px;">
-                                @error('value_certificate')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                @enderror
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="d-flex align-items-center">
-                        <button type="submit" class="btn btn-primary ml-auto" style="width: 300px; height: 60px;">
-                            <i class="fas fa-save"></i> រក្សាទុក
-                        </button>
-                    </div>
-                </form>
-
+                </div>
             </div>
+
+            <div class="col-md-3">
+                <div class="form-group text-center d-flex flex-column align-items-center">
+                    <strong class="d-block mb-2">ឥណទានអនុម័ត:</strong>
+                    <span id="fin_law" class="form-control" style="width: 320px; height: 60px; text-align: center;">
+                        {{ $report->fin_law ?? 0 }}
+                    </span>
+                </div>
+                <div class="form-group text-center d-flex flex-column align-items-center">
+                    <strong class="d-block mb-2">ចលនាឥណទាន:</strong>
+                    <span id="credit_movement" class="form-control" style="width: 320px; height: 60px; text-align: center;">
+                        {{ $credit_movement ?? 0 }}
+                    </span>
+                </div>
+                <div class="form-group text-center d-flex flex-column align-items-center">
+                    <strong class="d-block mb-2">ស្ថានភាពឥណទានថ្មី:</strong>
+                    <span id="new_credit_status" class="form-control"
+                        style="width: 320px; height: 60px; text-align: center;">
+                        {{ $report->new_credit_status ?? 0 }}
+                    </span>
+                </div>
+                <div class="form-group text-center d-flex flex-column align-items-center">
+                    <strong class="d-block mb-2">ឥណទានទំនេរ:</strong>
+                    <span id="credit" class="form-control" style="width: 320px; height: 60px; text-align: center;">
+                        {{ $report->credit ?? 0 }}
+                    </span>
+                </div>
+            </div>
+
+            <div class="col-md-3">
+                <div class="form-group text-center d-flex flex-column align-items-center">
+                    <strong class="d-block mb-2">ធានាចំណាយពីមុន:</strong>
+                    <span id="deadline_balance" class="form-control"
+                        style="width: 320px; height: 60px; text-align: center;">
+                        {{ $report->deadline_balance ?? 0 }}
+                    </span>
+                </div>
+                <div class="form-group text-center d-flex flex-column align-items-center">
+                    <strong class="d-block mb-2">ស្នើរសុំលើកនេះ:</strong>
+                    <span id="applying" class="form-control" style="width: 320px; height: 60px; text-align: center;">
+                        {{ $certificateData->value_certificate ?? 0 }}
+                    </span>
+                </div>
+                <div class="form-group text-center d-flex flex-column align-items-center">
+                    <strong class="d-block mb-2">ឥណទាននៅសល់:</strong>
+                    <span id="remaining_credit" class="form-control"
+                        style="width: 320px; height: 60px; text-align: center;">
+                        {{ $report->credit - $certificateData->value_certificate ?? 0 }}
+                    </span>
+                </div>
+            </div>
+
         </div>
     </div>
 @endsection
@@ -209,85 +216,6 @@
         })(jQuery); // End of use strict
     </script>
 
-    {{-- <script>
-        function filterSubAccountKeys(event) {
-            const searchTerm = event.target.value.toLowerCase(); // Get the search term
-            const select = document.getElementById('subAccountKeySelect');
-            const options = select.options;
-            let count = 0;
-
-            // Filter the options based on the search term
-            for (let i = 0; i < options.length; i++) {
-                const optionText = options[i].textContent.toLowerCase(); // Get the option text
-                if (optionText.includes(searchTerm)) {
-                    options[i].style.display = ''; // Show matching option
-                    count++;
-                } else {
-                    options[i].style.display = 'none'; // Hide non-matching option
-                }
-            }
-
-            // Update the result count
-            document.getElementById('resultCount').textContent = 'ចំនួន: ' + count;
-
-            // Optionally clear the input if no results are found
-            if (count === 0) {
-                document.getElementById('combinedField').value = ''; // Clear if no matches
-            }
-        }
-
-        function getSelectedValue() {
-            const select = document.getElementById('subAccountKeySelect');
-            const selectedOption = select.options[select.selectedIndex];
-
-            if (selectedOption) {
-                const subAccountKey = selectedOption.text; // Get the selected option text
-                const reportKey = selectedOption.getAttribute('data-report-key'); // Get the report key
-
-                // Update the combinedField input with the selected value
-                document.getElementById('combinedField').value = subAccountKey;
-
-                // If you need to do something with the reportKey, you can store it as needed
-                console.log('Selected Report Key:', reportKey); // Example usage
-            }
-        }
-    </script> --}}
-    {{-- <script>
-        function filterReportKeys(event) {
-            const searchValue = event.target.value.toLowerCase();
-            const selectElement = document.getElementById('reportKeySelect');
-            const options = selectElement.options;
-
-            let count = 0; // To count the matched results
-            for (let i = 0; i < options.length; i++) {
-                const optionText = options[i].text.toLowerCase();
-                const isMatch = optionText.includes(searchValue);
-
-                // Show or hide options based on search
-                options[i].style.display = isMatch ? 'block' : 'none';
-                if (isMatch) count++;
-            }
-
-            // Update the result count display
-            document.getElementById('reportResultCount').innerText = `ចំនួន: ${count}`;
-        }
-
-        // Reset the selection in the dropdown when input changes
-        function resetReportKeySelection() {
-            const selectElement = document.getElementById('reportKeySelect');
-            selectElement.selectedIndex = -1; // Deselect any selected option
-        }
-
-        // Function to handle the selected report key and update the input field
-        function getSelectedReportKey() {
-            const selectElement = document.getElementById('reportKeySelect');
-            const selectedOption = selectElement.options[selectElement.selectedIndex];
-            const inputElement = document.getElementById('searchReportKey');
-
-            // Set the input value to the selected option's text
-            inputElement.value = selectedOption.text.trim();
-        }
-    </script> --}}
     <script>
         // Function to handle the selected report key and update the input field
         function getSelectedReportKey() {
@@ -319,5 +247,78 @@
 
             document.getElementById('reportResultCount').innerText = `ចំនួន: ${count}`;
         }
+    </script>
+    <script>
+        let credit = 0;
+
+        async function updateReportInputField() {
+            const select = document.getElementById('reportKeySelect');
+            const selectedOption = select.options[select.selectedIndex];
+
+            if (selectedOption) {
+                document.getElementById('searchReportKey').value = selectedOption.textContent;
+                const reportKeyId = selectedOption.value;
+
+                try {
+                    const response = await fetch(`/reports/${reportKeyId}/early-balance`);
+                    if (!response.ok) throw new Error("Network response was not ok");
+
+                    const data = await response.json();
+                    // Update values from data returned by the backend
+
+                    document.getElementById('fin_law').textContent = formatNumber(data.fin_law);
+                    document.getElementById('credit_movement').textContent = formatNumber(data.credit_movement);
+                    document.getElementById('new_credit_status').textContent = formatNumber(data.new_credit_status);
+                    document.getElementById('credit').textContent = formatNumber(data.credit);
+                    document.getElementById('deadline_balance').textContent = formatNumber(data.deadline_balance);
+
+                    // Update credit and remaining credit
+                    credit = data.credit;
+                    updateRemainingCredit(data.apply || 0);
+                } catch (error) {
+                    console.error('Error fetching report data:', error);
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Could not fetch report data. Please try again later.',
+                        confirmButtonText: 'OK'
+                    });
+                }
+            }
+        }
+
+        function updateRemainingCredit(apply) {
+            const creditValue = parseFloat(document.getElementById('credit').textContent.replace(/,/g, '')) || 0;
+            const remainingCredit = creditValue - apply;
+
+            if (remainingCredit < 0) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Notice',
+                    text: 'Insufficient remaining credit.',
+                    confirmButtonText: 'OK'
+                });
+                document.getElementById('remaining_credit').textContent = "0";
+                return false;
+            }
+
+            document.getElementById('remaining_credit').textContent = formatNumber(remainingCredit);
+            return true;
+        }
+
+        function updateApplyValue() {
+            const apply = parseFloat(document.getElementById('value_certificate').value) || 0;
+            document.getElementById('applying').textContent = formatNumber(apply);
+            updateRemainingCredit(apply);
+        }
+
+        function formatNumber(num) {
+            return Number.isInteger(num) ?
+                num.toLocaleString() :
+                num.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        }
+
+        // Add input event listener to the value_certificate input
+        document.getElementById('value_certificate').addEventListener('input', updateApplyValue);
     </script>
 @endsection

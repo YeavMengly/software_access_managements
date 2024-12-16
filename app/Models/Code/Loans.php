@@ -2,6 +2,7 @@
 
 namespace App\Models\Code;
 
+use App\Models\Certificates\Certificate;
 use App\Models\Certificates\CertificateData;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -20,13 +21,6 @@ class Loans extends Model
         'total_increase',
         'decrease',
         'editorial',
-        // 'new_credit_status',
-        // 'early_balance',
-        // 'apply',
-        // 'deadline_balance',
-        // 'credit',
-        // 'law_average',
-        // 'law_correction',
     ];
 
     public function subAccountKey()
@@ -41,5 +35,9 @@ class Loans extends Model
 
     public function certificatData(){
         return $this->hasMany(CertificateData::class, 'report_key');
+    }
+
+    public function certificate(){
+        return $this->hasOne(Certificate::class, 'early_balance');
     }
 }

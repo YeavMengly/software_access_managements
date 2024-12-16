@@ -4,26 +4,19 @@ namespace App\Http\Controllers\Result\ResultSuccess;
 
 use App\Http\Controllers\Controller;
 use App\Models\Code\Report;
-use Illuminate\Http\Request;
- // Assuming you have a Report model
 
 class TotalController extends Controller
 {
     public function index()
     {
-        // Fetch reports (Adjust the query as needed)
-        $reports = Report::all(); // Example, you can use specific filtering here
-
-        // Calculate the totals
+        $reports = Report::all();
         $totals = $this->calculateTotals($reports);
 
-        // Pass the totals to the view
         return view('layouts.table.result-success-table.result-success', compact('totals'));
     }
 
     private function calculateTotals($reports)
     {
-        // Initialize the totals array with all fields set to 0
         $totals = [
             'fin_law' => 0,
             'current_loan' => 0,
@@ -60,12 +53,10 @@ class TotalController extends Controller
             $totals['credit'] += $report->credit;
             $totals['law_average'] += $report->law_average;
             $totals['law_correction'] += $report->law_correction;
-
             $totalIncrease = $report->internal_increase + $report->unexpected_increase + $report->additional_increase;
             $totals['total_increase'] += $totalIncrease;
         }
 
-        // Group reports by code
         $groupedByCode = $reports->groupBy(function ($report) {
             return $report->subAccountKey->accountKey->key->code ?? 'Unknown';
         });
@@ -73,7 +64,6 @@ class TotalController extends Controller
         foreach ($groupedByCode as $codeId => $reportsByCode) {
             $totals['code'][$codeId] = $this->calculateSumFields($reportsByCode);
 
-            // Group by accountKey within each codeId
             $groupedByAccountKey = $reportsByCode->groupBy(function ($report) {
                 return $report->subAccountKey->accountKey->account_key ?? 'Unknown';
             });
@@ -81,7 +71,6 @@ class TotalController extends Controller
             foreach ($groupedByAccountKey as $accountKeyId => $reportsByAccountKey) {
                 $totals['accountKey'][$codeId][$accountKeyId] = $this->calculateSumFields($reportsByAccountKey);
 
-                // Group by subAccountKey within each accountKey
                 $groupedBySubAccountKey = $reportsByAccountKey->groupBy(function ($report) {
                     return $report->subAccountKey->sub_account_key ?? 'Unknown';
                 });

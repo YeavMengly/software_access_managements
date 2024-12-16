@@ -14,10 +14,7 @@ return new class extends Migration
         if (!Schema::hasTable('sub_account_keys')) {
             Schema::create('sub_account_keys', function (Blueprint $table) {
                 $table->increments('id');
-                
-                // Correctly create the foreign key reference
                 $table->foreignId('account_key')->constrained('account_keys')->onDelete('cascade');
-
                 $table->string('sub_account_key')->nullable();
                 $table->string('name_sub_account_key')->nullable();
                 $table->timestamps();
