@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('result_apply', function (Blueprint $table) {
-            $table->id(); // Primary key
+            $table->id();
             $table->string('report_key');
             $table->decimal('fin_law', 10, 2)->default(0);
             $table->decimal('current_loan', 10, 2)->default(0);

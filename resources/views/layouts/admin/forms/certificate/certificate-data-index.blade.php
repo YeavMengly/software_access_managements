@@ -6,13 +6,13 @@
 
             <div class="d-flex justify-content-between align-items-center">
                 <a class="btn btn-danger d-flex align-items-center justify-content-center"
-                    href="{{ url('/card_certificate') }}"  style="width: 160px; height: 50px;">
+                    href="{{ route('back') }}"  style="width: 160px; height: 50px;">
                     <i class="fas fa-arrow-left"></i>&nbsp; ត្រឡប់ក្រោយ
                 </a>
                 <h2 style="font-weight: 700;">តារាងទិន្នន័យសលាកបត្រ</h2>
 
                 <a id="submit-button" class="btn btn-success d-flex align-items-center justify-content-center"
-                    href="{{ route('certificate-data.create') }}" style="width: 160px; height: 50px;">
+                    href="{{ route('certificate-data.create') }}" style="width: 160px; height: 50px; border-radius: 4px;">
                     <span class="me-2">បញ្ចូលទិន្ន័យ</span>&nbsp;
                     <i id="plus-icon" class="fas fa-plus"></i>
                 </a>
@@ -24,15 +24,11 @@
             <form class="max-w-md mx-auto mt-3" method="GET" action="">
                 <div class="row">
                     <div class="col-md-6">
-                        <div class="input-group my-3" style="width: 40%;">
+                        <div class="input-group my-3" style="width: 35%;">
                             <input type="search" name="search" value="{{ request('search') }}" class="form-control"
-                                placeholder="ស្វែងរកទិន្នន័យសលាកបត្រ" aria-label="Search Address">
-                            <button type="submit" class="btn btn-primary">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 50 50">
-                                placeholder="ស្វែងរកទិន្នន័យសលាកបត្រ" aria-label="Search Address"
-                                style=" height: 50px;">
-                            <button type="submit" class="btn btn-primary" style="height: 50px; width: 120px;" >
-                                <svg xmlns="http://www.w3.org/2000/svg" style="height: 20px;"  viewBox="0 0 50 50">
+                                placeholder="ស្វែងរកទិន្នន័យ" aria-label="Search Address"​ style="height: 60px;">
+                            <button type="submit" class="btn btn-primary" style="height: 60px; width: 120px;">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 50 50">
                                     <path
                                         d="M 21 3 C 11.621094 3 4 10.621094 4 20 C 4 29.378906 11.621094 37 21 37 C 24.710938 37 28.140625 35.804688 30.9375 33.78125 L 44.09375 46.90625 L 46.90625 44.09375 L 33.90625 31.0625 C 36.460938 28.085938 38 24.222656 38 20 C 38 10.621094 30.378906 3 21 3 Z M 21 5 C 29.296875 5 36 11.703125 36 20 C 36 28.296875 29.296875 35 21 35 C 12.703125 35 6 28.296875 6 20 C 6 11.703125 12.703125 5 21 5 Z">
                                     </path>
@@ -43,20 +39,17 @@
                     </div>
                 </div>
             </form>
+            
         </div>
     </div>
 
     <div class="border-wrapper ml-4 mr-4">
         <div class="result-total-table-container">
-
             <div class="d-flex justify-content-end mb-2">
-                <!-- Dropdown for showing number of items per page -->
                 <div style="width: 120px;">
                     <select name="per_page" class="form-control" onchange="window.location.href=this.value;">
-                        <option value="{{ url()->current() }}?per_page=25" {{ request('per_page') == 25 ? 'selected' : '' }}>
                         <option value="{{ url()->current() }}?per_page=25"
-                            {{ request('per_page') == 25 ? 'selected' : '' }}>
-                            បង្ហាញ 25</option>
+                            {{ request('per_page') == 25 ? 'selected' : '' }}>បង្ហាញ 25</option>
                         <option value="{{ url()->current() }}?per_page=50"
                             {{ request('per_page') == 50 ? 'selected' : '' }}>បង្ហាញ 50</option>
                         <option value="{{ url()->current() }}?per_page=100"
@@ -91,9 +84,7 @@
                                 <td style="border: 1px solid black; text-align: center;">
                                     {{ $certificateData->report ? $certificateData->report->report_key : 'N/A' }}
                                 </td>
-                                {{-- <td style="border: 1px solid black; text-align: center;">
-                                    {{ $certificateData->certificate ? $certificateData->certificate->name_certificate : 'N/A' }}
-                                </td> --}}
+
                                 <td style="border: 1px solid black; text-align: center;">
                                     {{ number_format($certificateData->value_certificate, 0, ' ', ' ') }}
                                 </td>

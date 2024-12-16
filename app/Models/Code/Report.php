@@ -19,7 +19,7 @@ class Report extends Model
         'name_report_key',
         'fin_law',
         'current_loan',
-
+        'date_year',
         'new_credit_status',
         'early_balance',
         'apply',
@@ -29,13 +29,16 @@ class Report extends Model
         'law_correction',
     ];
 
+    protected $casts = [
+        'date_year' => 'date:Y-m-d', // Ensure proper date format
+    ];
     protected $dates = ['date_column'];
 
 
     // belong table to subAccount class
     public function subAccountKey()
     {
-        return $this->belongsTo(SubAccountKey::class, 'sub_account_key');
+        return $this->belongsTo(SubAccountKey::class, 'sub_account_key', 'sub_account_key');
     }
 
     // Point to total class
@@ -50,13 +53,24 @@ class Report extends Model
         return $this->hasMany(CertificateData::class, 'report_key');
     }
 
-    public function certificate(){
+    public function certificate()
+    {
         return $this->hasOne(Certificate::class, 'early_balance');
     }
 
     public function loans()
     {
         return $this->hasOne(Loans::class, 'report_key');
+    }
+
+    public function year()
+    {
+        return $this->belongsTo(Year::class, 'date_year', 'id'); // Correctly reference year_id
+    }
+
+    public function scopeFilterByMonthYear($query, $month, $year)
+    {
+        return $query->whereMonth('created_at', $month)->whereYear('created_at', $year);
     }
 
     public static function getReportSql()
@@ -99,13 +113,22 @@ class Report extends Model
 
     public function delete()
     {
-        if($this->loans()->exists()){
+        if ($this->loans()->exists()) {
             $this->loans()->delete();
         }
-        
-        if($this->certificateData()->exists()){
+
+        if ($this->certificateData()->exists()) {
             $this->certificateData()->delete();
         }
-        return parent::delete();   // Then delete the report
+        return parent::delete();   
+    }
+
+    public function scopeFilterReports($query, $year, $month = null)
+    {
+        $query->whereYear('date_year', $year);
+
+        if ($month) {
+            $query->whereMonth('created_at', $month);
+        }
     }
 }

@@ -39,6 +39,8 @@
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.min.js"></script>
 
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+
 
     @yield('styles')
 </head>
@@ -82,7 +84,7 @@
                     @yield('result-administrative-plan')
                     @yield('result-total-summaries')
                     @yield('result-total-apply')
-                 
+
 
                     @yield('content-mission')
                     @yield('content-table-mission-cambodia')
@@ -113,7 +115,9 @@
                     @yield('content-loans')
                     @yield('form-content-loans-upload')
                     @yield('form-content-loans-edit')
-               
+
+                    @yield('content-date-year')
+
 
                     @yield('form-form-mission')
 
@@ -183,7 +187,12 @@
                 <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
                 <div class="modal-footer">
                     <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                    <a class="btn btn-primary" href="login.html">Logout</a>
+
+                    <!-- Logout form -->
+                    <form action="{{ route('logout') }}" method="POST" style="display:inline;">
+                        @csrf
+                        <button type="submit" class="btn btn-primary">Logout</button>
+                    </form>
                 </div>
             </div>
         </div>
@@ -234,6 +243,7 @@
     <!-- Page level plugins -->
     <script src="vendor/datatables/jquery.dataTables.min.js"></script>
     <script src="vendor/datatables/dataTables.bootstrap4.min.js"></script>
+
 
 </body>
 

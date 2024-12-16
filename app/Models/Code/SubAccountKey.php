@@ -22,19 +22,19 @@ class SubAccountKey extends Model
     // belong table to key class
     public function key()
     {
-        return $this->belongsTo(Key::class, 'code');
+        return $this->belongsTo(Key::class, 'code',  'code');
     }
 
     // belong table to accountKey class
     public function accountKey()
     {
-        return $this->belongsTo(AccountKey::class, 'account_key');
+        return $this->belongsTo(AccountKey::class, 'account_key',  'account_key');
     }
 
     // point to report class
     public function report()
     {
-        return $this->hasMany(Report::class, 'sub_account_key');
+        return $this->hasMany(Report::class, 'sub_account_key', 'sub_account_key');
     }
 
     public function certificateData()

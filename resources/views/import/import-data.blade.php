@@ -57,8 +57,6 @@
                 </div>
             </div>
         </div>
-
-
 @endsection
 
 @section('styles')
@@ -80,9 +78,7 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
         (function($) {
-            "use strict"; // Start of use strict
-
-            // Smooth transition for success alert
+            "use strict"; 
             function showAlert(message, type) {
                 var alertHtml = `<div class="alert alert-${type} alert-dismissible fade show" role="alert">${message}
                                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
@@ -91,10 +87,9 @@
                 $('.alert').addClass('show');
                 setTimeout(function() {
                     $('.alert').removeClass('show');
-                }, 3000); // Adjust duration as needed
+                }, 3000); 
             }
 
-            // Handle form submission via AJAX
             $('#key-form').on('submit', function(e) {
                 e.preventDefault();
                 $.ajax({
@@ -103,7 +98,7 @@
                     data: $(this).serialize(),
                     success: function(response) {
                         showAlert(response.message, 'success');
-                        $('#key-form')[0].reset(); // Reset form fields if needed
+                        $('#key-form')[0].reset(); 
                     },
                     error: function(xhr) {
                         var errors = xhr.responseJSON.errors;
@@ -120,6 +115,6 @@
                 });
             });
 
-        })(jQuery); // End of use strict
+        })(jQuery); 
     </script>
 @endsection

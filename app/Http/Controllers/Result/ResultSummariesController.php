@@ -15,20 +15,12 @@ class ResultSummariesController extends Controller
 {
     public function index()
     {
-        // Fetch reports (Adjust the query as needed)
         $reports = Report::getReportSql()->get();
-
-        // dd($reports);
-        // Calculate the totals
         $totals = $this->calculateTotals($reports);
-
-
-        // Store the totals into the database
         $this->storeSummaryReport($totals);
 
-        // Sort totals by codeId
         if (isset($totals['code']) && is_array($totals['code'])) {
-            ksort($totals['code']); // Sort by key (codeId) in ascending order
+            ksort($totals['code']);
         }
 
         return view('layouts.table.result-total-summaries-table', compact('totals'));
@@ -37,16 +29,8 @@ class ResultSummariesController extends Controller
     public function export(Request $request)
     {
         try {
-            // Initialize query builder for Report model
             $query = SummaryReport::query();
-
-            // Apply filters
-            // $this->applyFilters($query, $request);
-
-            // Retrieve the filtered data
             $reports = $query->get();
-
-            // Create an instance of ResultExport and call the export method
             $resultExport = new SummariesExport($reports);
             return $resultExport->export($request);
         } catch (\Exception $e) {
@@ -58,31 +42,21 @@ class ResultSummariesController extends Controller
     public function exportPdf(Request $request)
     {
         try {
-            // Initialize query builder for Report model
             $query = Report::query();
-
-            // Get data
             $reports = $query->get();
             $totals = $this->calculateTotals($reports);
 
-            // Build the HTML content
             $html = view('layouts.pdf.summaries_pdf', compact('reports', 'totals'))->render();
-
-            // Configure mPDF with Khmer font and landscape mode
             $mpdf = new \Mpdf\Mpdf([
                 'format' => 'A2-L',
             ]);
-
-            // Write the HTML content to the PDF
             $mpdf->WriteHTML($html);
 
-            // Output PDF to download
             return $mpdf->Output('របាយការណ៍សង្ខេប.pdf', 'D');
         } catch (\Exception $e) {
             return response()->json(['error' => $e->getMessage()], 500);
         }
     }
-
 
     private function calculateTotals($reports)
     {
@@ -95,7 +69,7 @@ class ResultSummariesController extends Controller
             'apply' => 0,
             'total_increase' => 0,
             'code' => [],
-            'total_sums' => [ // New section to store column sums
+            'total_sums' => [
                 'fin_law' => 0,
                 'current_loan' => 0,
                 'decrease' => 0,
@@ -106,9 +80,7 @@ class ResultSummariesController extends Controller
                 'total_sum_refer' => 0,
                 'total_remain' => 0,
             ],
-            'report_key_seven' => [ // New section to store column sums
-
-            ],
+            'report_key_seven' => [],
         ];
 
         foreach ($reports as $index => $report) {
@@ -120,7 +92,6 @@ class ResultSummariesController extends Controller
             $totals['early_balance'] += $report->early_balance ?? 0;
             $totals['apply'] += $report->apply ?? 0;
             $report1 = substr($report->report_key, 2, 1);
-            // Update the total sums
             $totals['total_sums']['fin_law'] += ($totals['code']["$report->code"]['fin_law'] ?? 0);
             $totals['total_sums']['current_loan'] += ($totals['code']["$report->code"]['current_loan'] ?? 0);
             $totals['total_sums']['decrease'] += ($totals['code']["$report->code"]['decrease'] ?? 0);
@@ -142,10 +113,8 @@ class ResultSummariesController extends Controller
                 'total_sum_refer' => $totals['report_key']["$report1"]['total_sum_refer'] ?? 0,
                 'total_remain' => $totals['report_key']["$report1"]['total_remain'] ?? 0,
             ];
-            
+
             $totals['report_key']["$report1"]['report_key_seven']["$report->report_key"] = $this->calculateSumFields($report);
-            
-            // Update the total sums using the seven-digit prefix
             $totals['report_key']["$report1"]['fin_law'] += $totals['report_key']["$report1"]['report_key_seven']["$report->report_key"]['fin_law'];
             $totals['report_key']["$report1"]['current_loan'] += $totals['report_key']["$report1"]['report_key_seven']["$report->report_key"]['current_loan'];
             $totals['report_key']["$report1"]['decrease'] += $totals['report_key']["$report1"]['report_key_seven']["$report->report_key"]['decrease'];
@@ -153,12 +122,9 @@ class ResultSummariesController extends Controller
             $totals['report_key']["$report1"]['early_balance'] += $totals['report_key']["$report1"]['report_key_seven']["$report->report_key"]['early_balance'];
             $totals['report_key']["$report1"]['apply'] += $totals['report_key']["$report1"]['report_key_seven']["$report->report_key"]['apply'];
             $totals['report_key']["$report1"]['total_increase'] += $totals['report_key']["$report1"]['report_key_seven']["$report->report_key"]['total_increase'];
-            
             $totals['report_key']["$report1"]['total_sum_refer'] += $totals['report_key']["$report1"]['report_key_seven']["$report->report_key"]['early_balance'] + $totals['report_key']["$report1"]['report_key_seven']["$report->report_key"]['apply'];
-            
             $totals['report_key']["$report1"]['total_remain'] += $totals['report_key']["$report1"]['report_key_seven']["$report->report_key"]['new_credit_status']
                 - ($totals['report_key']["$report1"]['report_key_seven']["$report->report_key"]['early_balance'] + $totals['report_key']["$report1"]['report_key_seven']["$report->report_key"]['apply']);
-            
         }
 
         return $totals;

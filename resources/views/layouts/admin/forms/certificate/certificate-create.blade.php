@@ -7,8 +7,11 @@
                 <div class="row">
                     <div class="col-lg-12 margin-tb mb-4">
                         <div class="d-flex justify-content-between align-items-center">
-                            <h3 class="card-title">កែដើមគ្រា</h3>
-                            <a class="btn btn-danger  d-flex align-items-center justify-content-center" href="{{ route('certificate.index') }}" style="width: 160px; height: 50px;">  <i class="fas fa-arrow-left"></i> &nbsp;ត្រឡប់ក្រោយ</a>
+                            <a class="btn btn-danger  d-flex align-items-center justify-content-center"
+                                href="{{ route('back') }}" style="width: 160px; height: 50px;"> <i
+                                    class="fas fa-arrow-left"></i>&nbsp;&nbsp; ត្រឡប់ក្រោយ</a>
+                            <h3 class="card-title" style="font-weight: 500;">កែដើមគ្រា</h3>
+                            <span></span>
                         </div>
                     </div>
                 </div>
@@ -43,9 +46,7 @@
                                         <select name="report_key" id="reportKeySelect" class="form-control" size="5"
                                             onchange="updateReportInputField()" style="width: 420px; height: 260px;">
                                             @foreach ($reports as $report)
-                                                <option value="{{ $report->id }}">
-                                                    {{ $report->subAccountKey->sub_account_key }} >
-                                                    {{ $report->report_key }}
+                                                <option value="{{ $report->id }}"> {{ $report->subAccountKey->sub_account_key }} > {{ $report->report_key }}
                                                 </option>
                                             @endforeach
                                         </select>
@@ -66,7 +67,8 @@
                                 </div>
 
                                 <div class="d-flex align-items-center">
-                                    <button type="submit" class="btn btn-primary ml-auto"  style="width: 300px; height: 60px;">បានរក្សាទុក</button>
+                                    <button type="submit" class="btn btn-primary ml-auto"
+                                        style="width: 300px; height: 60px;">បានរក្សាទុក</button>
                                 </div>
                             </div>
                         </form>
