@@ -13,6 +13,7 @@ class CambodiaMission extends Model
         'role',
         'position_type',
         'letter_number',
+        'letter_format',
         'letter_date',
         'pocket_money',
         'meal_money',

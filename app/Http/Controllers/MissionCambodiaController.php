@@ -45,12 +45,13 @@ class MissionCambodiaController extends Controller
         $search = $request->input('search');
         $startDate = $request->input('start_date');
         $endDate = $request->input('end_date');
-
+        $selectedYear = $request->input('year', date('Y'));
+        $selectedMonth = $request->input('month', now()->month);
+    
         // Initialize query builder
         $query = CambodiaMission::query();
         // Ensure pagination is used
         $missions = CambodiaMission::paginate(20);
-
 
         // Filter by text search if provided
         if ($search) {
@@ -95,11 +96,18 @@ class MissionCambodiaController extends Controller
             }
         }
 
+        // Filter by selected year if provided
+        if ($selectedYear) {
+            $query->whereYear('created_at', $selectedYear);
+        }
+
+        // Filter by selected month if provided
+        if ($selectedMonth) {
+            $query->whereMonth('created_at', $selectedMonth);
+        }
+
         // Fetch missions
         $missions = $query->get();
-
-        // $perPage = $request->get('per_page', 25); // Get per_page from request or default to 25
-        // $missions = CambodiaMission::paginate($perPage); // Assuming 'ResultMission' is the model
 
         // Calculate totals
         $totals = [
@@ -126,6 +134,8 @@ class MissionCambodiaController extends Controller
             'missions' => $missions,
             'totals' => $totals,
             'groupedTotals' => $groupedTotals,
+            'selectedYear' => $selectedYear,
+            'selectedMonth' => $selectedMonth,
         ]);
     }
 
@@ -170,12 +180,12 @@ class MissionCambodiaController extends Controller
             'ង' => ['pocket_money' => 16000, 'meal_money' => 60000, 'accommodation_money' => 80000],
         ];
 
-        // Validate and process the request data
         $validatedData = $request->validate([
             'names.*' => 'required|string|max:255',
             'people.*.role' => ['required', 'string', Rule::in($roles)],
             'people.*.position_type' => 'required|string|in:ក,ខ១,ខ២,គ,ឃ,ង',
-            'letter_number' => 'required|numeric',
+            'letter_number' => 'required|string',
+            'letter_format' => 'required|string',
             'full_letter_number' => 'required|string',
             'letter_date' => 'required|date',
             'mission_objective' => 'required|string',
@@ -193,10 +203,21 @@ class MissionCambodiaController extends Controller
         $daysCount = $missionStartDate->diff($missionEndDate)->days + 1;
         $nightsCount = $daysCount - 1;
 
+        // Parse dates
+        $letterDate = Carbon::parse($request->letter_date);
+        $missionStartDate = Carbon::parse($request->mission_start_date);
+
+        // Check the condition
+        if ($missionStartDate->lessThan($letterDate)) {
+            // Return an error message
+            return redirect()->back()->with('error', 'កាលបរិច្ឆេទចាប់ផ្តើមបេសកកម្មមិនអាចមុនកាលបរិច្ឆេទនៃលិខិតនោះទេ។');
+        }   
+
         // Prepare data for the mission (this will be used for all persons)
         $missionData = [
             'letter_number' => $request->letter_number,
-            'letter_number' => $fullLetterNumber,
+            'letter_format' => $request->letter_format,
+            'full_letter_number' => $fullLetterNumber,
             'letter_date' => $request->letter_date,
             'mission_objective' => $request->mission_objective,
             'location' => $request->location,
@@ -339,12 +360,8 @@ class MissionCambodiaController extends Controller
 
     public function edit($id)
     {
-        // Fetch the mission data
         $missions = CambodiaMission::findOrFail($id);
-
-        // Get existing people associated with the mission
-        $people = CambodiaMission::where('id', $id)->first()->people;
-        // Pass data to the view
+        $people = $missions->people;  // This will get the associated people.
         return view('layouts.admin.forms.form-mission.mission-edit', [
             'missions' => $missions,
             'people' => $people,
@@ -369,8 +386,8 @@ class MissionCambodiaController extends Controller
             'name' => 'required|string|max:255',
             'role' => 'required|string|max:255',
             'position_type' => 'required|string|max:255',
-            'letter_number' => 'required|numeric',
-            'letter_format' => 'required|string|max:255',
+            'letter_number' => 'required|string',
+            'letter_format' => 'required|string',
             'letter_date' => 'required|date',
             'mission_objective' => 'required|string',
             'location' => 'nullable|string',
@@ -379,8 +396,15 @@ class MissionCambodiaController extends Controller
             'travel_allowance' => 'required|numeric|min:0',
         ]);
 
+        // Retrieve data from the request
+        $letterNumber = $request->input('letter_number');
+        $letterFormat = $request->input('letter_format');
+
+        // Combine the fields into the full_letter_number
+        $fullLetterNumber = $letterNumber . ' ' . $letterFormat;
+
         // Construct the full letter number
-        $fullLetterNumber = trim($validatedData['letter_format'] . '/' . $validatedData['letter_number']);
+        // $fullLetterNumber = trim($validatedData['letter_format'] . '/' . $validatedData['letter_number']);
 
         $name = $validatedData['name']; // Retrieve name from the validated data
 
@@ -479,6 +503,9 @@ class MissionCambodiaController extends Controller
         //     }
         // }
 
+        // Retrieve the existing mission record
+        $mission = CambodiaMission::findOrFail($id);
+
         // Get the position type values
         $positionType = $validatedData['position_type'];
 
@@ -488,7 +515,7 @@ class MissionCambodiaController extends Controller
         $accommodationMoneyPerNight = $positionTypes[$positionType]['accommodation_money'] ?? 0;
 
         // Find the mission record
-        $mission = CambodiaMission::findOrFail($id);
+        // $mission = CambodiaMission::findOrFail($id);
 
         // Calculate the duration of the mission
         $missionStartDate = new \DateTime($request->mission_start_date);
@@ -529,7 +556,7 @@ class MissionCambodiaController extends Controller
             'full_letter_number' => $fullLetterNumber,
             'letter_date' => $validatedData['letter_date'],
             'mission_objective' => $validatedData['mission_objective'],
-            'location' => $request->location,
+            'location' => $validatedData['location'],
             'mission_start_date' => $validatedData['mission_start_date'],
             'mission_end_date' => $validatedData['mission_end_date'],
             'days_count' => $daysCount,
@@ -547,6 +574,9 @@ class MissionCambodiaController extends Controller
         // Update the mission record
         $mission = CambodiaMission::findOrFail($id);
         $mission->update($updateData);
+        $mission->letter_number = $letterNumber;
+        $mission->letter_format = $letterFormat;
+        $mission->full_letter_number = $fullLetterNumber;
 
         // Redirect with success message
         return redirect()->route('mission-cam.index')->with('success', 'Mission updated successfully');

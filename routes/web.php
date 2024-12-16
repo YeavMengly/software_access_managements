@@ -41,7 +41,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('dashboard.dashboardui');
-});
+})->name('dashboard');
 
 // Route to display report-mission view
 Route::get('/report-mission', function () {
@@ -120,12 +120,9 @@ Route::post('/loans/import', [LoansController::class, 'import'])->name('loans.im
 Route::get('/results/export', [ResultController::class, 'export'])->name('result.export');
 Route::get('/summaries/export', [ResultSummariesController::class, 'export'])->name('summaries.export');
 
-
 //===============================>> Manage Pdf Print
 Route::get('/results/pdf', [ResultController::class, 'exportPdf'])->name('result.exportPdf');
 Route::get('/summaries/export-pdf', [ResultSummariesController::class, 'exportPdf'])->name('summaries.exportPdf');
-
-
 
 Route::get('/mission-abroad', [MissionAbroadController::class, 'index'])->name('table-mission-abroad');
 // Route::get('mission-abroad/export', [MissionAbroadController::class, 'export'])->name('table-mission-abroad');

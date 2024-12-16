@@ -5,7 +5,7 @@
         <div class="row mt-4 mr-4">
             <div class="col-lg-12 margin-tb mb-4">
                 <div class="d-flex justify-content-between align-items-center">
-                    <a class="btn btn-danger" href="{{ url('/card_certificate') }}"
+                    <a class="btn btn-danger" href="{{ route('total_card') }}"
                         style="font-family: 'Khmer OS Siemreap', sans-serif;"> <i class="fas fa-arrow-left"></i>
                         ត្រឡប់ក្រោយ</a>
                 </div>
@@ -19,7 +19,7 @@
                             placeholder="ស្វែងរកទិន្នន័យ" aria-label="Search Address">
                     </div>
                     <!-- Search by date -->
-                    <div class="input-group mt-3 my-3" style="width: 70%; font-family: 'Khmer OS Siemreap', sans-serif">
+                    {{-- <div class="input-group mt-3 my-3" style="width: 70%; font-family: 'Khmer OS Siemreap', sans-serif">
                         <!-- Label for Start Date -->
                         <div class="input-group-prepend">
                             <span class="input-group-text"
@@ -33,7 +33,7 @@
                         </div>
                         <input type="date" name="end_date" value="{{ request('end_date') }}" class="form-control"
                             placeholder="End Date" aria-label="End Date">
-                    </div>
+                    </div> --}}
                 </div>
                 <div class="col-md-6">
                     <div class="d-flex align-items-center justify-content-end py-3">
@@ -66,7 +66,7 @@
                 <button type="button" class="btn btn-secondary ml-3"
                     onclick="window.location.href='{{ route('reports-missions.index') }}'"
                     style="padding: 10px 40px;
-                    font-size: 18px;
+                    font-size: 18px; 
                     font-family: 'Khmer OS Siemreap', sans-serif;
                     background-color: #df5bad;
                     width: 200px;
@@ -88,6 +88,69 @@
                 </select>
             </div>
         </div> --}}
+        <form method="GET" action="{{ route('mission-cam.index') }}">
+            <div class="input-group my-3 ml-auto" style="width: 20%; font-family: 'Khmer OS Siemreap', sans-serif">
+                <!-- Year Selection --> 
+                <div class="input-group-prepend">
+                    <span class="input-group-text" style="background-color: #007bff; color: white;">ឆ្នាំ</span>
+                </div>
+                <select name="year" class="form-control" onchange="this.form.submit()">
+                    <option value="" disabled>ជ្រើសរើសឆ្នាំ</option>
+                    @for ($year = date('Y'); $year >= 2022; $year--)
+                        <option value="{{ $year }}" {{ request('year', date('Y')) == $year ? 'selected' : '' }}>
+                            {{ convertToKhmerNumber($year) }}
+                        </option>
+                    @endfor
+                </select>
+
+                <!-- Month Selection -->
+                @php
+                    // Define months in Khmer
+                    $khmerMonths = [
+                        1 => 'មករា',
+                        2 => 'កុម្ភៈ',
+                        3 => 'មិនា',
+                        4 => 'មេសា',
+                        5 => 'ឧសភា',
+                        6 => 'មិថុនា',
+                        7 => 'កក្កដា',
+                        8 => 'សីហា',
+                        9 => 'កញ្ញា',
+                        10 => 'តុលា',
+                        11 => 'វិច្ឆិកា',
+                        12 => 'ធ្នូ',
+                    ];
+                @endphp
+                <div class="input-group-prepend">
+                    <span class="input-group-text" style="background-color: #007bff; color: white;">ខែ</span>
+                </div>
+                <select name="month" class="form-control" onchange="this.form.submit()">
+                    <option value="" disabled selected>ជ្រើសរើសខែ</option>
+                    @for ($month = 1; $month <= 12; $month++)
+                        <option value="{{ $month }}"
+                            {{ request('month', now()->month) == $month ? 'selected' : '' }}>
+                            {{ $khmerMonths[$month] }}
+                        </option>
+                    @endfor
+                </select>
+
+                {{-- @php
+                    $daysInMonth = now()->daysInMonth;
+                @endphp
+  
+                <div class="input-group-prepend">
+                    <span class="input-group-text" style="background-color: #007bff; color: white;">ថ្ងៃ</span>
+                </div>
+                <select name="day" class="form-control" onchange="this.form.submit()">
+                    <option value="" disabled selected>ជ្រើសរើសថ្ងៃ</option>
+                    @for ($day = 1; $day <= 31; $day++)
+                        <option value="{{ $day }}" {{ request('day') == $day ? 'selected' : '' }}>
+                            {{ $day }}
+                        </option>
+                    @endfor
+                </select> --}}
+            </div>
+        </form>
     </div>
 
     <div class="border-wrapper mt-3">
@@ -103,7 +166,7 @@
                 <h4>ការិយាល័យហិរញ្ញវត្ថុ</h4>
             </div>
             <div class="third-header">
-                <h4>តារាងរបាយការណ៍ចំណាយបេសកកម្មក្នុងប្រទេសឆ្នាំ ២០២៤</h4>
+                <h4>តារាងរបាយការណ៍ចំណាយបេសកកម្មក្នុងប្រទេសឆ្នាំ {{ convertToKhmerNumber(request('year', date('Y'))) }}</h4>
                 <h4>របស់អគ្គនាយករដ្ឋបាល និងហិរញ្ញវត្ថុ</h4>
             </div>
 
@@ -122,7 +185,7 @@
                                 តួនាទី</th>
                             <th rowspan="2"
                                 style="border: 2px solid black; font-family: 'Khmer OS Siemreap', sans-serif; font-weight: bold;">
-                                ប្រភេទមុខតំណែង</th> 
+                                ប្រភេទមុខតំណែង</th>
                             <th colspan="2"
                                 style="border: 2px solid black; font-family: 'Khmer OS Siemreap', sans-serif; font-weight: bold;">
                                 លិខិតបញ្ជាបេសកកម្ម</th>
@@ -194,101 +257,132 @@
                                 សម្រាប់កម្មវិធីទី០៥ ចង្កោមសកម្មភាពទី០១ ស្ដីពី ពង្រឹងប្រសិទ្ធភាពនៃការអនុវត្តចំណាយ
                                 និងការគ្រប់គ្រងកិច្ចការហិរញ្ញវត្ថុតាមប្រព័ន្ធ FMIS</td>
                         </tr>
-                        @foreach ($missions->groupBy('letter_number') as $letterNumber => $group)
-                            @foreach ($group as $index => $mission)
+                        @php
+                            $totalIndexCounter = 1;
+                        @endphp
+                        @foreach ($missions->groupBy('letter_format') as $letterFormat => $groupedByFormat)
+                            @foreach ($groupedByFormat->groupBy('letter_number') as $letterNumber => $group)
+                                @foreach ($group as $index => $mission)
+                                    <tr>
+                                        <td style="border: 2px solid black; font-family: 'Khmer OS Siemreap', sans-serif">
+                                            {{ $totalIndexCounter }}.{{ $index + 1 }}
+                                        </td>
+                                        <td
+                                            style="border: 2px solid black; width:180px; font-family: 'Khmer OS Siemreap', sans-serif">
+                                            {{ $mission->name }}
+                                        </td>
+                                        <td
+                                            style="border: 2px solid black; width: 100px; font-family: 'Khmer OS Siemreap', sans-serif">
+                                            {{ $mission->role }}
+                                        </td>
+                                        <td style="border: 2px solid black; font-family: 'Khmer OS Siemreap', sans-serif">
+                                            {{ $mission->position_type }}
+                                        </td>
+                                        <td style="border: 2px solid black; font-family: 'Khmer OS Siemreap', sans-serif">
+                                            {{ $mission->letter_number }} {{ $mission->letter_format }}
+                                        </td>
+                                        <td
+                                            style="border: 2px solid black; width: 110px; font-family: 'Khmer OS Siemreap', sans-serif">
+                                            {{ $mission->letter_date }}
+                                        </td>
+                                        <td style="border: 2px solid black; font-family: 'Khmer OS Siemreap', sans-serif">
+                                            {{ $mission->mission_objective }}
+                                        </td>
+                                        <td style="border: 2px solid black; font-family: 'Khmer OS Siemreap', sans-serif">
+                                            {{ $mission->location }}
+                                        </td>
+                                        <td
+                                            style="border: 2px solid black; width: 110px; font-family: 'Khmer OS Siemreap', sans-serif">
+                                            {{ $mission->mission_start_date }}
+                                        </td>
+                                        <td
+                                            style="border: 2px solid black; width: 110px; font-family: 'Khmer OS Siemreap', sans-serif">
+                                            {{ $mission->mission_end_date }}
+                                        </td>
+                                        <td style="border: 2px solid black; font-family: 'Khmer OS Siemreap', sans-serif">
+                                            {{ $mission->days_count }}
+                                        </td>
+                                        <td style="border: 2px solid black; font-family: 'Khmer OS Siemreap', sans-serif">
+                                            {{ $mission->nights_count }}
+                                        </td>
+                                        <td style="border: 2px solid black; font-family: 'Khmer OS Siemreap', sans-serif">
+                                            {{ number_format($mission->travel_allowance, 0, '.', ',') }}
+                                        </td>
+                                        <td style="border: 2px solid black; font-family: 'Khmer OS Siemreap', sans-serif">
+                                            {{ number_format($mission->pocket_money, 0, '.', ',') }}
+                                        </td>
+                                        <td style="border: 2px solid black; font-family: 'Khmer OS Siemreap', sans-serif">
+                                            {{ number_format($mission->total_pocket_money, 0, '.', ',') }}
+                                        </td>
+                                        <td style="border: 2px solid black; font-family: 'Khmer OS Siemreap', sans-serif">
+                                            {{ number_format($mission->meal_money, 0, '.', ',') }}
+                                        </td>
+                                        <td style="border: 2px solid black; font-family: 'Khmer OS Siemreap', sans-serif">
+                                            {{ number_format($mission->total_meal_money, 0, '.', ',') }}
+                                        </td>
+                                        <td style="border: 2px solid black; font-family: 'Khmer OS Siemreap', sans-serif">
+                                            {{ number_format($mission->accommodation_money, 0, '.', ',') }}
+                                        </td>
+                                        <td style="border: 2px solid black; font-family: 'Khmer OS Siemreap', sans-serif">
+                                            {{ number_format($mission->total_accommodation_money, 0, '.', ',') }}
+                                        </td>
+                                        <td style="border: 2px solid black; font-family: 'Khmer OS Siemreap', sans-serif">
+                                            {{ number_format($mission->other_allowances, 0, '.', ',') }}
+                                        </td>
+                                        <td style="border: 2px solid black; font-family: 'Khmer OS Siemreap', sans-serif">
+                                            {{ number_format($mission->final_total, 0, '.', ',') }}
+                                        </td>
+                                        <td style="border: 2px solid black;">
+                                            <div style="display: flex; gap: 5px;">
+                                                <a href="{{ route('missions.edit', $mission->id) }}"
+                                                    class="btn btn-primary btn-sm">
+                                                    <i class="fas fa-edit"></i>
+                                                </a>
+                                                <form id="delete-form-{{ $mission->id }}"
+                                                    action="{{ route('missions.delete', $mission->id) }}" method="POST"
+                                                    style="display:inline;">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button type="button" class="btn btn-danger btn-sm"
+                                                        onclick="confirmDelete({{ $mission->id }})">
+                                                        <i class="fas fa-trash-alt"></i>
+                                                    </button>
+                                                </form>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                @endforeach
+
+                                <!-- Display the total row for this letter_number group -->
                                 <tr>
-                                    <td style="border: 2px solid black; font-family: 'Khmer OS Siemreap', sans-serif">
-                                        {{ $loop->parent->iteration }}.{{ $index + 1 }}</td>
-                                    <td
-                                        style="border: 2px solid black; width:180px; font-family: 'Khmer OS Siemreap', sans-serif">
-                                        {{ $mission->name }}</td>
-                                    <td
-                                        style="border: 2px solid black; width: 100px; font-family: 'Khmer OS Siemreap', sans-serif">
-                                        {{ $mission->role }}</td>
-                                    <td style="border: 2px solid black; font-family: 'Khmer OS Siemreap', sans-serif">
-                                        {{ $mission->position_type }}</td>
-                                    <td style="border: 2px solid black; font-family: 'Khmer OS Siemreap', sans-serif">
-                                        {{ $mission->letter_number }} {{ $mission->letter_format }}</td>
-                                    <td style="border: 2px solid black; width: 110px; font-family: 'Khmer OS Siemreap', sans-serif">
-                                        {{ $mission->letter_date }}</td>
-                                    <td style="border: 2px solid black; font-family: 'Khmer OS Siemreap', sans-serif">
-                                        {{ $mission->mission_objective }}</td>
-                                    <td style="border: 2px solid black; font-family: 'Khmer OS Siemreap', sans-serif">
-                                        {{ $mission->location }}</td>
-                                    <td
-                                        style="border: 2px solid black; width: 110px; font-family: 'Khmer OS Siemreap', sans-serif">
-                                        {{ $mission->mission_start_date }}</td>
-                                    <td 
-                                        style="border: 2px solid black; width: 110px; font-family: 'Khmer OS Siemreap', sans-serif">
-                                        {{ $mission->mission_end_date }}</td>
-                                    <td style="border: 2px solid black; font-family: 'Khmer OS Siemreap', sans-serif">
-                                        {{ $mission->days_count }}</td>
-                                    <td style="border: 2px solid black; font-family: 'Khmer OS Siemreap', sans-serif">
-                                        {{ $mission->nights_count }}</td>
-                                    <td style="border: 2px solid black; font-family: 'Khmer OS Siemreap', sans-serif">
-                                        {{ number_format($mission->travel_allowance, 0, '.', ',') }}</td>
-                                    <td style="border: 2px solid black; font-family: 'Khmer OS Siemreap', sans-serif">
-                                        {{ number_format($mission->pocket_money, 0, '.', ',') }}</td>
-                                    <td style="border: 2px solid black; font-family: 'Khmer OS Siemreap', sans-serif">
-                                        {{ number_format($mission->total_pocket_money, 0, '.', ',') }}</td>
-                                    <td style="border: 2px solid black; font-family: 'Khmer OS Siemreap', sans-serif">
-                                        {{ number_format($mission->meal_money, 0, '.', ',') }}</td>
-                                    <td style="border: 2px solid black; font-family: 'Khmer OS Siemreap', sans-serif">
-                                        {{ number_format($mission->total_meal_money, 0, '.', ',') }}</td>
-                                    <td style="border: 2px solid black; font-family: 'Khmer OS Siemreap', sans-serif">
-                                        {{ number_format($mission->accommodation_money, 0, '.', ',') }}</td>
-                                    <td style="border: 2px solid black; font-family: 'Khmer OS Siemreap', sans-serif">
-                                        {{ number_format($mission->total_accommodation_money, 0, '.', ',') }}</td>
-                                    <td style="border: 2px solid black; font-family: 'Khmer OS Siemreap', sans-serif">
-                                        {{ number_format($mission->other_allowances, 0, '.', ',') }}</td>
-                                    <td style="border: 2px solid black; font-family: 'Khmer OS Siemreap', sans-serif">
-                                        {{ number_format($mission->final_total, 0, '.', ',') }}</td>
+                                    <td colspan="12"
+                                        style="border: 2px solid black; font-family: 'Khmer OS Muol Light', sans-serif;">
+                                        <strong>{{ 'សរុប' }} {{ $totalIndexCounter }}</strong>
+                                    </td>
                                     <td style="border: 2px solid black;">
-                                        <div style="display: flex; gap: 5px;">
-                                            <a href="{{ route('missions.edit', $mission->id) }}"
-                                                class="btn btn-primary btn-sm">
-                                                <i class="fas fa-edit"></i>
-                                            </a>
-                                            <form id="delete-form-{{ $mission->id }}"
-                                                action="{{ route('missions.delete', $mission->id) }}" method="POST"
-                                                style="display:inline;">
-                                                @csrf
-                                                @method('DELETE')
-                                                <button type="button" class="btn btn-danger btn-sm"
-                                                    onclick="confirmDelete({{ $mission->id }})">
-                                                    <i class="fas fa-trash-alt"></i>
-                                                </button>
-                                            </form>
-                                        </div>
+                                        <strong>{{ number_format($group->sum('travel_allowance'), 0, '.', ',') }}</strong>
+                                    </td>
+                                    <td style="border: 2px solid black;"></td>
+                                    <td style="border: 2px solid black;">
+                                        <strong>{{ number_format($group->sum('total_pocket_money'), 0, '.', ',') }}</strong>
+                                    </td>
+                                    <td style="border: 2px solid black;"></td>
+                                    <td style="border:   2px solid black;">
+                                        <strong>{{ number_format($group->sum('total_meal_money'), 0, '.', ',') }}</strong>
+                                    </td>
+                                    <td style="border: 2px solid black;"></td>
+                                    <td style="border: 2px solid black;">
+                                        <strong>{{ number_format($group->sum('total_accommodation_money'), 0, '.', ',') }}</strong>
+                                    </td>
+                                    <td style="border: 2px solid black;"></td>
+                                    <td style="border: 2px solid black;">
+                                        <strong>{{ number_format($group->sum('final_total'), 0, '.', ',') }}</strong>
                                     </td>
                                 </tr>
+                                @php
+                                    $totalIndexCounter++;
+                                @endphp
                             @endforeach
-                            <!-- Display the total row for this group -->
-                            <tr>
-                                <td colspan="12"
-                                    style="border: 2px solid black; font-family: 'Khmer OS Muol Light', sans-serif;">
-                                    <strong>{{ 'សរុប' }} {{ $loop->index + 1 }}</strong>
-                                </td>
-                                <td style="border: 2px solid black;">
-                                    <strong>{{ number_format($groupedTotals[$letterNumber]['travel_allowance'], 0, '.', ',') }}</strong>
-                                </td>
-                                <td style="border: 2px solid black;"></td>
-                                <td style="border: 2px solid black;">
-                                    <strong>{{ number_format($groupedTotals[$letterNumber]['total_pocket_money'], 0, '.', ',') }}</strong>
-                                </td>
-                                <td style="border: 2px solid black;"></td>
-                                <td style="border: 2px solid black;">
-                                    <strong>{{ number_format($groupedTotals[$letterNumber]['total_meal_money'], 0, '.', ',') }}</strong>
-                                </td>
-                                <td style="border: 2px solid black;"></td>
-                                <td style="border: 2px solid black;">
-                                    <strong>{{ number_format($groupedTotals[$letterNumber]['total_accommodation_money'], 0, '.', ',') }}</strong>
-                                </td>
-                                <td style="border: 2px solid black;"></td>
-                                <td style="border: 2px solid black;">
-                                    <strong>{{ number_format($groupedTotals[$letterNumber]['final_total'], 0, '.', ',') }}</strong>
-                                </td>
-                            </tr>
                         @endforeach
                         <tr>
                             <td colspan="12"
@@ -314,6 +408,7 @@
                             <td style="border: 2px solid black;">
                                 <strong>{{ number_format($totals['final_total'], 0, '.', ',') }}</strong>
                             </td>
+                            <td style="border: 2px solid black;"></td>
                         </tr>
                     </tbody>
                 </table>
@@ -538,6 +633,14 @@
 
             // Reload the page without query parameters
             window.location.href = "{{ url()->current() }}";
+        }
+
+
+        if (!function_exists('convertToKhmerNumber')) {
+            function convertToKhmerNumber($number) {
+                $khmerDigits = ['០', '១', '២', '៣', '៤', '៥', '៦', '៧', '៨', '៩'];
+                return str_replace(range(0, 9), $khmerDigits, $number);
+            }
         }
     </script>
 @endsection

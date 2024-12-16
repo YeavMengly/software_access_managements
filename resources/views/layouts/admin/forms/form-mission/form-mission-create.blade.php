@@ -6,7 +6,7 @@
                 <div class="d-flex justify-content-between align-items-center"
                     style="font-family: 'Khmer OS Siemreap', sans-serif;">
                     <h3 class="card-title">បញ្ចូលតារាងរបាយការណ៏ចំណាយបេសកកម្មក្នុងប្រទេស ឆ្នាំ២០២៤</h3>
-                    <a class="btn btn-danger" href="{{ route('mission-cam.index') }}"><i class="fas fa-arrow-left"></i>
+                    <a class="btn btn-danger" href="{{ route('dashboard') }}"><i class="fas fa-arrow-left"></i>
                         ត្រឡប់ក្រោយ</a>
                 </div>
             </div>
@@ -69,11 +69,13 @@
                                             placeholder="Enter number" oninput="updateFullLetterNumber()">
 
                                         <!-- Format selection dropdown -->
-                                        <select id="letter_format" class="form-select mx-3"
+                                        <select id="letter_format" name="letter_format" class="form-select mx-3"
                                             onchange="updateFullLetterNumber()">
                                             <option value=""></option>
-                                            <option value=" កប/ល.ទ.ខ">កប/ល.ទ.ខ</option>
-                                            <option value=" កប/ឧ.ប.ទ.ឃ">កប/ឧ.ប.ទ.ឃ</option>
+                                            <option value=" កប/ល.ប.ក">កប/ល.ប.ក</option>
+                                            <option value=" កប/ឧ.ទ.ន">កប/ឧ.ទ.ន</option>
+                                            <option value=" កប/ឧ.ទ.ន.ខ.ល">កប/ឧ.ទ.ន.ខ.ល</option>
+                                            <option value=" កប/ឧ.ទ.ន.គ.ក.ប">កប/ឧ.ទ.ន.គ.ក.ប</option>
                                         </select>
 
                                         <!-- Hidden input to store the combined value -->
@@ -354,4 +356,13 @@
             document.getElementById('full_letter_number').value = letterNumber + letterFormat;
         }
     </script>
+    @if (session('error'))
+        <script>
+            // SweetAlert will show the error message
+            Swal.fire({
+                icon: 'error',
+                title: 'ទិន្នន័យដែលបានបញ្ចូលមិនជោគជ័យ',
+            });
+        </script>      
+    @endif
 @endsection
