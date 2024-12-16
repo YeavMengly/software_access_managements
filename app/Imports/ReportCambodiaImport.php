@@ -17,6 +17,7 @@ class ReportCambodiaImport implements ToCollection
                 'name_latin' => $row[2],
                 'account_number' => $row[3],
             ];
-        });
+        });   
     }
 }
+ 

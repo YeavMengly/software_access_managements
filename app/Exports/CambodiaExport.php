@@ -191,7 +191,7 @@ class CambodiaExport
 
                     // Apply style to a range of cells
                     $sheet->getStyle('A' . $row . ':U' . $row)->applyFromArray($styleArray);
-                    
+
                     // Increment the row for the next entry or total
                     $row++;
                     $totalCounter++;
@@ -228,7 +228,7 @@ class CambodiaExport
             $sheet->setCellValue('B' . $row, $mission->name);
             $sheet->setCellValue('C' . $row, $mission->role);
             $sheet->setCellValue('D' . $row, $mission->position_type);
-            $sheet->setCellValue('E' . $row, $mission->letter_number);
+            $sheet->setCellValue('E' . $row, $mission->letter_number . ' ' . $mission->letter_format);
             $sheet->setCellValue('F' . $row, Date::PHPToExcel($mission->letter_date));
             $sheet->setCellValue('G' . $row, $mission->mission_objective);
             $sheet->setCellValue('H' . $row, $mission->location);

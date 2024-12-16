@@ -21,6 +21,7 @@ class CreateCambodiaMissionsTable extends Migration
                 $table->string('role');
                 $table->string('position_type');
                 $table->string('letter_number');
+                $table->string('letter_format');
                 $table->date('letter_date');
                 $table->text('mission_objective');
                 $table->string('location');

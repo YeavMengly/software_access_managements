@@ -155,28 +155,45 @@
                                 <label for="mission_letter">លិខិតបញ្ជាបេសកកម្ម:</label>
                                 <div class="form-subgroup">
                                     <label for="letter_number">លេខ:</label>
-                                    <div class="input-group">
+                                    <div class="input-group mx-3">
+                                        <!-- Number input -->
                                         <input type="number" name="letter_number" id="letter_number"
-                                            class="form-control @error('letter_number') is-invalid @enderror"
-                                            value="{{ old('letter_number', $missions->letter_number) }}">
+                                            class="form-control @error('letter_number') is-invalid @enderror" min="0"
+                                            placeholder="Enter number" oninput="updateFullLetterNumber()"
+                                            value="{{ old('letter_number', $missions->letter_number ?? '') }}">
+
+                                        <!-- Format selection dropdown -->
 
                                         <select id="letter_format" name="letter_format" class="form-select mx-3"
                                             onchange="updateFullLetterNumber()">
-                                            <option value="កប/ល.ទ.ខ"
-                                                {{ old('letter_format', $missions->letter_format) === 'កប/ល.ទ.ខ' ? 'selected' : '' }}>
-                                                កប/ល.ទ.ខ</option>
-                                            <option value="កប/ឧ.ប.ទ.ឃ"
-                                                {{ old('letter_format', $missions->letter_format) === 'កប/ឧ.ប.ទ.ឃ' ? 'selected' : '' }}>
-                                                កប/ឧ.ប.ទ.ឃ</option>
+                                            <option value=""></option>
+                                            <option value="កប/ល.ប.ក"
+                                                {{ old('letter_format', $missions->letter_format ?? '') == 'កប/ល.ប.ក' ? 'selected' : '' }}>
+                                                កប/ល.ប.ក
+                                            </option>
+                                            <option value="កប/ឧ.ទ.ន"
+                                                {{ old('letter_format', $missions->letter_format ?? '') == 'កប/ឧ.ទ.ន' ? 'selected' : '' }}>
+                                                កប/ឧ.ទ.ន
+                                            </option>
+                                            <option value="កប/ឧ.ទ.ន.ខ.ល"
+                                                {{ old('letter_format', $missions->letter_format ?? '') == 'កប/ឧ.ទ.ន.ខ.ល' ? 'selected' : '' }}>
+                                                កប/ឧ.ទ.ន.ខ.ល
+                                            </option>
+                                            <option value="កប/ឧ.ទ.ន.គ.ក.ប"
+                                                {{ old('letter_format', $missions->letter_format ?? '') == 'កប/ឧ.ទ.ន.គ.ក.ប' ? 'selected' : '' }}>
+                                                កប/ឧ.ទ.ន.គ.ក.ប
+                                            </option>
                                         </select>
-                                    </div>
 
-                                    <input type="hidden" name="full_letter_number" id="full_letter_number"
-                                        value="{{ old('full_letter_number', $missions->full_letter_number) }}">
+                                        <!-- Hidden input for combined value -->
+                                        <input type="hidden" name="full_letter_number" id="full_letter_number"
+                                            value="{{ old('full_letter_number', ($missions->letter_number ?? '') . ' ' . ($missions->letter_format ?? '')) }}">
+                                    </div>
                                     @error('letter_number')
                                         <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
                                 </div>
+
 
                                 <div class="form-subgroup">
                                     <label for="letter_date">កាលបរិច្ឆេទ:</label>
@@ -199,7 +216,7 @@
                                 @enderror
                             </div>
                         </div>
-                        
+
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label for="mission_objective">កម្មវត្ថុនៃការចុះបេសកកម្ម:</label>
@@ -463,12 +480,10 @@
     </script>
     <script>
         function updateFullLetterNumber() {
-            const letterNumber = document.getElementById('letter_number').value;
-            const letterFormat = document.getElementById('letter_format').value;
-            const fullLetterNumber = document.getElementById('full_letter_number');
-    
-            // Combine letter number and selected format
-            fullLetterNumber.value = letterNumber + letterFormat;
+            var letterNumber = document.getElementById('letter_number').value;
+            var letterFormat = document.getElementById('letter_format').value;
+            var fullLetterNumber = letterNumber + ' ' + letterFormat;
+            document.getElementById('full_letter_number').value = fullLetterNumber;
         }
     </script>
 @endsection

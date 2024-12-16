@@ -21,7 +21,6 @@ class ReportMissionController extends Controller
             ['id_number' => '1720800864', 'name_khmer' => 'ឡេង សេ', 'name_latin' => 'LENG SE', 'account_number' => '0010002722602', 'total_amount' => 0],
             ['id_number' => '1651200111', 'name_khmer' => 'គុយ រតនា', 'name_latin' => 'KUY ROTTANA', 'account_number' => '0010002528385', 'total_amount' => 0],
         ];
-
         // Pass the data to the view
         return view('layouts.table.table-mission.report-mission', compact('data'));
     }
