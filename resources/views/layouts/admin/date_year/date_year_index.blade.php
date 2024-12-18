@@ -17,7 +17,7 @@
                             @if (auth()->check() && auth()->user()->role == 'admin')
                                 <!-- Check if the user is an admin -->
                                 <a class="btn btn-success d-flex justify-content-center align-items-center"
-                                    href="{{ route('codes.create') }}"
+                                    href="" data-bs-toggle="modal" data-bs-target="#createYear"
                                     style="width: 160px; height: 50px; border-radius: 4px;">
                                     កំណត់ឆ្នាំ &nbsp;&nbsp;
                                 </a>
