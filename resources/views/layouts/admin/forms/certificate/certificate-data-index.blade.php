@@ -5,11 +5,11 @@
         <div class="col-lg-12 margin-tb">
 
             <div class="d-flex justify-content-between align-items-center">
-                <a class="btn btn-danger d-flex align-items-center justify-content-center"
-                    href="{{ route('back') }}"  style="width: 160px; height: 50px;">
-                    <i class="fas fa-arrow-left"></i>&nbsp; ត្រឡប់ក្រោយ
+                <a class="btn btn-danger d-flex align-items-center justify-content-center" href="{{ route('back') }}"
+                    style="width: 160px; height: 50px;">
+                    <i class="fas fa-arrow-left"></i>&nbsp;
                 </a>
-                <h2 style="font-weight: 700;">តារាងទិន្នន័យសលាកបត្រ</h2>
+                <h3 style="font-weight: 700;">តារាងទិន្នន័យសលាកបត្រ</h3>
 
                 <a id="submit-button" class="btn btn-success d-flex align-items-center justify-content-center"
                     href="{{ route('certificate-data.create') }}" style="width: 160px; height: 50px; border-radius: 4px;">
@@ -24,22 +24,21 @@
             <form class="max-w-md mx-auto mt-3" method="GET" action="">
                 <div class="row">
                     <div class="col-md-6">
-                        <div class="input-group my-3" style="width: 35%;">
+                        <div class="input-group my-3" style="width: 25%;">
                             <input type="search" name="search" value="{{ request('search') }}" class="form-control"
-                                placeholder="ស្វែងរកទិន្នន័យ" aria-label="Search Address"​ style="height: 60px;">
-                            <button type="submit" class="btn btn-primary" style="height: 60px; width: 120px;">
+                                placeholder="ស្វែងរកទិន្នន័យ" aria-label="Search Address"​ style="height: 40px; width: 180px;">
+                            <button type="submit" class="btn btn-primary" style="height: 40px; width: 60px;">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 50 50">
                                     <path
                                         d="M 21 3 C 11.621094 3 4 10.621094 4 20 C 4 29.378906 11.621094 37 21 37 C 24.710938 37 28.140625 35.804688 30.9375 33.78125 L 44.09375 46.90625 L 46.90625 44.09375 L 33.90625 31.0625 C 36.460938 28.085938 38 24.222656 38 20 C 38 10.621094 30.378906 3 21 3 Z M 21 5 C 29.296875 5 36 11.703125 36 20 C 36 28.296875 29.296875 35 21 35 C 12.703125 35 6 28.296875 6 20 C 6 11.703125 12.703125 5 21 5 Z">
                                     </path>
                                 </svg>
-                                ស្វែងរក
                             </button>
                         </div>
                     </div>
                 </div>
             </form>
-            
+
         </div>
     </div>
 
@@ -158,14 +157,14 @@
             padding: 10px;
         }
 
-        /* .result-total-table-container {
-                            max-height: 100vh;
-                            overflow-y: auto;
-                        } */
-
         .btn-container {
             position: relative;
             display: inline-block;
+        }
+
+        h3 {
+            font-family: 'Khmer OS Muol Light', sans-serif;
+            font-size: 16px;
         }
 
         .btn,
@@ -275,4 +274,3 @@
         });
     </script>
 @endsection
-

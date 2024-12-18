@@ -6,9 +6,9 @@
             <div class="row">
                 <div class="col-lg-12 margin-tb mb-4">
                     <div class="d-flex justify-content-between align-items-center">
-                        <a class="btn btn-danger d-flex justify-content-center align-items-center mr-2"
-                            href="{{ route('back') }}" style="width: 120px; height: 40px;">
-                            <i class="fas fa-arrow-left"></i>
+                        <a class="btn btn-danger" href="{{ route('back') }}"
+                            style="width: 160px; height: 50px; border-radius: 4px; display: flex; align-items: center; justify-content: center;">
+                            <i class="fas fa-arrow-left"></i>&nbsp;&nbsp;
                         </a>
 
                         <h3 class="mx-auto" style="font-weight: 700;">តារាងឆ្នាំ</h3>
@@ -16,10 +16,10 @@
                         <div class="btn-group">
                             @if (auth()->check() && auth()->user()->role == 'admin')
                                 <!-- Check if the user is an admin -->
-                                <a class="btn btn-success d-flex justify-content-center align-items-center" href="#"
-                                    data-bs-toggle="modal" data-bs-target="#createYear"
-                                    style="width: 120px; height: 40px; border-radius: 4px;">
-                                    បង្កើតឆ្នាំ
+                                <a class="btn btn-success d-flex justify-content-center align-items-center"
+                                    href="{{ route('codes.create') }}"
+                                    style="width: 160px; height: 50px; border-radius: 4px;">
+                                    កំណត់ឆ្នាំ &nbsp;&nbsp;
                                 </a>
                             @else
                                 <span></span>
@@ -118,20 +118,20 @@
                 <tbody>
                     @foreach ($years as $year)
                         <tr>
-                           @if (auth()->check() || auth()->user()->role === 'user')
-                            <td style="border: 1px solid black; text-align: center;">{{ $year->id }}</td>
-                            <td style="border: 1px solid black; text-align: center;">
-                                {{ \Carbon\Carbon::parse($year->date_year)->format('Y') }} <!-- Display year only -->
-                            </td>
-                            <td style="border: 1px solid black; text-align: center;">
-                                <span
-                                    class="status-text {{ $year->status === 'active' ? 'text-success' : ($year->status === 'inactive' ? 'text-danger' : 'text-warning') }}">
-                                    {{ ucfirst($year->status) }}
-                                </span>
-                            </td>
+                            @if (auth()->check() || auth()->user()->role === 'user')
+                                <td style="border: 1px solid black; text-align: center;">{{ $year->id }}</td>
+                                <td style="border: 1px solid black; text-align: center;">
+                                    {{ \Carbon\Carbon::parse($year->date_year)->format('Y') }} <!-- Display year only -->
+                                </td>
+                                <td style="border: 1px solid black; text-align: center;">
+                                    <span
+                                        class="status-text {{ $year->status === 'active' ? 'text-success' : ($year->status === 'inactive' ? 'text-danger' : 'text-warning') }}">
+                                        {{ ucfirst($year->status) }}
+                                    </span>
+                                </td>
                             @else
-                            <span></span>
-                        @endif
+                                <span></span>
+                            @endif
                             {{-- @if (auth()->check() && auth()->user()->role === 'admin')
                                
                             @else

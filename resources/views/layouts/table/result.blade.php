@@ -4,20 +4,19 @@
     <div class="row mr-4 ml-2">
         <div class="col-lg-12 margin-tb ">
             <div class="d-flex justify-content-between align-items-center">
-                <a class="btn btn-danger d-flex justify-content-center align-items-center" href="{{ url('/total_card') }}"
-                    style="width: 120px; height: 40px; "> <i class="fas fa-arrow-left"></i>&nbsp;
-                    ត្រឡប់ក្រោយ</a>
+                <a class="btn btn-danger" href="{{ route('total_card') }}"
+                    style="width: 160px; height: 50px; border-radius: 4px; display: flex; align-items: center; justify-content: center;">
+                    <i class="fas fa-arrow-left"></i>&nbsp;&nbsp;
+                </a>
             </div>
         </div>
     </div>
     <div class="border-wrapper mt-2 mr-4 ml-4">
         <div class="container-fluid">
-
-            {{--                    Start Form Search                      --}}
+            {{-- Start Form Search --}}
             <form id="filterForm" class="max-w-md mx-auto mt-3" method="GET" action="{{ route('result.index') }}"
                 onsubmit="return validateDateField()">
                 <div class="row mb-3">
-
                     {{-- Filter Sub-Account --}}
                     <div class="col-md-2 d-flex">
                         <input type="text" name="sub_account_key_id" value="{{ request('sub_account_key_id') }}"
@@ -43,7 +42,7 @@
                         </div>
                     </div>
 
-                    {{--        Start btn search and reset       --}}
+                    {{--  Start btn search and reset  --}}
                     <div class="col-md-12">
                         <div class="input-group ">
                             <button type="submit" class="btn btn-primary mr-2" style="width: 120px; height: 40px;">
@@ -63,33 +62,15 @@
                                 </svg>
                                 កំណត់ឡើងវិញ
                             </button>
-
                         </div>
                     </div>
-                    {{--        End btn search and reset       --}}
                 </div>
             </form>
-            {{--                    End Form Search                      --}}
-
+            {{--   End Form Search   --}}
             <div class="d-flex justify-content-end mb-2">
                 <div class="d-flex">
                     <!-- Month Dropdown -->
                     <div style="width: 120px; height: 40px; margin-right: 10px;">
-                        {{-- <form method="GET" action="{{ route('result.index') }}">
-                            <select name="month" class="form-control" onchange="this.form.submit()">
-                                <option value="">ជ្រើសរើសខែ</option>
-                                @foreach (range(1, 12) as $month)
-                                    @php
-                                        $khmerMonth = getKhmerMonth($month);
-                                        $selectedMonth = request('month', \Carbon\Carbon::now()->month); // Current or selected month
-                                    @endphp
-                                    <option value="{{ $month }}" {{ $selectedMonth == $month ? 'selected' : '' }}>
-                                        {{ $khmerMonth }}
-                                    </option>
-                                @endforeach
-                            </select>
-                        </form> --}}
-
                         <form method="GET" action="{{ route('result.index') }}">
                             <select name="month" class="form-control" onchange="this.form.submit()">
                                 <option value="">ជ្រើសរើសខែ</option>
@@ -104,7 +85,6 @@
                                 @endforeach
                             </select>
                         </form>
-                        
                     </div>
 
                     <!-- Year Dropdown -->
@@ -129,7 +109,7 @@
                 </div>
             </div>
 
-            {{--        Start action btn export and print        --}}
+            {{-- Start action btn export and print --}}
             <div class="d-flex justify-content-end mt-3 mb-3 ">
                 <a href="{{ route('result.export', request()->query()) }}"
                     class="btn btn-danger btn-width mr-2 d-flex align-items-center justify-content-center"
@@ -143,14 +123,13 @@
                 </a>
             </div>
 
-            {{--        Start action btn export and print        --}}
+            {{-- Start action btn export and print --}}
 
             <div class="border-wrapper">
                 <div class="result-total-table-container mt-4">
                     <div class="first-header text-center">
                         <h2>ព្រះរាជាណាចក្រកម្ពុជា</h2>
                         <h3>ជាតិ សាសនា ព្រះមហាក្សត្រ</h3>
-                        {{-- <h3>3</h3> --}}
                     </div>
                     <h3>ក្រសួងការងារ​ នឹងបណ្ដុះបណ្ដាលវិជ្ជាជីវៈ</h3>
                     <h3>នាយកដ្ខានរដ្ខាបាល និងហិរញ្ញវត្ថុ</h3>
@@ -195,12 +174,10 @@
                                     ឆ្នាំ{{ convertToKhmerNumber($currentYear) }}</span>
                             @endif
                         </h4>
-
-
                     </div>
                     <div class="table-container">
 
-                        {{--            Table           --}}
+                        {{--   Table  --}}
                         <table id="reportTable" class="table-border mt-4">
                             <thead class="header-border">
                                 <tr>

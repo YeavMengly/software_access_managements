@@ -7,11 +7,12 @@
 @endsection
 
 @section('result-total-table')
-<div class="d-flex justify-content-between align-items-center  mt-4 mr-4 ml-4">
-    <a class="btn btn-danger" href="{{ route('total_card') }}">
-        <i class="fas fa-arrow-left"></i> ត្រឡប់ក្រោយ
-    </a>
-</div>
+    <div class="d-flex justify-content-between align-items-center  mt-4 mr-4 ml-4">
+        <a class="btn btn-danger" href="{{ route('back') }}"
+            style="width: 160px; height: 50px; border-radius: 4px; display: flex; align-items: center; justify-content: center;">
+            <i class="fas fa-arrow-left"></i>&nbsp;&nbsp;
+        </a>
+    </div>
     <div class="border-wrapper mt-4 mr-4 ml-4">
         <div class="result-total-table-container">
 

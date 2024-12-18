@@ -9,7 +9,7 @@
                         របាយការណ៍សរុបធានាចំណាយ
                     </a>
                 </div>
-
+                
                 <div class="col-md-4 mb-3">
                     <a href="{{ route('result-total-summaries-table') }}" class="btn btn-custom btn-block animate-button">
                         របាយការណ៍សង្ខេប

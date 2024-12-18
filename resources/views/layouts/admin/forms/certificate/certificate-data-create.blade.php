@@ -9,7 +9,7 @@
                         <div class="d-flex justify-content-between align-items-center">
                             <a class="btn btn-danger d-flex justify-content-center align-items-center mr-2"
                                 href="{{ route('back') }}" style="width: 160px; height: 50px;"><i
-                                    class="fas fa-arrow-left"></i> &nbsp; ត្រឡប់ក្រោយ</a>
+                                    class="fas fa-arrow-left"></i> &nbsp;</a>
                             <h3 class="card-title" style="font-weight: 500;">បង្កើតសលាកបត្រ</h3>
                             <span></span>
                         </div>
@@ -74,7 +74,7 @@
                                                 <div class="invalid-feedback">{{ $message }}</div>
                                             @enderror
                                         </div>
-                                    </div> 
+                                    </div>
                                 </div>
 
                                 <div class="d-flex justify-content-end mt-4">
@@ -146,12 +146,13 @@
             font-family: 'Khmer OS Muol Light', sans-serif;
             font-size: 16px;
         }
+
         .result-total-table-container {
             max-height: 100vh;
             overflow-y: auto;
         }
 
-        
+
         .btn,
         .form-control,
         th,

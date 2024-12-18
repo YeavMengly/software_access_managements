@@ -4,8 +4,10 @@
     <div class="row mt-4 mr-4 ml-2">
         <div class="col-lg-12 margin-tb mb-4">
             <div class="d-flex justify-content-between align-items-center">
-                <a class="btn btn-danger" href="{{ url('/total_card') }}"> <i class="fas fa-arrow-left"></i>
-                    ត្រឡប់ក្រោយ</a>
+                <a class="btn btn-danger" href="{{ route('total_card') }}"
+                    style="width: 160px; height: 50px; border-radius: 4px; display: flex; align-items: center; justify-content: center;">
+                    <i class="fas fa-arrow-left"></i>&nbsp;&nbsp;
+                </a>
             </div>
         </div>
     </div>
@@ -62,25 +64,33 @@
                     </thead>
                     <tbody class="cell-border">
                         @foreach ($totals['code'] as $codeId => $totalsByCode)
-                        <tr>
-                            <td colspan="1">ជំពូក: {{ $codeId }} </td>
-                            <td>{{ number_format($totalsByCode['fin_law'], 0, ' ', ' ') }}</td>
-                            <td>{{ number_format($totalsByCode['current_loan'], 0, ' ', ' ') }}</td>
-                            <td>{{ number_format($totalsByCode['early_balance'], 0, ' ', ' ') }}</td>
-                            <td>{{ number_format($totalsByCode['apply'], 0, ' ', ' ') }}</td>
-                            <td>{{ number_format($totalsByCode['apply'] / $totalsByCode['current_loan'], 2, '.', ' ') }} %</td>
-                            <td>{{ number_format($totalsByCode['early_balance'] + $totalsByCode['apply'], 0, ' ', ' ') }}</td>
-                            <td>{{ number_format(($totalsByCode['early_balance'] + $totalsByCode['apply']) / $totalsByCode['current_loan'], 2, '.', ' ') }} %</td>
-                            <td>{{ number_format($totalsByCode['current_loan'] - ($totalsByCode['early_balance'] + $totalsByCode['apply']), 0, ' ', ' ') }}</td>
-                            <td>{{ number_format($totalsByCode['early_balance'], 0, ' ', ' ') }}</td>
-                            <td>{{ number_format($totalsByCode['apply'], 0, ' ', ' ') }}</td>
-                            <td>{{ number_format($totalsByCode['apply'] / $totalsByCode['current_loan'], 2, '.', ' ') }} %</td>
-                            <td>{{ number_format($totalsByCode['early_balance'] + $totalsByCode['apply'], 0, ' ', ' ') }}</td>
-                            <td>{{ number_format(($totalsByCode['early_balance'] + $totalsByCode['apply']) / $totalsByCode['current_loan'], 2, '.', ' ') }} %</td>
-                            <td>{{ number_format($totalsByCode['current_loan'] - ($totalsByCode['early_balance'] + $totalsByCode['apply']) / $totalsByCode['current_loan'], 2, '.', ' ') }}</td>
-                            <td></td>
-                        </tr>
-                    
+                            <tr>
+                                <td colspan="1">ជំពូក: {{ $codeId }} </td>
+                                <td>{{ number_format($totalsByCode['fin_law'], 0, ' ', ' ') }}</td>
+                                <td>{{ number_format($totalsByCode['current_loan'], 0, ' ', ' ') }}</td>
+                                <td>{{ number_format($totalsByCode['early_balance'], 0, ' ', ' ') }}</td>
+                                <td>{{ number_format($totalsByCode['apply'], 0, ' ', ' ') }}</td>
+                                <td>{{ number_format($totalsByCode['apply'] / $totalsByCode['current_loan'], 2, '.', ' ') }}
+                                    %</td>
+                                <td>{{ number_format($totalsByCode['early_balance'] + $totalsByCode['apply'], 0, ' ', ' ') }}
+                                </td>
+                                <td>{{ number_format(($totalsByCode['early_balance'] + $totalsByCode['apply']) / $totalsByCode['current_loan'], 2, '.', ' ') }}
+                                    %</td>
+                                <td>{{ number_format($totalsByCode['current_loan'] - ($totalsByCode['early_balance'] + $totalsByCode['apply']), 0, ' ', ' ') }}
+                                </td>
+                                <td>{{ number_format($totalsByCode['early_balance'], 0, ' ', ' ') }}</td>
+                                <td>{{ number_format($totalsByCode['apply'], 0, ' ', ' ') }}</td>
+                                <td>{{ number_format($totalsByCode['apply'] / $totalsByCode['current_loan'], 2, '.', ' ') }}
+                                    %</td>
+                                <td>{{ number_format($totalsByCode['early_balance'] + $totalsByCode['apply'], 0, ' ', ' ') }}
+                                </td>
+                                <td>{{ number_format(($totalsByCode['early_balance'] + $totalsByCode['apply']) / $totalsByCode['current_loan'], 2, '.', ' ') }}
+                                    %</td>
+                                <td>{{ number_format($totalsByCode['current_loan'] - ($totalsByCode['early_balance'] + $totalsByCode['apply']) / $totalsByCode['current_loan'], 2, '.', ' ') }}
+                                </td>
+                                <td></td>
+                            </tr>
+
 
                             {{-- @foreach ($totals['accountKey'][$codeId] as $accountKeyId => $totalsByAccountKey)
                                 <tr>
@@ -151,7 +161,7 @@
 
         }
 
-      
+
         th,
         td {
             border: 1px solid black;
@@ -170,7 +180,8 @@
             border-collapse: collapse;
         }
 
-        th, .btn,
+        th,
+        .btn,
         td {
             border: 1px solid black;
             text-align: center;

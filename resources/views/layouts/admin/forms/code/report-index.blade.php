@@ -22,23 +22,22 @@
                     <div class="d-flex justify-content-between align-items-center">
                         <a class="btn btn-danger d-flex justify-content-center align-items-center" href="{{ route('back') }}"
                             style="width: 160px; height: 50px;">
-                            <i class="fas fa-arrow-left"></i>&nbsp;&nbsp;ត្រឡប់ក្រោយ
+                            <i class="fas fa-arrow-left"></i>&nbsp;&nbsp;
                         </a>
-                        <h2 style="font-weight: 700;">តារាងរបាយការណ៍បញ្ចូលឥណទានអនុម័តដើមឆ្នាំ</h2>
+                        <h3 style="font-weight: 700;">តារាងរបាយការណ៍បញ្ចូលឥណទានអនុម័តដើមឆ្នាំ</h3>
                         <div class="btn-group">
                             <a class="btn btn-success d-flex justify-content-center align-items-center" href="#"
                                 data-bs-toggle="modal" data-bs-target="#importModal"
                                 style="width: 160px; height: 50px; border-radius: 4px;">
-                                Import Excel &nbsp;&nbsp;<i class="fas fa-file-import" style="margin-left: 8px;"></i>
+                                Import Excel &nbsp;<i class="fas fa-file-import" style="margin-left: 8px;"></i>
                             </a>
                             &nbsp;&nbsp;
                             <a class="btn btn-success d-flex justify-content-center align-items-center"
                                 href="{{ route('codes.create') }}" style="width: 160px; height: 50px; border-radius: 4px;">
-                                បញ្ចូលទិន្នន័យ &nbsp;&nbsp;<i class="fas fa-plus" style="margin-left: 8px;"></i>
+                                បញ្ចូលទិន្នន័យ &nbsp;<i class="fas fa-plus" style="margin-left: 8px;"></i>
                             </a>
                         </div>
                     </div>
-
 
                     <div class="modal fade" id="importModal" tabindex="-1" aria-labelledby="importModalLabel"
                         aria-hidden="true">
@@ -248,7 +247,6 @@
 
 @section('styles')
     {{-- Custom style here --}}
-
     <style>
         .modal-content {
             border-radius: 10px;
@@ -261,6 +259,11 @@
         .modal-title {
             font-size: 1.25rem;
             font-weight: bold;
+        }
+
+        h3 {
+            font-family: 'Khmer OS Muol Light', sans-serif;
+            font-size: 16px;
         }
 
         .border-wrapper {

@@ -7,10 +7,9 @@
             <div class="container-fluid">
                 <div class="row">
                     <div class="col-lg-12 d-flex justify-content-between align-items-center margin-tb mb-4">
-
-                        <a class="btn btn-danger d-flex justify-content-center align-items-center mr-2"
-                            href="{{ route('back') }}" style="width: 120px; height: 40px;">
-                            <i class="fas fa-arrow-left"></i>
+                        <a class="btn btn-danger" href="{{ route('back') }}"
+                            style="width: 160px; height: 50px; border-radius: 4px; display: flex; align-items: center; justify-content: center;">
+                            <i class="fas fa-arrow-left"></i>&nbsp;&nbsp;
                         </a>
                         <h3 class="card-title" style="font-weight: 500;">បង្កើតទិន្នន័យឥណទានអនុម័តដើមឆ្នាំ</h3>
                         <span></span>
@@ -60,7 +59,8 @@
                                                     style="height: 130px; width: 80%;">
                                                     @foreach ($subAccountKeys as $subAccountKey)
                                                         <option value="{{ $subAccountKey->id }}"
-                                                            {{ old('sub_account_key') == $subAccountKey->id ? 'selected' : '' }}>{{ $subAccountKey->sub_account_key }}
+                                                            {{ old('sub_account_key') == $subAccountKey->id ? 'selected' : '' }}>
+                                                            {{ $subAccountKey->sub_account_key }}
                                                         </option>
                                                     @endforeach
                                                 </select>

@@ -6,32 +6,29 @@
             <div class="row">
                 <div class="col-md-4 mb-3">
                     <a href="{{ route('keys.index') }}" class="btn btn-custom btn-block animate-button">
-                        <i class="fas fa-plus"></i> បញ្ចូលទិន្ន័យជំពូក
+                        បញ្ចូលទិន្ន័យជំពូក
                     </a>
-
                 </div>
                 <div class="col-md-4 mb-3">
                     <a href="{{ route('accounts.index') }}" class="btn btn-custom btn-block animate-button">
-                        <i class="fas fa-edit"></i> បញ្ចូលទិន្ន័យគណនី
+                        បញ្ចូលទិន្ន័យគណនី
                     </a>
-
                 </div>
                 <div class="col-md-4 mb-3">
                     <a href="{{ route('sub-account.index') }}" class="btn btn-custom btn-block animate-button">
-                        <i class="fas fa-edit"></i> បញ្ចូលទិន្ន័យអនុគណនី
+                        បញ្ចូលទិន្ន័យអនុគណនី
                     </a>
-
                 </div>
-
                 <div class="col-md-4 mb-3">
                     <a href="{{ route('back') }}" class="btn btn-custom btn-block animate-button">
-                        <i class="fas fa-sign-out-alt"></i> ចាកចេញ
+                        <i class="fas fa-sign-out-alt" style="color: red;"></i>&nbsp;ចាកចេញ
                     </a>
                 </div>
             </div>
         </div>
     </div>
 @endsection
+
 
 @section('styles')
     <style>
@@ -49,7 +46,7 @@
         }
 
         .container-box {
-            background-color: #3987ee;
+            background-color: #f0f0f0;
             border-radius: 10px;
             padding: 20px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -58,22 +55,13 @@
         }
 
         .btn-custom {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 180px;
-            background-color: #67a6ee;
+            background-color: #3987ee;
             color: white;
-            border-radius: 5px;
-            padding: 10px;
+            border-radius: 16px;
+            padding: 15px 20px;
             text-align: center;
             transition: background-color 0.3s ease;
-            animation: fadeIn 1s ease-out;
             font-family: 'Khmer OS Siemreap', sans-serif;
-            font-size: 28px;
-            /* Updated font size */
-            font-weight: bold;
-            /* Optional: make text bold */
         }
 
         a {
@@ -82,7 +70,7 @@
         }
 
         .btn-custom:hover {
-            background-color: #33a3ff;
+            background-color: #94999c;
         }
 
         .animate-button {
