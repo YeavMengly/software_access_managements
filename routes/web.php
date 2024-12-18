@@ -42,6 +42,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+
 Route::get('/', function () {
     return view('dashboard.dashboardui');
 })->name('dashboard');
@@ -49,6 +50,11 @@ Route::get('/', function () {
 // Route::get('/', function () {
 //     return view('dashboard.dashboardui');
 // });
+
+Route::get('/', function () {
+    return view('dashboard.dashboardui');
+})->name('dashboard');
+
 
 //===============================>> Route to display report-mission view
 Route::get('/report-mission', function () {
@@ -129,6 +135,7 @@ Route::get('/results/pdf', [ResultController::class, 'exportPdf'])->name('result
 Route::get('/summaries/export-pdf', [ResultSummariesController::class, 'exportPdf'])->name('summaries.exportPdf');
 
 Route::get('/mission-abroad', [MissionAbroadController::class, 'index'])->name('table-mission-abroad');
+
 Route::get('/mission-abroad/export', [MissionAbroadController::class, 'export'])->name('table-mission-abroad');
 
 // Route::get('/report-mission', [ReportMissionController::class, 'showReportMissionForm'])->name('report-mission');
@@ -175,3 +182,4 @@ Route::middleware(['auth', 'role:user'])->group(function () {
         return view('dashboard.dashboardui');
     })->name('user.dashboard');
 });
+
