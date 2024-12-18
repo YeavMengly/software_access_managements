@@ -185,6 +185,7 @@
                             <th rowspan="2"
                                 style="border: 2px solid black; font-family: 'Khmer OS Siemreap', sans-serif; font-weight: bold;">
                                 សកម្មភាព</th>
+
                         </tr>
 
                         <tr>
@@ -310,6 +311,7 @@
                                                 </form>
                                             </div>
                                         </td>
+
                                     </tr>
                                 @endforeach
 
@@ -319,30 +321,31 @@
                                         style="border: 2px solid black; font-family: 'Khmer OS Muol Light', sans-serif;">
                                         <strong>{{ 'សរុប' }} {{ $totalIndexCounter }}</strong>
                                     </td>
+
                                     <td style="border: 2px solid black;">
                                         <strong>{{ number_format($group->sum('travel_allowance'), 0, '.', ',') }}</strong>
                                     </td>
-                                    <td style="border: 2px solid black;"></td>
-                                    <td style="border: 2px solid black;">
-                                    <td style="border: 2px solid black;">
-                                        <strong>{{ number_format($group->sum('travel_allowance'), 0, '.', ',') }}</strong>
-                                    </td>
+
                                     <td style="border: 2px solid black;"></td>
                                     <td style="border: 2px solid black;">
                                         <strong>{{ number_format($group->sum('total_pocket_money'), 0, '.', ',') }}</strong>
                                     </td>
+
                                     <td style="border: 2px solid black;"></td>
                                     <td style="border:   2px solid black;">
                                         <strong>{{ number_format($group->sum('total_meal_money'), 0, '.', ',') }}</strong>
                                     </td>
+
                                     <td style="border: 2px solid black;"></td>
                                     <td style="border: 2px solid black;">
                                         <strong>{{ number_format($group->sum('total_accommodation_money'), 0, '.', ',') }}</strong>
                                     </td>
                                     <td style="border: 2px solid black;"></td>
+
                                     <td style="border: 2px solid black;">
                                         <strong>{{ number_format($group->sum('final_total'), 0, '.', ',') }}</strong>
                                     </td>
+
                                 </tr>
                                 @php
                                     $totalIndexCounter++;
@@ -357,18 +360,22 @@
                             <td style="border: 2px solid black;">
                                 <strong>{{ number_format($totals['travel_allowance'], 0, '.', ',') }}</strong>
                             </td>
+
                             <td style="border: 2px solid black;"></td>
                             <td style="border: 2px solid black;">
                                 <strong>{{ number_format($totals['total_pocket_money'], 0, '.', ',') }}</strong>
                             </td>
+
                             <td style="border: 2px solid black;"></td>
                             <td style="border: 2px solid black;">
                                 <strong>{{ number_format($totals['total_meal_money'], 0, '.', ',') }}</strong>
                             </td>
+
                             <td style="border: 2px solid black;"></td>
                             <td style="border: 2px solid black;">
                                 <strong>{{ number_format($totals['total_accommodation_money'], 0, '.', ',') }}</strong>
                             </td>
+
                             <td style="border: 2px solid black;"></td>
                             <td style="border: 2px solid black;">
                                 <strong>{{ number_format($totals['final_total'], 0, '.', ',') }}</strong>
@@ -377,41 +384,7 @@
                         </tr>
                     </tbody>
                 </table>
-                {{-- <div class="d-flex justify-content-between align-items-center mt-4">
-                    <div>
-                        <!-- Custom Pagination -->
-                        <nav aria-label="Page navigation example">
-                            <ul class="pagination">
-                                <li class="page-item{{ $missions->onFirstPage() ? ' disabled' : '' }}">
-                                    <a class="page-link"
-                                        href="{{ $missions->previousPageUrl() }}&per_page={{ request('per_page') }}"
-                                        aria-label="Previous">
-                                        <span aria-hidden="true">&laquo;</span>
-                                        <span class="sr-only">Previous</span>
-                                    </a>
-                                </li>
-                                @for ($i = 1; $i <= $missions->lastPage(); $i++)
-                                    <li class="page-item{{ $missions->currentPage() == $i ? ' active' : '' }}">
-                                        <a class="page-link"
-                                            href="{{ $missions->url($i) }}&per_page={{ request('per_page') }}">{{ $i }}</a>
-                                    </li>
-                                @endfor
-                                <li class="page-item{{ !$missions->hasMorePages() ? ' disabled' : '' }}">
-                                    <a class="page-link"
-                                        href="{{ $missions->nextPageUrl() }}&per_page={{ request('per_page') }}"
-                                        aria-label="Next">
-                                        <span aria-hidden="true">&raquo;</span>
-                                        <span class="sr-only">Next</span>
-                                    </a>
-                                </li>
-                            </ul>
-                        </nav>
-                    </div>
-                    <div>
-                        <p class="text-muted">បង្ហាញ {{ $missions->firstItem() }} ដល់ {{ $missions->lastItem() }} នៃ
-                            {{ $missions->total() }} លទ្ធផល</p>
-                    </div>
-                </div> --}}
+
             </div>
         </div>
         <div class="d-flex justify-content-end mt-3">
