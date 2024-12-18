@@ -15,28 +15,6 @@ use Illuminate\Support\Facades\Log;
 
 class LoansController extends Controller
 {
-    // public function index(Request $request)
-    // {
-    //     $subAccountKeyId = $request->input('sub_account_key_id');
-    //     $reportKey = $request->input('report_key');
-    //     $date = $request->input('date');
-    //     $perPage = $request->input('per_page', 25);
-
-    //     $query = Loans::query();
-    //     if ($subAccountKeyId) {
-    //         $query->whereHas('subAccountKey', function ($q) use ($subAccountKeyId) {
-    //             $q->where('sub_account_key_column_in_related_table', 'like', "%{$subAccountKeyId}%");
-    //         });
-    //     }
-    //     if ($reportKey) {
-    //         $query->whereHas('reportKey', function ($q) use ($reportKey) {
-    //             $q->where('report_key_column_in_related_table', 'like', "%{$reportKey}%");
-    //         });
-    //     }
-    //     $loans = $query->paginate($perPage);
-
-    //     return view('layouts.admin.forms.loans.loans-index', compact('loans'));
-    // }
     public function index(Request $request)
     {
         $subAccountKeyId = $request->input('sub_account_key_id');

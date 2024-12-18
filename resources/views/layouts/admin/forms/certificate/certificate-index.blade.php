@@ -8,7 +8,7 @@
                 <a class="btn btn-danger  d-flex align-items-center justify-content-center"
                     href="{{ route('back') }}" style="width: 160px; height: 50px;"> <i
                         class="fas fa-arrow-left"></i>
-                    &nbsp; ត្រឡប់ក្រោយ</a>
+                    &nbsp;</a>
             </div>
 
             <div class="d-flex justify-content-between align-items-center">
@@ -210,8 +210,6 @@
             padding-right: 48px;
             /* Make space for the loader */
         }
-
-
 
         #loader {
             display: none;

@@ -10,7 +10,7 @@
                             <a class="btn btn-danger" href="{{ route('accounts.index') }}"
                                 style="width: 160px; height: 50px; border-radius: 4px; display: flex; align-items: center; justify-content: center;">
                                 <i class="fas fa-arrow-left"></i>
-                                &nbsp;&nbsp;ត្រឡប់ក្រោយ</a>
+                                &nbsp;&nbsp;</a>
                             <h3 class="card-title">បង្កើតលេខកូដគណនី</h3>
                             <span></span>
                         </div>

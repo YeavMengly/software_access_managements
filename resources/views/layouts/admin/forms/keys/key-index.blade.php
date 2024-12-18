@@ -8,15 +8,13 @@
                     <div class="d-flex justify-content-between align-items-center">
                         <a class="btn btn-danger" href="{{ route('programs') }}"
                             style="width: 160px; height: 50px; border-radius: 4px; display: flex; align-items: center; justify-content: center;">
-                            <i class="fas fa-arrow-left"></i>&nbsp;&nbsp;ត្រឡប់ក្រោយ
+                            <i class="fas fa-arrow-left"></i>&nbsp;&nbsp;
                         </a>
-                        <h2 class="mx-auto" style="font-weight: 700;">តារាងលេខជំពូក</h2>
+                        <h3 class="mx-auto" style="font-weight: 700;">តារាងលេខជំពូក</h3>
 
-                        <a id="submit-button" class="btn btn-success" href="{{ route('keys.create') }}"
-                            style="width: 180px; height: 50px; border-radius: 4px; display: flex; align-items: center; justify-content: center; text-align: center; gap: 8px;">
-                            បញ្ចូលទិន្ន័យ
-                            <i id="plus-icon" class="fas fa-plus"></i>
-                            <div id="loader" class="loader" style="display: none;"></div>
+                        <a class="btn btn-success d-flex justify-content-center align-items-center"
+                            href="{{ route('keys.create') }}" style="width: 160px; height: 50px; border-radius: 4px;">
+                            បញ្ចូលទិន្នន័យ &nbsp;<i class="fas fa-plus" style="margin-left: 8px;"></i>
                         </a>
 
 
@@ -29,7 +27,7 @@
                                 <div class="input-group my-3" style="width: 25%;">
                                     <input type="search" name="search" value="{{ request('search') }}"
                                         class="form-control" placeholder="ស្វែងរកទិន្នន័យ" aria-label="Search Address"
-                                        style="width: 180px; height: 60px;">
+                                        style="width: 180px; height: 40px;">
                                     <button type="submit" class="btn btn-primary" style="width: 60px">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
                                             viewBox="0 0 50 50">
@@ -200,6 +198,11 @@
             display: inline-block;
         }
 
+        h3 {
+            font-family: 'Khmer OS Muol Light', sans-serif;
+            font-size: 16px;
+        }
+
         .btn,
         .form-control,
         label,
@@ -217,9 +220,7 @@
             padding-right: 50px;
         }
 
-        #plus-icon {
-            margin-left: 16px;
-        }
+
 
         #loader {
             position: absolute;
