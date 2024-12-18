@@ -8,9 +8,9 @@
                     <div class="d-flex justify-content-between align-items-center">
                         <a class="btn btn-danger" href="{{ route('programs') }}"
                             style="width: 160px; height: 50px; border-radius: 4px; display: flex; align-items: center; justify-content: center;">
-                            <i class="fas fa-arrow-left"></i>&nbsp;&nbsp;ត្រឡប់ក្រោយ
+                            <i class="fas fa-arrow-left"></i>&nbsp;&nbsp;
                         </a>
-                        <h2 class="mx-auto" style="font-weight: 700;">តារាងលេខកូដអនុគណនី</h2>
+                        <h3 class="mx-auto" style="font-weight: 700;">តារាងលេខកូដអនុគណនី</h3>
                         <a class="btn btn-success" href="{{ route('sub-account.create') }}"
                             style="width: 160px; height: 50px; border-radius: 4px; display: flex; align-items: center; justify-content: center;">
                             បញ្ចូលទិន្នន័យ&nbsp;&nbsp;<i class="fas fa-plus" style="margin-left: 8px;"></i>
@@ -21,10 +21,10 @@
                     <form class="max-w-md mx-auto mt-3" method="GET" action="">
                         <div class="row">
                             <div class="col-md-6">
-                                <div class="input-group my-3" style="width: 35%;">
+                                <div class="input-group my-3" style="width: 25%;">
                                     <input type="search" name="search" value="{{ request('search') }}"
                                         class="form-control" placeholder="ស្វែងរកទិន្នន័យ" aria-label="Search Address"
-                                        style="width: 180px; height: 60px;">
+                                        style="width: 180px; height: 40px;">
                                     <button type="submit" class="btn btn-primary" style="width: 60px">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
                                             viewBox="0 0 50 50">
@@ -204,6 +204,11 @@
             text-align: center;
             padding: 5px;
             font-family: 'Khmer OS Siemreap', sans-serif;
+            font-size: 16px;
+        }
+
+        h3 {
+            font-family: 'Khmer OS Muol Light', sans-serif;
             font-size: 16px;
         }
 

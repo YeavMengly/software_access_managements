@@ -5,9 +5,11 @@
             <div class="col-lg-12 margin-tb mb-4 mt-4">
                 <div class="d-flex justify-content-between align-items-center"
                     style="font-family: 'Khmer OS Siemreap', sans-serif;">
-                    <h3 class="card-title">បញ្ចូលតារាងរបាយការណ៏ចំណាយបេសកកម្មក្នុងប្រទេស ឆ្នាំ២០២៤</h3>
-                    <a class="btn btn-danger" href="{{ route('dashboard') }}"><i class="fas fa-arrow-left"></i>
-                        ត្រឡប់ក្រោយ</a>
+                    <a class="btn btn-danger" href="{{ route('back') }}"
+                        style="width: 160px; height: 50px; border-radius: 4px; display: flex; align-items: center; justify-content: center;">
+                        <i class="fas fa-arrow-left"></i>&nbsp;&nbsp;
+                    </a>
+                    <h3 class="card-title">បញ្ចូលតារាងរបាយការណ៏ចំណាយបេសកកម្មក្នុងប្រទេស ឆ្នាំ២០២៤</h3><span></span>
                 </div>
             </div>
         </div>
@@ -212,6 +214,11 @@
         .form-number {
             margin-left: 25px;
         }
+
+        h3 {
+            font-family: 'Khmer OS Muol Light', sans-serif;
+            font-size: 16px;
+        }
     </style>
 @endsection
 
@@ -363,6 +370,6 @@
                 icon: 'error',
                 title: 'ទិន្នន័យដែលបានបញ្ចូលមិនជោគជ័យ',
             });
-        </script>      
+        </script>
     @endif
 @endsection

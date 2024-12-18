@@ -8,8 +8,9 @@
 
 @section('result-total-table')
     <div class="d-flex justify-content-between align-items-center  mt-4 mr-4 ml-4">
-        <a class="btn btn-danger" href="{{ route('total_card') }}" style="width: 160px; height: 50px;">
-            <i class="fas fa-arrow-left"></i>&nbsp;ត្រឡប់ក្រោយ
+        <a class="btn btn-danger" href="{{ route('back') }}"
+            style="width: 160px; height: 50px; border-radius: 4px; display: flex; align-items: center; justify-content: center;">
+            <i class="fas fa-arrow-left"></i>&nbsp;&nbsp;
         </a>
     </div>
     <div class="border-wrapper mt-4 ml-4 mr-4">
@@ -405,11 +406,13 @@
             </div>
             {{--        Start action btn export and print        --}}
             <div class="d-flex justify-content-end mt-3 mb-3">
-                <a href="{{ route('summaries.export', request()->query()) }}" class="btn btn-danger btn-width mr-2 d-flex align-items-center justify-content-center mr-2"
+                <a href="{{ route('summaries.export', request()->query()) }}"
+                    class="btn btn-danger btn-width mr-2 d-flex align-items-center justify-content-center mr-2"
                     style="width: 150px; height: 50px; text-align: center;">
                     <i class="fas fa-download"></i>&nbsp; Export
                 </a>
-                <a href="{{ route('summaries.exportPdf', request()->query()) }}" class="btn btn-primary btn-width mr-2 d-flex align-items-center justify-content-center"
+                <a href="{{ route('summaries.exportPdf', request()->query()) }}"
+                    class="btn btn-primary btn-width mr-2 d-flex align-items-center justify-content-center"
                     style="width: 150px; height: 50px; text-align: center;">
                     <i class="fas fa-print"></i>&nbsp; Print
                 </a>

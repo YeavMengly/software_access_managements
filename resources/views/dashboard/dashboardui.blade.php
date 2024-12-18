@@ -30,10 +30,11 @@
 
                                 <a href="{{ route('codes.index') }}" class="btn btn-custom btn-block animate-button">
                                     កែសម្រួលមាតិកាកម្មវិធី
-                    <a href="{{ route('programs') }}" class="btn btn-custom btn-block animate-button">
-                                    កែសម្រួល ជំពូក គណនី អនុគណនី
+                                    <a href="{{ route('programs') }}" class="btn btn-custom btn-block animate-button">
+                                        <a href="{{ route('programs') }}" class="btn btn-custom btn-block animate-button">
+                                            កែសម្រួល ជំពូក គណនី អនុគណនី
 
-                                </a>
+                                        </a>
                             </div>
 
                             <div class="col-md-6 mb-3">
@@ -69,12 +70,13 @@
                             <div class="col-md-6 mb-3">
                                 <a href="{{ route('certificate-data.index') }}"
                                     class="btn btn-custom btn-block animate-button">
-                                    កែសម្រួល អណត្តិ​ សលាកបត្រ
+                                    កែសម្រួល អាណត្តិ​ សលាកបត្រ
                                 </a>
                             </div>
 
                             <div class="col-md-6 mb-3">
-                                <a href="{{ route('mission-cam.create') }}" class="btn btn-custom btn-block animate-button">
+                                <a href="{{ route('mission-cam.create') }}"
+                                    class="btn btn-custom btn-block animate-button">
                                     បញ្ចូលបេសកម្ម </a>
                             </div>
 
@@ -84,12 +86,17 @@
                                 </a>
                             </div>
 
+                            <div class="col-md-6 mb-3">
+                                <a href="{{ route('mission-cam.create') }}"
+                                    class="btn btn-custom btn-block animate-button">
+                                    បញ្ចូលគម្រោងចំណាយបេសកកម្ម </a>
+                            </div>
+
                             <div class="col-md-12 ">
                                 <button class="btn btn-custom btn-block animate-button" onclick="openAndCloseWindow()">
                                     ចាកចេញពីកម្មវិធី <i class="fas fa-sign-out-alt" style="color: red"></i>
                                 </button>
                             </div>
-
                         </div>
                     </div>
                 </div>

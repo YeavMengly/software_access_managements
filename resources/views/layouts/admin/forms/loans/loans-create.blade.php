@@ -8,10 +8,9 @@
                 <div class="row">
                     <div class="col-lg-12 margin-tb mb-4">
                         <div class="d-flex justify-content-between align-items-center">
-
-                            <a class="btn btn-danger d-flex justify-content-center align-items-center mr-2"
-                                href="{{ route('back') }}" style="width: 120px; height: 40px;">
-                                <i class="fas fa-arrow-left"></i>
+                            <a class="btn btn-danger" href="{{ route('back') }}"
+                                style="width: 160px; height: 50px; border-radius: 4px; display: flex; align-items: center; justify-content: center;">
+                                <i class="fas fa-arrow-left"></i>&nbsp;&nbsp;
                             </a>
                             <h3 class="card-title" style="font-weight: 500;">បង្កើតទិន្នន័យ</h3>
                             <span></span>
@@ -57,7 +56,9 @@
                                             onclick="getSelectedReportKey()"
                                             style="height: 130px; width: 100%; text-align: left;">
                                             @foreach ($reports as $report)
-                                                <option value="{{ $report->id }}"> {{ $report->subAccountKey->sub_account_key }} > {{ $report->report_key }}
+                                                <option value="{{ $report->id }}">
+                                                    {{ $report->subAccountKey->sub_account_key }} >
+                                                    {{ $report->report_key }}
                                                 </option>
                                             @endforeach
                                         </select>

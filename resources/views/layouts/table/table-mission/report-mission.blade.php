@@ -1,32 +1,39 @@
 @extends('layouts.master')
 
 @section('content-table-mission-cambodia')
-    <div class="row">
+    <div class="row ml-3 mr-3">
         <div class="col-lg-6 margin-tb mb-4 mt-4">
             <div class="d-flex justify-content-between align-items-center"
                 style="font-family: 'Khmer OS Siemreap', sans-serif;">
-                <a class="btn btn-danger" href="{{ route('mission-cam.index') }}"><i class="fas fa-arrow-left"></i>
-                    ត្រឡប់ក្រោយ</a>
+                <a class="btn btn-danger" href="{{ route('mission-cam.index') }}"
+                    style="width: 160px; height: 50px; border-radius: 4px; display: flex; align-items: center; justify-content: center;">
+                    <i class="fas fa-arrow-left"></i>&nbsp;&nbsp;
+                </a>
             </div>
         </div>
         <div class="col-md-6">
             <div class="d-flex align-items-center justify-content-end py-3">
-                <a class="btn btn-success" href="{{ route('reports-missions.create') }}"
-                    style="font-family: 'Khmer OS Siemreap', sans-serif;">បញ្ចូលទិន្នន័យ</a>
+                <a class="btn btn-success d-flex justify-content-center align-items-center"
+                    href="{{ route('reports-missions.create') }}" style="width: 160px; height: 50px; border-radius: 4px;">
+                    បញ្ចូលទិន្នន័យ &nbsp;<i class="fas fa-plus" style="margin-left: 8px;"></i>
+                </a>
             </div>
         </div>
     </div>
-    <div class="row-1">
+    <div class="row-1 d-flex ml-4 mr-4">
         <!-- New Officer List Button -->
-        <a style="font-family: 'Khmer OS Siemreap', sans-serif;" class="btn btn-success"
-            href="{{ route('imported-mission-table') }}"><i class="fas fa-list"></i>
-            បញ្ជីឈ្មោះមន្រ្តី</a>
-
+        <a class="btn btn-success d-flex justify-content-center align-items-center"
+            href="{{ route('imported-mission-table') }}" style="width: 160px; height: 50px; border-radius: 4px;">
+            បញ្ជីឈ្មោះមន្រ្តី &nbsp;<i class="fas fa-list"></i>
+        </a>
+        &nbsp;
         <!-- Button to Open the Modal -->
-        <button style="font-family: 'Khmer OS Siemreap', sans-serif;" type="button" class="btn btn-primary"
-            data-bs-toggle="modal" data-bs-target="#uploadModal">
+        <button style="font-family: 'Khmer OS Siemreap', sans-serif; width: 160px; height: 50px; border-radius: 4px;"
+            type="button" class="btn btn-primary d-flex justify-content-center align-items-center" data-bs-toggle="modal"
+            data-bs-target="#uploadModal">
             Upload File
         </button>
+
 
         <!-- Modal -->
         <div class="modal fade" id="uploadModal" tabindex="-1" aria-labelledby="uploadModalLabel" aria-hidden="true">
@@ -74,9 +81,9 @@
         </form> --}}
 
     </div>
-    <div class="border-wrapper mt-3">
+    <div class="border-wrapper mt-3 ml-4 mr-4">
         <div class="result-total-table-container">
-            <div class="first-header">
+            <div class="top-header">
                 <h4>ព្រះរាជាណាចក្រកម្ពុជា</h4>
                 <h3>ជាតិ សាសនា ព្រះមហាក្សត្រ</h3>
             </div>
@@ -179,7 +186,7 @@
             display: none;
         }
 
-        .first-header {
+        .top-header {
             text-align: center;
             margin-bottom: 70px;
         }
