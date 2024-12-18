@@ -13,6 +13,11 @@
                         href="{{ route('mission-cam.create') }}" style="width: 160px; height: 50px; border-radius: 4px;">
                         បញ្ចូលទិន្នន័យ&nbsp;<i class="fas fa-plus" style="margin-left: 8px;"></i>
                     </a>
+<<<<<<< HEAD
+=======
+                        style="font-family: 'Khmer OS Siemreap', sans-serif;"> <i class="fas fa-arrow-left"></i>
+                        ត្រឡប់ក្រោយ</a>
+>>>>>>> 291645b93392bf5ef951aecb7229d969c251e878
                 </div>
             </div>
         </div>
@@ -319,6 +324,11 @@
                                         style="border: 2px solid black; font-family: 'Khmer OS Muol Light', sans-serif;">
                                         <strong>{{ 'សរុប' }} {{ $totalIndexCounter }}</strong>
                                     </td>
+                                    <td style="border: 2px solid black;">
+                                        <strong>{{ number_format($group->sum('travel_allowance'), 0, '.', ',') }}</strong>
+                                    </td>
+                                    <td style="border: 2px solid black;"></td>
+                                    <td style="border: 2px solid black;">
                                     <td style="border: 2px solid black;">
                                         <strong>{{ number_format($group->sum('travel_allowance'), 0, '.', ',') }}</strong>
                                     </td>

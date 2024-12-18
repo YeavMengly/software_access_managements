@@ -10,6 +10,12 @@
                         <i class="fas fa-arrow-left"></i>&nbsp;&nbsp;
                     </a>
                     <h3 class="card-title">បញ្ចូលតារាងរបាយការណ៏ចំណាយបេសកកម្មក្នុងប្រទេស ឆ្នាំ២០២៤</h3><span></span>
+<<<<<<< HEAD
+=======
+                    <h3 class="card-title">បញ្ចូលតារាងរបាយការណ៏ចំណាយបេសកកម្មក្នុងប្រទេស ឆ្នាំ២០២៤</h3>
+                    <a class="btn btn-danger" href="{{ route('dashboard') }}"><i class="fas fa-arrow-left"></i>
+                        ត្រឡប់ក្រោយ</a>
+>>>>>>> 291645b93392bf5ef951aecb7229d969c251e878
                 </div>
             </div>
         </div>
@@ -371,5 +377,9 @@
                 title: 'ទិន្នន័យដែលបានបញ្ចូលមិនជោគជ័យ',
             });
         </script>
+<<<<<<< HEAD
+=======
+        </script>      
+>>>>>>> 291645b93392bf5ef951aecb7229d969c251e878
     @endif
 @endsection
