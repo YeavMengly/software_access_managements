@@ -30,10 +30,11 @@
 
                                 <a href="{{ route('codes.index') }}" class="btn btn-custom btn-block animate-button">
                                     កែសម្រួលមាតិកាកម្មវិធី
-                    <a href="{{ route('programs') }}" class="btn btn-custom btn-block animate-button">
-                                    កែសម្រួល ជំពូក គណនី អនុគណនី
+                                    <a href="{{ route('programs') }}" class="btn btn-custom btn-block animate-button">
+                                        <a href="{{ route('programs') }}" class="btn btn-custom btn-block animate-button">
+                                            កែសម្រួល ជំពូក គណនី អនុគណនី
 
-                                </a>
+                                        </a>
                             </div>
 
                             <div class="col-md-6 mb-3">
@@ -74,7 +75,8 @@
                             </div>
 
                             <div class="col-md-6 mb-3">
-                                <a href="{{ route('mission-cam.create') }}" class="btn btn-custom btn-block animate-button">
+                                <a href="{{ route('mission-cam.create') }}"
+                                    class="btn btn-custom btn-block animate-button">
                                     បញ្ចូលបេសកម្ម </a>
                             </div>
 

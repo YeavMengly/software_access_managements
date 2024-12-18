@@ -13,8 +13,11 @@
                         href="{{ route('mission-cam.create') }}" style="width: 160px; height: 50px; border-radius: 4px;">
                         បញ្ចូលទិន្នន័យ&nbsp;<i class="fas fa-plus" style="margin-left: 8px;"></i>
                     </a>
+<<<<<<< HEAD
+=======
                         style="font-family: 'Khmer OS Siemreap', sans-serif;"> <i class="fas fa-arrow-left"></i>
                         ត្រឡប់ក្រោយ</a>
+>>>>>>> 291645b93392bf5ef951aecb7229d969c251e878
                 </div>
             </div>
         </div>
@@ -25,22 +28,6 @@
                         <input type="search" name="search" value="{{ request('search') }}" class="form-control"
                             placeholder="ស្វែងរកទិន្នន័យ" aria-label="Search Address">
                     </div>
-                    <!-- Search by date -->
-                    {{-- <div class="input-group mt-3 my-3" style="width: 70%; font-family: 'Khmer OS Siemreap', sans-serif">
-                        <!-- Label for Start Date -->
-                        <div class="input-group-prepend">
-                            <span class="input-group-text"
-                                style="background-color: #007bff; color: white;">ចាប់ពីថ្ងៃ</span>
-                        </div>
-                        <input type="date" name="start_date" value="{{ request('start_date') }}" class="form-control"
-                            placeholder="Start Date" aria-label="Start Date">
-                        <!-- Label for End Date -->
-                        <div class="input-group-prepend ml-5">
-                            <span class="input-group-text" style="background-color: #007bff; color: white;">ដល់ថ្ងៃ</span>
-                        </div>
-                        <input type="date" name="end_date" value="{{ request('end_date') }}" class="form-control"
-                            placeholder="End Date" aria-label="End Date">
-                    </div> --}}
                 </div>
                 <div class="col-md-2">
                     <form method="GET" action="{{ route('mission-cam.index') }}">
@@ -127,82 +114,8 @@
                 </button>
             </div>
         </form>
-        {{-- <div class="d-flex justify-content-end mb-2">
-            <!-- Dropdown for showing number of items per page -->
-            <div style="width: 120px;">
-                <select name="per_page" class="form-control" onchange="window.location.href=this.value;">
-                    <option value="{{ url()->current() }}?per_page=25" {{ request('per_page') == 25 ? 'selected' : '' }}>
-                        បង្ហាញ 25</option>
-                    <option value="{{ url()->current() }}?per_page=50" {{ request('per_page') == 50 ? 'selected' : '' }}>
-                        បង្ហាញ 50</option>
-                    <option value="{{ url()->current() }}?per_page=100" {{ request('per_page') == 100 ? 'selected' : '' }}>
-                        បង្ហាញ 100</option>
-                </select>
-            </div>
-        </div> --}}
-        <form method="GET" action="{{ route('mission-cam.index') }}">
-            <div class="input-group my-3 ml-auto" style="width: 20%; font-family: 'Khmer OS Siemreap', sans-serif">
-                <!-- Year Selection --> 
-                <div class="input-group-prepend">
-                    <span class="input-group-text" style="background-color: #007bff; color: white;">ឆ្នាំ</span>
-                </div>
-                <select name="year" class="form-control" onchange="this.form.submit()">
-                    <option value="" disabled>ជ្រើសរើសឆ្នាំ</option>
-                    @for ($year = date('Y'); $year >= 2022; $year--)
-                        <option value="{{ $year }}" {{ request('year', date('Y')) == $year ? 'selected' : '' }}>
-                            {{ convertToKhmerNumber($year) }}
-                        </option>
-                    @endfor
-                </select>
 
-                <!-- Month Selection -->
-                @php
-                    // Define months in Khmer
-                    $khmerMonths = [
-                        1 => 'មករា',
-                        2 => 'កុម្ភៈ',
-                        3 => 'មិនា',
-                        4 => 'មេសា',
-                        5 => 'ឧសភា',
-                        6 => 'មិថុនា',
-                        7 => 'កក្កដា',
-                        8 => 'សីហា',
-                        9 => 'កញ្ញា',
-                        10 => 'តុលា',
-                        11 => 'វិច្ឆិកា',
-                        12 => 'ធ្នូ',
-                    ];
-                @endphp
-                <div class="input-group-prepend">
-                    <span class="input-group-text" style="background-color: #007bff; color: white;">ខែ</span>
-                </div>
-                <select name="month" class="form-control" onchange="this.form.submit()">
-                    <option value="" disabled selected>ជ្រើសរើសខែ</option>
-                    @for ($month = 1; $month <= 12; $month++)
-                        <option value="{{ $month }}"
-                            {{ request('month', now()->month) == $month ? 'selected' : '' }}>
-                            {{ $khmerMonths[$month] }}
-                        </option>
-                    @endfor
-                </select>
 
-                {{-- @php
-                    $daysInMonth = now()->daysInMonth;
-                @endphp
-  
-                <div class="input-group-prepend">
-                    <span class="input-group-text" style="background-color: #007bff; color: white;">ថ្ងៃ</span>
-                </div>
-                <select name="day" class="form-control" onchange="this.form.submit()">
-                    <option value="" disabled selected>ជ្រើសរើសថ្ងៃ</option>
-                    @for ($day = 1; $day <= 31; $day++)
-                        <option value="{{ $day }}" {{ request('day') == $day ? 'selected' : '' }}>
-                            {{ $day }}
-                        </option>
-                    @endfor
-                </select> --}}
-            </div>
-        </form>
     </div>
 
     <div class="border-wrapper mt-3 mr-4 ml-4">
