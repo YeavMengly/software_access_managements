@@ -120,6 +120,7 @@
 
 
                     @yield('form-form-mission')
+                    @yield('form-plans-upload')
 
                     <div class="container-fluid">
 
