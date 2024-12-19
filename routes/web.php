@@ -24,6 +24,7 @@ use App\Http\Controllers\Result\ResultSuccess\TotalController;
 use App\Http\Controllers\Result\ResultSummariesController;
 use App\Http\Controllers\Result\ResultTotalController;
 use App\Http\Controllers\Loans\SumReferController;
+use App\Http\Controllers\MissionPlanningController;
 use App\Http\Controllers\Report\LoansController;
 use App\Http\Controllers\Report\YearController;
 use App\Http\Controllers\ReportMissionController;
@@ -112,6 +113,7 @@ Route::resource('/mission-cam', MissionCambodiaController::class);
 Route::get('/mission-cam/{id}/edit', [MissionCambodiaController::class, 'edit'])->name('missions.edit');
 Route::put('/mission-cam/{id}', [MissionCambodiaController::class, 'update'])->name('missions.update');
 Route::delete('/mission-cam/{mission}', [MissionCambodiaController::class, 'delete'])->name('missions.delete');
+Route::resource('mission-planning', MissionPlanningController::class);
 
 //==================>> Manage Mission Exports and Imports
 Route::get('/mission-cambodia/export', [MissionCambodiaController::class, 'export'])->name('table-mission-cambodia');
@@ -182,4 +184,3 @@ Route::middleware(['auth', 'role:user'])->group(function () {
         return view('dashboard.dashboardui');
     })->name('user.dashboard');
 });
-
