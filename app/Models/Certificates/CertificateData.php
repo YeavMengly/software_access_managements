@@ -32,8 +32,7 @@ class CertificateData extends Model
     }
 
     public function accountKey(){
-        return $this->belongsTo(AccountKey::class, 'account_key');
-        
+        return $this->belongsTo(AccountKey::class, 'account_key'); 
     }
 
     // public function subAccountKey(){

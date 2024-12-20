@@ -59,8 +59,7 @@
                                                     style="height: 130px; width: 80%;">
                                                     @foreach ($subAccountKeys as $subAccountKey)
                                                         <option value="{{ $subAccountKey->id }}"
-                                                            {{ old('sub_account_key') == $subAccountKey->id ? 'selected' : '' }}>
-                                                            {{ $subAccountKey->sub_account_key }}
+                                                            {{ old('sub_account_key') == $subAccountKey->id ? 'selected' : '' }}> {{ $subAccountKey->sub_account_key }}
                                                         </option>
                                                     @endforeach
                                                 </select>

@@ -220,8 +220,6 @@
             padding-right: 50px;
         }
 
-
-
         #loader {
             position: absolute;
             top: 50%;

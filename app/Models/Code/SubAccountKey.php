@@ -3,6 +3,7 @@
 namespace App\Models\Code;
 
 use App\Models\Certificates\CertificateData;
+use App\Models\Mission\MissionPlanning;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -46,5 +47,8 @@ class SubAccountKey extends Model
         return $this->hasMany(Loans::class, 'sub_account_key');
     }
 
+    public function missionPlanning(){
+        return $this->hasMany(MissionPlanning::class, 'sub_account_key');
+    }
 
 }
