@@ -10,7 +10,8 @@
                             style="width: 160px; height: 50px; border-radius: 4px; display: flex; align-items: center; justify-content: center;">
                             <i class="fas fa-arrow-left"></i>&nbsp;&nbsp;
                         </a>
-                        <h3 class="card-title" style="font-weight: 500;">បញ្ចូលគម្រោងចំណាយបេសកកម្មតាមចំណាត់ថ្នាក់កម្មវិធីប្រចាំឆ្នាំ ២០២៥</h3>
+                        <h3 class="card-title" style="font-weight: 500;">
+                            តារាងបញ្ចូលបេសកកម្មចំណាយតាមកម្មវិធី</h3>
                         <span></span>
                     </div>
                 </div>
@@ -35,99 +36,72 @@
 
                 <div class="border-wrapper">
                     <div class="form-container">
-                        <form action="{{ route('codes.store') }}" method="POST" enctype="multipart/form-data"
+                        <form action="{{ route('mission-planning.store') }}" method="POST" enctype="multipart/form-data"
                             onsubmit="validateForm(event)">
                             @csrf
                             <div class="row d-flex justify-content-between align-items-center margin-tb mb-4">
                                 <div class="col-md-4">
                                     <div class="row">
                                         <div class="col-md-4">
-                                            <div class="form-group">
-                                                <label for="searchSubAccountKey" class="font-weight-bold">
-                                                    <strong>លេខអនុគណនី:</strong>
-                                                </label>
-                                                <input type="text" id="searchSubAccountKey"
-                                                    class="form-control text-center" placeholder="ស្វែងរកលេខអនុគណនី..."
-                                                    onkeyup="filterSubAccountKeys(event)"
-                                                    oninput="resetSubAccountSelection()" style="width: 80%; height: 40px;"
-                                                    value="{{ old('searchSubAccountKey') }}">
-                                                <p id="resultCount" style="font-weight: bold; margin-top: 8px;">ចំនួន: 0</p>
-                                                <select name="sub_account_key" id="subAccountKeySelect" class="form-control"
-                                                    size="5" onclick="getSelectedValue()"
-                                                    style="height: 130px; width: 80%;">
-                                                    {{-- @foreach ($subAccountKeys as $subAccountKey)
-                                                        <option value="{{ $subAccountKey->id }}"
-                                                            {{ old('sub_account_key') == $subAccountKey->id ? 'selected' : '' }}>
-                                                            {{ $subAccountKey->sub_account_key }}
-                                                        </option>
-                                                    @endforeach --}}
-                                                </select>
-                                                <span id="subAccountKeyError" class="text-danger"
-                                                    style="display: none;">បញ្ជាក់ទិន្នន័យ</span>
-                                            </div>
+                                            <label for="report_key"> <strong>លេខកូដកម្មវិធី:</strong></label>
+                                            <input type="text" id="searchReportKey" class="form-control mb-2"
+                                                placeholder="ស្វែងរកលេខកូដកម្មវិធី..." onkeyup="filterReportKeys(event)"
+                                                style="width: 100%; height: 40px; text-align: center; line-height: 60px;">
+                                            <p id="resultCount" style="font-weight: bold;">ចំនួន: 0</p>
+                                            <select name="report_key" id="reportKeySelect" class="form-control"
+                                                size="5" onchange="updateReportInputField()"
+                                                style="width: 100%; height: 150px;">
+                                                @foreach ($reports as $report)
+                                                    <option value="{{ $report->id }}"> <!-- This sends the ID -->
+                                                        <span>{{ $report->sub_account_key ?? 'N/A' }} >
+                                                            {{ $report->report_key }}</span>
+                                                    </option>
+                                                @endforeach
+                                            </select>
+
                                         </div>
+
                                         <div class="col-md-4">
                                             <div class="form-group">
-                                                <label for="report_key"><strong>លេខកូដកម្មវិធី:</strong></label>
-                                                <input type="number" name="report_key" id="report_key"
-                                                    class="form-control @error('report_key') is-invalid @enderror"
+                                                <label for="pay_mission"><strong>ទឹកប្រាក់ចំណាយបេសកកម្ម:</strong></label>
+                                                <input type="number" name="pay_mission" id="pay_mission"
+                                                    class="form-control @error('pay_mission') is-invalid @enderror"
                                                     style="width: 80%; height: 40px;" min="0"
-                                                    value="{{ old('report_key') }}">
-                                                @error('report_key')
+                                                    value="{{ old('pay_mission') }}">
+                                                @error('pay_mission')
                                                     <div class="invalid-feedback">{{ $message }}</div>
                                                 @enderror
-                                                <span id="reportKeyError" class="text-danger"
-                                                    style="display: none;">បញ្ជាក់ទិន្នន័យ</span>
                                             </div>
-                                            <div class="form-group">
-                                                <label for="fin_law"><strong>ច្បាប់ហិរញ្ញវត្ថុ:</strong></label>
-                                                <input type="number" name="fin_law" id="fin_law"
-                                                    class="form-control @error('fin_law') is-invalid @enderror"
-                                                    style="width: 80%; height: 40px;" min="0"
-                                                    value="{{ old('fin_law') }}"
-                                                    oninput="updateCurrentLoan(this); formatNumber(this)">
-                                                @error('fin_law')
-                                                    <div class="invalid-feedback">{{ $message }}</div>
-                                                @enderror
-                                                <span id="finLawError" class="text-danger"
-                                                    style="display: none;">បញ្ជាក់ទិន្នន័យ</span>
-                                            </div>
-
-
                                         </div>
+
                                         <div class="col-md-4">
                                             <div class="form-group">
                                                 <label for="mission-type"><strong>ប្រភេទបេសកកម្ម</strong></label>
                                                 <div>
-                                                    <div class="form-check">
-                                                        <input class="form-check-input" type="radio" name="mission_type"
-                                                            id="mission_type1" value="រជ្ជទេយ្យ">
-                                                        <label class="form-check-label"
-                                                            for="mission_type1">រជ្ជទេយ្យ</label>
-                                                    </div>
-                                                    <div class="form-check">
-                                                        <input class="form-check-input" type="radio" name="mission_type"
-                                                            id="mission_type2" value="លទ្ធកម្ម">
-                                                        <label class="form-check-label"
-                                                            for="mission_type2">លទ្ធកម្ម</label>
-                                                    </div>
-                                                    <div class="form-check">
-                                                        <input class="form-check-input" type="radio"
-                                                            name="mission_type" id="mission_type3" value="ទូទាត់ត្រង់">
-                                                        <label class="form-check-label"
-                                                            for="mission_type3">ទូទាត់ត្រង់</label>
-                                                    </div>
+                                                    @foreach ($missionTypes as $missionType)
+                                                        <div class="form-check">
+                                                            <input class="form-check-input" type="radio"
+                                                                name="mission_type" id="mission_type{{ $loop->index }}"
+                                                                value="{{ $missionType->id }}"
+                                                                {{ old('mission_type') == $missionType->id ? 'checked' : '' }}>
+                                                            <label class="form-check-label"
+                                                                for="mission_type{{ $loop->index }}">
+                                                                {{ $missionType->mission_type }}
+                                                            </label>
+                                                        </div>
+                                                    @endforeach
                                                 </div>
                                             </div>
+
                                         </div>
 
                                     </div>
                                 </div>
                             </div>
+
                             <div class="d-flex align-items-center">
-                                <button type="submit" class="btn btn-primary ml-auto"
-                                    style="width: 150px; height: 50px;">
-                                    <i class="fas fa-save"></i> រក្សាទុក
+                                <button type="submit" class="btn btn-primary ml-auto" style="width: 150px; height: 50px;">
+                                    <i class="fas fa-save"></i> Save
                                 </button>
                             </div>
                         </form>
@@ -176,143 +150,44 @@
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
     <script>
-        function updateCurrentLoan(finLawInput) {
-            const finLawValue = parseFloat(finLawInput.value) || 0;
-            const currentLoanInput = document.getElementById('current_loan');
-            currentLoanInput.value = finLawValue;
-        }
+        document.addEventListener("DOMContentLoaded", () => {
+            const searchInput = document.getElementById("searchReportKey");
+            const reportKeySelect = document.getElementById("reportKeySelect");
+            const resultCount = document.getElementById("resultCount");
 
-        function formatNumber(input) {
+            searchInput.addEventListener("keyup", (event) => {
+                const searchValue = event.target.value.toLowerCase();
 
-            const value = input.value;
-            input.value = value.replace(/\D/g, '');
-        }
-    </script>
-    <script>
-        function setSelectedYear() {
-            var selectedYear = document.getElementById('dateYearSelect').value;
-            document.getElementById('date_year').value = selectedYear; // Update the readonly input field
-        }
-    </script>
-    <script>
-        let selectedIndex = -1;
+                let matchCount = 0;
 
-        function filterSubAccountKeys(event) {
-            var input = document.getElementById('searchSubAccountKey').value.toLowerCase();
-            var select = document.getElementById('subAccountKeySelect');
-            var options = select.options;
-            var count = 0;
-            for (var i = 0; i < options.length; i++) {
-                var optionText = options[i].textContent.toLowerCase();
-                if (optionText.includes(input)) {
-                    options[i].style.display = '';
-                    count++;
-                } else {
-                    options[i].style.display = 'none';
-                }
-            }
+                // Loop through each option in the select element
+                Array.from(reportKeySelect.options).forEach((option) => {
+                    const optionText = option.textContent.toLowerCase();
 
-            document.getElementById('resultCount').innerText = 'ចំនួន: ' + count;
-
-            if (event.key === 'ArrowDown') {
-                if (selectedIndex < options.length - 1) {
-                    selectedIndex++;
-                    while (options[selectedIndex].style.display === 'none') {
-                        selectedIndex++;
-                        if (selectedIndex >= options.length) {
-                            selectedIndex = options.length - 1;
-                            break;
-                        }
+                    if (optionText.includes(searchValue)) {
+                        option.style.display = ""; // Show the option
+                        matchCount++;
+                    } else {
+                        option.style.display = "none"; // Hide the option
                     }
-                    options[selectedIndex].selected = true;
-                    updateSubAccountInputField();
-                }
-            } else if (event.key === 'ArrowUp') {
-                if (selectedIndex > 0) {
-                    selectedIndex--;
-                    while (options[selectedIndex].style.display === 'none') {
-                        selectedIndex--;
-                        if (selectedIndex < 0) {
-                            selectedIndex = 0;
-                            break;
-                        }
-                    }
-                    options[selectedIndex].selected = true;
-                    updateSubAccountInputField();
-                }
-            } else if (event.key === 'Enter') {
-                updateSubAccountInputField();
-            }
-        }
+                });
 
-        function resetSubAccountSelection() {
-            selectedIndex = -1;
-            var select = document.getElementById('subAccountKeySelect');
-            select.selectedIndex = -1;
-        }
+                // Update result count
+                resultCount.textContent = `ចំនួន: ${matchCount}`;
+            });
+        });
 
-        function updateSubAccountInputField() {
-            var select = document.getElementById('subAccountKeySelect');
-            var selectedOption = select.options[select.selectedIndex];
+        function updateReportInputField() {
+            const reportKeySelect = document.getElementById("reportKeySelect");
+            const searchReportKey = document.getElementById("searchReportKey");
 
-            if (selectedOption) {
-                document.getElementById('searchSubAccountKey').value = selectedOption.textContent;
-            }
-        }
+            // Get the selected value
+            const selectedOptionText = reportKeySelect.options[reportKeySelect.selectedIndex].textContent.trim();
 
-        function getSelectedValue() {
-            updateSubAccountInputField();
-        }
-    </script>
-    <script>
-        function validateForm(event) {
-            let isValid = true;
-            document.getElementById('subAccountKeyError').style.display = 'none';
-            document.getElementById('reportKeyError').style.display = 'none';
-            document.getElementById('finLawError').style.display = 'none';
-            document.getElementById('currentLoanError').style.display = 'none';
-            document.getElementById('nameReportKeyError').style.display = 'none';
-            document.getElementById('yearError').style.display = 'none';
-
-            // Check if 'sub_account_key' is empty
-            if (document.getElementById('subAccountKeySelect').value === "") {
-                isValid = false;
-                document.getElementById('subAccountKeyError').style.display = 'inline'; // Show error message
-            }
-
-            // Check if 'report_key' is empty
-            if (document.getElementById('report_key').value === "") {
-                isValid = false;
-                document.getElementById('reportKeyError').style.display = 'inline'; // Show error message
-            }
-
-            // Check if 'fin_law' is empty
-            if (document.getElementById('fin_law').value === "") {
-                isValid = false;
-                document.getElementById('finLawError').style.display = 'inline'; // Show error message
-            }
-
-            // Check if 'current_loan' is empty
-            if (document.getElementById('current_loan').value === "") {
-                isValid = false;
-                document.getElementById('currentLoanError').style.display = 'inline'; // Show error message
-            }
-
-            // Check if 'name_report_key' is empty
-            if (document.getElementById('name_report_key').value.trim() === "") {
-                isValid = false;
-                document.getElementById('nameReportKeyError').style.display = 'inline'; // Show error message
-            }
-
-            if (document.getElementById('year_id').value.trim() === "") {
-                isValid = false;
-                document.getElementById('yearError').style.display = 'inline'; // Show error message
-            }
-
-            if (!isValid) {
-                event.preventDefault();
-            }
+            // Update the input field
+            searchReportKey.value = selectedOptionText;
         }
     </script>
 @endsection

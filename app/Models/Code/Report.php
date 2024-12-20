@@ -4,6 +4,7 @@ namespace App\Models\Code;
 
 use App\Models\Certificates\Certificate;
 use App\Models\Certificates\CertificateData;
+use App\Models\Mission\MissionPlanning;
 use App\Models\Totals\Total;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -38,8 +39,9 @@ class Report extends Model
     // belong table to subAccount class
     public function subAccountKey()
     {
-        return $this->belongsTo(SubAccountKey::class, 'sub_account_key', 'sub_account_key');
+        return $this->belongsTo(SubAccountKey::class, 'sub_account_key'); // Adjust this if needed
     }
+    
 
     // Point to total class
     public function total()
@@ -101,14 +103,18 @@ class Report extends Model
             'loans.decrease',
             'loans.editorial',
             'cd.value_certificate',
-            'cd.amount'
+            'cd.amount',
+
+            'mp.pay_mission',
+            'mp.name_mission_type'
 
         ])
             ->join('sub_account_keys as sak', 'sak.id', '=', 'reports.sub_account_key')
             ->join('account_keys as ak', 'ak.id', '=', 'sak.account_key')
             ->join('keys', 'keys.code', '=', 'ak.code')
             ->leftJoin('certificate_data as cd', 'cd.report_key', '=', 'reports.id')
-            ->leftJoin('loans', 'loans.report_key', '=', 'reports.id');
+            ->leftJoin('loans', 'loans.report_key', '=', 'reports.id')
+            ->leftJoin('mission_plannings as mp','mp.report_key', '=' , 'reports.id');
     }
 
     public function delete()
@@ -130,5 +136,9 @@ class Report extends Model
         if ($month) {
             $query->whereMonth('created_at', $month);
         }
+    }
+
+    public function missionPlanning(){
+        return $this->hasMany(MissionPlanning::class, 'report_key');
     }
 }

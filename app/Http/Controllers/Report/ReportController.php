@@ -182,7 +182,7 @@ class ReportController extends Controller
         // Create the report
         $report = Report::create([
             ...$validatedData,
-            'date_year' => $year->date_year,
+            'date_year' => $year->id,
             'total_increase' => $total_increase,
             'new_credit_status' => $new_credit_status,
             'apply' => $currentApplyTotal,
