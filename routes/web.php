@@ -29,6 +29,7 @@ use App\Http\Controllers\Report\LoansController;
 use App\Http\Controllers\Report\YearController;
 use App\Http\Controllers\ReportMissionController;
 use App\Http\Controllers\Result\ResultApplyController;
+use App\Http\Controllers\Result\TablesMission\ResultMissionPlans;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -87,6 +88,9 @@ Route::get('/certificate-amount', [AmountCertificateController::class, 'index'])
 //===============================>> Manage Mission
 Route::get('/reports/{id}/early-balance', [CertificateDataController::class, 'getEarlyBalance']);
 
+Route::get('/table-ms-plan', [ResultMissionPlans::class, 'index'])->name('table-ms-plan');
+
+
 //===============================>> Manage Result Operation
 Route::get('/total_card/results', [ResultController::class, 'index'])->name('result.index');
 Route::get('/result-total', [ResultTotalController::class, 'index'])->name('result-total-table');
@@ -124,7 +128,7 @@ Route::get('/imported-mission-table', [ReportMissionController::class, 'imported
 
 //===============================>> Manage Imports
 Route::post('/reports/import', [ReportController::class, 'show'])->name('reports.import');
-Route::post('/import-excel', [ReportController::class, 'import'])->name('reports.import');
+// Route::post('/import-excel', [ReportController::class, 'import'])->name('reports.import');
 Route::get('/loans/import', [LoansController::class, 'showImportForm'])->name('loans.importForm');
 Route::post('/loans/import', [LoansController::class, 'import'])->name('loans.import');
 
@@ -136,7 +140,7 @@ Route::get('/summaries/export', [ResultSummariesController::class, 'export'])->n
 Route::get('/results/pdf', [ResultController::class, 'exportPdf'])->name('result.exportPdf');
 Route::get('/summaries/export-pdf', [ResultSummariesController::class, 'exportPdf'])->name('summaries.exportPdf');
 
-Route::get('/mission-abroad', [MissionAbroadController::class, 'index'])->name('table-mission-abroad');
+// Route::get('/mission-abroad', [MissionAbroadController::class, 'index'])->name('table-mission-abroad');
 
 Route::get('/mission-abroad/export', [MissionAbroadController::class, 'export'])->name('table-mission-abroad');
 

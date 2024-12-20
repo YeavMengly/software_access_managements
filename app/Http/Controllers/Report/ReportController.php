@@ -109,7 +109,8 @@ class ReportController extends Controller
         // }
         $validatedData = $request->validate([
             'sub_account_key' => 'required|exists:sub_account_keys,id',
-            'report_key' => 'required|string|max:255|unique:reports,report_key,NULL,id,sub_account_key,' . $request->input('sub_account_key'),
+            // 'report_key' => 'required|string|max:255|unique:reports,report_key,NULL,id,sub_account_key,' . $request->input('sub_account_key'),
+            'report_key' => 'required|string|max:255',
             'name_report_key' => 'required|string|max:255',
             'fin_law' => 'required|numeric|min:0',
             'current_loan' => 'required|numeric|min:0',
@@ -182,7 +183,7 @@ class ReportController extends Controller
         // Create the report
         $report = Report::create([
             ...$validatedData,
-            'date_year' => $year->date_year,
+            'date_year' => $year->id,
             'total_increase' => $total_increase,
             'new_credit_status' => $new_credit_status,
             'apply' => $currentApplyTotal,

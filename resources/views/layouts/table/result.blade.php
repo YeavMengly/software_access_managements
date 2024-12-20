@@ -123,8 +123,6 @@
                 </a>
             </div>
 
-            {{-- Start action btn export and print --}}
-
             <div class="border-wrapper">
                 <div class="result-total-table-container mt-4">
                     <div class="first-header text-center">

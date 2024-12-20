@@ -46,11 +46,19 @@
                     </a>
                 </div>
 
-                <div class="col-md-4 ">
+                <div class="col-md-4 mb-3">
                     <a href="{{ route('certificate-amount') }}" class="btn btn-custom btn-block animate-button">
                         តារាងសាលាកបត្រ
                     </a>
                 </div>
+
+                <div class="col-md-4 ">
+                    <a href="{{route('table-ms-plan')}}" class="btn btn-custom btn-block animate-button">
+                        តារាងចំណាយបេសកកម្មតាមកម្មវិធី
+                    </a>
+                </div>
+
+        
 
                 <div class="col-md-4 ">
                     <a href="{{ route('back') }}" class="btn btn-custom btn-block animate-button">

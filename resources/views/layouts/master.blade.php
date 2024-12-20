@@ -155,7 +155,11 @@
                     @yield('content-import-data')
                     {{--                        End Import Data                         --}}
 
+                    {{--                        Start Table                         --}}
 
+                    @yield('content-table-ms-plan')
+
+                    {{--                        End Table                           --}}
                 </div>
 
             </div>
