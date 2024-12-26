@@ -54,9 +54,7 @@
                                                 size="5" onchange="updateReportInputField()"
                                                 style="width: 100%; height: 150px;">
                                                 @foreach ($reports as $report)
-                                                    <option value="{{ $report->id }}">
-                                                        <span>{{ $report->subAccountKey->sub_account_key }} >
-                                                            {{ $report->report_key }}</span>
+                                                    <option value="{{ $report->id }}"><span>{{ $report->subAccountKey->sub_account_key }} > {{ $report->report_key }}</span>
                                                     </option>
                                                 @endforeach
                                             </select>

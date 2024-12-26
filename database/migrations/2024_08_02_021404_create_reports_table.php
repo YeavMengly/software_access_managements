@@ -16,8 +16,8 @@ return new class extends Migration
                 $table->increments('id');
 
                 // Foreign key column
-                $table->unsignedBigInteger('sub_account_key')->change();
-                $table->foreignId('sub_account_key')->references('id')->on('sub_account_keys')->onDelete('cascade');
+                $table->unsignedBigInteger('sub_account_key')->unique();
+                $table->foreign('sub_account_key')->references('sub_account_key')->on('sub_account_keys')->onDelete('cascade');
 
                 // $table->foreign('sub_account_key')->constrained('sub_account_keys')->onDelete('cascade');
 
@@ -29,7 +29,7 @@ return new class extends Migration
 
                 // Foreign key column for year_id
                 $table->unsignedBigInteger('date_year');
-                $table->foreign('date_year')->references('id')->on('years')->onDelete('cascade'); // Reference to years table
+                $table->foreign('date_year')->references('idZ')->on('years')->onDelete('cascade'); // Reference to years table
 
                 $table->decimal('new_credit_status', 15, 2)->default(0);
                 $table->decimal('early_balance', 15, 2)->default(0);

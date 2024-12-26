@@ -19,7 +19,7 @@ class Year extends Model
     ];
     public function reports()
     {
-        return $this->hasMany(Report::class, 'date_year'); // Reference reports by year_id
+        return $this->hasMany(Report::class, 'date_year', 'id'); // Reference reports by year_id
     }
     
 }

@@ -54,7 +54,7 @@
                                         <select name="account_key" id="accountKeySelect" class="form-control" size="5"
                                             onclick="getSelectedAccountValue()" style="width: 420px; height: 120px;">
                                             @foreach ($accountKeys as $accountKey)
-                                                <option value="{{ $accountKey->id }}"> {{ $accountKey->account_key }}
+                                                <option value="{{ $accountKey->account_key }}"> {{ $accountKey->account_key }}
                                                 </option>
                                             @endforeach
                                         </select>

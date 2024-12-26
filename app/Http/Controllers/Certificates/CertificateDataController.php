@@ -3,13 +3,12 @@
 namespace App\Http\Controllers\Certificates;
 
 use App\Http\Controllers\Controller;
-use App\Models\Certificates\Certificate;
 use App\Models\Certificates\CertificateData;
 use App\Models\Code\AccountKey;
 use App\Models\Code\Key;
-use App\Models\Code\Loans;
 use App\Models\Code\Report;
 use App\Models\Code\SubAccountKey;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class CertificateDataController extends Controller
@@ -83,11 +82,15 @@ class CertificateDataController extends Controller
         $keys = Key::all();
         $accountKeys = AccountKey::all();
         $subAccountKeys = SubAccountKey::all();
-        $reports = Report::with('year')
-            ->whereHas('year', function ($query) {
-                $query->where('status', 'active'); // Include only reports tied to active years
-            })
-            ->get();
+        // $reports = Report::with('year')
+        //     ->whereHas('year', function ($query) {
+        //         $query->where('status', 'active'); // Include only reports tied to active years
+        //     })
+        //     ->get();
+        $reports = Report::whereHas('year', function ($query) {
+            $query->where('status', 'active')
+                  ->where('date_year', '>=', Carbon::now()->startOfYear()); // Compare _year in the related model
+        })->get();
 
         return view('layouts.admin.forms.certificate.certificate-data-create', compact('reports', 'subAccountKeys', 'accountKeys', 'keys'));
     }

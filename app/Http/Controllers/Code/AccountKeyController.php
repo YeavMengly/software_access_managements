@@ -47,7 +47,7 @@ class AccountKeyController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'code' => 'required|exists:keys,id',
+            'code' => 'required|exists:keys,code',
             'account_key' => 'required',
             'name_account_key' => 'required',
         ]);

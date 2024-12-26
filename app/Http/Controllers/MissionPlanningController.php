@@ -94,4 +94,33 @@ class MissionPlanningController extends Controller
 
         return redirect()->route('mission-planning.index')->with('success', 'Mission planning deleted successfully.');
     }
+
+    public function getEarlyBalance($id)
+    {
+        $report = Report::find($id);
+        $missionPlanning = $report ? $report->missionPlannings : null;
+    
+        if ($report) {
+            // Calculate credit movement based on mission planning data
+            $credit_movement = ($missionPlanning->total_increase ?? 0) - ($missionPlanning->decrease ?? 0);
+            
+            return response()->json([
+                'fin_law' => $report->fin_law,
+                'credit_movement' => $credit_movement,
+                'new_credit_status' => $report->new_credit_status,
+                'credit' => $report->credit,
+                'deadline_balance' => $report->deadline_balance,
+            ]);
+        }
+    
+        return response()->json([
+            'fin_law' => 0,
+            'credit_movement' => 0,
+            'new_credit_status' => 0,
+            'credit' => 0,
+            'deadline_balance' => 0,
+        ]);
+    }
+    
+
 }

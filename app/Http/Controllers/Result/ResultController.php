@@ -59,9 +59,62 @@ class ResultController extends Controller
     //     // Pass variables to view
     //     return view('layouts.table.result', compact('totals', 'reports', 'loans', 'years', 'currentYear', 'currentMonth', 'selectedYearId', 'month'));
     // }
+    // public function index(Request $request)
+    // {
+    //     $years = Year::all(); // Fetch all years
+    //     $currentYear = date('Y'); // Get the current year
+    //     $currentMonth = date('m'); // Get the current month
+
+    //     // Get selected year or default to current year
+    //     $selectedYearId = $request->get('per_page'); // Assuming 'per_page' is used for year selection
+    //     $selectedYear = Year::find($selectedYearId);
+    //     $year = $selectedYear ? $selectedYear->id : null;
+
+    //     // Get selected month or default to current month
+    //     $month = $request->get('month', $currentMonth);
+
+    //     // Apply filters based on the selected year and month
+    //     $reportQuery = Report::query()->whereHas('year', function ($query) use ($year, $month) {
+    //         if ($year) {
+    //             $query->where('id', $year); // Filter by year ID
+    //         }
+    //         if ($month) {
+    //             $query->whereMonth('date_year', $month); // Filter by month
+    //         }
+    //     });
+
+    //     $loanQuery = Report::query()->whereHas('year', function ($query) use ($year, $month) {
+    //         if ($year) {
+    //             $query->where('id', $year); // Filter by year ID
+    //         }
+    //         if ($month) {
+    //             $query->whereMonth('date_year', $month); // Filter by month
+    //         }
+    //     });
+
+    //     $this->applyFilters($reportQuery, $request);
+    //     $this->applyFilters($loanQuery, $request);
+
+    //     // Handle export functionality
+    //     if ($request->has('export')) {
+    //         $combinedResults = $reportQuery->get()->merge($loanQuery->get());
+    //         return Excel::download(new ResultExport($combinedResults), 'results.xlsx');
+    //     }
+
+    //     // Fetch data
+    //     $reports = $reportQuery->get();
+    //     $loans = $loanQuery->get();
+
+    //     $totals = $this->calculateTotals($reports, $loans);
+
+    //     // Pass variables to view
+    //     return view('layouts.table.result', compact('totals', 'reports', 'loans', 'years', 'currentYear', 'currentMonth', 'selectedYearId', 'month'));
+    // }
     public function index(Request $request)
     {
-        $years = Year::all(); // Fetch all years
+        // Fetch only active years
+        $years = Year::where('status', 'active')->get(); // Filter active years only
+
         $currentYear = date('Y'); // Get the current year
         $currentMonth = date('m'); // Get the current month
 
@@ -110,6 +163,7 @@ class ResultController extends Controller
         // Pass variables to view
         return view('layouts.table.result', compact('totals', 'reports', 'loans', 'years', 'currentYear', 'currentMonth', 'selectedYearId', 'month'));
     }
+
 
     public function export(Request $request)
     {
