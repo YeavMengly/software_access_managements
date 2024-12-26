@@ -21,7 +21,7 @@
                         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                     </div>
                 @endif
-                
+
                 @if ($errors->any())
                     <div class="alert alert-danger alert-dismissible fade show" role="alert">
                         <strong>Whoops!</strong> There were some problems with your input.<br><br>
@@ -36,7 +36,8 @@
 
                 <div class="border-wrapper">
                     <div class="form-container">
-                        <form action="{{ route('mission-planning.store') }}" method="POST" enctype="multipart/form-data" onsubmit="validateForm(event)">
+                        <form action="{{ route('mission-planning.store') }}" method="POST" enctype="multipart/form-data"
+                            onsubmit="validateForm(event)">
                             @csrf
                             <div class="row d-flex justify-content-between align-items-center margin-tb mb-4">
                                 <div class="col-md-4">
@@ -51,21 +52,17 @@
                                                 size="5" onchange="updateReportInputField()"
                                                 style="width: 100%; height: 150px;">
                                                 @foreach ($reports as $report)
-                                                    <option value="{{ $report->id }}"> <!-- This sends the ID -->
-                                                        <span>{{ $report->subAccountKey->sub_account_key ?? 'N/A' }} > {{ $report->report_key }}</span>
                                                     <option value="{{ $report->id }}"> <span>{{ $report->subAccountKey->sub_account_key ?? 'N/A' }}>{{ $report->report_key }}</span>
                                                     </option>
                                                 @endforeach
                                             </select>
+
                                         </div>
-                
-                                        <div class="col-md-4">
 
                                        
                                         <div class="col-md-6">
 
                                              {{-- <div class="col-md-4"> --}}
-
                                             <div class="form-group">
                                                 <label for="pay_mission"><strong>ទឹកប្រាក់ចំណាយបេសកកម្ម:</strong></label>
                                                 <input type="number" name="pay_mission" id="pay_mission"
@@ -76,11 +73,6 @@
                                                     <div class="invalid-feedback">{{ $message }}</div>
                                                 @enderror
                                             </div>
-
-                                        </div>
-                
-                                        <div class="col-md-4">
-
                                         {{-- </div> --}}
 
                                             <div class="form-group">
@@ -100,9 +92,9 @@
                                                     @endforeach
                                                 </div>
                                             </div>
+
                                         </div>
 
-           
 
 
                                     </div>
@@ -152,7 +144,7 @@
                                     </div>
                                 </div>
                             </div>
-                
+
                             <div class="d-flex align-items-center">
                                 <button type="submit" class="btn btn-primary ml-auto"
                                     style="width: 150px; height: 50px;">
@@ -160,6 +152,7 @@
                                 </button>
                             </div>
                         </form>
+
                     </div>
                 </div>
             </div>
