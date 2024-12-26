@@ -14,7 +14,10 @@ return new class extends Migration
         if (!Schema::hasTable('account_keys')) {
             Schema::create('account_keys', function (Blueprint $table) {
                 $table->increments('id');
-                $table->foreignId('code')->constrained('keys')->onDelete('cascade'); // Define the foreign key
+                
+                $table->unsignedInteger('code')->unique();
+                $table->foreign('code')->references('code')->on('keys')->onDelete('cascade');
+              
                 $table->string('account_key');
                 $table->string('name_account_key');
                 $table->timestamps();

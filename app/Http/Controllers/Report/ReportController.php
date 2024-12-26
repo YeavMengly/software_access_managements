@@ -76,40 +76,15 @@ class ReportController extends Controller
     {
         $subAccountKeys = SubAccountKey::all();
         $report = null;
-        $years = Year::all();  // Fetch all years from the database
+        $years = Year::all();  
 
         return view('layouts.admin.forms.code.report-create', compact('subAccountKeys', 'report', 'years'));
     }
 
     public function store(Request $request)
     {
-        // $validatedData = $request->validate([
-        //     'sub_account_key' => 'required|exists:sub_account_keys,id',
-        //     'report_key' => 'required|string|max:255',
-        //     'name_report_key' => 'required|string|max:255',
-        //     'fin_law' => 'required|numeric|min:0',
-        //     'current_loan' => 'required|numeric|min:0',
-        //     'date_year' => 'required|exists:years,id',
-        // ]);
-
-        // // dd($validatedData);
-
-        // // Retrieve the selected year
-        // $year = Year::find($validatedData['date_year']);
-        // if (!$year) {
-        //     return redirect()->back()->withErrors(['date_year' => 'Invalid year selected.'])->withInput();
-        // }
-
-        // // Check if the selected year matches the current year
-        // $currentYear = now()->year; // Get the current year
-        // if ($year->date_year->year !== $currentYear) {
-        //     return redirect()->back()->withErrors([
-        //         'date_year' => 'The selected year does not match the current year (' . $currentYear . ').',
-        //     ])->withInput();
-        // }
         $validatedData = $request->validate([
-            'sub_account_key' => 'required|exists:sub_account_keys,id',
-            // 'report_key' => 'required|string|max:255|unique:reports,report_key,NULL,id,sub_account_key,' . $request->input('sub_account_key'),
+            'sub_account_key' => 'required|exists:sub_account_keys,sub_account_key',
             'report_key' => 'required|string|max:255',
             'name_report_key' => 'required|string|max:255',
             'fin_law' => 'required|numeric|min:0',
@@ -122,21 +97,11 @@ class ReportController extends Controller
             'fin_law.numeric' => 'តម្លៃច្បាប់ហិរញ្ញវត្ថុត្រូវតែជាលេខ។',
         ]);
     
-        // Retrieve the selected year
         $year = Year::find($validatedData['date_year']);
         if (!$year) {
             return redirect()->back()->withErrors(['date_year' => 'ឆ្នាំដែលបានជ្រើសរើសមិនត្រឹមត្រូវ។'])->withInput();
         }
-    
-        // Check if the selected year matches the current year
-        $currentYear = now()->year; // Get the current year
-        if ($year->date_year->year !== $currentYear) {
-            return redirect()->back()->withErrors([
-                'date_year' => 'ឆ្នាំដែលបានជ្រើសរើសមិនដូចនឹងឆ្នាំបច្ចុប្បន្ន (' . $currentYear . ')។',
-            ])->withInput();
-        }
-    
-        // Additional validations for logical consistency
+
         if ($request->input('current_loan') < 0) {
             return redirect()->back()->withErrors([
                 'current_loan' => 'ចំនួនទុនបងវិញមិនអាចមានតម្លៃអវិជ្ជមាន។',
@@ -149,18 +114,15 @@ class ReportController extends Controller
             ])->withInput();
         }
 
-        // Default values for optional fields
         $validatedData['internal_increase'] = $validatedData['internal_increase'] ?? 0;
         $validatedData['unexpected_increase'] = $validatedData['unexpected_increase'] ?? 0;
         $validatedData['additional_increase'] = $validatedData['additional_increase'] ?? 0;
         $validatedData['decrease'] = $validatedData['decrease'] ?? 0;
         $validatedData['editorial'] = $validatedData['editorial'] ?? 0;
 
-        // Calculate totals and balances
         $total_increase = $validatedData['internal_increase'] + $validatedData['unexpected_increase'] + $validatedData['additional_increase'];
         $new_credit_status = $validatedData['current_loan'] + $total_increase - $validatedData['decrease'] - $validatedData['editorial'];
 
-        // Check for duplicate entries
         $existingRecord = Report::where('sub_account_key', $request->input('sub_account_key'))
             ->where('report_key', $request->input('report_key'))
             ->where('date_year', $request->input('date_year'))
@@ -171,8 +133,7 @@ class ReportController extends Controller
                 'report_key' => 'The combination of Sub-Account Key ID and Report Key already exists.',
             ])->withInput();
         }
-
-        // Fetch totals from CertificateData
+        
         $currentApplyTotal = CertificateData::where('report_key', $validatedData['report_key'])->sum('value_certificate');
         $early_balance = $currentApplyTotal > 0 ? $currentApplyTotal : 0;
         $deadline_balance = $early_balance + $currentApplyTotal;

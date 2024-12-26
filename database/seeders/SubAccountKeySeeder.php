@@ -136,6 +136,7 @@ class SubAccountKeySeeder extends Seeder
             ['account_key' => '6405', 'sub_account_key' => '64053', 'name_sub_account_key' => 'មរណៈភាព'],
             ['account_key' => '6405', 'sub_account_key' => '64054', 'name_sub_account_key' => 'ឧបត្ថម្ភនិវត្តជន'],
             ['account_key' => '6405', 'sub_account_key' => '64055', 'name_sub_account_key' => 'ឧបត្ថម្ភដល់អ្នកសុំឈប់ពីការងារ'],
+            ['account_key' => '6405', 'sub_account_key' => '64056', 'name_sub_account_key' => 'គ្រោះថ្នាក់ក្នុងការងារនិងទព្វលភាព'],
             ['account_key' => '6406', 'sub_account_key' => '64061', 'name_sub_account_key' => 'កូនមានអាយុចាប់ពី២០ឆ្នាំចុះ'],
             ['account_key' => '6406', 'sub_account_key' => '64063', 'name_sub_account_key' => 'ប្រាក់បំណាច់អ្នកក្នុងបន្ទុក'],
             ['account_key' => '6406', 'sub_account_key' => '64981', 'name_sub_account_key' => 'បន្ទុកបុគ្គលិកផ្សេងៗទៀត'],

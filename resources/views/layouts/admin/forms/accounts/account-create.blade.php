@@ -47,7 +47,7 @@
                                         <strong>លេខជំពូក:</strong>
                                         <select name="code" class="form-control" style="width: 420px; height: 60px;">
                                             @foreach ($keys as $key)
-                                                <option value="{{ $key->id }}">{{ $key->code }}</option>
+                                                <option value="{{ $key->code }}">{{ $key->code }}</option>
                                             @endforeach
                                         </select>
                                     </div>

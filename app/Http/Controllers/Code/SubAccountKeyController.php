@@ -60,7 +60,7 @@ class SubAccountKeyController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'account_key' => 'required|exists:account_keys,id',
+            'account_key' => 'required|exists:account_keys,account_key',
             'sub_account_key' => 'required',
             'name_sub_account_key' => 'required'
         ]);

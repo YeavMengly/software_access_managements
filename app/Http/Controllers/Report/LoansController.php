@@ -7,6 +7,7 @@ use App\Models\Certificates\CertificateData;
 use App\Models\Code\Loans;
 use App\Models\Code\Report;
 use App\Models\Code\SubAccountKey;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use PhpOffice\PhpSpreadsheet\Reader\Exception;
@@ -48,59 +49,61 @@ class LoansController extends Controller
     public function create()
     {
         $subAccountKeys = SubAccountKey::all();
-        $reports = Report::with('year')
-            ->whereHas('year', function ($query) {
-                $query->where('status', 'active');
-            })
-            ->get();
+
+        $reports = Report::whereHas('year', function ($query) {
+            $query->where('status', 'active')
+                ->where('date_year', '>=', Carbon::now()->startOfYear()); // Compare _year in the related model
+        })->get();
 
         return view('layouts.admin.forms.loans.loans-create', compact('subAccountKeys', 'reports'));
     }
-
     public function store(Request $request)
     {
         $validatedData = $request->validate([
-            'report_key' => 'required|exists:reports,id',
+            'report_key' => 'required|exists:reports,report_key',
             'internal_increase' => 'nullable|numeric|min:0',
             'unexpected_increase' => 'nullable|numeric|min:0',
             'additional_increase' => 'nullable|numeric|min:0',
             'decrease' => 'nullable|numeric|min:0',
             'editorial' => 'nullable|numeric|min:0',
         ]);
-
+    
         // Retrieve the associated Report with its active Year
         $report = Report::with('year')
-            ->whereHas('year', function ($query) {
-                $query->where('status', 'active');
+            ->where('report_key', $validatedData['report_key'])
+            ->whereHas('id', function ($query) {
+                $query->where('status', 'active'); // Check for active year
             })
-            ->find($validatedData['report_key']);
-
-        // If the report doesn't exist or is tied to an inactive year, redirect back with an error
-        if (!$report) {
+            ->first();
+    
+        // Validate if the report exists and belongs to the active year
+        if (!$report || $report->year->status !== 'active') {
             return redirect()->back()->withErrors([
-                'report_key' => 'The selected report is either inactive or does not exist.',
+                'report_key' => 'The selected report does not belong to the active year.',
             ])->withInput();
         }
-
-        // Proceed with loan record creation
+    
+        // Initialize default values for nullable fields
         $validatedData['internal_increase'] = $validatedData['internal_increase'] ?? 0;
         $validatedData['unexpected_increase'] = $validatedData['unexpected_increase'] ?? 0;
         $validatedData['additional_increase'] = $validatedData['additional_increase'] ?? 0;
         $validatedData['decrease'] = $validatedData['decrease'] ?? 0;
         $validatedData['editorial'] = $validatedData['editorial'] ?? 0;
-
+    
+        // Calculate total increase
         $total_increase = $validatedData['internal_increase'] +
             $validatedData['unexpected_increase'] +
             $validatedData['additional_increase'];
-
+    
         $subAccountKey = $report->subAccountKey->sub_account_key;
         $current_loan = $report->current_loan;
-
+    
         // Calculate new credit status
         $new_credit_status = $current_loan + $total_increase -
             $validatedData['decrease'] -
             $validatedData['editorial'];
-
+    
+        // Create Loan record
         Loans::create([
             'sub_account_key' => $subAccountKey,
             'report_key' => $validatedData['report_key'],
@@ -111,13 +114,16 @@ class LoansController extends Controller
             'editorial' => $validatedData['editorial'],
             'total_increase' => $total_increase,
         ]);
-
+    
+        // Update the report with the new credit status
         $report->update([
             'new_credit_status' => $new_credit_status,
         ]);
-
+    
+        // Redirect back to index with success message
         return redirect()->route('loans.index')->with('success', 'Loan transaction added successfully!');
     }
+    
 
 
     public function edit($id)
@@ -155,6 +161,7 @@ class LoansController extends Controller
                 'report_key' => 'The Report Key does not exist.'
             ])->withInput();
         }
+        
         $current_loan = $existingReport->current_loan;
         $fin_law = $existingReport->fin_law;
         $total_increase = $validatedData['internal_increase'] + $validatedData['unexpected_increase'] + $validatedData['additional_increase'];

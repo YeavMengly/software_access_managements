@@ -25,12 +25,12 @@ class Loans extends Model
 
     public function subAccountKey()
     {
-        return $this->belongsTo(SubAccountKey::class, 'sub_account_key');
+        return $this->belongsTo(SubAccountKey::class, 'sub_account_key', 'sub_account_key');
     }
 
-    public function reportKey()
+    public function reports()
     {
-        return $this->belongsTo(Report::class, 'report_key');
+        return $this->belongsTo(Report::class, 'report_key', 'report_key');
     }
 
     public function certificatData(){

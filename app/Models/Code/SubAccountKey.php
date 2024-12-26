@@ -44,7 +44,7 @@ class SubAccountKey extends Model
     }
 
     public function loans(){
-        return $this->hasMany(Loans::class, 'sub_account_key');
+        return $this->hasMany(Loans::class, 'sub_account_key', 'sub_account_key');
     }
 
     public function missionPlanning(){

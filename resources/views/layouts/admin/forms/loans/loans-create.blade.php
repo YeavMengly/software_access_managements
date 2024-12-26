@@ -56,9 +56,7 @@
                                             onclick="getSelectedReportKey()"
                                             style="height: 130px; width: 100%; text-align: left;">
                                             @foreach ($reports as $report)
-                                                <option value="{{ $report->id }}">
-                                                    {{ $report->subAccountKey->sub_account_key }} >
-                                                    {{ $report->report_key }}
+                                                <option value="{{ $report->report_key }}">{{ $report->subAccountKey->sub_account_key }} > {{ $report->report_key }}
                                                 </option>
                                             @endforeach
                                         </select>
