@@ -15,10 +15,10 @@ return new class extends Migration
             Schema::create('loans', function (Blueprint $table) {
                 $table->id();
                 $table->unsignedBigInteger('sub_account_key')->change();
-                $table->foreignId('sub_account_key')->references('id')->on('sub_account_keys')->onDelete('cascade');
+                $table->foreignId('sub_account_key')->references('sub_account_key')->on('sub_account_keys')->onDelete('cascade');
                 
                 $table->unsignedBigInteger('report_key')->change();
-                $table->foreignId('report_key')->references('id')->on('reports')->onDelete('cascade');
+                $table->foreignId('report_key')->references('report_key')->on('reports')->onDelete('cascade');
 
                 $table->decimal('internal_increase', 15, 2)->default(0);
                 $table->decimal('unexpected_increase', 15, 2)->default(0);

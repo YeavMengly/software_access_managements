@@ -361,7 +361,74 @@
                                                     {{ number_format($totalsBySubAccountKey['law_correction'], 2, '.', ' ') }}
                                                     %</td>
                                             </tr>
-                                            @foreach ($totals['reportKey'][$codeId][$accountKeyId][$subAccountKeyId] as $reportKeyId => $totalsByReportKey)
+                                            {{-- @foreach ($totals['reportKey'][$codeId][$accountKeyId][$subAccountKeyId] as $reportKeyId => $totalsByReportKey)
+                                                <tr>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td colspan="1">{{ $reportKeyId }}</td>
+                                                    <td colspan="1" style="text-align: start;">
+                                                        {{ $totalsByReportKey['name_report_key'] }}</td>
+                                                    <td>{{ number_format($totalsByReportKey['fin_law'], 0, ' ', ' ') }}
+                                                    </td>
+                                                    <td>{{ number_format($totalsByReportKey['current_loan'], 0, ' ', ' ') }}
+                                                    </td>
+                                                    <td>{{ number_format($totalsByReportKey['internal_increase'], 0, ' ', ' ') }}
+                                                    </td>
+                                                    <td>{{ number_format($totalsByReportKey['unexpected_increase'], 0, ' ', ' ') }}
+                                                    </td>
+                                                    <td>{{ number_format($totalsByReportKey['additional_increase'], 0, ' ', ' ') }}
+                                                    </td>
+                                                    <td>{{ number_format($totalsByReportKey['total_increase'], 0, ' ', ' ') }}
+                                                    </td>
+                                                    <td
+                                                        style="color: {{ $totalsByReportKey['decrease'] < 0 ? 'red' : 'black' }};">
+                                                        {{ number_format($totalsByReportKey['decrease'], 0, ' ', ' ') }}
+                                                    </td>
+                                                    <td
+                                                        style="color: {{ $totalsByReportKey['editorial'] < 0 ? 'red' : 'black' }};">
+                                                        {{ number_format($totalsByReportKey['editorial'], 0, ' ', ' ') }}
+                                                    </td>
+                                                    <td
+                                                        style="color: {{ $totalsByReportKey['new_credit_status'] < 0 ? 'red' : 'black' }};">
+                                                        {{ number_format($totalsByReportKey['new_credit_status'], 0, ' ', ' ') }}
+                                                    </td>
+                                                    <td
+                                                        style="color: {{ $totalsByReportKey['early_balance'] < 0 ? 'red' : 'black' }};">
+                                                        {{ number_format($totalsByReportKey['early_balance'], 0, ' ', ' ') }}
+                                                    </td>
+                                                    <td
+                                                        style="color: {{ $totalsByReportKey['apply'] < 0 ? 'red' : 'black' }};">
+                                                        {{ number_format($totalsByReportKey['apply'], 0, ' ', ' ') }}
+                                                    </td>
+                                                    <td
+                                                        style="color: {{ $totalsByReportKey['deadline_balance'] < 0 ? 'red' : 'black' }};">
+                                                        {{ number_format($totalsByReportKey['deadline_balance'], 0, ' ', ' ') }}
+                                                    </td>
+                                                    <td
+                                                        style="color: {{ $totalsByReportKey['credit'] < 0 ? 'red' : 'black' }};">
+                                                        {{ number_format($totalsByReportKey['credit'], 0, ' ', ' ') }}
+                                                    </td>
+                                                    <td
+                                                        style="color: {{ $totalsByReportKey['law_average'] < 0 ? 'red' : 'black' }};">
+                                                        {{ number_format($totalsByReportKey['law_average'], 2, '.', '') }}
+                                                        %
+                                                    </td>
+                                                    <td
+                                                        style="color: {{ $totalsByReportKey['law_correction'] < 0 ? 'red' : 'black' }};">
+                                                        {{ number_format($totalsByReportKey['law_correction'], 2, '.', '') }}
+                                                        %
+                                                    </td>
+                                                </tr>
+                                            @endforeach --}}
+                                            @php
+                                                // Sort by the key (index) before looping
+                                                $sortedTotals = collect(
+                                                    $totals['reportKey'][$codeId][$accountKeyId][$subAccountKeyId],
+                                                )->sortKeys();
+                                            @endphp
+
+                                            @foreach ($sortedTotals as $reportKeyId => $totalsByReportKey)
                                                 <tr>
                                                     <td></td>
                                                     <td></td>

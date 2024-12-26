@@ -18,9 +18,9 @@ class Key extends Model
     ];
 
     // Point to accountKey class
-    public function accountKey()
+    public function accountKeys()
     {
-        return $this->hasMany(AccountKey::class, 'code'); // Ensure 'code' is used for both keys
+        return $this->hasMany(AccountKey::class, 'code', 'code'); // Use 'id' as local key
     }
     
 

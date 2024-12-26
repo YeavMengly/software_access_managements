@@ -39,7 +39,7 @@ class Report extends Model
     // belong table to subAccount class
     public function subAccountKey()
     {
-        return $this->belongsTo(SubAccountKey::class, 'sub_account_key'); // Adjust this if needed
+        return $this->belongsTo(SubAccountKey::class, 'sub_account_key', 'sub_account_key'); // Adjust this if needed
     }
     
 
@@ -62,7 +62,7 @@ class Report extends Model
 
     public function loans()
     {
-        return $this->hasOne(Loans::class, 'report_key');
+        return $this->hasOne(Loans::class, 'report_key', 'report_key');
     }
 
     public function year()
@@ -105,16 +105,16 @@ class Report extends Model
             'cd.value_certificate',
             'cd.amount',
 
-            'mp.pay_mission',
-            'mp.name_mission_type'
+            // 'mp.pay_mission',
+            // 'mp.name_mission_type'
 
         ])
             ->join('sub_account_keys as sak', 'sak.id', '=', 'reports.sub_account_key')
             ->join('account_keys as ak', 'ak.id', '=', 'sak.account_key')
             ->join('keys', 'keys.code', '=', 'ak.code')
             ->leftJoin('certificate_data as cd', 'cd.report_key', '=', 'reports.id')
-            ->leftJoin('loans', 'loans.report_key', '=', 'reports.id')
-            ->leftJoin('mission_plannings as mp','mp.report_key', '=' , 'reports.id');
+            ->leftJoin('loans', 'loans.report_key', '=', 'reports.id');
+            // ->leftJoin('mission_plannings as mp','mp.report_key', '=' , 'reports.id');
     }
 
     public function delete()
