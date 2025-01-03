@@ -76,7 +76,7 @@ class ReportController extends Controller
     {
         $subAccountKeys = SubAccountKey::all();
         $report = null;
-        $years = Year::all();  
+        $years = Year::all();
 
         return view('layouts.admin.forms.code.report-create', compact('subAccountKeys', 'report', 'years'));
     }
@@ -96,7 +96,7 @@ class ReportController extends Controller
             'date_year.required' => 'សូមជ្រើសរើសឆ្នាំ។',
             'fin_law.numeric' => 'តម្លៃច្បាប់ហិរញ្ញវត្ថុត្រូវតែជាលេខ។',
         ]);
-    
+
         $year = Year::find($validatedData['date_year']);
         if (!$year) {
             return redirect()->back()->withErrors(['date_year' => 'ឆ្នាំដែលបានជ្រើសរើសមិនត្រឹមត្រូវ។'])->withInput();
@@ -107,7 +107,7 @@ class ReportController extends Controller
                 'current_loan' => 'ចំនួនទុនបងវិញមិនអាចមានតម្លៃអវិជ្ជមាន។',
             ])->withInput();
         }
-    
+
         if ($request->input('fin_law') < $request->input('current_loan')) {
             return redirect()->back()->withErrors([
                 'fin_law' => 'ច្បាប់ហិរញ្ញវត្ថុត្រូវតែធំជាងឬស្មើចំនួនទុនបងវិញ។',
@@ -133,7 +133,7 @@ class ReportController extends Controller
                 'report_key' => 'The combination of Sub-Account Key ID and Report Key already exists.',
             ])->withInput();
         }
-        
+
         $currentApplyTotal = CertificateData::where('report_key', $validatedData['report_key'])->sum('value_certificate');
         $early_balance = $currentApplyTotal > 0 ? $currentApplyTotal : 0;
         $deadline_balance = $early_balance + $currentApplyTotal;
@@ -209,6 +209,88 @@ class ReportController extends Controller
 
         return redirect()->route('codes.index')->with('success', 'ថវិការអនុម័តបានកែដោយជោគជ័យ។');
     }
+
+    // public function update(Request $request, $id)
+    // {
+    //     $validatedData = $request->validate([
+    //         'sub_account_key' => 'required|exists:sub_account_keys,sub_account_key',
+    //         'report_key' => 'required|string|max:255',
+    //         'name_report_key' => 'required|string|max:255',
+    //         'fin_law' => 'required|numeric|min:0',
+    //         'current_loan' => 'required|numeric|min:0',
+    //         'date_year' => 'required|exists:years,id',
+    //     ], [
+    //         'sub_account_key.required' => 'សូមជ្រើសរើសគណនីបន្ទាប់។',
+    //         'report_key.unique' => 'គន្លឹះរបាយការណ៍នេះមានរួចហើយសម្រាប់គណនីបន្ទាប់នេះ។',
+    //         'date_year.required' => 'សូមជ្រើសរើសឆ្នាំ។',
+    //         'fin_law.numeric' => 'តម្លៃច្បាប់ហិរញ្ញវត្ថុត្រូវតែជាលេខ។',
+    //     ]);
+
+    //     $year = Year::find($validatedData['date_year']);
+    //     if (!$year) {
+    //         return redirect()->back()->withErrors(['date_year' => 'ឆ្នាំដែលបានជ្រើសរើសមិនត្រឹមត្រូវ។'])->withInput();
+    //     }
+
+    //     if ($request->input('current_loan') < 0) {
+    //         return redirect()->back()->withErrors([
+    //             'current_loan' => 'ចំនួនទុនបងវិញមិនអាចមានតម្លៃអវិជ្ជមាន។',
+    //         ])->withInput();
+    //     }
+
+    //     if ($request->input('fin_law') < $request->input('current_loan')) {
+    //         return redirect()->back()->withErrors([
+    //             'fin_law' => 'ច្បាប់ហិរញ្ញវត្ថុត្រូវតែធំជាងឬស្មើចំនួនទុនបងវិញ។',
+    //         ])->withInput();
+    //     }
+
+    //     $validatedData['internal_increase'] = $validatedData['internal_increase'] ?? 0;
+    //     $validatedData['unexpected_increase'] = $validatedData['unexpected_increase'] ?? 0;
+    //     $validatedData['additional_increase'] = $validatedData['additional_increase'] ?? 0;
+    //     $validatedData['decrease'] = $validatedData['decrease'] ?? 0;
+    //     $validatedData['editorial'] = $validatedData['editorial'] ?? 0;
+
+    //     $total_increase = $validatedData['internal_increase'] + $validatedData['unexpected_increase'] + $validatedData['additional_increase'];
+    //     $new_credit_status = $validatedData['current_loan'] + $total_increase - $validatedData['decrease'] - $validatedData['editorial'];
+
+    //     $existingRecord = Report::where('sub_account_key', $request->input('sub_account_key'))
+    //         ->where('report_key', $request->input('report_key'))
+    //         ->where('date_year', $request->input('date_year'))
+    //         ->where('id', '!=', $id)
+    //         ->exists();
+
+    //     if ($existingRecord) {
+    //         return redirect()->back()->withErrors([
+    //             'report_key' => 'The combination of Sub-Account Key ID and Report Key already exists.',
+    //         ])->withInput();
+    //     }
+
+    //     $report = Report::findOrFail($id);
+
+    //     $currentApplyTotal = CertificateData::where('report_key', $validatedData['report_key'])->sum('value_certificate');
+    //     $early_balance = $currentApplyTotal > 0 ? $currentApplyTotal : 0;
+    //     $deadline_balance = $early_balance + $currentApplyTotal;
+    //     $credit = $new_credit_status - $deadline_balance;
+    //     $law_average = $validatedData['fin_law'] ? max(-100, min(100, ($deadline_balance / $validatedData['fin_law']) * 100)) : 0;
+    //     $law_correction = $early_balance ? max(-100, min(100, ($deadline_balance / $early_balance) * 100)) : 0;
+
+    //     // Update the report
+    //     $report->update([
+    //         ...$validatedData,
+    //         'date_year' => $year->id,
+    //         'total_increase' => $total_increase,
+    //         'new_credit_status' => $new_credit_status,
+    //         'apply' => $currentApplyTotal,
+    //         'deadline_balance' => $deadline_balance,
+    //         'credit' => $credit,
+    //         'law_average' => $law_average,
+    //         'law_correction' => $law_correction,
+    //     ]);
+
+    //     // Perform additional recalculations
+    //     $this->recalculateAndSaveReport($report);
+
+    //     return redirect()->route('codes.create')->with('success', 'ថវិការអនុម័តបានកែប្រែដោយជោគជ័យ។');
+    // }
 
     public function destroy($id)
     {

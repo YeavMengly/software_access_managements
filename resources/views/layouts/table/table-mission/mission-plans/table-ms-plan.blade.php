@@ -161,38 +161,43 @@
                     {{ convertToKhmerNumber(request('year', date('Y'))) }}</h4>
                     <h3>របស់ក្រសួងការងារ និងបណ្ដុះបណ្ដាលវិជ្ជាជីវៈ</h4>
             </div>
-
             <div class="table-container">
-                <table class="table-border ">
+                <table class="table-border">
                     <thead>
                         <tr>
                             <th rowspan="2"
                                 style="border: 1px solid black; align-items: center; font-family: 'Khmer OS Siemreap', sans-serif; font-weight: bold;">
-                                ចំណាត់ថ្នាក់កម្មវិធី</th>
+                                ចំណាត់ថ្នាក់កម្មវិធី
+                            </th>
                             <th rowspan="2"
                                 style="border: 1px solid black; font-family: 'Khmer OS Siemreap', sans-serif; font-weight: bold;">
-                                កម្មវិធី/អនុកម្មវិធី/ចង្កោមសកម្មភាព</th>
-
+                                កម្មវិធី/អនុកម្មវិធី/ចង្កោមសកម្មភាព
+                            </th>
                             <th colspan="4"
                                 style="border: 1px solid black; font-family: 'Khmer OS Siemreap', sans-serif; font-weight: bold;">
-                                សរុប</th>
+                                សរុប
+                            </th>
 
                             @php
-                                $previousSubAccountKey = null; // Track the previous sub_account_key
+                                $previousSubAccountKey = null;
                             @endphp
 
+                            {{-- Loop for each missionPlanning --}}
                             @foreach ($missionPlannings as $mp)
-                                @if ($mp->sub_account_key != $previousSubAccountKey)
-                                    <th colspan="3"
-                                        style="border: 1px solid black; font-family: 'Khmer OS Siemreap', sans-serif; font-weight: bold;">
-                                        {{ $mp->sub_account_key }} {{ $mp->report->subAccountKey->name_sub_account_key }}
-                                    </th>
-                                    @php
-                                        $previousSubAccountKey = $mp->sub_account_key; // Update the previous key
-                                    @endphp
+                                @if (in_array($mp->sub_account_key, ['61121', '61122', '61123']))
+                                    {{-- Display a new sub_account_key header if it changes --}}
+                                    @if ($mp->sub_account_key != $previousSubAccountKey)
+                                        <th colspan="3"
+                                            style="border: 1px solid black; font-family: 'Khmer OS Siemreap', sans-serif; font-weight: bold;">
+                                            {{ $mp->sub_account_key }}
+                                            {{ $mp->report->subAccountKey->name_sub_account_key }}
+                                        </th>
+                                        @php
+                                            $previousSubAccountKey = $mp->sub_account_key;
+                                        @endphp
+                                    @endif
                                 @endif
                             @endforeach
-
                         </tr>
 
                         <tr>
@@ -203,48 +208,42 @@
                                 ឥណទានថ្មី
                             </th>
                             <th style="border: 1px solid black; font-family: 'Khmer OS Siemreap', sans-serif">
-                                ឥណទានសម្រាប់បើកផ្ដល់ប្រាក់មុន</th>
-                            <th style="border: 1px solid black; font-family: 'Khmer OS Siemreap', sans-serif">
-                                ឥណទានសម្រាប់អនុវត្តនិតិវិធីទូទាត់ត្រង់
-                            </th>
-
-                            <th style="border: 1px solid black; font-family: 'Khmer OS Siemreap', sans-serif">
-                                ច្បាប់ហិរញ្ញវត្ថុប្រចាំឆ្នាំ២០២៥
-                            </th>
-                            <th style="border: 1px solid black; font-family: 'Khmer OS Siemreap', sans-serif">
                                 ឥណទានសម្រាប់បើកផ្ដល់ប្រាក់មុន
                             </th>
                             <th style="border: 1px solid black; font-family: 'Khmer OS Siemreap', sans-serif">
                                 ឥណទានសម្រាប់អនុវត្តនិតិវិធីទូទាត់ត្រង់
                             </th>
 
+                            @php
+                                $previousSubAccountKey = null;
+                            @endphp
 
-                            <th style="border: 1px solid black; font-family: 'Khmer OS Siemreap', sans-serif">
-                                ច្បាប់ហិរញ្ញវត្ថុប្រចាំឆ្នាំ២០២៥
-                            </th>
-                            <th style="border: 1px solid black; font-family: 'Khmer OS Siemreap', sans-serif">
-                                ឥណទានសម្រាប់បើកផ្ដល់ប្រាក់មុន
-                            </th>
-                            <th style="border: 1px solid black; font-family: 'Khmer OS Siemreap', sans-serif">
-                                ឥណទានសម្រាប់អនុវត្តនិតិវិធីទូទាត់ត្រង់
-                            </th>
-
-                            <th style="border: 1px solid black; font-family: 'Khmer OS Siemreap', sans-serif">
-                                ច្បាប់ហិរញ្ញវត្ថុប្រចាំឆ្នាំ២០២៥
-                            </th>
-                            <th style="border: 1px solid black; font-family: 'Khmer OS Siemreap', sans-serif">
-                                ឥណទានសម្រាប់បើកផ្ដល់ប្រាក់មុន
-                            </th>
-                            <th style="border: 1px solid black; font-family: 'Khmer OS Siemreap', sans-serif">
-                                ឥណទានសម្រាប់អនុវត្តនិតិវិធីទូទាត់ត្រង់
-                            </th>
+                            {{-- Loop for each missionPlanning --}}
+                            @foreach ($missionPlannings as $mp)
+                                @if (in_array($mp->sub_account_key, ['61121', '61122', '61123']))
+                                    {{-- Display the corresponding columns for sub_account_key --}}
+                                    @if ($mp->sub_account_key != $previousSubAccountKey)
+                                        <th style="border: 1px solid black; font-family: 'Khmer OS Siemreap', sans-serif">
+                                            ច្បាប់ហិរញ្ញវត្ថុប្រចាំឆ្នាំ២០២៥
+                                        </th>
+                                        <th style="border: 1px solid black; font-family: 'Khmer OS Siemreap', sans-serif">
+                                            ឥណទានសម្រាប់បើកផ្ដល់ប្រាក់មុន
+                                        </th>
+                                        <th style="border: 1px solid black; font-family: 'Khmer OS Siemreap', sans-serif">
+                                            ឥណទានសម្រាប់អនុវត្តនិតិវិធីទូទាត់ត្រង់
+                                        </th>
+                                        @php
+                                            $previousSubAccountKey = $mp->sub_account_key;
+                                        @endphp
+                                    @endif
+                                @endif
+                            @endforeach
                         </tr>
                     </thead>
-                    <tbody>
-                        <tr>
 
-                        </tr>
-                        @foreach ($missionPlannings as $mp)
+                    <tbody>
+
+                        @if (in_array($mp->sub_account_key, ['61121', '61122', '61123']))
                             <tr>
                                 <td style="border: 1px solid black;">{{ $mp->report->report_key }}</td>
                                 <td style="border: 1px solid black;">{{ $mp->sub_account_key }}</td>
@@ -252,19 +251,47 @@
                                 <td style="border: 1px solid black;">0</td>
                                 <td style="border: 1px solid black;">0</td>
                                 <td style="border: 1px solid black;">0</td>
-                                <td style="border: 1px solid black;">0</td>
-                                <td style="border: 1px solid black;">0</td>
-                                <td style="border: 1px solid black;">0</td>
-                                <td style="border: 1px solid black;">0</td>
-                                <td style="border: 1px solid black;">0</td>
-                                <td style="border: 1px solid black;">0</td>
-                                <td style="border: 1px solid black;">0</td>
-                                <td style="border: 1px solid black;">0</td>
-                                <td style="border: 1px solid black;">0</td>
-                            </tr>
-                        @endforeach
-                    </tbody>
 
+                                {{-- Check for mission_type conditions --}}
+                                @if ($mp->mission_type == '1')
+                                    <td style="border: 1px solid black;">{{ $mp->pay_mission }}</td>
+                                    <td style="border: 1px solid black;">0</td>
+                                @elseif ($mp->mission_type == '2')
+                                    <td style="border: 1px solid black;">{{ $mp->pay_mission }}</td>
+                                    <td style="border: 1px solid black;">0</td>
+                                @elseif ($mp->mission_type == '3')
+                                    <td style="border: 1px solid black;"></td>
+                                    <td style="border: 1px solid black;"></td>
+                                    <td style="border: 1px solid black;"></td>
+
+                                    <td style="border: 1px solid black;">{{ $mp->pay_mission }}</td>
+                                    <td style="border: 1px solid black;">0</td>
+                                @else
+                                    {{-- Default values if mission_type doesn't match any of the conditions --}}
+                                    <td style="border: 1px solid black;">0</td>
+                                    <td style="border: 1px solid black;">0</td>
+                                @endif
+                            </tr>
+                        @endif
+
+                        {{-- @foreach ($missionPlannings as $mp)
+                            <tr>
+                                <td style="border: 1px solid black;">{{ $mp->report->report_key }}</td>
+                                <td style="border: 1px solid black;">{{ $mp->sub_account_key }}</td>
+                                <td style="border: 1px solid black;">{{ $mp->pay_mission }}</td>
+                                @if ($mp->mission_type == 'type_1')
+                                    <td style="border: 1px solid black;">{{ $mp->pay_mission }}</td>
+                                    <td style="border: 1px solid black;">0</td>
+                                @elseif ($mp->mission_type == 'type_2')
+                                    <td style="border: 1px solid black;">0</td>
+                                    <td style="border: 1px solid black;">{{ $mp->pay_mission }}</td>
+                                @else
+                                    <td style="border: 1px solid black;">0</td>
+                                    <td style="border: 1px solid black;">0</td>
+                                @endif
+                            </tr>
+                        @endforeach --}}
+                    </tbody>
                 </table>
 
             </div>

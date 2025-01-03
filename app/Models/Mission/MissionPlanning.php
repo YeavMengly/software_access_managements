@@ -23,7 +23,7 @@ class MissionPlanning extends Model
     // belong table to report class
     public function report()
     {
-        return $this->belongsTo(Report::class, 'report_key');
+        return $this->belongsTo(Report::class, 'report_key',);
     }
 
     public function subAccountKey()

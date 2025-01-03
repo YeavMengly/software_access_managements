@@ -89,6 +89,8 @@ Route::get('/certificate-amount', [AmountCertificateController::class, 'index'])
 Route::get('/reports/{id}/early-balance', [CertificateDataController::class, 'getEarlyBalance']);
 
 Route::get('/table-ms-plan', [ResultMissionPlans::class, 'index'])->name('table-ms-plan');
+Route::get('/reports/{id}/early-balance', [MissionPlanningController::class, 'getEarlyBalance']);
+
 
 
 //===============================>> Manage Result Operation
