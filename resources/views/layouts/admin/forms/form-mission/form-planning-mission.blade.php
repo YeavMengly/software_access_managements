@@ -43,7 +43,9 @@
                                 <div class="col-md-4">
                                     <div class="row">
                                         <div class="col-md-6">
-                                            <label for="report_key"> <strong>លេខកូដកម្មវិធី:</strong></label>
+                                            <label for="report_key">
+                                                <strong>លេខកូដកម្មវិធី:</strong>
+                                            </label>
                                             <input type="text" id="searchReportKey" class="form-control mb-2"
                                                 placeholder="ស្វែងរកលេខកូដកម្មវិធី..." onkeyup="filterReportKeys(event)"
                                                 style="width: 100%; height: 40px; text-align: center; line-height: 60px;">
@@ -52,17 +54,14 @@
                                                 size="5" onchange="updateReportInputField()"
                                                 style="width: 100%; height: 150px;">
                                                 @foreach ($reports as $report)
-                                                    <option value="{{ $report->id }}"> <span>{{ $report->subAccountKey->sub_account_key ?? 'N/A' }}>{{ $report->report_key }}</span>
+                                                    <option value="{{ $report->id }}">{{ $report->subAccountKey->sub_account_key ?? 'N/A' }} > {{ $report->report_key }}
                                                     </option>
                                                 @endforeach
                                             </select>
-
                                         </div>
-
-                                       
                                         <div class="col-md-6">
 
-                                             {{-- <div class="col-md-4"> --}}
+                                      
                                             <div class="form-group">
                                                 <label for="pay_mission"><strong>ទឹកប្រាក់ចំណាយបេសកកម្ម:</strong></label>
                                                 <input type="number" name="pay_mission" id="pay_mission"
@@ -73,8 +72,7 @@
                                                     <div class="invalid-feedback">{{ $message }}</div>
                                                 @enderror
                                             </div>
-                                        {{-- </div> --}}
-
+                               
                                             <div class="form-group">
                                                 <label for="mission-type"><strong>ប្រភេទបេសកកម្ម</strong></label>
                                                 <div>
@@ -249,18 +247,19 @@
                 document.getElementById('searchReportKey').value = selectedOption.textContent;
 
                 const reportKeyId = selectedOption.value;
+
+                // Fetch report data based on selected report key
                 fetch(`/reports/${reportKeyId}/early-balance`)
                     .then(response => response.json())
                     .then(data => {
-                        // Update financial data
-                        credit = data.credit;
+                        // Display fetched data in corresponding fields
                         document.getElementById('fin_law').textContent = formatNumber(data.fin_law);
                         document.getElementById('credit_movement').textContent = formatNumber(data.credit_movement);
                         document.getElementById('new_credit_status').textContent = formatNumber(data.new_credit_status);
                         document.getElementById('credit').textContent = formatNumber(data.credit);
                         document.getElementById('deadline_balance').textContent = formatNumber(data.deadline_balance);
 
-                        // Initial calculation of remaining credit
+                        // Calculate and update remaining credit initially
                         updateRemainingCredit(0);
                     })
                     .catch(error => console.error('Error fetching report data:', error));
@@ -289,12 +288,13 @@
         }
 
         document.getElementById('pay_mission').addEventListener('input', function() {
-            const payMission = parseFloat(this.value) || 0; // Get value from input or default to 0
-            document.getElementById('paying').textContent = formatNumber(payMission); // Update the paying field
+            const payMission = parseFloat(this.value) || 0; // Get value or default to 0
+            document.getElementById('paying').textContent = formatNumber(payMission); // Update paying field
 
-            // Update remaining credit based on pay_mission
+            // Update remaining credit
             updateRemainingCredit(payMission);
         });
+
 
         function formatNumber(num) {
             if (Number.isInteger(num) || num % 1 === 0) {

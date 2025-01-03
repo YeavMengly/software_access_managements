@@ -172,7 +172,7 @@
                     @forelse ($reports as $report)
                         <tr>
                             <td style="border: 1px solid black; max-width: 80px; text-align: center">
-                                {{ $report->subAccountKey->sub_account_key }}</td>
+                                {{ $report->sub_account_key }}</td>
                             <td style="border: 1px solid black; max-width: 80px; text-align: center">
                                 {{ $report->report_key }}</td>
                             <td style="border: 1px solid black; max-width: 220px; text-align: start;">

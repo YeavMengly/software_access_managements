@@ -56,7 +56,7 @@ class MissionPlanningController extends Controller
             'mission_type' => $validatedData['mission_type'],
         ]);
 
-        return redirect()->route('mission-planning.index')->with('success', 'Mission planning created successfully.');
+        return redirect()->route('mission-planning.index')->with('success', 'ផែនការបេសកកម្មបានបង្កើតជោគជ័យ។');
     }
 
 
@@ -99,11 +99,11 @@ class MissionPlanningController extends Controller
     {
         $report = Report::find($id);
         $missionPlanning = $report ? $report->missionPlannings : null;
-    
+
         if ($report) {
-            // Calculate credit movement based on mission planning data
+            // Calculate credit movement
             $credit_movement = ($missionPlanning->total_increase ?? 0) - ($missionPlanning->decrease ?? 0);
-            
+
             return response()->json([
                 'fin_law' => $report->fin_law,
                 'credit_movement' => $credit_movement,
@@ -112,7 +112,8 @@ class MissionPlanningController extends Controller
                 'deadline_balance' => $report->deadline_balance,
             ]);
         }
-    
+
+        // Return default values if no report found
         return response()->json([
             'fin_law' => 0,
             'credit_movement' => 0,
@@ -121,6 +122,4 @@ class MissionPlanningController extends Controller
             'deadline_balance' => 0,
         ]);
     }
-    
-
 }

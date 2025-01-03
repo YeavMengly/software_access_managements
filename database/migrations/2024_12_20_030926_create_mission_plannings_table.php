@@ -16,12 +16,12 @@ return new class extends Migration
                 $table->id();
 
                 $table->unsignedBigInteger('sub_account_key');
-                $table->foreign('sub_account_key')->references('id')->on('sub_account_keys')->onDelete('cascade');
+                $table->foreign('sub_account_key')->references('sub_account_key')->on('sub_account_keys')->onDelete('cascade');
 
 
                 // Define report_key as unsignedBigInteger and foreign key
                 $table->unsignedBigInteger('report_key');
-                $table->foreign('report_key')->references('id')->on('reports')->onDelete('cascade');
+                $table->foreign('report_key')->references('report_key')->on('reports')->onDelete('cascade');
 
                 $table->decimal('pay_mission', 15, 2)->default(0);
 

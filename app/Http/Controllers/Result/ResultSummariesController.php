@@ -16,8 +16,12 @@ class ResultSummariesController extends Controller
     public function index()
     {
         $reports = Report::getReportSql()->get();
+
+        dd($reports);
         $totals = $this->calculateTotals($reports);
         $this->storeSummaryReport($totals);
+
+        // dd($totals);
 
         if (isset($totals['code']) && is_array($totals['code'])) {
             ksort($totals['code']);
@@ -61,6 +65,7 @@ class ResultSummariesController extends Controller
     private function calculateTotals($reports)
     {
         $totals = [
+            'report_key' => [],
             'fin_law' => 0,
             'current_loan' => 0,
             'decrease' => 0,
@@ -84,6 +89,8 @@ class ResultSummariesController extends Controller
         ];
 
         foreach ($reports as $index => $report) {
+
+
             $totals['code']["$report->code"] = $this->calculateSumFields($report);
             $totals['fin_law'] += $report->fin_law ?? 0;
             $totals['current_loan'] += $report->current_loan ?? 0;
@@ -143,32 +150,70 @@ class ResultSummariesController extends Controller
         ];
     }
 
+    // private function storeSummaryReport($totals)
+    // {
+    //     try {
+    //         DB::transaction(function () use ($totals) {
+    //             foreach ($totals['code'] as $code => $data) {
+    //                 try {
+    //                     SummaryReport::updateOrCreate(
+    //                         ['program' => $code->code],
+    //                         [
+    //                             'fin_law' => $data['fin_law'],
+    //                             'current_loan' => $data['current_loan'],
+    //                             'total_increase' => $data['total_increase'],
+    //                             'decrease' => $data['decrease'],
+    //                             'new_credit_status' => $data['new_credit_status'],
+    //                             'total_early_balance' => $data['early_balance'],
+    //                             'avg_total_early_balance' => $this->calculatePercentage($data['early_balance'], $data['new_credit_status']),
+    //                             'total_apply' => $data['apply'],
+    //                             'avg_total_apply' => $this->calculatePercentage($data['apply'], $data['new_credit_status']),
+    //                             'total_sum_refer' => $data['early_balance'] + $data['apply'],
+    //                             'avg_total_sum_refer' => $this->calculatePercentage($data['early_balance'] + $data['apply'], $data['new_credit_status']),
+    //                             'total_remain' => $data['new_credit_status'] - ($data['early_balance'] + $data['apply']),
+    //                             'avg_total_remain' => $this->calculatePercentage($data['new_credit_status'] - ($data['early_balance'] + $data['apply']), $data['new_credit_status']),
+    //                         ]
+    //                     );
+    //                 } catch (\Exception $e) {
+    //                     Log::error("Error storing summary for code: {$code->code}, Error: " . $e->getMessage());
+    //                 }
+    //             }
+    //         });
+    //     } catch (\Exception $e) {
+    //         Log::error('Transaction failed: ' . $e->getMessage());
+    //     }
+    // }
     private function storeSummaryReport($totals)
     {
         try {
             DB::transaction(function () use ($totals) {
                 foreach ($totals['code'] as $code => $data) {
+                    // Debug the code and data being processed
+                    Log::info('Processing Code: ' . $code);
+                    Log::info('Data: ' . json_encode($data));
+
                     try {
+                        // Ensure the program value is valid
                         SummaryReport::updateOrCreate(
-                            ['program' => $code->code],
+                            ['program' => $code], // Updated condition
                             [
-                                'fin_law' => $data['fin_law'],
-                                'current_loan' => $data['current_loan'],
-                                'total_increase' => $data['total_increase'],
-                                'decrease' => $data['decrease'],
-                                'new_credit_status' => $data['new_credit_status'],
-                                'total_early_balance' => $data['early_balance'],
+                                'fin_law' => number_format($data['fin_law'], 2, '.', ''),
+                                'current_loan' => number_format($data['current_loan'], 2, '.', ''),
+                                'total_increase' => number_format($data['total_increase'], 2, '.', ''),
+                                'decrease' => number_format($data['decrease'], 2, '.', ''),
+                                'new_credit_status' => number_format($data['new_credit_status'], 2, '.', ''),
+                                'total_early_balance' => number_format($data['early_balance'], 2, '.', ''),
                                 'avg_total_early_balance' => $this->calculatePercentage($data['early_balance'], $data['new_credit_status']),
-                                'total_apply' => $data['apply'],
+                                'total_apply' => number_format($data['apply'], 2, '.', ''),
                                 'avg_total_apply' => $this->calculatePercentage($data['apply'], $data['new_credit_status']),
-                                'total_sum_refer' => $data['early_balance'] + $data['apply'],
+                                'total_sum_refer' => number_format($data['early_balance'] + $data['apply'], 2, '.', ''),
                                 'avg_total_sum_refer' => $this->calculatePercentage($data['early_balance'] + $data['apply'], $data['new_credit_status']),
-                                'total_remain' => $data['new_credit_status'] - ($data['early_balance'] + $data['apply']),
+                                'total_remain' => number_format($data['new_credit_status'] - ($data['early_balance'] + $data['apply']), 2, '.', ''),
                                 'avg_total_remain' => $this->calculatePercentage($data['new_credit_status'] - ($data['early_balance'] + $data['apply']), $data['new_credit_status']),
                             ]
                         );
                     } catch (\Exception $e) {
-                        Log::error("Error storing summary for code: {$code->code}, Error: " . $e->getMessage());
+                        Log::error("Error storing summary for code: {$code}, Error: " . $e->getMessage());
                     }
                 }
             });
