@@ -179,25 +179,25 @@
                             </th>
 
                             @php
-                                $previousSubAccountKey = null;
+                                $previousSubAccountKey = null; // Track the previous sub-account key
                             @endphp
 
-                            {{-- Loop for each missionPlanning --}}
                             @foreach ($missionPlannings as $mp)
-                                @if (in_array($mp->sub_account_key, ['61121', '61122', '61123']))
+                                {{-- @if (in_array($mp->sub_account_key, ['61121', '61122', '61123'])) --}}
                                     {{-- Display a new sub_account_key header if it changes --}}
                                     @if ($mp->sub_account_key != $previousSubAccountKey)
                                         <th colspan="3"
                                             style="border: 1px solid black; font-family: 'Khmer OS Siemreap', sans-serif; font-weight: bold;">
-                                            {{ $mp->sub_account_key }}
+                                            {{ $mp->sub_account_key }} -
                                             {{ $mp->report->subAccountKey->name_sub_account_key }}
                                         </th>
                                         @php
                                             $previousSubAccountKey = $mp->sub_account_key;
                                         @endphp
                                     @endif
-                                @endif
+                                {{-- @endif --}}
                             @endforeach
+
                         </tr>
 
                         <tr>
@@ -243,7 +243,7 @@
 
                     <tbody>
 
-                        @if (in_array($mp->sub_account_key, ['61121', '61122', '61123']))
+                        {{-- @if (in_array($mp->sub_account_key, ['61121', '61122', '61123']))
                             <tr>
                                 <td style="border: 1px solid black;">{{ $mp->report->report_key }}</td>
                                 <td style="border: 1px solid black;">{{ $mp->sub_account_key }}</td>
@@ -251,8 +251,6 @@
                                 <td style="border: 1px solid black;">0</td>
                                 <td style="border: 1px solid black;">0</td>
                                 <td style="border: 1px solid black;">0</td>
-
-                                {{-- Check for mission_type conditions --}}
                                 @if ($mp->mission_type == '1')
                                     <td style="border: 1px solid black;">{{ $mp->pay_mission }}</td>
                                     <td style="border: 1px solid black;">0</td>
@@ -267,33 +265,38 @@
                                     <td style="border: 1px solid black;">{{ $mp->pay_mission }}</td>
                                     <td style="border: 1px solid black;">0</td>
                                 @else
-                                    {{-- Default values if mission_type doesn't match any of the conditions --}}
                                     <td style="border: 1px solid black;">0</td>
                                     <td style="border: 1px solid black;">0</td>
                                 @endif
                             </tr>
-                        @endif
+                        @endif --}}
+                        {{-- @endif --}}
 
-                        {{-- @foreach ($missionPlannings as $mp)
+                        @foreach ($missionPlannings as $mp)
                             <tr>
-                                <td style="border: 1px solid black;">{{ $mp->report->report_key }}</td>
-                                <td style="border: 1px solid black;">{{ $mp->sub_account_key }}</td>
-                                <td style="border: 1px solid black;">{{ $mp->pay_mission }}</td>
-                                @if ($mp->mission_type == 'type_1')
+                                @if (in_array($mp->sub_account_key, ['61121', '61122', '61123']))
+                                    <td style="border: 1px solid black;">{{ $mp->report->report_key }}</td>
+                                    <td style="border: 1px solid black;">{{ $mp->sub_account_key }}</td>
                                     <td style="border: 1px solid black;">{{ $mp->pay_mission }}</td>
-                                    <td style="border: 1px solid black;">0</td>
-                                @elseif ($mp->mission_type == 'type_2')
-                                    <td style="border: 1px solid black;">0</td>
-                                    <td style="border: 1px solid black;">{{ $mp->pay_mission }}</td>
+                                    @if ($mp->mission_type == '1')
+                                        <td style="border: 1px solid black;">0</td>
+                                        <td style="border: 1px solid black;">{{ $mp->pay_mission }}</td>
+                                        <td style="border: 1px solid black;">{{ $mp->pay_mission }}</td>
+                                    @elseif ($mp->mission_type == '2')
+                                        <td style="border: 1px solid black;">0</td>
+                                        <td style="border: 1px solid black;">{{ $mp->pay_mission }}</td>
+                                    @else
+                                        <td style="border: 1px solid black;">0</td>
+                                        <td style="border: 1px solid black;">0</td>
+                                        <td style="border: 1px solid black;">0</td>
+                                    @endif
                                 @else
-                                    <td style="border: 1px solid black;">0</td>
-                                    <td style="border: 1px solid black;">0</td>
+                                    <td style="border: 1px solid black;"></td>
                                 @endif
                             </tr>
-                        @endforeach --}}
+                        @endforeach
                     </tbody>
                 </table>
-
             </div>
         </div>
     </div>

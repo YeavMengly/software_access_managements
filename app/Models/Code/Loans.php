@@ -4,6 +4,7 @@ namespace App\Models\Code;
 
 use App\Models\Certificates\Certificate;
 use App\Models\Certificates\CertificateData;
+use App\Models\DataMandate;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -31,6 +32,11 @@ class Loans extends Model
     public function reports()
     {
         return $this->belongsTo(Report::class, 'report_key', 'report_key');
+    }
+
+    public function dataMandates()
+    {
+        return $this->belongsTo(DataMandate::class, 'report_key', 'report_key');
     }
 
     public function certificatData(){

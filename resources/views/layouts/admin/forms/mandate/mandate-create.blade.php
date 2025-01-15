@@ -1,6 +1,6 @@
 @extends('layouts.master')
 
-@section('form-plans-upload')
+@section('form-mandate-upload')
     <div class="border-wrapper">
         <div class="result-total-table-container">
             <div class="container-fluid">
@@ -11,7 +11,7 @@
                             <i class="fas fa-arrow-left"></i>&nbsp;&nbsp;
                         </a>
                         <h3 class="card-title" style="font-weight: 500;">
-                            តារាងបញ្ចូលបេសកកម្មចំណាយតាមកម្មវិធី</h3>
+                            បញ្ចូលអាណត្តិ</h3>
                         <span></span>
                     </div>
                 </div>
@@ -36,49 +36,50 @@
 
                 <div class="border-wrapper">
                     <div class="form-container">
-                        <form action="{{ route('mission-planning.store') }}" method="POST" enctype="multipart/form-data"
+                        <form action="{{ route('mandates.store') }}" method="POST" enctype="multipart/form-data"
                             onsubmit="validateForm(event)">
                             @csrf
                             <div class="row d-flex justify-content-between align-items-center margin-tb mb-4">
                                 <div class="col-md-4">
                                     <div class="row">
-                                        <div class="col-md-6">
+                                        <div class="col-md-4">
                                             <label for="report_key">
-                                                <strong>លេខកូដកម្មវិធី:</strong>
+                                                <strong>លេខអនុគណនី & កម្មវិធី:</strong>
                                             </label>
                                             <input type="text" id="searchReportKey" class="form-control mb-2"
                                                 placeholder="ស្វែងរកលេខកូដកម្មវិធី..." onkeyup="filterReportKeys(event)"
                                                 style="width: 100%; height: 40px; text-align: center; line-height: 60px;">
                                             <p id="resultCount" style="font-weight: bold;">ចំនួន: 0</p>
-                                        
+
                                             @php
                                                 // Sort the reports by report_key in ascending order
-                                                $sortedReports = $reports->sortBy('sub_account_key');
+                                                $sortedReports = $dataMandate->sortBy('sub_account_key');
                                             @endphp
-                                        
+
                                             <select name="report_key" id="reportKeySelect" class="form-control"
                                                 size="5" onchange="updateReportInputField()"
                                                 style="width: 100%; height: 150px;">
-                                                @foreach ($sortedReports as $report)
-                                                    <option value="{{ $report->id }}">
-                                                        {{ $report->subAccountKey->sub_account_key ?? 'N/A' }} > {{ $report->report_key }}
+                                                @foreach ($sortedReports as $dataMandate)
+                                                    <option value="{{ $dataMandate->id }}">
+                                                        {{ $dataMandate->subAccountKey->sub_account_key ?? 'N/A' }} >
+                                                        {{ $dataMandate->report_key }}
                                                     </option>
                                                 @endforeach
                                             </select>
                                         </div>
-                                        
-                                        <div class="col-md-6">
+
+                                        <div class="col-md-4">
                                             <div class="form-group">
-                                                <label for="pay_mission"><strong>ទឹកប្រាក់ចំណាយបេសកកម្ម:</strong></label>
-                                                <input type="number" name="pay_mission" id="pay_mission"
-                                                    class="form-control @error('pay_mission') is-invalid @enderror"
-                                                    style="width: 80%; height: 40px;" min="0"
-                                                    value="{{ old('pay_mission') }}">
-                                                @error('pay_mission')
+                                                <label for="pay_mission"><strong>ថវិកា:</strong></label>
+                                                <input type="number" name="value_mandate" id="value_mandate"
+                                                    class="form-control @error('value_mandate') is-invalid @enderror"
+                                                    style="width: 100%; height: 40px;" min="0"
+                                                    value="{{ old('value_mandate') }}">
+                                                @error('value_mandate')
                                                     <div class="invalid-feedback">{{ $message }}</div>
                                                 @enderror
                                             </div>
-                               
+
                                             <div class="form-group">
                                                 <label for="mission-type"><strong>ប្រភេទបេសកកម្ម</strong></label>
                                                 <div>
@@ -95,6 +96,26 @@
                                                         </div>
                                                     @endforeach
                                                 </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <!-- File Input -->
+                                                <label for="attachments"><strong>ជ្រើសរើស ថ្ងៃ ខែ ឆ្នាំ:</strong></label>
+                                                <input type="date" class="form-control" id="date_mandate"
+                                                    name="date_mandate" multiple
+                                                    style="height: 45px; padding: 10px; width: 230px;">
+                                            </div>
+                                            <div class="form-group">
+                                                <!-- File Input -->
+                                                <label for="attachments"><strong>ឯកសារភ្ជាប់:</strong></label>
+                                                <input type="file" class="form-control" id="attachments"
+                                                    name="attachments[]" multiple
+                                                    style="height: 45px; padding: 10px; width: 230px;"
+                                                    onchange="displaySelectedFiles()">
+
+                                                <!-- Display Selected Files -->
+                                                <ul id="fileList" style="margin-top: 10px; padding-left: 20px;"></ul>
                                             </div>
                                         </div>
                                     </div>
@@ -239,38 +260,46 @@
     </script>
 
     <script>
-        let credit = 0;
-
         function updateReportInputField() {
             const select = document.getElementById('reportKeySelect');
             const selectedOption = select.options[select.selectedIndex];
 
             if (selectedOption) {
-                document.getElementById('searchReportKey').value = selectedOption.textContent;
+                const mandateId = selectedOption.value;
+                console.log('Selected Report Key ID:', mandateId);
 
-                const reportKeyId = selectedOption.value;
-
-                // Fetch report data based on selected report key
-                fetch(`/reports/${reportKeyId}/early-balance`)
-                    .then(response => response.json())
-                    .then(data => {
-                        // Display fetched data in corresponding fields
-                        document.getElementById('fin_law').textContent = formatNumber(data.fin_law);
-                        document.getElementById('credit_movement').textContent = formatNumber(data.credit_movement);
-                        document.getElementById('new_credit_status').textContent = formatNumber(data.new_credit_status);
-                        document.getElementById('credit').textContent = formatNumber(data.credit);
-                        document.getElementById('deadline_balance').textContent = formatNumber(data.deadline_balance);
-
-                        // Calculate and update remaining credit initially
-                        updateRemainingCredit(0);
+                fetch(`/mandate/${mandateId}/early-balance`)
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Network response was not ok');
+                        }
+                        return response.json();
                     })
-                    .catch(error => console.error('Error fetching report data:', error));
+                    .then(data => {
+                        console.log('Response data:', data);
+
+                        document.getElementById('fin_law').textContent = formatNumber(data.fin_law || 0);
+                        document.getElementById('credit_movement').textContent = formatNumber(data.credit_movement ||
+                        0);
+                        document.getElementById('new_credit_status').textContent = formatNumber(data
+                            .new_credit_status || 0);
+                        document.getElementById('credit').textContent = formatNumber(data.credit || 0);
+                        document.getElementById('deadline_balance').textContent = formatNumber(data.deadline_balance ||
+                            0);
+
+                        updateRemainingCredit(0); // Initialize remaining credit
+                    })
+                    .catch(error => {
+                        console.error('Error fetching report data:', error);
+                        alert('Failed to fetch report data. Please try again.');
+                    });
             }
         }
 
-        function updateRemainingCredit(pay_mission) {
+
+        function updateRemainingCredit(value_mandate) {
             const credit = parseFloat(document.getElementById('credit').textContent.replace(/,/g, '')) || 0;
-            const remainingCredit = credit - pay_mission;
+            const remainingCredit = credit - value_mandate;
 
             if (remainingCredit < 0) {
                 // Show SweetAlert error if credit is insufficient
@@ -289,14 +318,13 @@
             return true; // Credit is valid
         }
 
-        document.getElementById('pay_mission').addEventListener('input', function() {
-            const payMission = parseFloat(this.value) || 0; // Get value or default to 0
-            document.getElementById('paying').textContent = formatNumber(payMission); // Update paying field
+        document.getElementById('value_mandate').addEventListener('input', function() {
+            const valueMandate = parseFloat(this.value) || 0; // Get value or default to 0
+            document.getElementById('paying').textContent = formatNumber(valueMandate); // Update paying field
 
             // Update remaining credit
-            updateRemainingCredit(payMission);
+            updateRemainingCredit(valueMandate);
         });
-
 
         function formatNumber(num) {
             if (Number.isInteger(num) || num % 1 === 0) {
@@ -304,6 +332,55 @@
             } else {
                 return num.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
             }
+        }
+
+        // Initialize fields on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            updateReportInputField();
+        });
+    </script>
+
+    <script>
+        function displaySelectedFiles() {
+            const fileInput = document.getElementById('attachments'); // Get the file input
+            const fileList = document.getElementById('fileList'); // Get the file list container
+            const files = Array.from(fileInput.files); // Convert FileList to Array
+
+            // Clear the list before displaying new files
+            fileList.innerHTML = '';
+
+            // Sort files by name
+            files.sort((a, b) => a.name.localeCompare(b.name));
+
+            // Loop through files and display their names with icons
+            files.forEach((file, index) => {
+                const listItem = document.createElement('li');
+                listItem.style.cssText = 'display: flex; align-items: center; margin-bottom: 5px;';
+
+                // Create icon element based on file type
+                const icon = document.createElement('i');
+                if (file.name.endsWith('.pdf')) {
+                    icon.className = 'fas fa-file-pdf';
+                    icon.style.color = 'red';
+                } else if (file.name.endsWith('.doc') || file.name.endsWith('.docx')) {
+                    icon.className = 'fas fa-file-word';
+                    icon.style.color = 'blue';
+                } else {
+                    icon.className = 'fas fa-file-alt'; // Default icon for other file types
+                    icon.style.color = 'gray';
+                }
+                icon.style.marginRight = '10px';
+
+                // Add text for file name
+                const text = document.createTextNode(`${index + 1}. ${file.name}`);
+
+                // Append icon and text to the list item
+                listItem.appendChild(icon);
+                listItem.appendChild(text);
+
+                // Append list item to file list
+                fileList.appendChild(listItem);
+            });
         }
     </script>
 @endsection

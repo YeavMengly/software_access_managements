@@ -12,14 +12,33 @@ use Illuminate\Support\Facades\Log;
 class MissionPlanningController extends Controller
 {
 
-    public function index()
+    public function index(Request $request)
     {
-        // Retrieve all mission planning records with their relationships
-        $missionPlannings = MissionPlanning::with(['report', 'subAccountKey', 'missionType'])->get();
-
-        return view('layouts.admin.forms.form-mission.form-mission-planning-index', compact('missionPlannings'));
+        // Retrieve all mission types for filtering options
+        $missionTypes = MissionType::all();
+    
+        // Get the selected mission type ID from the request
+        $selectedMissionType = $request->input('mission_type');
+    
+        // Query mission planning with relationships
+        $query = MissionPlanning::with(['report', 'subAccountKey', 'missionType']);
+    
+        // Apply filter if a mission type is selected
+        if ($selectedMissionType) {
+            $query->where('mission_type', $selectedMissionType);
+        }
+    
+        // Fetch the filtered mission plans
+        $missionPlannings = $query->get();
+    
+        // Calculate the total amount for the selected mission type
+        $totalAmount = $query->sum('pay_mission');
+    
+        // Pass data to the view
+        return view('layouts.admin.forms.form-mission.form-mission-planning-index', compact('missionPlannings', 'missionTypes', 'selectedMissionType', 'totalAmount'));
     }
-
+    
+    
 
     // Display the form for creating a new mission planning
     public function create()

@@ -23,7 +23,26 @@
     @endif
 
 
+
     <div class="table-container p-3">
+        <div class="d-flex justify-content-end mb-3">
+            <div class="btn-group mb-3" role="group" aria-label="Mission Type Filter">
+                <!-- Show 'All' Button -->
+                <a href="{{ route('mission-planning.index') }}"
+                    class="btn btn-outline-primary {{ !$selectedMissionType ? 'active' : '' }}">
+                    ទាំងអស់
+                </a>
+
+                <!-- Generate Buttons Dynamically for Each Mission Type -->
+                @foreach ($missionTypes as $type)
+                    <a href="{{ route('mission-planning.index', ['mission_type' => $type->id]) }}"
+                        class="btn btn-outline-primary {{ $selectedMissionType == $type->id ? 'active' : '' }}">
+                        {{ $type->mission_type }}
+                    </a>
+                @endforeach
+            </div>
+        </div>
+
         <table class="table-border">
             <thead>
                 <tr>
@@ -32,18 +51,17 @@
                     <th style="border: 1px solid black;">លេខកូដកម្មវិធី</th>
                     <th style="border: 1px solid black;">ចំណាយបេសកកម្ម</th>
                     <th style="border: 1px solid black;">ប្រភេទបេសកកម្ម</th>
-                    <th style="border: 1px solid black;">Actions</th>
+                    <th style="border: 1px solid black;">ស្ថានភាព</th>
                 </tr>
             </thead>
             <tbody style="border: 1px solid black;">
                 @foreach ($missionPlannings as $index => $mp)
                     <tr>
                         <td style="border: 1px solid black;">{{ $index + 1 }}</td>
-                        {{-- @dd($mp->report->sub_account_key) --}}
                         <td style="border: 1px solid black;">{{ $mp->report->subAccountKey->sub_account_key }}</td>
                         <td style="border: 1px solid black;">{{ $mp->report->report_key ?? 'N/A' }}</td>
-                        <!-- Access the related report's id -->
-                        <td style="border: 1px solid black;">{{ $mp->pay_mission }}</td>
+                        <td style="border: 1px solid black;">{{ number_format($mp->pay_mission, 0, ' ', ' ') }}</td>
+
                         <td style="border: 1px solid black;">{{ $mp->missionType->mission_type ?? 'N/A' }}</td>
                         <td style="border: 1px solid black; text-align: center;">
                             <div style="display: flex; justify-content: center; gap: 5px;">
@@ -62,11 +80,19 @@
                                 </form>
                             </div>
                         </td>
-
                     </tr>
                 @endforeach
             </tbody>
+            <!-- Total Row -->
+            <tfoot>
+                <tr style="background:  rgb(181, 245, 86);">
+                    <td colspan="3" style="border: 1px solid black; text-align: center;"><strong>សរុបថវិកា</strong></td>
+                    <td style="border: 1px solid black;"><strong>{{ number_format($totalAmount, 0, ' ', ' ') }}</strong></td>
+                    <td colspan="2" style="border: 1px solid black;"></td>
+                </tr>
+            </tfoot>
         </table>
+
     </div>
 @endsection
 
@@ -108,14 +134,14 @@
     <script>
         function confirmDelete(missionId) {
             Swal.fire({
-                title: 'Are you sure?',
-                text: "You won't be able to revert this!",
+                title: 'តើអ្នកពិតជាចង់លុបមែនទេ?',
+                text: "អ្នកមិនអាចស្តារវិញបានទេ!",
                 icon: 'warning',
                 showCancelButton: true,
                 confirmButtonColor: '#3085d6',
                 cancelButtonColor: '#d33',
-                confirmButtonText: 'Yes, delete it!',
-                cancelButtonText: 'Cancel',
+                confirmButtonText: 'បាទ/ចាស, លុប!',
+                cancelButtonText: 'បោះបង់',
                 reverseButtons: true,
             }).then((result) => {
                 if (result.isConfirmed) {

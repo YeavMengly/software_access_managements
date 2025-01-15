@@ -40,7 +40,7 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.min.js"></script>
 
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
-
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
 
     @yield('styles')
 </head>
@@ -112,9 +112,15 @@
                     @yield('form-report-upload')
                     @yield('form-report-edit')
 
+                    @yield('content-report-mandate')
+                    @yield('form-report-mandate-upload')
+
                     @yield('content-loans')
                     @yield('form-content-loans-upload')
                     @yield('form-content-loans-edit')
+
+                    @yield('content-loan-mandates')
+                    @yield('form-content-loan-mandates-upload')
 
                     @yield('content-date-year')
 
@@ -142,6 +148,13 @@
                     @yield('content-certificate-amount')
                     {{--                        End Certificate                          --}}
 
+                    {{--                        Start Mandate                          --}}
+                    @yield('form-mandate-index')
+                    @yield('form-mandate-upload')
+
+                    {{--                        End Mandate                            --}}
+
+
                     {{--                        Start Loans Total                         --}}
 
                     @yield(' loan-total')
@@ -158,6 +171,10 @@
                     {{--                        Start Table                         --}}
 
                     @yield('content-table-ms-plan')
+        
+                    @yield('result-total-fmc-table')
+
+                    @yield('table-mandate')
 
                     {{--                        End Table                           --}}
                 </div>

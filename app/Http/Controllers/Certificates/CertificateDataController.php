@@ -8,226 +8,112 @@ use App\Models\Code\AccountKey;
 use App\Models\Code\Key;
 use App\Models\Code\Report;
 use App\Models\Code\SubAccountKey;
+use App\Models\Mission\MissionType;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class CertificateDataController extends Controller
 {
-    // public function index(Request $request)
-    // {
-    //     $search = $request->input('search');
-    //     $sortField = $request->input('sort_field', 'value_certificate'); // Default to a valid column
-    //     $sortDirection = $request->input('sort_direction', 'asc');
-    //     $perPage = $request->input('per_page', 25);
-
-    //     if (!in_array($sortField, ['value_certificate', 'report_key'])) {
-    //         $sortField = 'value_certificate'; // Default to a valid column
-    //     }
-
-    //     $certificatesData = CertificateData::with(['report.subAccountKey.accountKey.key'])
-    //         ->when($search, function ($query, $search) {
-    //             return $query->whereHas('report', function ($query) use ($search) {
-    //                 return $query->where('report_key', 'like', "%{$search}%"); // Search by report_key
-    //             });
-    //         })
-    //         ->orderBy($sortField, $sortDirection)
-    //         ->paginate($perPage);
-
-    //     $totals = $this->calculateTotals($certificatesData);
-    //     $dataAvailable = $certificatesData->isNotEmpty();
-
-    //     return view('layouts.admin.forms.certificate.certificate-data-index', compact('certificatesData', 'totals', 'dataAvailable'));
-    // }
     public function index(Request $request)
-    {
+    {  
+        $missionTypes = MissionType::all();
         $search = $request->input('search');
-        $sortField = $request->input('sort_field', 'value_certificate'); // Default to a valid column
+        $sortField = $request->input('sort_field', 'value_certificate'); 
         $sortDirection = $request->input('sort_direction', 'asc');
         $perPage = $request->input('per_page', 25);
+        $selectedMissionType = $request->input('mission_type'); 
 
         if (!in_array($sortField, ['value_certificate', 'report_key'])) {
-            $sortField = 'value_certificate'; // Default to a valid column
+            $sortField = 'value_certificate'; 
         }
 
-        $certificatesData = CertificateData::with(['report.subAccountKey.accountKey.key'])
+        $query = CertificateData::with(['report.subAccountKey.accountKey.key', 'missionType'])
             ->whereHas('report.year', function ($query) {
-                $query->where('status', 'active'); // Include only reports tied to active years
+                $query->where('status', 'active'); 
             })
             ->when($search, function ($query, $search) {
-                return $query->whereHas('report', function ($query) use ($search) {
+                $query->whereHas('report', function ($query) use ($search) {
                     $query->where('report_key', 'like', "%{$search}%");
                 });
             })
-            ->orderBy($sortField, $sortDirection)
-            ->paginate($perPage);
+            ->when($selectedMissionType, function ($query, $selectedMissionType) {
+                $query->where('mission_type', $selectedMissionType); 
+            });
+
+        $totalAmount = $query->sum('value_certificate');
+
+        $certificatesData = $query->orderBy($sortField, $sortDirection)->paginate($perPage);
 
         $totals = $this->calculateTotals($certificatesData);
+
         $dataAvailable = $certificatesData->isNotEmpty();
 
-        return view('layouts.admin.forms.certificate.certificate-data-index', compact('certificatesData', 'totals', 'dataAvailable'));
+        return view('layouts.admin.forms.certificate.certificate-data-index', compact(
+            'certificatesData',
+            'totals',
+            'dataAvailable',
+            'totalAmount',
+            'selectedMissionType',
+            'missionTypes'
+        ));
     }
 
-
-    // public function create()
-    // {
-    //     $keys = Key::all();
-    //     $accountKeys = AccountKey::all();
-    //     $subAccountKeys = SubAccountKey::all();
-    //     $reports = Report::all();
-
-    //     return view('layouts.admin.forms.certificate.certificate-data-create', compact('reports', 'subAccountKeys', 'accountKeys', 'keys'));
-    // }
     public function create()
     {
         $keys = Key::all();
         $accountKeys = AccountKey::all();
         $subAccountKeys = SubAccountKey::all();
-        // $reports = Report::with('year')
-        //     ->whereHas('year', function ($query) {
-        //         $query->where('status', 'active'); // Include only reports tied to active years
-        //     })
-        //     ->get();
         $reports = Report::whereHas('year', function ($query) {
             $query->where('status', 'active')
-                  ->where('date_year', '>=', Carbon::now()->startOfYear()); // Compare _year in the related model
+                ->where('date_year', '>=', Carbon::now()->startOfYear());
         })->get();
+        $missionTypes = MissionType::all();
 
-        return view('layouts.admin.forms.certificate.certificate-data-create', compact('reports', 'subAccountKeys', 'accountKeys', 'keys'));
+        return view('layouts.admin.forms.certificate.certificate-data-create', compact('reports', 'subAccountKeys', 'accountKeys', 'keys', 'missionTypes'));
     }
-
-
-    // public function store(Request $request)
-    // {
-    //     $validated = $request->validate([
-    //         'report_key' => 'required|exists:reports,id',
-    //         'value_certificate' => 'required|numeric',
-    //     ]);
-
-    //     $report = Report::findOrFail($validated['report_key']);
-
-    //     if (!$report || !$report->subAccountKey) {
-    //         return redirect()->back()->withErrors(['error' => 'មិនមាន អនុគណនី ឬកូដកម្មវិធី។']);
-    //     }
-
-    //     $applyValue = $validated['value_certificate'];
-    //     $remainingCredit = $report->credit - $applyValue;
-
-    //     if ($remainingCredit < 0) {
-    //         return redirect()->back()->withErrors(['error' => 'ឥណាទានមិនអាចតិចជាងសូន្យ។']);
-    //     }
-
-    //     CertificateData::create([
-    //         'report_key' => $validated['report_key'],
-    //         'value_certificate' => $applyValue,
-    //     ]);
-    //     $this->recalculateAndSaveReport($report);
-
-    //     return redirect()->route('certificate-data.index')->with('success', 'សលាកបត្របានបញ្ចូលដោយជោគជ័យ');
-    // }
-    // public function store(Request $request)
-    // {
-    //     // Step 1: Validate incoming data
-    //     $validated = $request->validate([
-    //         'report_key' => 'required|exists:reports,id',
-    //         'value_certificate' => 'required|numeric|min:0',
-    //     ]);
-
-    //     // Step 2: Retrieve the associated report
-    //     $report = Report::with('year')->findOrFail($validated['report_key']);
-
-    //     // Step 3: Check if the report or sub-account key is missing
-    //     if (!$report->subAccountKey) {
-    //         return redirect()->back()->withErrors(['error' => 'មិនមាន អនុគណនី ឬកូដកម្មវិធី។']);
-    //     }
-
-    //     // Step 4: Check if the associated year exists
-    //     $year = $report->year;
-    //     if (!$year) {
-    //         return redirect()->back()->withErrors(['error' => 'ឆ្នាំដែលទាក់ទងគ្មានក្នុងប្រព័ន្ធ។']);
-    //     }
-
-    //     // Step 5: Ensure the year is active
-    //     if ($year->status !== 'active') {
-    //         return redirect()->back()->withErrors([
-    //             'error' => 'ឆ្នាំដែលទាក់ទងមិនសកម្មទេ។ មិនអាចបញ្ចូលស្លាកបត្រ។',
-    //         ]);
-    //     }
-
-    //     // Step 6: Calculate remaining credit and validate it
-    //     $applyValue = $validated['value_certificate'];
-    //     $remainingCredit = $report->credit - $applyValue;
-
-    //     if ($remainingCredit < 0) {
-    //         return redirect()->back()->withErrors(['error' => 'ឥណទានមិនអាចតិចជាងសូន្យ។']);
-    //     }
-
-    //     // Step 7: Store the certificate data
-    //     CertificateData::create([
-    //         'report_key' => $validated['report_key'],
-    //         'value_certificate' => $applyValue,
-    //     ]);
-
-    //     // Step 8: Recalculate and save the report's data
-    //     $this->recalculateAndSaveReport($report);
-
-    //     // Step 9: Redirect to the index route with a success message
-    //     return redirect()->route('certificate-data.index')->with('success', 'ស្លាកបត្របានបញ្ចូលដោយជោគជ័យ');
-    // }
 
     public function store(Request $request)
     {
-        // Step 1: Validate incoming data
         $validated = $request->validate([
             'report_key' => 'required|exists:reports,id',
             'value_certificate' => 'required|numeric|min:0',
+            'mission_type' => 'required|exists:mission_types,id',
+            'attachments' => 'nullable|array',
+            'attachments.*' => 'file|mimes:pdf|max:2048',
+            'date_certificate' => 'required|date'
         ]);
-
-        // Step 2: Retrieve the associated report
-        $report = Report::with('year')->findOrFail($validated['report_key']);
-
-        // Step 3: Check if the report or sub-account key is missing
-        if (!$report->subAccountKey) {
+        $report = Report::findOrFail($validated['report_key']);
+        if (!$report || !$report->subAccountKey) {
             return redirect()->back()->withErrors(['error' => 'មិនមាន អនុគណនី ឬកូដកម្មវិធី។']);
         }
-
-        // Step 4: Check if the associated year exists
-        $year = $report->year;
-        if (!$year) {
-            return redirect()->back()->withErrors(['error' => 'ឆ្នាំដែលទាក់ទងគ្មានក្នុងប្រព័ន្ធ។']);
-        }
-
-        // Step 5: Ensure the year matches the current year and is active
-        if ($year->date_year->year !== now()->year) {
-            return redirect()->back()->withErrors([
-                'error' => 'ឆ្នាំដែលបានជ្រើសមិនផ្គូផ្គងជាមួយឆ្នាំបច្ចុប្បន្ន។',
-            ]);
-        }
-
-        if ($year->status !== 'active') {
-            return redirect()->back()->withErrors([
-                'error' => 'ឆ្នាំដែលទាក់ទងមិនសកម្មទេ។ មិនអាចបញ្ចូលស្លាកបត្រ។',
-            ]);
-        }
-
-        // Step 6: Calculate remaining credit and validate it
         $applyValue = $validated['value_certificate'];
         $remainingCredit = $report->credit - $applyValue;
 
         if ($remainingCredit < 0) {
-            return redirect()->back()->withErrors(['error' => 'ឥណទានមិនអាចតិចជាងសូន្យ។']);
+            return redirect()->back()->withErrors(['error' => 'ឥណាទានមិនអាចតិចជាងសូន្យ។']);
         }
 
-        // Step 7: Store the certificate data
+        $storedFilePaths = [];
+
+        if ($request->hasFile('attachments')) {
+            foreach ($request->file('attachments') as $file) {
+                if ($file->isValid()) {
+                    $filePath = $file->store('certificateDatas', 'public'); 
+                    $storedFilePaths[] = $filePath; 
+                }
+            }
+        }
+
         CertificateData::create([
             'report_key' => $validated['report_key'],
             'value_certificate' => $applyValue,
+            'mission_type' => $validated['mission_type'],
+            'attachments' => json_encode($storedFilePaths), 
+            'date_certificate' => $validated['date_certificate']
         ]);
-
-        // Step 8: Recalculate and save the report's data
         $this->recalculateAndSaveReport($report);
 
-        // Step 9: Redirect to the index route with a success message
-        return redirect()->route('certificate-data.index')->with('success', 'ស្លាកបត្របានបញ្ចូលដោយជោគជ័យ');
+        return redirect()->route('certificate-data.create')->with('success', 'សលាកបត្របានបញ្ចូលដោយជោគជ័យ');
     }
 
     public function show($id)
@@ -339,6 +225,7 @@ class CertificateDataController extends Controller
 
         $report->save();
     }
+
     private function calculateTotals($certificatesData)
     {
         $totals = [];

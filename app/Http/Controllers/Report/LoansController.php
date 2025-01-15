@@ -23,24 +23,28 @@ class LoansController extends Controller
 
         $query = Loans::query();
 
+        // Filter by Sub-Account Key
         if ($subAccountKeyId) {
             $query->whereHas('subAccountKey', function ($q) use ($subAccountKeyId) {
                 $q->where('sub_account_key_column_in_related_table', 'like', "%{$subAccountKeyId}%");
             });
         }
 
+        // Filter by Report Key and Year Status
         if ($reportKey) {
-            $query->whereHas('reportKey.year', function ($q) {
-                $q->where('status', 'active');
-            })->whereHas('reportKey', function ($q) use ($reportKey) {
-                $q->where('report_key_column_in_related_table', 'like', "%{$reportKey}%");
+            $query->whereHas('reports', function ($q) use ($reportKey) {
+                $q->where('report_key_column_in_related_table', 'like', "%{$reportKey}%")
+                    ->whereHas('year', function ($q) {
+                        $q->where('status', 'active');
+                    });
             });
         } else {
-            $query->whereHas('reportKey.year', function ($q) {
+            $query->whereHas('reports.year', function ($q) {
                 $q->where('status', 'active');
             });
         }
 
+        // Paginate Results
         $loans = $query->paginate($perPage);
 
         return view('layouts.admin.forms.loans.loans-index', compact('loans'));
@@ -57,10 +61,78 @@ class LoansController extends Controller
 
         return view('layouts.admin.forms.loans.loans-create', compact('subAccountKeys', 'reports'));
     }
+    // public function store(Request $request)
+    // {
+    //     $validatedData = $request->validate([
+    //         'report_key' => 'required|exists:reports,report_key',
+    //         'internal_increase' => 'nullable|numeric|min:0',
+    //         'unexpected_increase' => 'nullable|numeric|min:0',
+    //         'additional_increase' => 'nullable|numeric|min:0',
+    //         'decrease' => 'nullable|numeric|min:0',
+    //         'editorial' => 'nullable|numeric|min:0',
+    //     ]);
+
+    //     // Retrieve the associated Report with its active Year
+    //     $report = Report::with('year', 'subAccountKey')
+    //     ->where('report_key', $validatedData['report_key'])
+    //     ->whereHas('year', function ($query) {
+    //         $query->where('status', 'active');
+    //     })
+    //     ->first();
+    
+
+    //     // Validate if the report exists and belongs to the active year
+    //     if (!$report || $report->year->status !== 'active') {
+    //         return redirect()->back()->withErrors([
+    //             'report_key' => 'The selected report does not belong to the active year.',
+    //         ])->withInput();
+    //     }
+
+    //     // Initialize default values for nullable fields
+    //     $validatedData['internal_increase'] = $validatedData['internal_increase'] ?? 0;
+    //     $validatedData['unexpected_increase'] = $validatedData['unexpected_increase'] ?? 0;
+    //     $validatedData['additional_increase'] = $validatedData['additional_increase'] ?? 0;
+    //     $validatedData['decrease'] = $validatedData['decrease'] ?? 0;
+    //     $validatedData['editorial'] = $validatedData['editorial'] ?? 0;
+
+    //     // Calculate total increase
+    //     $total_increase = $validatedData['internal_increase'] +
+    //         $validatedData['unexpected_increase'] +
+    //         $validatedData['additional_increase'];
+
+    //     $subAccountKey = $report->subAccountKey->sub_account_key;
+    //     $current_loan = $report->current_loan;
+
+    //     // Calculate new credit status
+    //     $new_credit_status = $current_loan + $total_increase -
+    //         $validatedData['decrease'] -
+    //         $validatedData['editorial'];
+
+    //     // Create Loan record
+    //     Loans::create([
+    //         'sub_account_key' => $subAccountKey,
+    //         'report_key' => $validatedData['report_key'],
+    //         'internal_increase' => $validatedData['internal_increase'],
+    //         'unexpected_increase' => $validatedData['unexpected_increase'],
+    //         'additional_increase' => $validatedData['additional_increase'],
+    //         'decrease' => $validatedData['decrease'],
+    //         'editorial' => $validatedData['editorial'],
+    //         'total_increase' => $total_increase,
+    //     ]);
+
+    //     // Update the report with the new credit status
+    //     $report->update([
+    //         'new_credit_status' => $new_credit_status,
+    //     ]);
+
+    //     // Redirect back to index with success message
+    //     return redirect()->route('loans.index')->with('success', 'Loan transaction added successfully!');
+    // }
+
     public function store(Request $request)
     {
         $validatedData = $request->validate([
-            'report_key' => 'required|exists:reports,report_key',
+            'report_key' => 'required|exists:reports,id',
             'internal_increase' => 'nullable|numeric|min:0',
             'unexpected_increase' => 'nullable|numeric|min:0',
             'additional_increase' => 'nullable|numeric|min:0',
@@ -68,44 +140,31 @@ class LoansController extends Controller
             'editorial' => 'nullable|numeric|min:0',
         ]);
     
-        // Retrieve the associated Report with its active Year
-        $report = Report::with('year')
-            ->where('report_key', $validatedData['report_key'])
-            ->whereHas('id', function ($query) {
-                $query->where('status', 'active'); // Check for active year
-            })
-            ->first();
-    
-        // Validate if the report exists and belongs to the active year
-        if (!$report || $report->year->status !== 'active') {
-            return redirect()->back()->withErrors([
-                'report_key' => 'The selected report does not belong to the active year.',
-            ])->withInput();
-        }
-    
-        // Initialize default values for nullable fields
         $validatedData['internal_increase'] = $validatedData['internal_increase'] ?? 0;
         $validatedData['unexpected_increase'] = $validatedData['unexpected_increase'] ?? 0;
         $validatedData['additional_increase'] = $validatedData['additional_increase'] ?? 0;
         $validatedData['decrease'] = $validatedData['decrease'] ?? 0;
         $validatedData['editorial'] = $validatedData['editorial'] ?? 0;
     
-        // Calculate total increase
-        $total_increase = $validatedData['internal_increase'] +
-            $validatedData['unexpected_increase'] +
-            $validatedData['additional_increase'];
+        $existingReport = Report::where('report_key', $validatedData['report_key'])->first();
     
-        $subAccountKey = $report->subAccountKey->sub_account_key;
-        $current_loan = $report->current_loan;
+        if (!$existingReport) {
+            return redirect()->back()->withErrors([
+                'report_key' => 'The selected report does not exist.'
+            ])->withInput();
+        }
     
-        // Calculate new credit status
-        $new_credit_status = $current_loan + $total_increase -
-            $validatedData['decrease'] -
-            $validatedData['editorial'];
+        $current_loan = $existingReport->current_loan;
+        $fin_law = $existingReport->fin_law;
+        $total_increase = $validatedData['internal_increase'] + $validatedData['unexpected_increase'] + $validatedData['additional_increase'];
+        $new_credit_status = $current_loan + $total_increase - $validatedData['decrease'] - $validatedData['editorial'];
+        $currentApplyTotal = CertificateData::where('report_key', $validatedData['report_key'])->sum('value_certificate');
+        $deadline_balance = $currentApplyTotal;
+        $credit = $new_credit_status - $deadline_balance;
+        $law_average = $fin_law ? max(-100, min(100, ($deadline_balance / $fin_law) * 100)) : 0;
+        $law_correction = $new_credit_status ? max(-100, min(100, ($deadline_balance / $new_credit_status) * 100)) : 0;
     
-        // Create Loan record
         Loans::create([
-            'sub_account_key' => $subAccountKey,
             'report_key' => $validatedData['report_key'],
             'internal_increase' => $validatedData['internal_increase'],
             'unexpected_increase' => $validatedData['unexpected_increase'],
@@ -115,15 +174,80 @@ class LoansController extends Controller
             'total_increase' => $total_increase,
         ]);
     
-        // Update the report with the new credit status
-        $report->update([
+        $existingReport->update([
             'new_credit_status' => $new_credit_status,
+            'apply' => $currentApplyTotal,
+            'deadline_balance' => $deadline_balance,
+            'credit' => $credit,
+            'law_average' => $law_average,
+            'law_correction' => $law_correction,
+            'current_loan' => $current_loan,
         ]);
     
-        // Redirect back to index with success message
         return redirect()->route('loans.index')->with('success', 'Loan transaction added successfully!');
     }
     
+    // public function store(Request $request)
+    // {
+    //     // Validate the input fields
+    //     $validatedData = $request->validate([
+    //         'report_key' => 'required|exists:reports,id', // Ensure report_key exists
+    //         'internal_increase' => 'nullable|numeric|min:0',
+    //         'unexpected_increase' => 'nullable|numeric|min:0',
+    //         'additional_increase' => 'nullable|numeric|min:0',
+    //         'decrease' => 'nullable|numeric|min:0',
+    //         'editorial' => 'nullable|numeric|min:0',
+    //     ]);
+    
+    //     // Set default values for nullable fields
+    //     $validatedData['internal_increase'] = $validatedData['internal_increase'] ?? 0;
+    //     $validatedData['unexpected_increase'] = $validatedData['unexpected_increase'] ?? 0;
+    //     $validatedData['additional_increase'] = $validatedData['additional_increase'] ?? 0;
+    //     $validatedData['decrease'] = $validatedData['decrease'] ?? 0;
+    //     $validatedData['editorial'] = $validatedData['editorial'] ?? 0;
+    
+    //     // Calculate total increase
+    //     $total_increase = $validatedData['internal_increase'] 
+    //         + $validatedData['unexpected_increase'] 
+    //         + $validatedData['additional_increase'];
+    
+    //     // Add total increase to the validated data
+    //     $validatedData['total_increase'] = $total_increase;
+    
+    //     // Retrieve the related report using report_key
+    //     $report = Report::where('report_key', $validatedData['report_key'])->first();
+    
+    //     if (!$report) {
+    //         return redirect()->back()->withErrors([
+    //             'report_key' => 'The selected report is invalid.',
+    //         ])->withInput();
+    //     }
+    
+    //     // Get the related sub_account_key from the report
+    //     $subAccountKey = $report->subAccountKey ? $report->subAccountKey->sub_account_key : null;
+    
+    //     if (!$subAccountKey) {
+    //         return redirect()->back()->withErrors([
+    //             'sub_account_key' => 'The associated sub_account_key is missing.',
+    //         ])->withInput();
+    //     }
+    
+    //     // Store the Loans record with sub_account_key
+    //     Loans::create([
+    //         'report_key' => $validatedData['report_key'],
+    //         'sub_account_key' => $subAccountKey, // Storing sub_account_key
+    //         'internal_increase' => $validatedData['internal_increase'],
+    //         'unexpected_increase' => $validatedData['unexpected_increase'],
+    //         'additional_increase' => $validatedData['additional_increase'],
+    //         'total_increase' => $total_increase,
+    //         'decrease' => $validatedData['decrease'],
+    //         'editorial' => $validatedData['editorial'],
+    //     ]);
+    
+    //     return redirect()->route('loans.index')->with('success', 'Loan transaction added successfully!');
+    // }
+    
+
 
 
     public function edit($id)
@@ -161,7 +285,7 @@ class LoansController extends Controller
                 'report_key' => 'The Report Key does not exist.'
             ])->withInput();
         }
-        
+
         $current_loan = $existingReport->current_loan;
         $fin_law = $existingReport->fin_law;
         $total_increase = $validatedData['internal_increase'] + $validatedData['unexpected_increase'] + $validatedData['additional_increase'];

@@ -10,6 +10,8 @@ use App\Http\Controllers\Code\SubAccountKeyController;
 use App\Http\Controllers\Components\CertificateCardController;
 use App\Http\Controllers\Components\TotalCardController;
 use App\Http\Controllers\Components\TotalProgramsController;
+use App\Http\Controllers\DataMandateController;
+use App\Http\Controllers\LoanMandateController;
 use App\Http\Controllers\MissionAbroadController;
 use App\Http\Controllers\MissionCambodiaController;
 use App\Http\Controllers\Loans\NewLoanController;
@@ -24,11 +26,14 @@ use App\Http\Controllers\Result\ResultSuccess\TotalController;
 use App\Http\Controllers\Result\ResultSummariesController;
 use App\Http\Controllers\Result\ResultTotalController;
 use App\Http\Controllers\Loans\SumReferController;
+use App\Http\Controllers\Mandates\MandateController;
+use App\Http\Controllers\Mandates\ResultFMCController;
 use App\Http\Controllers\MissionPlanningController;
 use App\Http\Controllers\Report\LoansController;
 use App\Http\Controllers\Report\YearController;
 use App\Http\Controllers\ReportMissionController;
 use App\Http\Controllers\Result\ResultApplyController;
+use App\Http\Controllers\Result\ResultMandateController;
 use App\Http\Controllers\Result\TablesMission\ResultMissionPlans;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -74,7 +79,9 @@ Route::resource('keys', KeyController::class);
 Route::resource('accounts', AccountKeyController::class);
 Route::resource('sub-account', SubAccountKeyController::class);
 Route::resource('loans', LoansController::class);
+Route::resource('loan-mandates', LoanMandateController::class);
 Route::resource('years', YearController::class);
+Route::resource('data-mandates', DataMandateController::class);
 
 //===============================>> Year
 Route::post('/years/{year}/toggle-status', [YearController::class, 'toggleStatus'])->name('date_year_index');
@@ -85,12 +92,22 @@ Route::resource('certificate', CertificateController::class);
 Route::resource('certificate-data', CertificateDataController::class);
 Route::get('/certificate-amount', [AmountCertificateController::class, 'index'])->name('certificate-amount');
 
+//===============================>> Mandate
+Route::resource('mandates', MandateController::class);
+Route::get('/mandate/{id}/early-balance', [MandateController::class, 'getEarlyBalance']);
+
+
+Route::get('/result-total-fmc', [ResultFMCController::class, 'index'])->name('result-fin-mandate-certificate');
+Route::get('/result-mandate', [ResultMandateController::class, 'index'])->name('result-mandate.index');
+
+
 //===============================>> Manage Mission
 Route::get('/reports/{id}/early-balance', [CertificateDataController::class, 'getEarlyBalance']);
 
 Route::get('/table-ms-plan', [ResultMissionPlans::class, 'index'])->name('table-ms-plan');
 Route::get('/reports/{id}/early-balance', [MissionPlanningController::class, 'getEarlyBalance']);
 
+Route::post('loan-mandates', [LoanMandateController::class, 'store'])->name('loan-mandates.store');
 
 
 //===============================>> Manage Result Operation
@@ -100,6 +117,7 @@ Route::get('/result-total-general', [ResultGeneralController::class, 'index'])->
 Route::get('/result-operation', [ResultOperationController::class, 'index'])->name('result-total-operation-table');
 Route::get('/result-summaries', [ResultSummariesController::class, 'index'])->name('result-total-summaries-table');
 Route::get('/result-apply', [ResultApplyController::class, 'index'])->name('result-applied-table');
+
 
 //===============================>> Manage Results Achieved
 Route::get('/result-success', [TotalController::class, 'index'])->name('result-success');

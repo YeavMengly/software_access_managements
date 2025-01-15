@@ -11,6 +11,12 @@
                 </div>
                 
                 <div class="col-md-4 mb-3">
+                    <a href="{{ route('result-mandate.index') }}" class="btn btn-custom btn-block animate-button">
+                        របាយការណ៍សរុបអាណត្តិ
+                    </a>
+                </div>
+                
+                <div class="col-md-4 mb-3">
                     <a href="{{ route('result-total-summaries-table') }}" class="btn btn-custom btn-block animate-button">
                         របាយការណ៍សង្ខេប
                     </a>
@@ -23,10 +29,16 @@
                 </div>
 
                 <div class="col-md-4 mb-3">
+                    <a href="{{ route('result-fin-mandate-certificate') }}" class="btn btn-custom btn-block animate-button">
+                        តារាង​ច្បាប់ហិរញ្ញ អាណត្តិ និងសលាកបត្រ
+                    </a>
+                </div>
+               
+                {{-- <div class="col-md-4 mb-3">
                     <a href="{{ route('result-total-general-table') }}" class="btn btn-custom btn-block animate-button">
                         ផែនការថវិការដ្ឋ
                     </a>
-                </div>
+                </div> --}}
 
                 <div class="col-md-4 mb-3">
                     <a href="{{ route('result-success') }}" class="btn btn-custom btn-block animate-button">

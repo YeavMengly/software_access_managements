@@ -38,6 +38,8 @@
                         </tr>
                     </thead>
                     <tbody>
+
+                        
                         @foreach ($totals['code'] as $codeId => $codeTotals)
                             <tr>
                                 <td colspan="1" style="border: 1px solid black; text-align: center;">

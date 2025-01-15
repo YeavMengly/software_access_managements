@@ -3,6 +3,8 @@
 namespace App\Models\Code;
 
 use App\Models\Certificates\CertificateData;
+use App\Models\DataMandate;
+use App\Models\Mandates\Mandate;
 use App\Models\Mission\MissionPlanning;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -49,6 +51,14 @@ class SubAccountKey extends Model
 
     public function missionPlanning(){
         return $this->hasMany(MissionPlanning::class, 'sub_account_key');
+    }
+
+    public function mandate(){
+        return $this->hasOne(Mandate::class, 'sub_account_key', 'sub_account_key');
+    }
+
+    public function dataMandate(){
+        return $this->hasMany(DataMandate::class, 'sub_account_key');
     }
 
 }

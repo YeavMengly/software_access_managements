@@ -20,7 +20,13 @@ return new class extends Migration
 
                 $table->decimal('value_certificate', 15, 2)->default(0);
 
-                $table->decimal('amount', 15, 2)->default(0);
+                $table->unsignedBigInteger('mission_type');
+                $table->foreign('mission_type')->references('id')->on('mission_types')->onDelete('cascade');
+                
+                // Add the 'attachments' column as a JSON field
+                $table->json('attachments')->nullable(); 
+
+                $table->date('date_certificate');
 
                 $table->timestamps();
             });

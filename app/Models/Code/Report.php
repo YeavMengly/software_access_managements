@@ -4,6 +4,9 @@ namespace App\Models\Code;
 
 use App\Models\Certificates\Certificate;
 use App\Models\Certificates\CertificateData;
+use App\Models\DataMandate;
+use App\Models\LoanMandate;
+use App\Models\Mandates\Mandate;
 use App\Models\Mission\MissionPlanning;
 use App\Models\Totals\Total;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -41,7 +44,7 @@ class Report extends Model
     {
         return $this->belongsTo(SubAccountKey::class, 'sub_account_key', 'sub_account_key'); // Adjust this if needed
     }
-    
+
 
     // Point to total class
     public function total()
@@ -52,13 +55,19 @@ class Report extends Model
     // Point to certificateData Class
     public function certificateData()
     {
-        return $this->hasMany(CertificateData::class, 'report_key');
+        return $this->hasMany(CertificateData::class, 'report_key', 'report_key');
     }
 
     public function certificate()
     {
         return $this->hasOne(Certificate::class, 'early_balance');
     }
+
+    public function mandate()
+    {
+        return $this->hasOne(Mandate::class, 'report_key', 'report_key');
+    }
+
 
     public function loans()
     {
@@ -114,7 +123,7 @@ class Report extends Model
             ->join('keys', 'keys.code', '=', 'ak.code')
             ->leftJoin('certificate_data as cd', 'cd.report_key', '=', 'reports.id')
             ->leftJoin('loans', 'loans.report_key', '=', 'reports.id');
-            // ->leftJoin('mission_plannings as mp','mp.report_key', '=' , 'reports.id');
+        // ->leftJoin('mission_plannings as mp','mp.report_key', '=' , 'reports.id');
     }
 
     public function delete()
@@ -126,7 +135,7 @@ class Report extends Model
         if ($this->certificateData()->exists()) {
             $this->certificateData()->delete();
         }
-        return parent::delete();   
+        return parent::delete();
     }
 
     public function scopeFilterReports($query, $year, $month = null)
@@ -138,7 +147,15 @@ class Report extends Model
         }
     }
 
-    public function missionPlanning(){
+    public function missionPlanning()
+    {
         return $this->hasMany(MissionPlanning::class, 'report_key');
     }
+
+    public function loanMandate()
+    {
+        return $this->hasMany(LoanMandate::class, 'report_key');
+    }
+
+
 }

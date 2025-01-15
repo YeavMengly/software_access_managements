@@ -45,44 +45,60 @@ class AmountCertificateController extends Controller
     {
         $totals = [];
         $totals['total_amount_overall'] = 0;
-    
+
         // Group by code (key code)
         $groupedByCode = $certificatesData->groupBy(function ($certificateData) {
             return optional($certificateData->report->subAccountKey->accountKey->key)->code ?? 'Unknown';
         });
-    
+
+        if ($groupedByCode->isEmpty()) {
+            return $totals;  // Early return if no data found
+        }
+
         foreach ($groupedByCode as $codeId => $certificatesByCode) {
             // Calculate totals for each code
             $totals['code'][$codeId] = $this->calculateSumFields($certificatesByCode);
             $totals['code'][$codeId]['name'] = optional($certificatesByCode->first()->report->subAccountKey->accountKey->key)->name ?? 'Unknown';
-    
+
             $totals['total_amount_overall'] += $totals['code'][$codeId]['value_certificate'];
-            
+
             // Group by accountKey within each codeId
             $groupedByAccountKey = $certificatesByCode->groupBy(function ($certificateData) {
                 return optional($certificateData->report->subAccountKey->accountKey)->account_key ?? 'Unknown';
             });
-    
+
+            if ($groupedByAccountKey->isEmpty()) {
+                continue;  // Skip if no account keys found for this code
+            }
+
             foreach ($groupedByAccountKey as $accountKeyId => $certificatesByAccountKey) {
                 // Calculate totals for each accountKey
                 $totals['accountKey'][$codeId][$accountKeyId] = $this->calculateSumFields($certificatesByAccountKey);
                 $totals['accountKey'][$codeId][$accountKeyId]['name_account_key'] = optional($certificatesByAccountKey->first()->report->subAccountKey->accountKey)->name_account_key ?? 'Unknown';
-    
+
                 // Group by subAccountKey within each accountKey
                 $groupedBySubAccountKey = $certificatesByAccountKey->groupBy(function ($certificateData) {
                     return optional($certificateData->report->subAccountKey)->sub_account_key ?? 'Unknown';
                 });
-    
+
+                if ($groupedBySubAccountKey->isEmpty()) {
+                    continue;  // Skip if no sub-account keys found for this account key
+                }
+
                 foreach ($groupedBySubAccountKey as $subAccountKeyId => $certificatesBySubAccountKey) {
                     // Calculate totals for each subAccountKey
                     $totals['subAccountKey'][$codeId][$accountKeyId][$subAccountKeyId] = $this->calculateSumFields($certificatesBySubAccountKey);
                     $totals['subAccountKey'][$codeId][$accountKeyId][$subAccountKeyId]['name_sub_account_key'] = optional($certificatesBySubAccountKey->first()->report->subAccountKey)->name_sub_account_key ?? 'Unknown';
-    
+
                     // Group by reportKey within each subAccountKey
                     $groupedByReportKey = $certificatesBySubAccountKey->groupBy(function ($certificateData) {
                         return optional($certificateData->report)->report_key ?? 'Unknown';
                     });
-    
+
+                    if ($groupedByReportKey->isEmpty()) {
+                        continue;  // Skip if no report keys found for this sub-account key
+                    }
+
                     foreach ($groupedByReportKey as $reportKeyId => $certificatesByReportKey) {
                         // Calculate totals for each reportKey
                         $totals['reportKey'][$codeId][$accountKeyId][$subAccountKeyId][$reportKeyId] = $this->calculateSumFields($certificatesByReportKey);
@@ -91,10 +107,11 @@ class AmountCertificateController extends Controller
                 }
             }
         }
-    
+
         return $totals;
     }
-    
+
+
     private function calculateSumFields($certificateDataCollection)
     {
         // Initialize totals for each field

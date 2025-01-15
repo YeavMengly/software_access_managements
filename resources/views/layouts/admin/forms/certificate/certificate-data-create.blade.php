@@ -47,12 +47,12 @@
                                             <strong>លេខកូដកម្មវិធី:</strong>
                                             <input type="text" id="searchReportKey" class="form-control"
                                                 placeholder="ស្វែងរកលេខកូដកម្មវិធី..." onkeyup="filterReportKeys(event)"
-                                                style="width: 100%; height: 40px; text-align: center; line-height: 60px;">
+                                                style="width: 280px; height: 40px; text-align: left; line-height: 60px;">
                                             <p id="resultCount" style="font-weight: bold;">ចំនួន: 0</p>
 
                                             <select name="report_key" id="reportKeySelect" class="form-control"
                                                 size="5" onchange="updateReportInputField()"
-                                                style="width: 100%; height: 150px;">
+                                                style="width: 280px; height: 150px;">
                                                 @foreach ($reports as $report)
                                                     <option value="{{ $report->id }}"><span>{{ $report->subAccountKey->sub_account_key }} > {{ $report->report_key }}</span>
                                                     </option>
@@ -61,8 +61,52 @@
                                         </div>
                                     </div>
 
-                                    <div class="col-md-6 d-flex flex-column align-items-center">
+                                    {{-- <div class="col-md-6 d-flex flex-column align-items-left">
                                         <div class="form-group text-center">
+                                            <strong>ចំនួនទឹកប្រាក់:</strong>
+                                            <input type="number" name="value_certificate" id="value_certificate"
+                                                class="form-control @error('value_certificate') is-invalid @enderror"
+                                                style="width: 280px; height: 40px; text-align: center; line-height: 60px;"
+                                                oninput="updateApplyValue()">
+                                            @error('value_certificate')
+                                                <div class="invalid-feedback">{{ $message }}</div>
+                                            @enderror
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="mission-type"><strong>ប្រភេទបេសកកម្ម</strong></label>
+                                            <div>
+                                                @foreach ($missionTypes as $missionType)
+                                                    <div class="form-check">
+                                                        <input class="form-check-input" type="radio"
+                                                            name="mission_type" id="mission_type{{ $loop->index }}"
+                                                            value="{{ $missionType->id }}"
+                                                            {{ old('mission_type') == $missionType->id ? 'checked' : '' }}>
+                                                        <label class="form-check-label"
+                                                            for="mission_type{{ $loop->index }}">
+                                                            {{ $missionType->mission_type }}
+                                                        </label>
+                                                    </div>
+                                                @endforeach
+                                            </div>
+                                        </div>
+
+                                        <!-- Attachment Files -->
+                                        <div class="form-group mt-3">
+                                            <!-- File Input -->
+                                            <label for="attachments"><strong>ឯកសារភ្ជាប់:</strong></label>
+                                            <input type="file" class="form-control" id="attachments"
+                                                name="attachments[]" multiple style="height: 45px; padding: 10px;"
+                                                onchange="displaySelectedFiles()">
+
+                                            <!-- Display Selected Files -->
+                                            <ul id="fileList" style="margin-top: 10px; padding-left: 20px;"></ul>
+                                        </div>
+
+                                    </div> --}}
+                                    <div class="col-md-6 d-flex flex-column align-items-start">
+                                        <!-- Form Group for Value Certificate -->
+                                        <div class="form-group">
                                             <strong>ចំនួនទឹកប្រាក់:</strong>
                                             <input type="number" name="value_certificate" id="value_certificate"
                                                 class="form-control @error('value_certificate') is-invalid @enderror"
@@ -72,7 +116,42 @@
                                                 <div class="invalid-feedback">{{ $message }}</div>
                                             @enderror
                                         </div>
+
+                                        <!-- Form Group for Mission Type -->
+                                        <div class="form-group">
+                                            <label for="mission-type"><strong>ប្រភេទបេសកកម្ម</strong></label>
+                                            <div>
+                                                @foreach ($missionTypes as $missionType)
+                                                    <div class="form-check">
+                                                        <input class="form-check-input" type="radio" name="mission_type"
+                                                            id="mission_type{{ $loop->index }}"
+                                                            value="{{ $missionType->id }}"
+                                                            {{ old('mission_type') == $missionType->id ? 'checked' : '' }}>
+                                                        <label class="form-check-label"
+                                                            for="mission_type{{ $loop->index }}">
+                                                            {{ $missionType->mission_type }}
+                                                        </label>
+                                                    </div>
+                                                @endforeach
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <!-- File Input -->
+                                            <label for="attachments"><strong>ជ្រើសរើស ថ្ងៃ ខែ ឆ្នាំ:</strong></label>
+                                            <input type="date" class="form-control" id="date_certificate"
+                                                name="date_certificate" multiple style="height: 45px; padding: 10px; width: 230px;">
+                                        </div>
+                                        <!-- Attachment Files -->
+                                        <div class="form-group mt-3">
+                                            <label for="attachments"><strong>ឯកសារភ្ជាប់:</strong></label>
+                                            <input type="file" class="form-control" id="attachments" name="attachments[]"
+                                                multiple style="height: 45px; padding: 10px;"
+                                                onchange="displaySelectedFiles()">
+                                            <ul id="fileList" style="margin-top: 10px; padding-left: 20px;"></ul>
+                                        </div>
                                     </div>
+
                                 </div>
 
                                 <div class="d-flex justify-content-end mt-4">
@@ -136,7 +215,7 @@
 @section('styles')
     <style>
         .border-wrapper {
-            border: 2px solid black;
+            border: 1px solid black;
             padding: 10px;
         }
 

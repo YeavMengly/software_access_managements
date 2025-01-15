@@ -29,7 +29,7 @@ class MissionTypeSeeder extends Seeder
                 'updated_at' => now(),
             ],
             [
-                'mission_type' => 'ទូទាត់ត្រង់',
+                'mission_type' => 'បើកផ្ដល់មុន',
                 'created_at' => now(),
                 'updated_at' => now(),
             ],

@@ -1,6 +1,6 @@
 @extends('layouts.master')
 
-@section('form-content-loans-upload')
+@section('form-content-loan-mandates-upload')
     <div class="border-wrapper">
 
         <div class="result-total-table-container">
@@ -38,7 +38,7 @@
                 @endif
                 <div class="border-wrapper">
                     <div class="form-container">
-                        <form action="{{ route('loans.store') }}" method="POST" enctype="multipart/form-data">
+                        <form action="{{ route('loan-mandates.store') }}" method="POST" enctype="multipart/form-data">
                             @csrf
 
                             <div class="row d-flex justify-content-center">
@@ -55,9 +55,8 @@
                                         <select name="report_key" id="reportKeySelect" class="form-control" size="5"
                                             onclick="getSelectedReportKey()"
                                             style="height: 130px; width: 100%; text-align: left;">
-                                            @foreach ($reports as $report)
-                                                <option value="{{ $report->id }}">{{ $report->subAccountKey->sub_account_key }} > {{ $report->report_key }}
-                                                </option>
+                                            @foreach ($dataMandates as $dataMandate)
+                                                <option value="{{ $dataMandate->id }}">{{ $dataMandate->subAccountKey->sub_account_key }} > {{ $dataMandate->report_key }}</option>
                                             @endforeach
                                         </select>
                                     </div>

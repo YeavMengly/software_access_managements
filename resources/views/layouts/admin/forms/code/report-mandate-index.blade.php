@@ -1,6 +1,6 @@
 @extends('layouts.master')
 
-@section('content-report')
+@section('content-report-mandate')
     <div class="border-wrapper">
 
         @if (isset($connectionError) && $connectionError)
@@ -24,7 +24,7 @@
                             style="width: 160px; height: 50px;">
                             <i class="fas fa-arrow-left"></i>&nbsp;&nbsp;
                         </a>
-                        <h3 style="font-weight: 700;">តារាងរបាយការណ៍បញ្ចូលឥណទានអនុម័តដើមឆ្នាំ សម្រាប់សលាកបត្រ</h3>
+                        <h3 style="font-weight: 700;">តារាងរបាយការណ៍បញ្ចូលឥណទានអនុម័តដើមឆ្នាំ សម្រាប់អាណត្តិ</h3>
                         <div class="btn-group">
                             <a class="btn btn-success d-flex justify-content-center align-items-center" href="#"
                                 data-bs-toggle="modal" data-bs-target="#importModal"
@@ -33,7 +33,7 @@
                             </a>
                             &nbsp;&nbsp;
                             <a class="btn btn-success d-flex justify-content-center align-items-center"
-                                href="{{ route('codes.create') }}" style="width: 160px; height: 50px; border-radius: 4px;">
+                                href="{{ route('data-mandates.create') }}" style="width: 160px; height: 50px; border-radius: 4px;">
                                 បញ្ចូលទិន្នន័យ &nbsp;<i class="fas fa-plus" style="margin-left: 8px;"></i>
                             </a>
                         </div>
@@ -169,31 +169,31 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @forelse ($reports as $report)
+                    @forelse ($dataMandates as $dataMandate)
                         <tr>
                             <td style="border: 1px solid black; max-width: 80px; text-align: center">
-                                {{ $report->sub_account_key }}</td>
+                                {{ $dataMandate->sub_account_key }}</td>
                             <td style="border: 1px solid black; max-width: 80px; text-align: center">
-                                {{ $report->report_key }}</td>
+                                {{ $dataMandate->report_key }}</td>
                             <td style="border: 1px solid black; max-width: 220px; text-align: start;">
-                                {{ $report->name_report_key }}</td>
+                                {{ $dataMandate->name_report_key }}</td>
                             <td style="border: 1px solid black; max-width: 80px; text-align: center">
-                                {{ number_format($report->fin_law, 0, ' ', ' ') }}</td>
+                                {{ number_format($dataMandate->fin_law, 0, ' ', ' ') }}</td>
                             <td style="border: 1px solid black; max-width: 80px; text-align: center">
-                                {{ number_format($report->current_loan, 0, ' ', ' ') }}</td>
+                                {{ number_format($dataMandate->current_loan, 0, ' ', ' ') }}</td>
 
                             <td style="border: 1px solid black; text-align: center; justify-content: center">
-                                <form id="delete-form-{{ $report->id }}"
-                                    action="{{ route('codes.destroy', $report->id) }}" method="POST"
+                                <form id="delete-form-{{ $dataMandate->id }}"
+                                    action="{{ route('data-mandates.destroy', $dataMandate->id) }}" method="POST"
                                     style="display: none;">
                                     @csrf
                                     @method('DELETE')
                                 </form>
-                                <a class="btn btn-primary" href="{{ route('codes.edit', $report->id) }}">
+                                <a class="btn btn-primary" href="{{ route('data-mandates.edit', $dataMandate->id) }}">
                                     <i class="fas fa-edit" title="Edit"></i>
                                 </a>
                                 <button type="button" class="btn btn-danger"
-                                    onclick="confirmDelete({{ $report->id }})">
+                                    onclick="confirmDelete({{ $dataMandate->id }})">
                                     <i class="fas fa-trash-alt" title="Delete"></i>
                                 </button>
                             </td>
@@ -211,23 +211,23 @@
                 <div>
                     <nav aria-label="Page navigation example">
                         <ul class="pagination">
-                            <li class="page-item{{ $reports->onFirstPage() ? ' disabled' : '' }}">
+                            <li class="page-item{{ $dataMandates->onFirstPage() ? ' disabled' : '' }}">
                                 <a class="page-link"
-                                    href="{{ $reports->previousPageUrl() }}&per_page={{ request('per_page') }}"
+                                    href="{{ $dataMandates->previousPageUrl() }}&per_page={{ request('per_page') }}"
                                     aria-label="Previous">
                                     <span aria-hidden="true">&laquo;</span>
                                     <span class="sr-only">Previous</span>
                                 </a>
                             </li>
-                            @for ($i = 1; $i <= $reports->lastPage(); $i++)
-                                <li class="page-item{{ $reports->currentPage() == $i ? ' active' : '' }}">
+                            @for ($i = 1; $i <= $dataMandates->lastPage(); $i++)
+                                <li class="page-item{{ $dataMandates->currentPage() == $i ? ' active' : '' }}">
                                     <a class="page-link"
-                                        href="{{ $reports->url($i) }}&per_page={{ request('per_page') }}">{{ $i }}</a>
+                                        href="{{ $dataMandates->url($i) }}&per_page={{ request('per_page') }}">{{ $i }}</a>
                                 </li>
                             @endfor
-                            <li class="page-item{{ !$reports->hasMorePages() ? ' disabled' : '' }}">
+                            <li class="page-item{{ !$dataMandates->hasMorePages() ? ' disabled' : '' }}">
                                 <a class="page-link"
-                                    href="{{ $reports->nextPageUrl() }}&per_page={{ request('per_page') }}"
+                                    href="{{ $dataMandates->nextPageUrl() }}&per_page={{ request('per_page') }}"
                                     aria-label="Next">
                                     <span aria-hidden="true">&raquo;</span>
                                     <span class="sr-only">Next</span>
@@ -237,8 +237,8 @@
                     </nav>
                 </div>
                 <div>
-                    <p class="text-muted">បង្ហាញ {{ $reports->firstItem() }} ដល់ {{ $reports->lastItem() }} នៃ
-                        {{ $reports->total() }} លទ្ធផល</p>
+                    <p class="text-muted">បង្ហាញ {{ $dataMandates->firstItem() }} ដល់ {{ $dataMandates->lastItem() }} នៃ
+                        {{ $dataMandates->total() }} លទ្ធផល</p>
                 </div>
             </div>
         </div>

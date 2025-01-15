@@ -11,11 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        if (!Schema::hasTable('loans')) {
-            Schema::create('loans', function (Blueprint $table) {
+        if (!Schema::hasTable('loan_mandates')) {
+            Schema::create('loan_mandates', function (Blueprint $table) {
                 $table->id();
-                $table->unsignedBigInteger('sub_account_key')->change();
-                $table->foreignId('sub_account_key')->references('id')->on('sub_account_keys')->onDelete('cascade');
                 
                 $table->unsignedBigInteger('report_key')->change();
                 $table->foreignId('report_key')->references('id')->on('reports')->onDelete('cascade');
@@ -23,9 +21,10 @@ return new class extends Migration
                 $table->decimal('internal_increase', 15, 2)->default(0);
                 $table->decimal('unexpected_increase', 15, 2)->default(0);
                 $table->decimal('additional_increase', 15, 2)->default(0);
-                $table->decimal('total_increase', 15, 2)->default(0);  
+                $table->decimal('total_increase', 15, 2)->default(0);
                 $table->decimal('decrease', 15, 2)->default(0);
                 $table->decimal('editorial', 15, 2)->default(0);
+
                 $table->timestamps();
             });
         }
@@ -36,6 +35,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('loans');
+        Schema::dropIfExists('loan_mandates');
     }
 };

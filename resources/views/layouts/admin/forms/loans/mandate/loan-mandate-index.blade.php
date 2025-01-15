@@ -1,6 +1,6 @@
 @extends('layouts.master')
 
-@section('content-report')
+@section('content-loan-mandates')
     <div class="border-wrapper">
 
         @if (isset($connectionError) && $connectionError)
@@ -8,7 +8,6 @@
                 <strong>No internet connection:</strong> Please check your network settings and try again.
             </div>
         @else
-            <!-- Existing content -->
             <div class="result-total-table-container">
                 <div class="row">
                 </div>
@@ -18,27 +17,30 @@
         <div class="result-total-table-container">
             <div class="row">
                 <div class="col-lg-12 margin-tb">
-
                     <div class="d-flex justify-content-between align-items-center">
-                        <a class="btn btn-danger d-flex justify-content-center align-items-center" href="{{ route('back') }}"
-                            style="width: 160px; height: 50px;">
+                        <a class="btn btn-danger" href="{{ route('back') }}"
+                            style="width: 160px; height: 50px; border-radius: 4px; display: flex; align-items: center; justify-content: center;">
                             <i class="fas fa-arrow-left"></i>&nbsp;&nbsp;
                         </a>
-                        <h3 style="font-weight: 700;">តារាងរបាយការណ៍បញ្ចូលឥណទានអនុម័តដើមឆ្នាំ សម្រាប់សលាកបត្រ</h3>
+                        <h3 style="font-weight: 500;">តារាងរបាយការណ៍បញ្ចូលនិយ័តថវិកា</h3>
                         <div class="btn-group">
-                            <a class="btn btn-success d-flex justify-content-center align-items-center" href="#"
-                                data-bs-toggle="modal" data-bs-target="#importModal"
-                                style="width: 160px; height: 50px; border-radius: 4px;">
-                                Import Excel &nbsp;<i class="fas fa-file-import" style="margin-left: 8px;"></i>
-                            </a>
-                            &nbsp;&nbsp;
+                           
                             <a class="btn btn-success d-flex justify-content-center align-items-center"
-                                href="{{ route('codes.create') }}" style="width: 160px; height: 50px; border-radius: 4px;">
-                                បញ្ចូលទិន្នន័យ &nbsp;<i class="fas fa-plus" style="margin-left: 8px;"></i>
+                            href="#"
+                            data-bs-toggle="modal" data-bs-target="#importModal"
+                                href="{{ route('loan-mandates.create') }}" style="width: 160px; height: 50px; border-radius: 4px;">
+                                Import &nbsp;<i class="fas fa-file-import"></i>
                             </a>
+                            &nbsp;
+                            <a class="btn btn-success d-flex justify-content-center align-items-center"
+                                href="{{ route('loan-mandates.create') }}" style="width: 160px; height: 50px; border-radius: 4px;">
+                                បញ្ចូលទិន្នន័យ &nbsp;&nbsp;<i class="fas fa-plus" style="margin-left: 8px;"></i>
+                            </a>
+
                         </div>
                     </div>
 
+                    {{-- Import Modal --}}
                     <div class="modal fade" id="importModal" tabindex="-1" aria-labelledby="importModalLabel"
                         aria-hidden="true">
                         <div class="modal-dialog modal-dialog-centered">
@@ -50,7 +52,7 @@
                                     </button>
                                 </div>
                                 <div class="modal-body">
-                                    <form id="uploadForm" action="{{ route('reports.import') }}" method="POST"
+                                    <form id="uploadForm" action="{{ route('loans.import') }}" method="POST"
                                         enctype="multipart/form-data">
                                         @csrf
                                         <div class="mb-3">
@@ -66,10 +68,10 @@
                                             <small id="fileSizeWarning" class="text-danger d-none">File size exceeds 5 MB
                                                 limit.</small>
                                             <div id="fileNameDisplay" class="mt-2"></div>
+                                            <!-- Display chosen file name here -->
                                         </div>
                                         <div class="mb-3 text-center">
-                                            <button type="submit" id="uploadButton" class="btn btn-primary"
-                                                style="height: 60px; width: 100%;">
+                                            <button type="submit" id="uploadButton" class="btn btn-primary">
                                                 <i class="fas fa-upload" style="margin-right: 8px;"></i> Upload
                                             </button>
                                         </div>
@@ -88,6 +90,7 @@
                     {{-- Field Search --}}
                     <form class="max-w-md mx-auto mt-4" method="GET" action="{{ url()->current() }}">
                         <div class="row">
+
                             <div class="col-md-2 d-flex">
                                 <input type="text" name="sub_account_key_id" value="{{ request('sub_account_key_id') }}"
                                     class="form-control mb-2" placeholder="លេខអនុគណនី" style="width: 120px; height: 40px;">
@@ -97,9 +100,10 @@
                                     class="form-control mb-2" placeholder="លេខកូដកម្មវិធី"
                                     style="width: 120px; height: 40px;">
                             </div>
+
                             <div class="col-md-12">
-                                <div class="input-group my-3">
-                                    <button type="submit" class="btn btn-primary mr-2" style="width: 150px; height: 40px;">
+                                <div class="input-group ">
+                                    <button type="submit" class="btn btn-primary mr-2" style="width: 120px; height: 40px;">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
                                             viewBox="0 0 50 50">
                                             <path
@@ -109,7 +113,7 @@
                                         ស្វែងរក
                                     </button>
                                     <button type="button" id="resetBtn" class="btn btn-danger"
-                                        style="width: 150px; height: 40px;">
+                                        style="width: 120px; height: 40px;">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
                                             fill="currentColor" class="bi bi-x-circle" viewBox="0 0 16 16">
                                             <path
@@ -117,10 +121,12 @@
                                         </svg>
                                         កំណត់ឡើងវិញ
                                     </button>
+
                                 </div>
                             </div>
                         </div>
                     </form>
+
                 </div>
             </div>
 
@@ -162,72 +168,92 @@
                     <tr>
                         <th style="border: 1px solid black; font-size: 14px; max-width: 50px;">លេខអនុគណនី</th>
                         <th style="border: 1px solid black; font-size: 14px; max-width: 60px;">លេខកូដកម្មវិធី</th>
-                        <th style="border: 1px solid black; font-size: 14px; max-width: 80px;">ចំណាត់ថ្នាក់</th>
-                        <th style="border: 1px solid black; font-size: 14px; max-width: 80px;">ច្បាប់ហិរញ្ញវត្ថុ</th>
-                        <th style="border: 1px solid black; font-size: 14px; max-width: 80px;">ឥណទានបច្ចុប្បន្ន</th>
+                        <th style="border: 1px solid black; font-size: 14px; max-width: 80px;">កើនផ្ទៃក្នុង</th>
+                        <th style="border: 1px solid black; font-size: 14px; max-width: 80px;">មិនបានគ្រោងទុក</th>
+                        <th style="border: 1px solid black; font-size: 14px; max-width: 80px;">បំពេញបន្ថែម</th>
+                        <th style="border: 1px solid black; font-size: 14px; max-width: 80px;">សរុប</th>
+                        <th style="border: 1px solid black; font-size: 14px; max-width: 80px;">ថយ</th>
+                        <th style="border: 1px solid black; font-size: 14px; max-width: 80px;">វិចារណកម្ម</th>
                         <th style="border: 1px solid black; font-size: 14px; max-width: 80px;">សកម្មភាព</th>
                     </tr>
                 </thead>
                 <tbody>
-                    @forelse ($reports as $report)
+                    @forelse ($loanMandates as $loanMandate)
                         <tr>
                             <td style="border: 1px solid black; max-width: 80px; text-align: center">
-                                {{ $report->sub_account_key }}</td>
+                                {{-- @if ($loanMandate->dataMandates && $loanMandate->reportKey->subAccountKey) --}}
+                                    {{ $loanMandate->sub_account_key }}
+                                {{-- @else
+                                    N/A
+                                @endif --}}
+                            </td>
                             <td style="border: 1px solid black; max-width: 80px; text-align: center">
-                                {{ $report->report_key }}</td>
-                            <td style="border: 1px solid black; max-width: 220px; text-align: start;">
-                                {{ $report->name_report_key }}</td>
+                                {{ $loanMandate->report_key }}
+                            </td>
                             <td style="border: 1px solid black; max-width: 80px; text-align: center">
-                                {{ number_format($report->fin_law, 0, ' ', ' ') }}</td>
+                                {{ number_format($loanMandate->internal_increase, 0, ' ', ' ') }}
+                            </td>
                             <td style="border: 1px solid black; max-width: 80px; text-align: center">
-                                {{ number_format($report->current_loan, 0, ' ', ' ') }}</td>
-
+                                {{ number_format($loanMandate->unexpected_increase, 0, ' ', ' ') }}
+                            </td>
+                            <td style="border: 1px solid black; max-width: 80px; text-align: center">
+                                {{ number_format($loanMandate->additional_increase) }}
+                            </td>
+                            <td style="border: 1px solid black; max-width: 80px; text-align: center">
+                                {{ number_format($loanMandate->total_increase) }}
+                            </td>
+                            <td style="border: 1px solid black; max-width: 80px; text-align: center">
+                                {{ number_format($loanMandate->decrease, 0, ' ', ' ') }}
+                            </td>
+                            <td style="border: 1px solid black; max-width: 80px; text-align: center">
+                                {{ number_format($loanMandate->editorial, 0, ' ', ' ') }}
+                            </td>
                             <td style="border: 1px solid black; text-align: center; justify-content: center">
-                                <form id="delete-form-{{ $report->id }}"
-                                    action="{{ route('codes.destroy', $report->id) }}" method="POST"
+                                <form id="delete-form-{{ $loanMandate->id }}"
+                                    action="{{ route('loan-mandates.destroy', $loanMandate->id) }}" method="POST"
                                     style="display: none;">
                                     @csrf
                                     @method('DELETE')
                                 </form>
-                                <a class="btn btn-primary" href="{{ route('codes.edit', $report->id) }}">
+                                <a class="btn btn-primary" href="{{ route('loan-mandates.edit', $loanMandate->id) }}">
                                     <i class="fas fa-edit" title="Edit"></i>
                                 </a>
                                 <button type="button" class="btn btn-danger"
-                                    onclick="confirmDelete({{ $report->id }})">
+                                    onclick="confirmDelete({{ $loanMandate->id }})">
                                     <i class="fas fa-trash-alt" title="Delete"></i>
                                 </button>
                             </td>
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="13" style="text-align: center;">គ្មានទិន្នន័យ</td>
+                            <td colspan="9" style="text-align: center;">គ្មានទិន្នន័យ</td>
                         </tr>
                     @endforelse
-
                 </tbody>
             </table>
+
             {{-- Custom Pagination --}}
             <div class="d-flex justify-content-between align-items-center mt-4">
                 <div>
                     <nav aria-label="Page navigation example">
                         <ul class="pagination">
-                            <li class="page-item{{ $reports->onFirstPage() ? ' disabled' : '' }}">
+                            <li class="page-item{{ $loanMandates->onFirstPage() ? ' disabled' : '' }}">
                                 <a class="page-link"
-                                    href="{{ $reports->previousPageUrl() }}&per_page={{ request('per_page') }}"
+                                    href="{{ $loanMandates->previousPageUrl() }}&per_page={{ request('per_page') }}"
                                     aria-label="Previous">
                                     <span aria-hidden="true">&laquo;</span>
                                     <span class="sr-only">Previous</span>
                                 </a>
                             </li>
-                            @for ($i = 1; $i <= $reports->lastPage(); $i++)
-                                <li class="page-item{{ $reports->currentPage() == $i ? ' active' : '' }}">
+                            @for ($i = 1; $i <= $loanMandates->lastPage(); $i++)
+                                <li class="page-item{{ $loanMandates->currentPage() == $i ? ' active' : '' }}">
                                     <a class="page-link"
-                                        href="{{ $reports->url($i) }}&per_page={{ request('per_page') }}">{{ $i }}</a>
+                                        href="{{ $loanMandates->url($i) }}&per_page={{ request('per_page') }}">{{ $i }}</a>
                                 </li>
                             @endfor
-                            <li class="page-item{{ !$reports->hasMorePages() ? ' disabled' : '' }}">
+                            <li class="page-item{{ !$loanMandates->hasMorePages() ? ' disabled' : '' }}">
                                 <a class="page-link"
-                                    href="{{ $reports->nextPageUrl() }}&per_page={{ request('per_page') }}"
+                                    href="{{ $loanMandates->nextPageUrl() }}&per_page={{ request('per_page') }}"
                                     aria-label="Next">
                                     <span aria-hidden="true">&raquo;</span>
                                     <span class="sr-only">Next</span>
@@ -237,8 +263,8 @@
                     </nav>
                 </div>
                 <div>
-                    <p class="text-muted">បង្ហាញ {{ $reports->firstItem() }} ដល់ {{ $reports->lastItem() }} នៃ
-                        {{ $reports->total() }} លទ្ធផល</p>
+                    <p class="text-muted">បង្ហាញ {{ $loanMandates->firstItem() }} ដល់ {{ $loanMandates->lastItem() }} នៃ
+                        {{ $loanMandates->total() }} លទ្ធផល</p>
                 </div>
             </div>
         </div>
@@ -246,7 +272,6 @@
 @endsection
 
 @section('styles')
-    {{-- Custom style here --}}
     <style>
         .modal-content {
             border-radius: 10px;
@@ -259,11 +284,6 @@
         .modal-title {
             font-size: 1.25rem;
             font-weight: bold;
-        }
-
-        h3 {
-            font-family: 'Khmer OS Muol Light', sans-serif;
-            font-size: 16px;
         }
 
         .border-wrapper {
@@ -288,12 +308,12 @@
             display: inline-block;
             cursor: pointer;
             width: 100%;
-            height: 100%;
+            height: 250px;
             border: 2px solid #ced4da;
             border-radius: 5px;
-            /* background-color: #3e72a7; */
+            background-color: #f8f9fa;
             text-align: center;
-            line-height: 200px;
+            line-height: 250px;
         }
 
         .custom-file-upload input[type="file"] {
@@ -325,7 +345,7 @@
             text-align: center;
             padding: 5px;
             font-family: 'Khmer OS Siemreap', sans-serif;
-            font-size: 16px;
+            font-size: 14px;
         }
 
         .btn-primary {
@@ -343,6 +363,11 @@
             height: 20px;
             margin-top: 10px;
             width: 100%;
+        }
+
+        h3 {
+            font-family: 'Khmer OS Muol Light', sans-serif;
+            font-size: 16px;
         }
 
         .progress-bar {
@@ -390,7 +415,6 @@
             const progressBar = document.getElementById('progressBar');
             const progressText = document.getElementById('progressText');
 
-            // Check file size (5 MB limit)
             const file = fileInput.files[0];
             if (file && file.size > 5 * 1024 * 1024) { // 5 MB in bytes
                 fileSizeWarning.classList.remove('d-none');
@@ -399,14 +423,11 @@
                 fileSizeWarning.classList.add('d-none');
             }
 
-            // Show loading spinner and hide success message
             loadingMessage.classList.remove('d-none');
             successMessage.classList.add('d-none');
 
-            // Create FormData object to send file
             const formData = new FormData(document.getElementById('uploadForm'));
 
-            // Create XMLHttpRequest object
             const xhr = new XMLHttpRequest();
 
             xhr.upload.addEventListener('progress', function(e) {

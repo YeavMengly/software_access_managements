@@ -6,6 +6,7 @@ use App\Models\Code\AccountKey;
 use App\Models\Code\Key;
 use App\Models\Code\Loans;
 use App\Models\Code\Report;
+use App\Models\Mission\MissionType;
 use Illuminate\Database\Eloquent\Model;
 
 class CertificateData extends Model
@@ -15,7 +16,9 @@ class CertificateData extends Model
         'report_key',
         'name_certificate',
         'value_certificate',
-        'amount'
+        'mission_type',
+        'attachments',
+        'date_certificate'
     ];
 
     // belong table to certificate class
@@ -30,21 +33,27 @@ class CertificateData extends Model
         return $this->belongsTo(Report::class, 'report_key');
     }
 
-    public function accountKey(){
-        return $this->belongsTo(AccountKey::class, 'account_key'); 
+    public function accountKey()
+    {
+        return $this->belongsTo(AccountKey::class, 'account_key');
     }
 
     // public function subAccountKey(){
     //     return $this->belongsTo(SubAccountKey::class, 'sub_account_key');
     // }
 
-    public function key(){
+    public function key()
+    {
         return $this->belongsTo(Key::class, 'code');
     }
 
-    public function loans(){
+    public function loans()
+    {
         return $this->belongsTo(Loans::class, 'report_key');
-        return $this->hasOne(Loans::class, 'report_key','report_key');
+        return $this->hasOne(Loans::class, 'report_key', 'report_key');
     }
 
+    public function missionType(){
+        return $this->belongsTo(MissionType::class, 'mission_type');
+    }
 }

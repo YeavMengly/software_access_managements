@@ -10,13 +10,20 @@
                         <div class="row">
                             <div class="col-md-6 mb-3">
                                 <a href="{{ route('codes.create') }}" class="btn btn-custom btn-block animate-button">
-                                    បញ្ចូលឥណទានអនុម័តដើមឆ្នាំ​ នឹងផែនការរជ្ជទេយ្យ
+                                    បញ្ចូលឥណទានអនុម័តដើមឆ្នាំ​ សម្រាប់សលាកបត្រ
+                                </a>
+                            </div>
+
+
+                            <div class="col-md-6 mb-3">
+                                <a href="{{ route('years.index') }}" class="btn btn-custom btn-block animate-button">
+                                    កំណត់ឆ្នាំចាប់ផ្ដើម 
                                 </a>
                             </div>
 
                             <div class="col-md-6 mb-3">
-                                <a href="{{ route('years.index') }}" class="btn btn-custom btn-block animate-button">
-                                    កំណត់ឆ្នាំចាប់ផ្ដើម
+                                <a href="{{ route('data-mandates.create') }}" class="btn btn-custom btn-block animate-button">
+                                    បញ្ចូលឥណទានអនុម័តដើមឆ្នាំ​ សម្រាប់អាណត្តិ
                                 </a>
                             </div>
 
@@ -25,7 +32,13 @@
                                     ចុះបញ្ជីនិយ័តភាពថវិកា
                                 </a>
                             </div>
-
+                            
+                            <div class="col-md-6 mb-3">
+                                <a href="{{ route('loan-mandates.create') }}" class="btn btn-custom btn-block animate-button">
+                                    ចុះបញ្ជីនិយ័តភាពថវិកា
+                                </a>
+                            </div>
+             
                             <div class="col-md-6 mb-3">
                                 <a href="{{ route('programs') }}" class="btn btn-custom btn-block animate-button">
                                     កែសម្រួល ជំពូក គណនី អនុគណនី
@@ -33,7 +46,7 @@
                             </div>
 
                             <div class="col-md-6 mb-3">
-                                <a href="#" class="btn btn-custom btn-block animate-button">
+                                <a href="{{route('mandates.create')}}" class="btn btn-custom btn-block animate-button">
                                     បញ្ចូលអាណត្តិ
                                 </a>
                             </div>
@@ -75,17 +88,22 @@
                             </div>
 
                             <div class="col-md-6 mb-3">
-                                <a href="{{ route('total_card') }}" class="btn btn-custom btn-block animate-button">
-                                    ពិនិត្យរបាយការណ៍
-                                </a>
+                                <a href="{{ route('mission-planning.index') }}"
+                                    class="btn btn-custom btn-block animate-button">
+                                    កែសម្រួល ចំណាយបេសកកម្មតាមចំណាត់ថ្នាក់កម្មវិធី </a>
                             </div>
 
                             <div class="col-md-6 mb-3">
-                                <a href="{{route('mission-planning.create')}}"
+                                <a href="{{ route('mission-planning.create') }}"
                                     class="btn btn-custom btn-block animate-button">
                                     បញ្ចូលគម្រោងចំណាយបេសកកម្មតាមចំណាត់ថ្នាក់កម្មវិធី </a>
                             </div>
 
+                            <div class="col-md-6 mb-3">
+                                <a href="{{ route('total_card') }}" class="btn btn-custom btn-block animate-button">
+                                    ពិនិត្យរបាយការណ៍
+                                </a>
+                            </div>
                             <div class="col-md-12 ">
                                 <button class="btn btn-custom btn-block animate-button" onclick="openAndCloseWindow()">
                                     ចាកចេញពីកម្មវិធី <i class="fas fa-sign-out-alt" style="color: red"></i>
