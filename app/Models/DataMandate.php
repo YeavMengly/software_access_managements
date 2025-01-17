@@ -48,4 +48,9 @@ class DataMandate extends Model
     public function mandate(){
         return $this->hasOne(Mandate::class, 'report_key', 'report_key');
     }
+
+    public function report()
+    {
+        return $this->belongsTo(Report::class, 'report_key', 'report_key');
+    }
 }

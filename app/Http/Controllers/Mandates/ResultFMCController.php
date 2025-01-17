@@ -4,27 +4,28 @@ namespace App\Http\Controllers\Mandates;
 
 use App\Http\Controllers\Controller;
 use App\Models\Code\Report;
-use App\Models\DataMandate;
-use Illuminate\Http\Request;
 
 class ResultFMCController extends Controller
 {
-    //
     public function index()
     {
-        // Fetch data mandates with relationships
-        $dataMandates = DataMandate::with(['mandate', 'subAccountKey'])->get();
+        // Eager-load related models
+        $reports = Report::with(['certificateData', 'mandate', 'subAccountKey', 'dataMandate'])->get();
+         
 
-        // Extract and format the required data
-        $formattedMandates = $dataMandates->map(function ($mandate) {
-            return [
-                'sub_account_key' => $mandate->subAccountKey->sub_account_key ?? null,
-                'report_key' => $mandate->report_key,
-                'apply' => number_format($mandate->apply ?? 0, 0, ' ', ' '),
-                'mandate_details' => $mandate->mandate->value_mandate ?? null, // Example of accessing mandate details
+        // Merge Report and DataMandate models into a new collection
+        $mergedReports = $reports->map(function ($report) {
+            return (object) [
+                'sub_account_key' => $report->subAccountKey->sub_account_key ?? 'N/A',
+                'report_key' => $report->report_key,
+                'fin_law' => $report->fin_law,
+                'value_certificate' => $report->apply - $report->credit   ?? 'គ្មានទិន្នន័យ',
+                'value_mandate' => $report->dataMandate->first()?->deadline_balance ?? 'គ្មានទិន្នន័យ',
+
             ];
         });
+        
 
-        return view('layouts.table.fmc.result-fin-mandate-certificate', compact('formattedMandates'));
+        return view('layouts.table.fmc.result-fin-mandate-certificate', compact('mergedReports'));
     }
 }

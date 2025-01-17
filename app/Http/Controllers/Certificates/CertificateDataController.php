@@ -212,9 +212,25 @@ class CertificateDataController extends Controller
         return redirect()->route('certificate-data.index')->with('success', 'សលាកបត្របានលុបដោយជោគជ័យ។');
     }
 
+    // private function recalculateAndSaveReport(Report $report)
+    // {
+    //     $newApplyTotal = CertificateData::where('report_key', $report->id)->sum('value_certificate');
+    //     $report->apply = $newApplyTotal;
+    //     $credit = $report->new_credit_status - $report->deadline_balance;
+    //     $report->credit = $credit;
+    //     $report->deadline_balance = $report->early_balance + $report->apply;
+    //     $report->credit = $report->new_credit_status - $report->deadline_balance;
+    //     $report->law_average = $report->deadline_balance > 0 ? ($report->deadline_balance / $report->fin_law) * 100 : 0;
+    //     $report->law_correction =  $report->deadline_balance > 0 ? ($report->deadline_balance /  $report->new_credit_status) * 100 : 0;
+
+    //     $report->save();
+    // }
     private function recalculateAndSaveReport(Report $report)
     {
-        $newApplyTotal = CertificateData::where('report_key', $report->id)->sum('value_certificate');
+        // $newApplyTotal = CertificateData::where('report_key', $report->id)->sum('value_certificate');
+        $newApplyTotal = CertificateData::where('report_key', $report->id)
+            ->latest('created_at') // Order by latest created record
+            ->value('value_certificate') ?? 0; // Get only the value_certificate column
         $report->apply = $newApplyTotal;
         $credit = $report->new_credit_status - $report->deadline_balance;
         $report->credit = $credit;

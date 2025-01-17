@@ -55,7 +55,7 @@ class Report extends Model
     // Point to certificateData Class
     public function certificateData()
     {
-        return $this->hasMany(CertificateData::class, 'report_key', 'report_key');
+        return $this->hasOne(CertificateData::class, 'report_key', 'report_key');
     }
 
     public function certificate()
@@ -155,6 +155,11 @@ class Report extends Model
     public function loanMandate()
     {
         return $this->hasMany(LoanMandate::class, 'report_key');
+    }
+
+    public function dataMandate()
+    {
+        return $this->hasMany(DataMandate::class, 'report_key', 'report_key');
     }
 
 

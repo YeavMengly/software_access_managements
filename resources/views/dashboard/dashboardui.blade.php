@@ -60,7 +60,7 @@
                             <div class="col-md-6 mb-3">
                                 <a href="{{ route('certificate-data.create') }}"
                                     class="btn btn-custom btn-block animate-button">
-                                    ចុះបញ្ជីសលាកប័ត្រចំណាយថវិកា
+                                    បញ្ចូលសលាកប័ត្រ
                                 </a>
                             </div>
 

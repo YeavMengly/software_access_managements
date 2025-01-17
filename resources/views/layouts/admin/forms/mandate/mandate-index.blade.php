@@ -88,6 +88,13 @@
                     @foreach ($mandates as $index => $md)
                         <tr>
                             <td style="border: 1px solid black;">{{ $index + 1 }}</td>
+
+                            {{-- <td style="border: 1px solid black; text-align: center;">
+                                {{ $md->dataMandate && $md->dataMandate->subAccountKey ? $md->dataMandate->subAccountKey->sub_account_key : 'N/A' }}
+                            </td>
+                            <td style="border: 1px solid black; text-align: center;">
+                                {{ $md->dataMandate ? $md->dataMandate->report_key : 'N/A' }}
+                            </td> --}}
                             <td style="border: 1px solid black;">  {{ $md->dataMandate->sub_account_key ?? 'N/A' }}</td>
                             <td style="border: 1px solid black;">{{ $md->dataMandate->report_key ?? 'N/A' }}</td>
                             <td style="border: 1px solid black;">{{ $md->value_mandate }}</td>

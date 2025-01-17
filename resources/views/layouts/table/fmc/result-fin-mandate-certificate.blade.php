@@ -23,14 +23,15 @@
                 </tr>
             </thead>
             <tbody class="cell-border">
-                @foreach($formattedMandates as $mandate)
-            <tr>
-                <td>{{ $mandate['sub_account_key'] }}</td>
-                <td>{{ $mandate['report_key'] }}</td>
-                <td>{{ $mandate['apply'] }}</td>
-                <td>{{ $mandate['mandate_details'] }}</td>
-            </tr>
-        @endforeach
+                @foreach ($mergedReports as $report)
+                    <tr>
+                        <td>{{ $report->sub_account_key }}</td>
+                        <td>{{ $report->report_key }}</td>
+                        <td>{{ $report->fin_law }}</td>
+                        <td>{{ $report->value_certificate }}</td>
+                        <td>{{ $report->value_mandate }}</td>
+                    </tr>
+                @endforeach
             </tbody>
         </table>
     </div>

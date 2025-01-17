@@ -204,16 +204,32 @@ class MandateController extends Controller
         return redirect()->route('mandates.index')->with('success', 'អាណត្តិបានលុបដោយជោគជ័យ។');
     }
     
+    // private function calculateAndSaveReportWithMandate(DataMandate $dataMandate)
+    // {
+    //     $lastValue = Mandate::where('report_key', $dataMandate->id)->sum('value_mandate');
+    //     $dataMandate->apply = $lastValue;
+    //     $credit = $dataMandate->new_credit_status - $dataMandate->deadline_balance;
+    //     $dataMandate->credit = $credit;
+    //     $dataMandate->deadline_balance = $dataMandate->early_balance + $dataMandate->apply;
+    //     $dataMandate->credit = $dataMandate->new_credit_status - $dataMandate->deadline_balance;
+    //     $dataMandate->law_average = $dataMandate->deadline_balance > 0 ? ($dataMandate->deadline_balance / $dataMandate->fin_law) * 100 : 0;
+    //     $dataMandate->law_correction = $dataMandate->deadline_balance > 0 ? ($dataMandate->deadline_balance /  $dataMandate->new_credit_status) * 100 : 0;
+    //     $dataMandate->save();
+    // }
+
     private function calculateAndSaveReportWithMandate(DataMandate $dataMandate)
     {
-        $lastValue = Mandate::where('report_key', $dataMandate->id)->sum('value_mandate');
-        $dataMandate->apply = $lastValue;
+        // $newApplyTotal = CertificateData::where('report_key', $report->id)->sum('value_certificate');
+        $newApplyTotal = Mandate::where('report_key', $dataMandate->id)
+            ->latest('created_at') // Order by latest created record
+            ->value('value_mandate') ?? 0; // Get only the value_certificate column
+        $dataMandate->apply = $newApplyTotal;
         $credit = $dataMandate->new_credit_status - $dataMandate->deadline_balance;
         $dataMandate->credit = $credit;
         $dataMandate->deadline_balance = $dataMandate->early_balance + $dataMandate->apply;
         $dataMandate->credit = $dataMandate->new_credit_status - $dataMandate->deadline_balance;
         $dataMandate->law_average = $dataMandate->deadline_balance > 0 ? ($dataMandate->deadline_balance / $dataMandate->fin_law) * 100 : 0;
-        $dataMandate->law_correction = $dataMandate->deadline_balance > 0 ? ($dataMandate->deadline_balance /  $dataMandate->new_credit_status) * 100 : 0;
+        $dataMandate->law_correction =  $dataMandate->deadline_balance > 0 ? ($dataMandate->deadline_balance /  $dataMandate->new_credit_status) * 100 : 0;
         $dataMandate->save();
     }
 }

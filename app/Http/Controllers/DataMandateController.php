@@ -95,7 +95,7 @@ class DataMandateController extends Controller
 
 
                     try {
-                        DataMandate::updateOrCreate(
+                        $dataMandate = DataMandate::updateOrCreate(
                             [
                                 'sub_account_key' => $subAccountKey,
                                 'report_key' => $data['report_key'],
@@ -114,6 +114,8 @@ class DataMandateController extends Controller
                                 'law_correction' => number_format($data['law_correction'], 2, '.', ''),
                             ]
                         );
+
+                        $this->recalculateAndSaveReport($dataMandate);
                     } catch (\Exception $e) {
                         Log::error("Error storing data mandate for sub_account_key: {$subAccountKey}, Error: " . $e->getMessage());
                         throw $e; // Re-throw to ensure rollback if needed
@@ -134,21 +136,19 @@ class DataMandateController extends Controller
         return redirect()->route('data-mandates.index')->with('success', 'ថវិការអនុម័តបានលុបដោយជោគជ័យ');
     }
 
-    // private function recalculateAndSaveMandate(Mandate $mandate)
-    // {
-    //     // $newApplyTotal = CertificateData::where('report_key', $report->id)->sum('value_certificate');
-
-    //     $newApplyTotal = Mandate::where('report_key', $mandate->id)
-    //         ->latest('created_at') // Order by latest created record
-    //         ->value('value_mandate') ?? 0; // Get only the value_certificate column
-    //     $mandate->apply = $newApplyTotal;
-    //     $credit = $mandate->new_credit_status - $mandate->deadline_balance;
-    //     $mandate->credit = $credit;
-    //     $mandate->deadline_balance = $mandate->early_balance + $mandate->apply;
-    //     $mandate->credit = $mandate->new_credit_status - $mandate->deadline_balance;
-    //     $mandate->law_average = $mandate->deadline_balance > 0 ? ($mandate->deadline_balance / $mandate->fin_law) * 100 : 0;
-    //     $mandate->law_correction =  $mandate->deadline_balance > 0 ? ($mandate->deadline_balance /  $mandate->new_credit_status) * 100 : 0;
-
-    //     $mandate->save();
-    // }
+    private function recalculateAndSaveReport(DataMandate $dataMandate)
+    {
+        // $newApplyTotal = CertificateData::where('report_key', $report->id)->sum('value_certificate');
+        $newApplyTotal = Mandate::where('report_key', $dataMandate->id)
+            ->latest('created_at') // Order by latest created record
+            ->value('value_mandate') ?? 0; // Get only the value_certificate column
+        $dataMandate->apply = $newApplyTotal;
+        $credit = $dataMandate->new_credit_status - $dataMandate->deadline_balance;
+        $dataMandate->credit = $credit;
+        $dataMandate->deadline_balance = $dataMandate->early_balance + $dataMandate->apply;
+        $dataMandate->credit = $dataMandate->new_credit_status - $dataMandate->deadline_balance;
+        $dataMandate->law_average = $dataMandate->deadline_balance > 0 ? ($dataMandate->deadline_balance / $dataMandate->fin_law) * 100 : 0;
+        $dataMandate->law_correction =  $dataMandate->deadline_balance > 0 ? ($dataMandate->deadline_balance /  $dataMandate->new_credit_status) * 100 : 0;
+        $dataMandate->save();
+    }
 }
