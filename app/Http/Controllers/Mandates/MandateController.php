@@ -22,7 +22,7 @@ class MandateController extends Controller
         $selectedMissionType = $request->input('mission_type');
 
         // Query mission planning with relationships
-        $query = Mandate::with(['dataMandate', 'subAccountKey', 'missionType']);
+        $query = Mandate::with(['dataMandates', 'subAccountKey', 'missionType']);
 
         // Apply filter if a mission type is selected
         if ($selectedMissionType) {
@@ -31,6 +31,7 @@ class MandateController extends Controller
 
         // Fetch the filtered mission plans
         $mandates = $query->get();
+
 
         // Calculate the total amount for the selected mission type
         $totalAmount = $query->sum('value_mandate');
@@ -98,12 +99,22 @@ class MandateController extends Controller
         ]);
 
         $this->calculateAndSaveReportWithMandate($dataMandate);
+
+        $dataMandate->refresh();
+
+
+        $lastMandate = Mandate::where('report_key', $validatedData['report_key'])->latest()->first();
+        $dataMandate->apply = $lastMandate->value_mandate;
+
+        $dataMandate->save();
+
+
         return redirect()->back()->with('success', 'អាណត្តិបានបញ្ចូលដោយជោគជ័យ');
     }
 
     public function getEarlyBalance($id)
     {
-        $dataMandate = DataMandate::find($id); 
+        $dataMandate = DataMandate::find($id);
         $loan = $dataMandate ? $dataMandate->loans : null;
 
         if ($dataMandate) {
@@ -115,8 +126,7 @@ class MandateController extends Controller
                 'credit' => $dataMandate->credit,
                 'deadline_balance' => $dataMandate->deadline_balance,
             ]);
-        }
-        else {
+        } else {
             return response()->json([
                 'error' => 'DataMandate not found.'
             ], 404);
@@ -182,47 +192,31 @@ class MandateController extends Controller
     {
         $mandate = Mandate::findOrFail($id);
         $dataMandate = DataMandate::findOrFail($mandate->report_key);
-    
-        // Delete the mandate
+
         $mandate->delete();
-    
-        // Calculate new totals and balances
+
         $newApplyTotal = Mandate::where('report_key', $dataMandate->id)->sum('value_mandate');
         $dataMandate->apply = $newApplyTotal > 0 ? $newApplyTotal : 0;
         $dataMandate->deadline_balance = $dataMandate->early_balance + $dataMandate->apply;
-    
+
         $credit = $dataMandate->new_credit_status - $dataMandate->deadline_balance;
         $dataMandate->update([
             'credit' => $credit,
             'apply' => $dataMandate->apply,
             'deadline_balance' => $dataMandate->deadline_balance,
         ]);
-    
-        // Recalculate related data
+
         $this->calculateAndSaveReportWithMandate($dataMandate);
-    
+
         return redirect()->route('mandates.index')->with('success', 'អាណត្តិបានលុបដោយជោគជ័យ។');
     }
-    
-    // private function calculateAndSaveReportWithMandate(DataMandate $dataMandate)
-    // {
-    //     $lastValue = Mandate::where('report_key', $dataMandate->id)->sum('value_mandate');
-    //     $dataMandate->apply = $lastValue;
-    //     $credit = $dataMandate->new_credit_status - $dataMandate->deadline_balance;
-    //     $dataMandate->credit = $credit;
-    //     $dataMandate->deadline_balance = $dataMandate->early_balance + $dataMandate->apply;
-    //     $dataMandate->credit = $dataMandate->new_credit_status - $dataMandate->deadline_balance;
-    //     $dataMandate->law_average = $dataMandate->deadline_balance > 0 ? ($dataMandate->deadline_balance / $dataMandate->fin_law) * 100 : 0;
-    //     $dataMandate->law_correction = $dataMandate->deadline_balance > 0 ? ($dataMandate->deadline_balance /  $dataMandate->new_credit_status) * 100 : 0;
-    //     $dataMandate->save();
-    // }
-
     private function calculateAndSaveReportWithMandate(DataMandate $dataMandate)
     {
-        // $newApplyTotal = CertificateData::where('report_key', $report->id)->sum('value_certificate');
         $newApplyTotal = Mandate::where('report_key', $dataMandate->id)
-            ->latest('created_at') // Order by latest created record
-            ->value('value_mandate') ?? 0; // Get only the value_certificate column
+            ->latest('created_at') 
+            ->value('value_mandate') ?? 0; 
+        $dataMandate->early_balance = $this->calculateEarlyBalance($dataMandate);
+
         $dataMandate->apply = $newApplyTotal;
         $credit = $dataMandate->new_credit_status - $dataMandate->deadline_balance;
         $dataMandate->credit = $credit;
@@ -231,5 +225,22 @@ class MandateController extends Controller
         $dataMandate->law_average = $dataMandate->deadline_balance > 0 ? ($dataMandate->deadline_balance / $dataMandate->fin_law) * 100 : 0;
         $dataMandate->law_correction =  $dataMandate->deadline_balance > 0 ? ($dataMandate->deadline_balance /  $dataMandate->new_credit_status) * 100 : 0;
         $dataMandate->save();
+    }
+
+    private function calculateEarlyBalance($dataMandate)
+    {
+        $mandate = Mandate::where('report_key', $dataMandate->id)->get();
+
+        if ($mandate->count() === 1) {
+            return 0;
+        }
+
+        $totalEarlyBalance = $mandate->slice(0, -1) 
+            ->filter(function ($item) {
+                return !is_null($item->value_mandate) && $item->value_mandate !== '';
+            })
+            ->sum('value_mandate');
+
+        return $totalEarlyBalance ?: 0;
     }
 }

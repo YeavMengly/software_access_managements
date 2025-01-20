@@ -113,6 +113,17 @@ class CertificateDataController extends Controller
         ]);
         $this->recalculateAndSaveReport($report);
 
+        $report->refresh();
+
+        // Update the apply value to the last entered value_certificate
+        $lastCertificateData = CertificateData::where('report_key', $validated['report_key'])->latest()->first();
+        $report->apply = $lastCertificateData->value_certificate;
+
+        // Update early_balance by recalculating it based on the new data
+        // $report->early_balance = $this->calculateEarlyBalance($report) ?: 0;
+
+        $report->save();
+
         return redirect()->route('certificate-data.create')->with('success', 'សលាកបត្របានបញ្ចូលដោយជោគជ័យ');
     }
 
@@ -231,6 +242,20 @@ class CertificateDataController extends Controller
         $newApplyTotal = CertificateData::where('report_key', $report->id)
             ->latest('created_at') // Order by latest created record
             ->value('value_certificate') ?? 0; // Get only the value_certificate column
+
+                    // Fetch all remaining certificate data for the given report_key
+        // $newApplyTotal = CertificateData::where('report_key', $report->id)->get();
+
+        // // If there are certificates, get the last value for apply, otherwise set to 0
+        // if ($newApplyTotal->isNotEmpty()) {
+        //     $report->apply = $newApplyTotal->last()->value_certificate;
+        // } else {
+        //     $report->apply = 0; // Default to 0 if no certificates
+        // }
+
+        // Recalculate early_balance
+        $report->early_balance = $this->calculateEarlyBalance($report);
+
         $report->apply = $newApplyTotal;
         $credit = $report->new_credit_status - $report->deadline_balance;
         $report->credit = $credit;
@@ -241,6 +266,28 @@ class CertificateDataController extends Controller
 
         $report->save();
     }
+
+    private function calculateEarlyBalance($report)
+    {
+        // Fetch all certificate data for the given report_key
+        $certificateData = CertificateData::where('report_key', $report->id)->get();
+
+        // If there is only one record, early_balance should be 0
+        if ($certificateData->count() === 1) {
+            return 0;
+        }
+
+        // If there are multiple records, sum all values except the last one
+        $totalEarlyBalance = $certificateData->slice(0, -1) // Exclude the last record
+            ->filter(function ($item) {
+                return !is_null($item->value_certificate) && $item->value_certificate !== '';
+            })
+            ->sum('value_certificate');
+
+        // Return the calculated balance, or 0 if no valid certificates
+        return $totalEarlyBalance ?: 0;
+    }
+
 
     private function calculateTotals($certificatesData)
     {

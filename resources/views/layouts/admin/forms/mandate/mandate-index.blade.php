@@ -77,6 +77,8 @@
                     <th style="border: 1px solid black;">ស្ថានភាព</th>
                 </tr>
             </thead>
+
+  
             <tbody style="border: 1px solid black;">
                 @if ($mandates->isEmpty())
                     <tr>
@@ -88,18 +90,14 @@
                     @foreach ($mandates as $index => $md)
                         <tr>
                             <td style="border: 1px solid black;">{{ $index + 1 }}</td>
-
-                            {{-- <td style="border: 1px solid black; text-align: center;">
-                                {{ $md->dataMandate && $md->dataMandate->subAccountKey ? $md->dataMandate->subAccountKey->sub_account_key : 'N/A' }}
+                            <td style="border: 1px solid black;">
+                                {{ $md->dataMandates->sub_account_key ?? 'គ្មានទិន្នន័យ' }}</td>
+                            <td style="border: 1px solid black;">{{ $md->dataMandates->report_key ?? 'គ្មានទិន្នន័យ' }}
                             </td>
-                            <td style="border: 1px solid black; text-align: center;">
-                                {{ $md->dataMandate ? $md->dataMandate->report_key : 'N/A' }}
-                            </td> --}}
-                            <td style="border: 1px solid black;">  {{ $md->dataMandate->sub_account_key ?? 'N/A' }}</td>
-                            <td style="border: 1px solid black;">{{ $md->dataMandate->report_key ?? 'N/A' }}</td>
                             <td style="border: 1px solid black;">{{ $md->value_mandate }}</td>
-                            <td style="border: 1px solid black;">{{ $md->missionType->mission_type ?? 'N/A' }}</td>
-                            <td style="border: 1px solid black;">{{ $md->date_mandate ?? 'N/A' }}</td>
+                            <td style="border: 1px solid black;">{{ $md->missionType->mission_type ?? 'គ្មានទិន្នន័យ' }}
+                            </td>
+                            <td style="border: 1px solid black;">{{ $md->date_mandate ?? 'គ្មានទិន្នន័យ' }}</td>
                             <td style="border: 1px solid black;">
                                 @if ($md->attachments)
                                     <div style="margin-top: 5px;">

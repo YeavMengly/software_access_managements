@@ -63,7 +63,7 @@ class Report extends Model
         return $this->hasOne(Certificate::class, 'early_balance');
     }
 
-    public function mandate()
+    public function mandates()
     {
         return $this->hasOne(Mandate::class, 'report_key', 'report_key');
     }
@@ -157,10 +157,8 @@ class Report extends Model
         return $this->hasMany(LoanMandate::class, 'report_key');
     }
 
-    public function dataMandate()
+    public function dataMandates()
     {
         return $this->hasMany(DataMandate::class, 'report_key', 'report_key');
     }
-
-
 }

@@ -2,8 +2,7 @@
 
 @section('result-total-fmc-table')
     <div class="d-flex justify-content-between align-items-center mr-4 ml-4">
-        <a class="btn btn-danger" href="{{ route('total_card') }}"
-            style="width: 160px; height: 50px; border-radius: 4px; display: flex; align-items: center; justify-content: center;">
+        <a class="btn btn-danger" href="{{ route('total_card') }}">
             <i class="fas fa-arrow-left"></i>
         </a>
     </div>
@@ -23,6 +22,7 @@
                 </tr>
             </thead>
             <tbody class="cell-border">
+
                 @foreach ($mergedReports as $report)
                     <tr>
                         <td>{{ $report->sub_account_key }}</td>
@@ -63,7 +63,7 @@
             border-collapse: collapse;
         }
 
-        .btn,
+
         .form-control,
         label,
         th,
@@ -73,8 +73,17 @@
             padding: 5px;
             font-family: 'Khmer OS Siemreap', sans-serif;
             font-size: 16px;
+
         }
 
+        .btn {
+            border-radius: 4px;
+            width: 120px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
 
         h2 {
             font-family: 'Khmer OS Muol Light', sans-serif;
@@ -85,10 +94,6 @@
         h4 {
             font-family: 'Khmer OS Muol Light', sans-serif;
             font-size: 16px;
-        }
-
-        .btn-width {
-            width: 120px;
         }
 
         .filterable {

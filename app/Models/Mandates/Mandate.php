@@ -29,7 +29,7 @@ class Mandate extends Model
     }
 
     // belong table to report class
-    public function dataMandate()
+    public function dataMandates()
     {
         return $this->belongsTo(DataMandate::class, 'report_key', 'report_key');
     }

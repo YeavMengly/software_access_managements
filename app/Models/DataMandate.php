@@ -45,11 +45,12 @@ class DataMandate extends Model
         return $this->belongsTo(SubAccountKey::class, 'sub_account_key', 'sub_account_key'); // Ensure 'sub_account_key_id' matches your database column
     }
 
-    public function mandate(){
+    public function mandates()
+    {
         return $this->hasOne(Mandate::class, 'report_key', 'report_key');
     }
 
-    public function report()
+    public function reports()
     {
         return $this->belongsTo(Report::class, 'report_key', 'report_key');
     }
