@@ -5,7 +5,7 @@
         <div class="col-lg-12 margin-tb ">
             <div class="d-flex justify-content-between align-items-center">
                 <a class="btn btn-danger" href="{{ route('total_card') }}"
-                    style="width: 160px; height: 50px; border-radius: 4px; display: flex; align-items: center; justify-content: center;">
+                    style="width: 120px; height: 40px; border-radius: 4px; display: flex; align-items: center; justify-content: center;">
                     <i class="fas fa-arrow-left"></i>&nbsp;&nbsp;
                 </a>
             </div>

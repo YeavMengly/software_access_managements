@@ -33,6 +33,11 @@ class MissionTypeSeeder extends Seeder
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
+            [
+                'mission_type' => 'ទូទាត់ត្រង់',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
         ]);
     }
 }

@@ -57,8 +57,8 @@ class SubAccountKey extends Model
         return $this->hasOne(Mandate::class, 'sub_account_key', 'sub_account_key');
     }
 
-    public function dataMandates(){
-        return $this->hasMany(DataMandate::class, 'sub_account_key');
+    public function dataMandate(){
+        return $this->hasMany(DataMandate::class, 'sub_account_key', 'sub_account_key');
     }
 
 }

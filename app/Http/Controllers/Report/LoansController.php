@@ -32,14 +32,14 @@ class LoansController extends Controller
 
         // Filter by Report Key and Year Status
         if ($reportKey) {
-            $query->whereHas('reports', function ($q) use ($reportKey) {
+            $query->whereHas('report', function ($q) use ($reportKey) {
                 $q->where('report_key_column_in_related_table', 'like', "%{$reportKey}%")
                     ->whereHas('year', function ($q) {
                         $q->where('status', 'active');
                     });
             });
         } else {
-            $query->whereHas('reports.year', function ($q) {
+            $query->whereHas('report.year', function ($q) {
                 $q->where('status', 'active');
             });
         }
@@ -61,74 +61,7 @@ class LoansController extends Controller
 
         return view('layouts.admin.forms.loans.loans-create', compact('subAccountKeys', 'reports'));
     }
-    // public function store(Request $request)
-    // {
-    //     $validatedData = $request->validate([
-    //         'report_key' => 'required|exists:reports,report_key',
-    //         'internal_increase' => 'nullable|numeric|min:0',
-    //         'unexpected_increase' => 'nullable|numeric|min:0',
-    //         'additional_increase' => 'nullable|numeric|min:0',
-    //         'decrease' => 'nullable|numeric|min:0',
-    //         'editorial' => 'nullable|numeric|min:0',
-    //     ]);
-
-    //     // Retrieve the associated Report with its active Year
-    //     $report = Report::with('year', 'subAccountKey')
-    //     ->where('report_key', $validatedData['report_key'])
-    //     ->whereHas('year', function ($query) {
-    //         $query->where('status', 'active');
-    //     })
-    //     ->first();
-    
-
-    //     // Validate if the report exists and belongs to the active year
-    //     if (!$report || $report->year->status !== 'active') {
-    //         return redirect()->back()->withErrors([
-    //             'report_key' => 'The selected report does not belong to the active year.',
-    //         ])->withInput();
-    //     }
-
-    //     // Initialize default values for nullable fields
-    //     $validatedData['internal_increase'] = $validatedData['internal_increase'] ?? 0;
-    //     $validatedData['unexpected_increase'] = $validatedData['unexpected_increase'] ?? 0;
-    //     $validatedData['additional_increase'] = $validatedData['additional_increase'] ?? 0;
-    //     $validatedData['decrease'] = $validatedData['decrease'] ?? 0;
-    //     $validatedData['editorial'] = $validatedData['editorial'] ?? 0;
-
-    //     // Calculate total increase
-    //     $total_increase = $validatedData['internal_increase'] +
-    //         $validatedData['unexpected_increase'] +
-    //         $validatedData['additional_increase'];
-
-    //     $subAccountKey = $report->subAccountKey->sub_account_key;
-    //     $current_loan = $report->current_loan;
-
-    //     // Calculate new credit status
-    //     $new_credit_status = $current_loan + $total_increase -
-    //         $validatedData['decrease'] -
-    //         $validatedData['editorial'];
-
-    //     // Create Loan record
-    //     Loans::create([
-    //         'sub_account_key' => $subAccountKey,
-    //         'report_key' => $validatedData['report_key'],
-    //         'internal_increase' => $validatedData['internal_increase'],
-    //         'unexpected_increase' => $validatedData['unexpected_increase'],
-    //         'additional_increase' => $validatedData['additional_increase'],
-    //         'decrease' => $validatedData['decrease'],
-    //         'editorial' => $validatedData['editorial'],
-    //         'total_increase' => $total_increase,
-    //     ]);
-
-    //     // Update the report with the new credit status
-    //     $report->update([
-    //         'new_credit_status' => $new_credit_status,
-    //     ]);
-
-    //     // Redirect back to index with success message
-    //     return redirect()->route('loans.index')->with('success', 'Loan transaction added successfully!');
-    // }
-
+   
     public function store(Request $request)
     {
         $validatedData = $request->validate([
@@ -146,7 +79,7 @@ class LoansController extends Controller
         $validatedData['decrease'] = $validatedData['decrease'] ?? 0;
         $validatedData['editorial'] = $validatedData['editorial'] ?? 0;
     
-        $existingReport = Report::where('report_key', $validatedData['report_key'])->first();
+        $existingReport = Report::where('id', $validatedData['report_key'])->first();
     
         if (!$existingReport) {
             return redirect()->back()->withErrors([
@@ -165,6 +98,7 @@ class LoansController extends Controller
         $law_correction = $new_credit_status ? max(-100, min(100, ($deadline_balance / $new_credit_status) * 100)) : 0;
     
         Loans::create([
+            'sub_account_key' => $existingReport->sub_account_key ?? null,
             'report_key' => $validatedData['report_key'],
             'internal_increase' => $validatedData['internal_increase'],
             'unexpected_increase' => $validatedData['unexpected_increase'],
@@ -186,70 +120,8 @@ class LoansController extends Controller
     
         return redirect()->route('loans.index')->with('success', 'Loan transaction added successfully!');
     }
-    
-    // public function store(Request $request)
-    // {
-    //     // Validate the input fields
-    //     $validatedData = $request->validate([
-    //         'report_key' => 'required|exists:reports,id', // Ensure report_key exists
-    //         'internal_increase' => 'nullable|numeric|min:0',
-    //         'unexpected_increase' => 'nullable|numeric|min:0',
-    //         'additional_increase' => 'nullable|numeric|min:0',
-    //         'decrease' => 'nullable|numeric|min:0',
-    //         'editorial' => 'nullable|numeric|min:0',
-    //     ]);
-    
-    //     // Set default values for nullable fields
-    //     $validatedData['internal_increase'] = $validatedData['internal_increase'] ?? 0;
-    //     $validatedData['unexpected_increase'] = $validatedData['unexpected_increase'] ?? 0;
-    //     $validatedData['additional_increase'] = $validatedData['additional_increase'] ?? 0;
-    //     $validatedData['decrease'] = $validatedData['decrease'] ?? 0;
-    //     $validatedData['editorial'] = $validatedData['editorial'] ?? 0;
-    
-    //     // Calculate total increase
-    //     $total_increase = $validatedData['internal_increase'] 
-    //         + $validatedData['unexpected_increase'] 
-    //         + $validatedData['additional_increase'];
-    
-    //     // Add total increase to the validated data
-    //     $validatedData['total_increase'] = $total_increase;
-    
-    //     // Retrieve the related report using report_key
-    //     $report = Report::where('report_key', $validatedData['report_key'])->first();
-    
-    //     if (!$report) {
-    //         return redirect()->back()->withErrors([
-    //             'report_key' => 'The selected report is invalid.',
-    //         ])->withInput();
-    //     }
-    
-    //     // Get the related sub_account_key from the report
-    //     $subAccountKey = $report->subAccountKey ? $report->subAccountKey->sub_account_key : null;
-    
-    //     if (!$subAccountKey) {
-    //         return redirect()->back()->withErrors([
-    //             'sub_account_key' => 'The associated sub_account_key is missing.',
-    //         ])->withInput();
-    //     }
-    
-    //     // Store the Loans record with sub_account_key
-    //     Loans::create([
-    //         'report_key' => $validatedData['report_key'],
-    //         'sub_account_key' => $subAccountKey, // Storing sub_account_key
-    //         'internal_increase' => $validatedData['internal_increase'],
-    //         'unexpected_increase' => $validatedData['unexpected_increase'],
-    //         'additional_increase' => $validatedData['additional_increase'],
-    //         'total_increase' => $total_increase,
-    //         'decrease' => $validatedData['decrease'],
-    //         'editorial' => $validatedData['editorial'],
-    //     ]);
-    
-    //     return redirect()->route('loans.index')->with('success', 'Loan transaction added successfully!');
-    // }
-    
 
-
-
+   
     public function edit($id)
     {
         $loan = Loans::findOrFail($id);

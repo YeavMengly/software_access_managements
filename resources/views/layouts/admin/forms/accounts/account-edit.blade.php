@@ -3,91 +3,130 @@
 @section('form-account-edit')
     <div class="border-wrapper">
         <div class="result-total-table-container">
-            <div class="container-fluid">
-                <div class="row">
-                    <div class="col-lg-12 margin-tb mb-4">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <h3 class="card-title">កែប្រែលេខកូដគណនី</h3>
-                            <a class="btn btn-danger" href="{{ route('accounts.index') }}"><i class="fas fa-arrow-left"></i>
-                                ត្រឡប់ក្រោយ</a>
-                        </div>
-                    </div>
-                </div>
 
-                @if (session('success'))
-                    <div class="alert alert-success alert-dismissible fade show" role="alert">
-                        {{ session('success') }}
-                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                    </div>
-                @endif
+            <div class="row">
+                <div class="col-lg-12 margin-tb mb-4">
+                    <div class="d-flex justify-content-between align-items-center">
 
-                @if ($errors->any())
-                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                        <strong>Whoops!</strong> There were some problems with your input.<br><br>
-                        <ul>
-                            @foreach ($errors->all() as $error)
-                                <li>{{ $error }}</li>
-                            @endforeach
-                        </ul>
-                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                    </div>
-                @endif
+                        <a class="btn btn-danger" style="width: 120px; height: 40px;" href="{{ route('accounts.index') }}"><i
+                                class="fas fa-arrow-left"></i>
+                        </a>
 
-                <div class="border-wrapper">
-                    <div class="form-container">
-                        <form action="{{ route('accounts.update', $accountKey->id) }}" method="POST" enctype="multipart/form-data">
-                            @csrf
-                            @method('PUT')
-
-                            <div class="form-group">
-                                <strong>លេខជំពូក:</strong>
-                                <select name="code" class="form-control">
-                                    @foreach ($keys as $key)
-                                        <option value="{{ $key->id }}" {{ $key->id == $accountKey->code_id ? 'selected' : '' }}>
-                                            {{ $key->code }}
-                                        </option>
-                                    @endforeach
-                                </select>
-                            </div>
-
-                            <div class="form-group">
-                                <label for="account_key">លេខគណនី:</label>
-                                <input type="number" name="account_key" id="account_key" value="{{ old('account_key', $accountKey->account_key) }}"
-                                    class="form-control @error('account_key') is-invalid @enderror">
-                                @error('account_key')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                @enderror
-                            </div>
-
-                            <div class="form-group">
-                                <label for="name_account_key">ចំណាត់ថ្នាក់:</label>
-                                <input type="text" name="name_account_key" id="name_account_key" value="{{ old('name_account_key', $accountKey->name_account_key) }}"
-                                    class="form-control @error('name_account_key') is-invalid @enderror">
-                                @error('name_account_key')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                @enderror
-                            </div>
-
-                            <div class="d-flex align-items-center">
-                                <button type="submit" class="btn btn-primary ml-auto">ធ្វើការកែប្រែ</button>
-                            </div>
-                        </form>
                     </div>
                 </div>
             </div>
+
+            @if (session('success'))
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    {{ session('success') }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            @endif
+
+            @if ($errors->any())
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <strong>Whoops!</strong> There were some problems with your input.<br><br>
+                    <ul>
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            @endif
+
+
+            <div class="d-flex justify-content-center align-items-center  ">
+                <div class="card shadow-lg w-65" style="max-width: 900px;">
+                    <h3 class="card-title text-center mt-4" style="font-weight: 500;">កែទិន្នន័យ</h3>
+                    <div class="form-container px-5 py-4">
+                        <form action="{{ route('accounts.update', $accountKey->id) }}" method="POST"
+                            enctype="multipart/form-data">
+                            @csrf
+                            @method('PUT')
+
+                            <div class="row mb-4">
+                                <!-- Column 1 -->
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="code" class="form-label"><strong>លេខជំពូក:</strong></label>
+                                        <select name="code" class="form-control" style="width: 230px; height: 40px;">
+                                            @foreach ($keys as $key)
+                                                <option value="{{ $key->id }}"
+                                                    {{ $key->id == $accountKey->code_id ? 'selected' : '' }}>
+                                                    {{ $key->code }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <!-- Column 2 -->
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="account_key" class="form-label"><strong>លេខគណនី:</strong></label>
+                                        <input type="number" name="account_key" id="account_key"
+                                            value="{{ old('account_key', $accountKey->account_key) }}"
+                                            class="form-control @error('account_key') is-invalid @enderror"
+                                            style="width: 230px; height: 40px;">
+                                        @error('account_key')
+                                            <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row mb-4">
+                                <!-- Column 3 -->
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label for="name_account_key"
+                                            class="form-label"><strong>ចំណាត់ថ្នាក់:</strong></label>
+                                        <input type="text" name="name_account_key" id="name_account_key"
+                                            value="{{ old('name_account_key', $accountKey->name_account_key) }}"
+                                            class="form-control @error('name_account_key') is-invalid @enderror"
+                                            style="height: 40px;">
+                                        @error('name_account_key')
+                                            <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Submit Button -->
+                            <div class="row">
+                                <div class="col-12 text-center">
+                                    <!-- Reset Button -->
+                                    <button type="reset" class="btn btn-secondary">
+                                        <i class="fas fa-undo"></i>&nbsp;កំណត់ឡើងវិញ
+                                    </button>
+
+                                    <!-- Submit Button -->
+                                    <button type="submit" class="btn btn-primary ml-3">
+                                        <i class="fas fa-save"></i>&nbsp;រក្សាទុក
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+
+                </div>
+            </div>
         </div>
+    </div>
     </div>
 @endsection
 
 @section('styles')
     <style>
         .border-wrapper {
-            border: 2px solid black;
-            padding: 10px;
+            padding-left: 16px;
+            padding-right: 16px;
         }
 
-        .container-fluid {
-            padding: 16px;
+        h3 {
+            font-family: 'Khmer OS Muol Light', sans-serif;
+            font-size: 16px;
         }
     </style>
 @endsection

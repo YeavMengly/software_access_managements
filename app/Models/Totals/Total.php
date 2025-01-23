@@ -39,7 +39,7 @@ class Total extends Model
     }
 
     // belong table to key class
-    public function keys()
+    public function key()
     {
         return $this->belongsTo(Key::class, 'code');
     }

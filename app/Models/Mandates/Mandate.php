@@ -2,7 +2,6 @@
 
 namespace App\Models\Mandates;
 
-use App\Models\Code\Report;
 use App\Models\Code\SubAccountKey;
 use App\Models\DataMandate;
 use App\Models\Mission\MissionType;
@@ -23,18 +22,18 @@ class Mandate extends Model
         'date_mandate'
     ];
 
-
-    public function subAccountKey(){
+    public function subAccountKey()
+    {
         return $this->belongsTo(SubAccountKey::class, 'sub_account_key', 'sub_account_key');
     }
 
-    // belong table to report class
-    public function dataMandates()
+    public function dataMandate()
     {
-        return $this->belongsTo(DataMandate::class, 'report_key', 'report_key');
+        return $this->belongsTo(DataMandate::class, 'report_key');
     }
 
-    public function missionType(){
+    public function missionType()
+    {
         return $this->belongsTo(MissionType::class, 'mission_type');
     }
 }

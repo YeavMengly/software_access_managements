@@ -4,140 +4,117 @@
     <div class="border-wrapper">
 
         <div class="result-total-table-container">
-            <div class="container-fluid">
-                <div class="row">
-                    <div class="col-lg-12 d-flex justify-content-between align-items-center margin-tb mb-4">
-                        <a class="btn btn-danger" href="{{ route('back') }}"
-                            style="width: 160px; height: 50px; border-radius: 4px; display: flex; align-items: center; justify-content: center;">
-                            <i class="fas fa-arrow-left"></i>&nbsp;&nbsp;
-                        </a>
-                        <h3 class="card-title" style="font-weight: 500;">បង្កើតទិន្នន័យឥណទានអនុម័តដើមឆ្នាំ សម្រាប់សលាកបត្រ
-                        </h3>
 
-                        <a class="btn-right "
-                            style="width: 160px; height: 50px; display: flex; align-items: center; justify-content: center;">
+            <div class="row">
+                <div class="col-lg-12 d-flex justify-content-between align-items-center margin-tb mb-4">
+                    <a class="btn btn-danger" href="{{ route('back') }}"
+                        style="width: 120px; height: 40px; border-radius: 4px; display: flex; align-items: center; justify-content: center;">
+                        <i class="fas fa-arrow-left"></i>
+                    </a>
 
-                        </a>
-                    </div>
                 </div>
-                @if (session('success'))
-                    <div class="alert alert-success alert-dismissible fade show" role="alert">
-                        {{ session('success') }}
-                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                    </div>
-                @endif
+            </div>
+            @if (session('success'))
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    {{ session('success') }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            @endif
 
-                @if ($errors->any())
-                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                        <strong>Whoops!</strong> There were some problems with your input.<br><br>
-                        <ul>
-                            @foreach ($errors->all() as $error)
-                                <li>{{ $error }}</li>
-                            @endforeach
-                        </ul>
-                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                    </div>
-                @endif
+            @if ($errors->any())
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <strong>Whoops!</strong> There were some problems with your input.<br><br>
+                    <ul>
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            @endif
 
-                <div class="border-wrapper">
-                    <div class="form-container">
-                        <form action="{{ route('codes.store') }}" method="POST" enctype="multipart/form-data"
-                            onsubmit="validateForm(event)">
+            <div class="d-flex justify-content-center align-items-center">
+                <div class="card shadow-lg" style="width: 90%;"> <!-- Adjusted width to 1080px -->
+            
+                    <h3 class="card-title text-center mt-4" style="font-weight: 500;">បង្កើតទិន្នន័យឥណទានអនុម័តដើមឆ្នាំ
+                        សម្រាប់សលាកបត្រ</h3> <!-- Moved h3 out of the card-body -->
+                    <div class="card-body px-5 py-4">
+                        <form action="{{ route('codes.store') }}" method="POST" enctype="multipart/form-data" onsubmit="validateForm(event)">
                             @csrf
-                            <div class="row">
+                            <div class="row justify-content-center">
                                 <div class="col-md-4">
-                                    <div class="row">
+                                    <div class="row justify-content-center">
                                         <div class="col-md-6">
                                             <div class="form-group">
-                                                <label for="searchSubAccountKey" class="font-weight-bold">
+                                                <label for="searchSubAccountKey" class="font-weight-bold text-center">
                                                     <strong>លេខអនុគណនី:</strong>
                                                 </label>
-                                                <input type="text" id="searchSubAccountKey"
-                                                    class="form-control text-center" placeholder="ស្វែងរកលេខអនុគណនី..."
-                                                    onkeyup="filterSubAccountKeys(event)"
-                                                    oninput="resetSubAccountSelection()" style="width: 80%; height: 40px;"
-                                                    value="{{ old('searchSubAccountKey') }}">
+                                                <input type="text" id="searchSubAccountKey" class="form-control text-center" placeholder="ស្វែងរកលេខអនុគណនី..."
+                                                    onkeyup="filterSubAccountKeys(event)" oninput="resetSubAccountSelection()" style="width: 230px; height: 40px;" value="{{ old('searchSubAccountKey') }}">
                                                 <p id="resultCount" style="font-weight: bold; margin-top: 8px;">ចំនួន: 0</p>
-                                                <select name="sub_account_key" id="subAccountKeySelect" class="form-control"
-                                                    size="5" onclick="getSelectedValue()"
-                                                    style="height: 130px; width: 80%;">
+                                                <select name="sub_account_key" id="subAccountKeySelect" class="form-control" size="5" onclick="getSelectedValue()"
+                                                    style="height: 130px; width:  230px; ">
                                                     @foreach ($subAccountKeys as $subAccountKey)
-                                                        <option value="{{ $subAccountKey->sub_account_key }}"{{ old('sub_account_key') == $subAccountKey->id ? 'selected' : '' }}>{{ $subAccountKey->sub_account_key }}
+                                                        <option value="{{ $subAccountKey->sub_account_key }}"{{ old('sub_account_key') == $subAccountKey->id ? 'selected' : '' }}> {{ $subAccountKey->sub_account_key }}
                                                         </option>
                                                     @endforeach
                                                 </select>
-                                                <span id="subAccountKeyError" class="text-danger"
-                                                    style="display: none;">បញ្ជាក់ទិន្នន័យ</span>
+                                                <span id="subAccountKeyError" class="text-danger" style="display: none;">បញ្ជាក់ទិន្នន័យ</span>
                                             </div>
                                         </div>
                                         <div class="col-md-6">
                                             <div class="form-group">
-                                                <label for="report_key"><strong>លេខកូដកម្មវិធី:</strong></label>
-                                                <input type="number" name="report_key" id="report_key"
-                                                    class="form-control @error('report_key') is-invalid @enderror"
-                                                    style="width: 80%; height: 40px;" min="0"
-                                                    value="{{ old('report_key') }}">
+                                                <label for="report_key" class="font-weight-bold text-center"><strong>លេខកូដកម្មវិធី:</strong></label>
+                                                <input type="number" name="report_key" id="report_key" class="form-control @error('report_key') is-invalid @enderror"
+                                                    style="width: 230px;  height: 40px;" min="0" value="{{ old('report_key') }}">
                                                 @error('report_key')
                                                     <div class="invalid-feedback">{{ $message }}</div>
                                                 @enderror
-                                                <span id="reportKeyError" class="text-danger"
-                                                    style="display: none;">បញ្ជាក់ទិន្នន័យ</span>
+                                                <span id="reportKeyError" class="text-danger" style="display: none;">បញ្ជាក់ទិន្នន័យ</span>
                                             </div>
                                             <div class="form-group">
-                                                <label for="fin_law"><strong>ច្បាប់ហិរញ្ញវត្ថុ:</strong></label>
-                                                <input type="number" name="fin_law" id="fin_law"
-                                                    class="form-control @error('fin_law') is-invalid @enderror"
-                                                    style="width: 80%; height: 40px;" min="0"
-                                                    value="{{ old('fin_law') }}"
-                                                    oninput="updateCurrentLoan(this); formatNumber(this)">
+                                                <label for="fin_law" class="font-weight-bold text-center"><strong>ច្បាប់ហិរញ្ញវត្ថុ:</strong></label>
+                                                <input type="number" name="fin_law" id="fin_law" class="form-control @error('fin_law') is-invalid @enderror"
+                                                    style="width:  230px;  height: 40px;" min="0" value="{{ old('fin_law') }}" oninput="updateCurrentLoan(this); formatNumber(this)">
                                                 @error('fin_law')
                                                     <div class="invalid-feedback">{{ $message }}</div>
                                                 @enderror
-                                                <span id="finLawError" class="text-danger"
-                                                    style="display: none;">បញ្ជាក់ទិន្នន័យ</span>
+                                                <span id="finLawError" class="text-danger" style="display: none;">បញ្ជាក់ទិន្នន័យ</span>
                                             </div>
-
+            
                                             <div class="form-group">
-                                                <label for="current_loan"><strong>ឥណទានបច្ចុប្បន្ន:</strong></label>
-                                                <input type="number" name="current_loan" id="current_loan"
-                                                    class="form-control @error('current_loan') is-invalid @enderror"
-                                                    style="width: 80%; height: 40px;" min="0"
-                                                    value="{{ old('current_loan') }}">
+                                                <label for="current_loan" class="font-weight-bold text-center"><strong>ឥណទានបច្ចុប្បន្ន:</strong></label>
+                                                <input type="number" name="current_loan" id="current_loan" class="form-control @error('current_loan') is-invalid @enderror"
+                                                    style="width:  230px;  height: 40px;" min="0" value="{{ old('current_loan') }}">
                                                 @error('current_loan')
                                                     <div class="invalid-feedback">{{ $message }}</div>
                                                 @enderror
-                                                <span id="currentLoanError" class="text-danger"
-                                                    style="display: none;">បញ្ជាក់ទិន្នន័យ</span>
+                                                <span id="currentLoanError" class="text-danger" style="display: none;">បញ្ជាក់ទិន្នន័យ</span>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-
+            
                                 <div class="col-md-4">
                                     <div class="form-group">
-                                        <label for="name_report_key"><strong>ចំណាត់ថ្នាក់:</strong></label>
-                                        <textarea name="name_report_key" id="name_report_key"
-                                            class="form-control @error('name_report_key') is-invalid @enderror" style="height: 220px; text-align: left;"
-                                            placeholder="សូមបញ្ចូលចំណាត់ថ្នាក់នៅនេះ...">{{ old('name_report_key') }}</textarea>
+                                        <label for="name_report_key" class="font-weight-bold text-center"><strong>ចំណាត់ថ្នាក់:</strong></label>
+                                        <textarea name="name_report_key" id="name_report_key" class="form-control @error('name_report_key') is-invalid @enderror"
+                                            style="height: 215px; text-align: left; width: 100%;" placeholder="សូមបញ្ចូលចំណាត់ថ្នាក់នៅនេះ...">{{ old('name_report_key') }}</textarea>
                                         @error('name_report_key')
                                             <div class="invalid-feedback">{{ $message }}</div>
                                         @enderror
-                                        <span id="nameReportKeyError" class="text-danger"
-                                            style="display: none;">បញ្ជាក់ទិន្នន័យ</span>
+                                        <span id="nameReportKeyError" class="text-danger" style="display: none;">បញ្ជាក់ទិន្នន័យ</span>
                                     </div>
                                 </div>
-
+            
                                 <div class="col-md-4">
                                     <div class="form-group">
-                                        <label for="date_year"><strong>ឆ្នាំចាប់ផ្ដើម</strong></label>
-                                        <select name="date_year" id="date_year"
-                                            class="form-control @error('date_year') is-invalid @enderror"
-                                            style="width: 40%; height: 40px;">
+                                        <label for="date_year" class="font-weight-bold text-center"><strong>ឆ្នាំចាប់ផ្ដើម</strong></label>
+                                        <select name="date_year" id="date_year" class="form-control @error('date_year') is-invalid @enderror" style="width:  230px;  height: 40px;">
                                             <option value="">-- ជ្រើសរើសឆ្នាំ --</option>
                                             @foreach ($years as $year)
                                                 @if ($year->status == 'active')
-                                                    <option value="{{ $year->id }}"
-                                                        {{ old('date_year') == $year->id ? 'selected' : '' }}>
+                                                    <option value="{{ $year->id }}" {{ old('date_year') == $year->id ? 'selected' : '' }}>
                                                         @php
                                                             $date = \Carbon\Carbon::parse($year->date_year);
                                                             $khmerMonth = getKhmerMonth($date->month);
@@ -153,19 +130,27 @@
                                         @enderror
                                     </div>
                                 </div>
-
                             </div>
-                            <div class="d-flex align-items-center">
-                                <button type="submit" class="btn btn-primary ml-auto"
-                                    style="width: 150px; height: 50px;">
-                                    <i class="fas fa-save"></i> រក្សាទុក
-                                </button>
+            
+                            <div class="row justify-content-center">
+                                <div class="col-12 text-center">
+                                    <!-- Reset Button -->
+                                    <button type="reset" class="btn btn-secondary ">
+                                        <i class="fas fa-undo"></i>&nbsp;&nbsp;កំណត់ឡើងវិញ
+                                    </button>
+            
+                                    <!-- Submit Button -->
+                                    <button type="submit" class="btn btn-primary ml-3">
+                                        <i class="fas fa-save"></i>&nbsp;&nbsp;រក្សាទុក
+                                    </button>
+                                </div>
                             </div>
                         </form>
-
                     </div>
+            
                 </div>
             </div>
+            
         </div>
     </div>
 @endsection
@@ -173,12 +158,8 @@
 @section('styles')
     <style>
         .border-wrapper {
-            border: 1px solid rgb(133, 131, 131);
-            padding: 10px;
-        }
-
-        .container-fluid {
-            padding: 16px;
+            padding-left: 16px;
+            padding-right: 16px;
         }
 
         #subAccountKeySelect {
@@ -190,7 +171,7 @@
             font-size: 16px;
         }
 
-        .btn,
+     
         .form-control,
         th,
         td {
@@ -200,6 +181,7 @@
             font-family: 'Khmer OS Siemreap', sans-serif;
             font-size: 14px;
         }
+
     </style>
 @endsection
 

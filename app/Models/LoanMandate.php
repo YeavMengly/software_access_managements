@@ -23,7 +23,7 @@ class LoanMandate extends Model
         'editorial',
     ];
 
-    public function reports(){
+    public function report(){
         return $this->belongsTo(Report::class, 'report_key');
     }
 }

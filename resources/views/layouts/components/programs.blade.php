@@ -6,17 +6,17 @@
             <div class="row">
                 <div class="col-md-4 mb-3">
                     <a href="{{ route('keys.index') }}" class="btn btn-custom btn-block animate-button">
-                        បញ្ចូលទិន្ន័យជំពូក
+                        បញ្ចូលជំពូក
                     </a>
                 </div>
                 <div class="col-md-4 mb-3">
                     <a href="{{ route('accounts.index') }}" class="btn btn-custom btn-block animate-button">
-                        បញ្ចូលទិន្ន័យគណនី
+                        បញ្ចូលគណនី
                     </a>
                 </div>
                 <div class="col-md-4 mb-3">
                     <a href="{{ route('sub-account.index') }}" class="btn btn-custom btn-block animate-button">
-                        បញ្ចូលទិន្ន័យអនុគណនី
+                        បញ្ចូលអនុគណនី
                     </a>
                 </div>
                 <div class="col-md-4 mb-3">

@@ -5,7 +5,7 @@
         <div class="col-lg-12 margin-tb ">
             <div class="d-flex justify-content-between align-items-center">
                 <a class="btn btn-danger" href="{{ route('total_card') }}"
-                    style="width: 160px; height: 50px; border-radius: 4px; display: flex; align-items: center; justify-content: center;">
+                    style="width: 120px; height: 40px; border-radius: 4px; display: flex; align-items: center; justify-content: center;">
                     <i class="fas fa-arrow-left"></i>&nbsp;&nbsp;
                 </a>
             </div>
@@ -184,7 +184,7 @@
                                     <th rowspan="3">គណនី</th>
                                     <th rowspan="3">អនុគណនី</th>
                                     <th rowspan="3">កូដកម្មវិធី</th>
-                                    <th rowspan="3">ចំណាត់ថ្នាក់</th>
+                                    <th rowspan="3" style="text-align: start; width: 350px;">ចំណាត់ថ្នាក់</th>
                                     <th rowspan="3">ច្បាប់ហិ.វ</th>
                                     <th rowspan="3">ឥណទានបច្ចុប្បន្ន</th>
                                     <th colspan="5">ចលនាឥណទាន</th>
@@ -217,7 +217,7 @@
                                         <td colspan="1"></td>
                                         <td colspan="1"></td>
                                         <td colspan="1"></td>
-                                        <td colspan="1" style="text-align: start; width: 350px;">
+                                        <td colspan="1">
                                             {{ $totalsByCode['name'] }}</td>
                                         <td>{{ number_format($totalsByCode['fin_law'], 0, ' ', ' ') }}</td>
                                         <td>{{ number_format($totalsByCode['current_loan'], 0, ' ', ' ') }}</td>

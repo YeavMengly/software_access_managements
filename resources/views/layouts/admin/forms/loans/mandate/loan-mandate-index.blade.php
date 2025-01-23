@@ -182,13 +182,13 @@
                         <tr>
                             <td style="border: 1px solid black; max-width: 80px; text-align: center">
                                 {{-- @if ($loanMandate->dataMandates && $loanMandate->reportKey->subAccountKey) --}}
-                                    {{ $loanMandate->sub_account_key }}
+                                    {{ $loanMandate->report->sub_account_key }}
                                 {{-- @else
                                     N/A
                                 @endif --}}
                             </td>
                             <td style="border: 1px solid black; max-width: 80px; text-align: center">
-                                {{ $loanMandate->report_key }}
+                                {{ $loanMandate->report->report_key }}
                             </td>
                             <td style="border: 1px solid black; max-width: 80px; text-align: center">
                                 {{ number_format($loanMandate->internal_increase, 0, ' ', ' ') }}
@@ -208,7 +208,7 @@
                             <td style="border: 1px solid black; max-width: 80px; text-align: center">
                                 {{ number_format($loanMandate->editorial, 0, ' ', ' ') }}
                             </td>
-                            <td style="border: 1px solid black; text-align: center; justify-content: center">
+                            <td style="border: 1px solid black; text-align: center; justify-content: center ; width: 120px;">
                                 <form id="delete-form-{{ $loanMandate->id }}"
                                     action="{{ route('loan-mandates.destroy', $loanMandate->id) }}" method="POST"
                                     style="display: none;">

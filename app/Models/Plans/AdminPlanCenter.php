@@ -22,7 +22,7 @@ class AdminPlanCenter extends Model
         'sth'
     ];
 
-    public function keys(){
+    public function key(){
         return $this->belongsTo(Key::class, 'code');
     }
 }

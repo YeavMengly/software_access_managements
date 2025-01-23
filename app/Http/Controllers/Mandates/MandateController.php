@@ -15,31 +15,37 @@ class MandateController extends Controller
     //
     public function index(Request $request)
     {
-        // Retrieve all mission types for filtering options
         $missionTypes = MissionType::all();
-
-        // Get the selected mission type ID from the request
         $selectedMissionType = $request->input('mission_type');
-
-        // Query mission planning with relationships
-        $query = Mandate::with(['dataMandates', 'subAccountKey', 'missionType']);
-
-        // Apply filter if a mission type is selected
-        if ($selectedMissionType) {
-            $query->where('mission_type', $selectedMissionType);
+        $search = $request->input('search');
+        $sortField = $request->input('sort_field', 'value_mandate'); 
+        $sortDirection = $request->input('sort_direction', 'asc');
+        $perPage = $request->input('per_page', 25);
+    
+        if (!in_array($sortField, ['value_mandate', 'report_key'])) {
+            $sortField = 'value_mandate'; 
         }
-
-        // Fetch the filtered mission plans
-        $mandates = $query->get();
-
-
-        // Calculate the total amount for the selected mission type
+    
+        $query = Mandate::with(['dataMandate.subAccountKey.accountKey.key', 'missionType'])
+            ->whereHas('dataMandate.year', function ($query) {
+                $query->where('status', 'active');
+            })
+            ->when($search, function ($query, $search) {
+                $query->whereHas('dataMandate', function ($query) use ($search) {
+                    $query->where('report_key', 'like', "%{$search}%");
+                });
+            })
+            ->when($selectedMissionType, function ($query, $selectedMissionType) {
+                $query->where('mission_type', $selectedMissionType);
+            });
+    
+        $mandates = $query->orderBy($sortField, $sortDirection)->paginate($perPage);
+    
         $totalAmount = $query->sum('value_mandate');
-
-        // Pass data to the view
+    
         return view('layouts.admin.forms.mandate.mandate-index', compact('mandates', 'missionTypes', 'selectedMissionType', 'totalAmount'));
     }
-
+    
     public function create()
     {
         $missionTypes = MissionType::all();
@@ -51,7 +57,6 @@ class MandateController extends Controller
 
     public function store(Request $request)
     {
-        // Validate input
         $validatedData = $request->validate([
             'report_key' => 'required|exists:data_mandates,id',
             'value_mandate' => 'required|numeric|min:0',
@@ -59,10 +64,8 @@ class MandateController extends Controller
             'attachments' => 'nullable|array',
             'attachments.*' => 'file|mimes:pdf|max:2048',
             'date_mandate' => 'required|date',
-
         ]);
 
-        // Retrieve the report by the provided report_key
         $dataMandate = DataMandate::findOrFail($validatedData['report_key']);
         if (!$dataMandate || !$dataMandate->subAccountKey) {
             return redirect()->back()->withErrors(['error' => 'មិនមាន អនុគណនី ឬកូដកម្មវិធី។']);
@@ -74,26 +77,21 @@ class MandateController extends Controller
             return redirect()->back()->withErrors(['error' => 'ឥណាទានមិនអាចតិចជាងសូន្យ។']);
         }
 
-        // Initialize array for storing file paths
         $storedFilePaths = [];
 
-        // Process uploaded files
         if ($request->hasFile('attachments')) {
             foreach ($request->file('attachments') as $file) {
                 if ($file->isValid()) {
-                    // Store file and save the file path in the database
-                    $filePath = $file->store('mandates', 'public'); // Save to public storage
-                    $storedFilePaths[] = $filePath;  // Store the file path
+                    $filePath = $file->store('mandates', 'public');
+                    $storedFilePaths[] = $filePath;
                 }
             }
         }
-
-        // Store data in the database
         Mandate::create([
             'report_key' => $validatedData['report_key'],
             'value_mandate' => $applyValue,
             'mission_type' => $validatedData['mission_type'],
-            'attachments' => json_encode($storedFilePaths),  // Store the file paths as JSON
+            'attachments' => json_encode($storedFilePaths),
             'date_mandate' => $validatedData['date_mandate'],
 
         ]);
@@ -101,13 +99,9 @@ class MandateController extends Controller
         $this->calculateAndSaveReportWithMandate($dataMandate);
 
         $dataMandate->refresh();
-
-
         $lastMandate = Mandate::where('report_key', $validatedData['report_key'])->latest()->first();
         $dataMandate->apply = $lastMandate->value_mandate;
-
         $dataMandate->save();
-
 
         return redirect()->back()->with('success', 'អាណត្តិបានបញ្ចូលដោយជោគជ័យ');
     }
@@ -154,22 +148,30 @@ class MandateController extends Controller
     public function update(Request $request, $id)
     {
         $validatedData = $request->validate([
-            'report_key' => 'required|exists:reports,id',
+            'report_key' => 'required|exists:data_mandates,id',
             'value_mandate' => 'required|numeric|min:0',
             'mission_type' => 'required|exists:mission_types,id',
             'attachments' => 'nullable|array',
             'attachments.*' => 'file|mimes:pdf|max:2048',
+            'date_mandate' => 'required|date',
         ]);
-
-        $mandate = Mandate::findOrFail($id);
-
-        $dataMandate = DataMandate::where('id', $validatedData['report_key'])
-            ->whereHas('year', function ($query) {
-                $query->where('status', 'active');
-            })
-            ->firstOrFail();
-        $storedFilePaths = json_decode($mandate->attachments, true) ?? [];
-
+    
+        $mandate = Mandate::findOrFail($id); // Find the specific mandate by ID
+        $dataMandate = DataMandate::findOrFail($validatedData['report_key']);
+    
+        if (!$dataMandate || !$dataMandate->subAccountKey) {
+            return redirect()->back()->withErrors(['error' => 'មិនមាន អនុគណនី ឬកូដកម្មវិធី។']);
+        }
+    
+        $applyValue = $validatedData['value_mandate'];
+        $remainingCredit = $dataMandate->credit - $applyValue + $mandate->value_mandate;
+    
+        if ($remainingCredit < 0) {
+            return redirect()->back()->withErrors(['error' => 'ឥណាទានមិនអាចតិចជាងសូន្យ។']);
+        }
+    
+        // Handle attachments
+        $storedFilePaths = $mandate->attachments ? json_decode($mandate->attachments, true) : [];
         if ($request->hasFile('attachments')) {
             foreach ($request->file('attachments') as $file) {
                 if ($file->isValid()) {
@@ -178,16 +180,25 @@ class MandateController extends Controller
                 }
             }
         }
-
+    
         $mandate->update([
             'report_key' => $validatedData['report_key'],
-            'value_mandate' => $validatedData['value_mandate'],
+            'value_mandate' => $applyValue,
             'mission_type' => $validatedData['mission_type'],
-            'attachments' => json_encode($storedFilePaths),  // Store the file paths as JSON
+            'attachments' => json_encode($storedFilePaths),
+            'date_mandate' => $validatedData['date_mandate'],
         ]);
-        return redirect()->route('mandates.index')->with('success', 'Mandate updated successfully.');
+    
+        $this->calculateAndSaveReportWithMandate($dataMandate);
+    
+        $dataMandate->refresh();
+        $lastMandate = Mandate::where('report_key', $validatedData['report_key'])->latest()->first();
+        $dataMandate->apply = $lastMandate->value_mandate;
+        $dataMandate->save();
+    
+        return redirect()->back()->with('success', 'អាណត្តិបានកែប្រែដោយជោគជ័យ');
     }
-
+    
     public function destroy($id)
     {
         $mandate = Mandate::findOrFail($id);
@@ -213,8 +224,8 @@ class MandateController extends Controller
     private function calculateAndSaveReportWithMandate(DataMandate $dataMandate)
     {
         $newApplyTotal = Mandate::where('report_key', $dataMandate->id)
-            ->latest('created_at') 
-            ->value('value_mandate') ?? 0; 
+            ->latest('created_at')
+            ->value('value_mandate') ?? 0;
         $dataMandate->early_balance = $this->calculateEarlyBalance($dataMandate);
 
         $dataMandate->apply = $newApplyTotal;
@@ -235,7 +246,7 @@ class MandateController extends Controller
             return 0;
         }
 
-        $totalEarlyBalance = $mandate->slice(0, -1) 
+        $totalEarlyBalance = $mandate->slice(0, -1)
             ->filter(function ($item) {
                 return !is_null($item->value_mandate) && $item->value_mandate !== '';
             })

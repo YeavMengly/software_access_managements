@@ -7,7 +7,7 @@
                 <div class="col-lg-12 margin-tb mb-4">
                     <div class="d-flex justify-content-between align-items-center">
                         <a class="btn btn-danger" href="{{ route('back') }}"
-                            style="width: 160px; height: 50px; border-radius: 4px; display: flex; align-items: center; justify-content: center;">
+                            style="width: 120px; height: 40px; border-radius: 4px; display: flex; align-items: center; justify-content: center;">
                             <i class="fas fa-arrow-left"></i>&nbsp;&nbsp;
                         </a>
 
@@ -16,10 +16,10 @@
                         <div class="btn-group">
                             @if (auth()->check() && auth()->user()->role == 'admin')
                                 <!-- Check if the user is an admin -->
-                                <a class="btn btn-success d-flex justify-content-center align-items-center"
-                                    href="" data-bs-toggle="modal" data-bs-target="#createYear"
-                                    style="width: 160px; height: 50px; border-radius: 4px;">
-                                    កំណត់ឆ្នាំ &nbsp;&nbsp;
+                                <a class="btn btn-primary d-flex justify-content-center align-items-center" href=""
+                                    data-bs-toggle="modal" data-bs-target="#createYear"
+                                    style="width: 120px; height: 40px; border-radius: 4px;">
+                                   បញ្ចូល
                                 </a>
                             @else
                                 <span></span>
@@ -40,7 +40,6 @@
                 </div>
             @endif
 
-            <!-- Modal Form for Creating a New Year -->
             <div class="modal fade" id="createYear" tabindex="-1" aria-labelledby="importModalLabel" aria-hidden="true">
                 <div class="modal-dialog modal-dialog-centered">
                     <div class="modal-content">
@@ -72,9 +71,6 @@
                     </div>
                 </div>
             </div>
-
-
-            {{-- Dropdown for showing number of items per page --}}
             <div class="d-flex justify-content-end mb-2">
                 <div style="width: 120px;">
                     <select name="per_page" class="form-control" onchange="window.location.href=this.value;">
@@ -91,7 +87,7 @@
             <table class="table table-striped table-hover">
                 <thead>
                     <tr>
-                        <th style="border: 1px solid black;">
+                        <th style="border: 1px solid black; width: 120px;">
                             <span> ល.រ</span>
                         </th>
                         <th style="border: 1px solid black;">
@@ -108,7 +104,7 @@
                         @else
                         @endif
                         @if (auth()->check() && auth()->user()->role == 'admin')
-                            <th style="border: 1px solid black;" width="200px">
+                            <th style="border: 1px solid black;" width="120px">
                                 <span> សកម្មភាព</span>
                             </th>
                         @else
@@ -119,11 +115,11 @@
                     @foreach ($years as $year)
                         <tr>
                             @if (auth()->check() || auth()->user()->role === 'user')
-                                <td style="border: 1px solid black; text-align: center;">{{ $year->id }}</td>
-                                <td style="border: 1px solid black; text-align: center;">
+                                <td>{{ $year->id }}</td>
+                                <td>
                                     {{ \Carbon\Carbon::parse($year->date_year)->format('Y') }} <!-- Display year only -->
                                 </td>
-                                <td style="border: 1px solid black; text-align: center;">
+                                <td>
                                     <span
                                         class="status-text {{ $year->status === 'active' ? 'text-success' : ($year->status === 'inactive' ? 'text-danger' : 'text-warning') }}">
                                         {{ ucfirst($year->status) }}
@@ -132,14 +128,8 @@
                             @else
                                 <span></span>
                             @endif
-                            {{-- @if (auth()->check() && auth()->user()->role === 'admin')
-                               
-                            @else
-                                <span></span>
-                            @endif --}}
-
                             @if (auth()->check() && auth()->user()->role == 'admin')
-                                <td style="border: 1px solid black; text-align: center;">
+                                <td>
                                     <div class="d-flex justify-content-center align-items-center">
                                         <div class="form-check form-switch">
                                             <input class="form-check-input toggle-status" type="checkbox" role="switch"
@@ -148,10 +138,8 @@
                                                 {{ $year->status === 'active' ? 'checked' : '' }}>
                                         </div>
                                     </div>
-
                                 </td>
-
-                                <td style="border: 1px solid black; text-align: center;">
+                                <td>
                                     <a class="btn btn-primary {{ $year->status !== 'active' ? 'disabled' : '' }}"
                                         href="{{ route('years.edit', $year->id) }}">
                                         <i class="fas fa-edit" title="Edit"></i>
@@ -184,7 +172,8 @@
     {{-- Insclude style here --}}
     <style>
         .border-wrapper {
-            padding: 10px;
+            padding-left: 16px;
+            padding-right: 16px;
         }
 
         .btn-container {
@@ -202,11 +191,11 @@
         label,
         th,
         td {
-            border: 1px solid rgb(133, 131, 131);
+            border: 1px solid black;
             text-align: center;
-            padding: 5px;
             font-family: 'Khmer OS Siemreap', sans-serif;
-            font-size: 16px;
+            font-size: 14px;
+            padding: 6px;
         }
 
         #submit-button {
@@ -214,47 +203,11 @@
             padding-right: 50px;
         }
 
-        #plus-icon {
-            margin-left: 16px;
-        }
-
-        #loader {
-            position: absolute;
-            top: 50%;
-            right: 10px;
-            transform: translateY(-50%);
-            width: 24px;
-            height: 24px;
-            border: 3px solid #f3f3f3;
-            /* Light grey */
-            border-top: 3px solid #3498db;
-            /* Blue */
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-        }
-
-        @keyframes spin {
-            0% {
-                transform: rotate(0deg);
-            }
-
-            100% {
-                transform: rotate(360deg);
-            }
-        }
-    </style>
-    <style>
         .switch {
             position: relative;
             display: inline-block;
             width: 50px;
             height: 25px;
-        }
-
-        .switch input {
-            opacity: 0;
-            width: 0;
-            height: 0;
         }
 
         .slider {
@@ -323,26 +276,6 @@
             });
         }
     </script>
-
-
-    {{-- <script>
-        function confirmDelete(id) {
-            Swal.fire({
-                title: 'តើអ្នកពិតជាចង់លុបមែនទេ?',
-                text: 'មិនអាចត្រឡប់វិញបានទេ!',
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
-                confirmButtonText: 'បាទ/ចាស, លុបវា!',
-                cancelButtonText: 'បោះបង់',
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    document.getElementById('delete-form-' + id).submit();
-                }
-            });
-        }
-    </script> --}}
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {

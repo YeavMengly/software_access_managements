@@ -14,7 +14,6 @@
                                 </a>
                             </div>
 
-
                             <div class="col-md-6 mb-3">
                                 <a href="{{ route('years.index') }}" class="btn btn-custom btn-block animate-button">
                                     កំណត់ឆ្នាំចាប់ផ្ដើម 

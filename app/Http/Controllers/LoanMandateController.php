@@ -25,14 +25,14 @@ class LoanMandateController extends Controller
 
         // Filter by Report Key and Year Status
         if ($reportKey) {
-            $query->whereHas('reports', function ($q) use ($reportKey) {
+            $query->whereHas('report', function ($q) use ($reportKey) {
                 $q->where('report_key_column_in_related_table', 'like', "%{$reportKey}%")
                     ->whereHas('year', function ($q) {
                         $q->where('status', 'active');
                     });
             });
         } else {
-            $query->whereHas('reports.year', function ($q) {
+            $query->whereHas('report.year', function ($q) {
                 $q->where('status', 'active');
             });
         }

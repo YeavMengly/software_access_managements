@@ -18,23 +18,22 @@
         <div class="result-total-table-container">
             <div class="row">
                 <div class="col-lg-12 margin-tb">
-
                     <div class="d-flex justify-content-between align-items-center">
                         <a class="btn btn-danger d-flex justify-content-center align-items-center" href="{{ route('back') }}"
-                            style="width: 160px; height: 50px;">
+                            style="width: 120px; height: 40px;">
                             <i class="fas fa-arrow-left"></i>&nbsp;&nbsp;
                         </a>
-                        <h3 style="font-weight: 700;">តារាងរបាយការណ៍បញ្ចូលឥណទានអនុម័តដើមឆ្នាំ សម្រាប់អាណត្តិ</h3>
+                        <h3 style="font-weight: 500;">បញ្ចូលឥណទានអនុម័តដើមឆ្នាំ សម្រាប់អាណត្តិ</h3>
                         <div class="btn-group">
                             <a class="btn btn-success d-flex justify-content-center align-items-center" href="#"
                                 data-bs-toggle="modal" data-bs-target="#importModal"
-                                style="width: 160px; height: 50px; border-radius: 4px;">
-                                Import Excel &nbsp;<i class="fas fa-file-import" style="margin-left: 8px;"></i>
+                                style="width: 120px; height: 40px; border-radius: 4px;">
+                                Import
                             </a>
                             &nbsp;&nbsp;
                             <a class="btn btn-success d-flex justify-content-center align-items-center"
-                                href="{{ route('data-mandates.create') }}" style="width: 160px; height: 50px; border-radius: 4px;">
-                                បញ្ចូលទិន្នន័យ &nbsp;<i class="fas fa-plus" style="margin-left: 8px;"></i>
+                                href="{{ route('data-mandates.create') }}" style="width: 120px; height: 40px; border-radius: 4px;">
+                                បញ្ចូល
                             </a>
                         </div>
                     </div>
@@ -99,7 +98,7 @@
                             </div>
                             <div class="col-md-12">
                                 <div class="input-group my-3">
-                                    <button type="submit" class="btn btn-primary mr-2" style="width: 150px; height: 40px;">
+                                    <button type="submit" class="btn btn-primary mr-2" style="width: 120px; height: 40px;">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
                                             viewBox="0 0 50 50">
                                             <path
@@ -108,8 +107,8 @@
                                         </svg>
                                         ស្វែងរក
                                     </button>
-                                    <button type="button" id="resetBtn" class="btn btn-danger"
-                                        style="width: 150px; height: 40px;">
+                                    <button type="button" id="resetBtn" class="btn btn-danger "
+                                        style="width: 120px; height: 40px; margin-left: 4px;">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
                                             fill="currentColor" class="bi bi-x-circle" viewBox="0 0 16 16">
                                             <path
@@ -182,7 +181,7 @@
                             <td style="border: 1px solid black; max-width: 80px; text-align: center">
                                 {{ number_format($dataMandate->current_loan, 0, ' ', ' ') }}</td>
 
-                            <td style="border: 1px solid black; text-align: center; justify-content: center">
+                            <td style="border: 1px solid black; text-align: center; justify-content: center; width: 120px;">
                                 <form id="delete-form-{{ $dataMandate->id }}"
                                     action="{{ route('data-mandates.destroy', $dataMandate->id) }}" method="POST"
                                     style="display: none;">
@@ -267,18 +266,11 @@
         }
 
         .border-wrapper {
-            padding: 32px;
+           padding-left: 16px;
+           padding-right: 16px;
         }
 
-        .description {
-            height: 220px;
-            overflow-y: auto;
-        }
-
-        .table-container {
-            width: 100%;
-        }
-
+    
         .btn-link {
             font-size: 1.5rem;
         }
@@ -323,9 +315,9 @@
         td {
             border: 1px solid black;
             text-align: center;
-            padding: 5px;
+            padding: 6px;
             font-family: 'Khmer OS Siemreap', sans-serif;
-            font-size: 16px;
+            font-size: 14px;
         }
 
         .btn-primary {

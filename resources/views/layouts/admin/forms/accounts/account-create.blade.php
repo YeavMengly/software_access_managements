@@ -1,111 +1,134 @@
 @extends('layouts.master')
 
 @section('form-account-upload')
-    <div class="border-wrapper">
+    <div class="border-wrapper vh-90">
         <div class="result-total-table-container">
-            <div class="container-fluid">
-                <div class="row">
-                    <div class="col-lg-12 margin-tb mb-4">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <a class="btn btn-danger" href="{{ route('accounts.index') }}"
-                                style="width: 160px; height: 50px; border-radius: 4px; display: flex; align-items: center; justify-content: center;">
-                                <i class="fas fa-arrow-left"></i>
-                                &nbsp;&nbsp;</a>
-                            <h3 class="card-title">បង្កើតលេខកូដគណនី</h3>
-                            <span></span>
-                        </div>
-                    </div>
-                </div>
+            <div class="row">
+                <div class="col-lg-12 margin-tb mb-4">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <a class="btn btn-danger" href="{{ route('accounts.index') }}"
+                            style=" border-radius: 4px; display: flex; align-items: center; justify-content: center; height: 40px; width: 120px;">
+                            <i class="fas fa-arrow-left"></i>
+                            &nbsp;&nbsp;</a>
 
-                @if (session('success'))
-                    <div class="alert alert-success alert-dismissible fade show" role="alert">
-                        {{ session('success') }}
-                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                    </div>
-                @endif
-
-                @if ($errors->any())
-                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                        <strong>Whoops!</strong> There were some problems with your input.<br><br>
-                        <ul>
-                            @foreach ($errors->all() as $error)
-                                <li>{{ $error }}</li>
-                            @endforeach
-                        </ul>
-                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                    </div>
-                @endif
-                <div class="border-wrapper">
-                    <div class="form-container">
-                        <form action="{{ route('accounts.store') }}" method="POST" enctype="multipart/form-data">
-                            @csrf
-
-                            <div class="row">
-                                <!-- Column 1 -->
-                                <div class="col-md-4">
-                                    <div class="form-group">
-                                        <strong>លេខជំពូក:</strong>
-                                        <select name="code" class="form-control" style="width: 420px; height: 60px;">
-                                            @foreach ($keys as $key)
-                                                <option value="{{ $key->code }}">{{ $key->code }}</option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-                                </div>
-
-                                <!-- Column 2 -->
-                                <div class="col-md-4">
-                                    <div class="form-group">
-                                        <label for="account_key">លេខគណនី:</label>
-                                        <input type="number" name="account_key" id="account_key"
-                                            class="form-control @error('account_key') is-invalid @enderror"
-                                            style="width: 420px; height: 60px;">
-                                        @error('account_key')
-                                            <div class="invalid-feedback">{{ $message }}</div>
-                                        @enderror
-                                    </div>
-                                </div>
-
-                                <!-- Column 3 -->
-                                <div class="col-md-4">
-                                    <div class="form-group">
-                                        <label for="name_account_key">ចំណាត់ថ្នាក់:</label>
-                                        <input type="text" name="name_account_key" id="name_account_key"
-                                            class="form-control @error('name_account_key') is-invalid @enderror"
-                                            style="width: 420px; height: 60px;">
-                                        @error('name_account_key')
-                                            <div class="invalid-feedback">{{ $message }}</div>
-                                        @enderror
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Submit Button -->
-                            <div class="row">
-                                <div class="col-md-12 text-right">
-                                    <button type="submit" class="btn btn-primary" style="width: 300px; height: 60px;"><i
-                                            class="fas fa-save"></i>&nbsp;&nbsp;បានរក្សាទុក</button>
-                                </div>
-                            </div>
-                        </form>
 
                     </div>
                 </div>
             </div>
+
+            @if (session('success'))
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    {{ session('success') }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            @endif
+
+            @if ($errors->any())
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <strong>Whoops!</strong> There were some problems with your input.<br><br>
+                    <ul>
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            @endif
+
         </div>
+        <div class="d-flex justify-content-center align-items-center  ">
+            <div class="card shadow-lg w-65" style="max-width: 900px;">
+
+                <h3 class="card-title text-center mt-4" style="font-weight: 500;">បង្កើតគណនី</h3>
+
+                <div class="card-body px-5 py-4">
+                    <form action="{{ route('accounts.store') }}" method="POST" enctype="multipart/form-data">
+                        @csrf
+
+                        <div class="row mb-4">
+                            <!-- Column 1 -->
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label for="code" class="form-label"><strong>លេខជំពូក:</strong></label>
+                                    <select name="code" id="code" class="form-control">
+                                        <option value="">-- ជ្រើសរើស --</option>
+                                        @foreach ($keys as $key)
+                                            <option value="{{ $key->code }}">{{ $key->code }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+
+                            <!-- Column 2 -->
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label for="account_key" class="form-label"><strong>លេខគណនី:</strong></label>
+                                    <input type="number" name="account_key" id="account_key"
+                                        class="form-control @error('account_key') is-invalid @enderror">
+                                    @error('account_key')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                            </div>
+
+                            <!-- Column 3 -->
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label for="name_account_key" class="form-label"><strong>ចំណាត់ថ្នាក់:</strong></label>
+                                    <input type="text" name="name_account_key" id="name_account_key"
+                                        class="form-control @error('name_account_key') is-invalid @enderror">
+                                    @error('name_account_key')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Submit Button -->
+                        <div class="row">
+                            <div class="col-12 text-center">
+                                <!-- Reset Button -->
+                                <button type="reset" class="btn btn-secondary ">
+                                    <i class="fas fa-undo"></i>&nbsp;&nbsp;កំណត់ឡើងវិញ
+                                </button>
+
+                                <!-- Submit Button -->
+                                <button type="submit" class="btn btn-primary ml-3">
+                                    <i class="fas fa-save"></i>&nbsp;&nbsp;រក្សាទុក
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
     </div>
+
 @endsection
 
 
 @section('styles')
     <style>
         .border-wrapper {
-            border: 2px solid black;
-            padding: 10px;
+            padding-left: 16px;
+            padding-right: 16px;
         }
 
-        .container-fluid {
-            padding: 16px;
+        h3 {
+            font-family: 'Khmer OS Muol Light', sans-serif;
+            font-size: 16px;
+        }
+
+        .form-container {
+            border: 1px solid black;
+        }
+
+
+        .form-control {
+            height: 40px;
+            width: 230px;
+            border: 1px solid black;
         }
     </style>
 @endsection

@@ -4,16 +4,13 @@
     <div class="border-wrapper">
         <div class="result-total-table-container">
             <div class="container-fluid">
-                <div class="row">
-                    <div class="col-lg-12 margin-tb mb-4">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <a class="btn btn-danger d-flex justify-content-center align-items-center mr-2"
-                                href="{{ route('back') }}" style="width: 160px; height: 50px;"><i
-                                    class="fas fa-arrow-left"></i> &nbsp;</a>
-                            <h3 class="card-title" style="font-weight: 500;">បង្កើតសលាកបត្រ</h3>
-                            <span></span>
-                        </div>
-                    </div>
+                <div class="row mb-4">
+
+
+                    <a class="btn btn-danger d-flex justify-content-center align-items-center " href="{{ route('back') }}"
+                        style="width: 120px; height: 40px;"><i class="fas fa-arrow-left"></i></a>
+
+
                 </div>
 
                 @if (session('success'))
@@ -34,25 +31,26 @@
                         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                     </div>
                 @endif
-                <div class="row d-flex justify-content-start">
-                    <div class="col-md-6">
-                        <div class="border-wrapper">
+                <div class="d-flex justify-content-center align-items-center  ">
+                    <div class="card shadow-lg w-65" style="max-width: 900px;">
+                        <h3 class="card-title text-center mt-4" style="font-weight: 500;">បង្កើតសលាកបត្រ</h3>
+                        <div class="card-body px-5 py-4">
                             <form action="{{ route('certificate-data.store') }}" method="POST"
                                 enctype="multipart/form-data">
                                 @csrf
 
                                 <div class="row justify-content-center">
-                                    <div class="col-md-6 d-flex flex-column align-items-center">
+                                    <div class="col-md-4 d-flex flex-column align-items-center">
                                         <div class="form-group">
                                             <strong>លេខកូដកម្មវិធី:</strong>
                                             <input type="text" id="searchReportKey" class="form-control"
                                                 placeholder="ស្វែងរកលេខកូដកម្មវិធី..." onkeyup="filterReportKeys(event)"
-                                                style="width: 280px; height: 40px; text-align: left; line-height: 60px;">
+                                                style="width: 230px; height: 40px; text-align: left; line-height: 40px;">
                                             <p id="resultCount" style="font-weight: bold;">ចំនួន: 0</p>
 
                                             <select name="report_key" id="reportKeySelect" class="form-control"
                                                 size="5" onchange="updateReportInputField()"
-                                                style="width: 280px; height: 150px;">
+                                                style="width: 230px; height: 120px;">
                                                 @foreach ($reports as $report)
                                                     <option value="{{ $report->id }}"><span>{{ $report->subAccountKey->sub_account_key }} > {{ $report->report_key }}</span>
                                                     </option>
@@ -61,50 +59,7 @@
                                         </div>
                                     </div>
 
-                                    {{-- <div class="col-md-6 d-flex flex-column align-items-left">
-                                        <div class="form-group text-center">
-                                            <strong>ចំនួនទឹកប្រាក់:</strong>
-                                            <input type="number" name="value_certificate" id="value_certificate"
-                                                class="form-control @error('value_certificate') is-invalid @enderror"
-                                                style="width: 280px; height: 40px; text-align: center; line-height: 60px;"
-                                                oninput="updateApplyValue()">
-                                            @error('value_certificate')
-                                                <div class="invalid-feedback">{{ $message }}</div>
-                                            @enderror
-                                        </div>
-
-                                        <div class="form-group">
-                                            <label for="mission-type"><strong>ប្រភេទបេសកកម្ម</strong></label>
-                                            <div>
-                                                @foreach ($missionTypes as $missionType)
-                                                    <div class="form-check">
-                                                        <input class="form-check-input" type="radio"
-                                                            name="mission_type" id="mission_type{{ $loop->index }}"
-                                                            value="{{ $missionType->id }}"
-                                                            {{ old('mission_type') == $missionType->id ? 'checked' : '' }}>
-                                                        <label class="form-check-label"
-                                                            for="mission_type{{ $loop->index }}">
-                                                            {{ $missionType->mission_type }}
-                                                        </label>
-                                                    </div>
-                                                @endforeach
-                                            </div>
-                                        </div>
-
-                                        <!-- Attachment Files -->
-                                        <div class="form-group mt-3">
-                                            <!-- File Input -->
-                                            <label for="attachments"><strong>ឯកសារភ្ជាប់:</strong></label>
-                                            <input type="file" class="form-control" id="attachments"
-                                                name="attachments[]" multiple style="height: 45px; padding: 10px;"
-                                                onchange="displaySelectedFiles()">
-
-                                            <!-- Display Selected Files -->
-                                            <ul id="fileList" style="margin-top: 10px; padding-left: 20px;"></ul>
-                                        </div>
-
-                                    </div> --}}
-                                    <div class="col-md-6 d-flex flex-column align-items-start">
+                                    <div class="col-md-4 d-flex flex-column justify-content-start align-items-start">
                                         <!-- Form Group for Value Certificate -->
                                         <div class="form-group">
                                             <strong>ចំនួនទឹកប្រាក់:</strong>
@@ -119,7 +74,7 @@
 
                                         <!-- Form Group for Mission Type -->
                                         <div class="form-group">
-                                            <label for="mission-type"><strong>ប្រភេទបេសកកម្ម</strong></label>
+                                            <label for="mission-type"><strong>ប្រភេទបញ្ជី</strong></label>
                                             <div>
                                                 @foreach ($missionTypes as $missionType)
                                                     <div class="form-check">
@@ -135,29 +90,37 @@
                                                 @endforeach
                                             </div>
                                         </div>
+                                    </div>
 
+                                    <div class="col-md-4 d-flex flex-column align-items-start">
                                         <div class="form-group">
                                             <!-- File Input -->
                                             <label for="attachments"><strong>ជ្រើសរើស ថ្ងៃ ខែ ឆ្នាំ:</strong></label>
                                             <input type="date" class="form-control" id="date_certificate"
-                                                name="date_certificate" multiple style="height: 45px; padding: 10px; width: 230px;">
+                                                name="date_certificate" multiple style="height: 40px; width: 230px;">
                                         </div>
                                         <!-- Attachment Files -->
-                                        <div class="form-group mt-3">
+                                        <div class="form-group ">
                                             <label for="attachments"><strong>ឯកសារភ្ជាប់:</strong></label>
                                             <input type="file" class="form-control" id="attachments" name="attachments[]"
-                                                multiple style="height: 45px; padding: 10px;"
+                                                multiple style="height: 40px; width: 230px; padding: 6px;"
                                                 onchange="displaySelectedFiles()">
-                                            <ul id="fileList" style="margin-top: 10px; padding-left: 20px;"></ul>
+                                            <ul id="fileList" style="padding-left: 24px;"></ul>
                                         </div>
                                     </div>
-
                                 </div>
+                                <div class="row">
+                                    <div class="col-12 text-center">
+                                        <!-- Reset Button -->
+                                        <button type="reset" class="btn btn-secondary ">
+                                            <i class="fas fa-undo"></i>&nbsp;&nbsp;កំណត់ឡើងវិញ
+                                        </button>
 
-                                <div class="d-flex justify-content-end mt-4">
-                                    <button type="submit" class="btn btn-primary" style="width: 200px; height: 50px;">
-                                        <i class="fas fa-save"></i> រក្សាទុក
-                                    </button>
+                                        <!-- Submit Button -->
+                                        <button type="submit" class="btn btn-primary ml-3">
+                                            <i class="fas fa-save"></i>&nbsp;&nbsp;រក្សាទុក
+                                        </button>
+                                    </div>
                                 </div>
                             </form>
                         </div>
@@ -166,23 +129,23 @@
                         <div class="form-group text-center d-flex flex-column align-items-center">
                             <strong class="d-block mb-2">ឥណទានអនុម័ត:</strong>
                             <span id="fin_law" class="form-control"
-                                style="width: 80%; height: 40px; text-align: center;">0</span>
+                                style="width: 230px; height: 40px; text-align: center;">0</span>
                         </div>
                         <div class="form-group text-center d-flex flex-column align-items-center">
                             <strong class="d-block mb-2">ចលនាឥណទាន:</strong>
                             <span id="credit_movement" class="form-control"
-                                style="width: 80%; height: 40px; text-align: center;">0</span>
+                                style="width: 230px; height: 40px; text-align: center;">0</span>
                         </div>
 
                         <div class="form-group text-center d-flex flex-column align-items-center">
                             <strong class="d-block mb-2">ស្ថានភាពឥណទានថ្មី:</strong>
                             <span id="new_credit_status" class="form-control"
-                                style="width: 80%; height: 40px; text-align: center;">0</span>
+                                style="width: 230px; height: 40px; text-align: center;">0</span>
                         </div>
                         <div class="form-group text-center d-flex flex-column align-items-center">
                             <strong class="d-block mb-2">ឥណទានទំនេរ:</strong>
                             <span id="credit" class="form-control"
-                                style="width: 80%; height: 40px; text-align: center;">0</span>
+                                style="width: 230px; height: 40px; text-align: center;">0</span>
                         </div>
                     </div>
 
@@ -190,19 +153,19 @@
                         <div class="form-group text-center d-flex flex-column align-items-center">
                             <strong class="d-block mb-2">ធានាចំណាយពីមុន:</strong>
                             <span id="deadline_balance" class="form-control"
-                                style="width: 80%; height: 40px; text-align: center;">0</span>
+                                style="width: 230px; height: 40px; text-align: center;">0</span>
                         </div>
 
                         <div class="form-group text-center d-flex flex-column align-items-center">
                             <strong class="d-block mb-2">ស្នើរសុំលើកនេះ:</strong>
                             <span id="applying" class="form-control"
-                                style="width: 80%; height: 40px; text-align: center;">0</span>
+                                style="width: 230px; height: 40px; text-align: center;">0</span>
                         </div>
 
                         <div class="form-group text-center d-flex flex-column align-items-center">
                             <strong class="d-block mb-2">ឥណទាននៅសល់:</strong>
                             <span id="remaining_credit" class="form-control"
-                                style="width: 80%; height: 40px; text-align: center;">0</span>
+                                style="width: 230px; height: 40px; text-align: center;">0</span>
                         </div>
                     </div>
 
@@ -215,8 +178,8 @@
 @section('styles')
     <style>
         .border-wrapper {
-            border: 1px solid black;
-            padding: 10px;
+            padding-left: 16px;
+            padding-right: 16px;
         }
 
         h3 {
@@ -224,19 +187,11 @@
             font-size: 16px;
         }
 
-        .result-total-table-container {
-            max-height: 100vh;
-            overflow-y: auto;
-        }
-
-
-        .btn,
         .form-control,
         th,
         td {
             border: 1px solid black;
             text-align: center;
-            padding: 6px;
             font-family: 'Khmer OS Siemreap', sans-serif;
             font-size: 14px;
         }

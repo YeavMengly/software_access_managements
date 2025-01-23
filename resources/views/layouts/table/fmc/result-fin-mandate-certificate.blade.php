@@ -14,9 +14,10 @@
         <table class="table-border">
             <thead class="header-border">
                 <tr>
-                    <th>អនុគណនី</th>
-                    <th>កម្មវិធី</th>
+                    <th style="text-align: center; width: 120px;">អនុគណនី</th>
+                    <th style="text-align: center; width: 120px;">កម្មវិធី</th>
                     <th>ច្បាប់ហិ.វ</th>
+                    <th>ឥណទានថ្មី</th>
                     <th>សលាកបត្រ​</th>
                     <th>អាណត្តិ</th>
                 </tr>
@@ -28,6 +29,7 @@
                         <td>{{ $report->sub_account_key }}</td>
                         <td>{{ $report->report_key }}</td>
                         <td>{{ $report->fin_law }}</td>
+                        <td>{{ $report->new_credit_status }}</td>
                         <td>{{ $report->value_certificate }}</td>
                         <td>{{ $report->value_mandate }}</td>
                     </tr>
@@ -40,22 +42,8 @@
 @section('styles')
     <style>
         .border-wrapper {
-            border: 2px solid black;
-
-        }
-
-        .result-total-table-container {
-            padding: 16px;
-
-        }
-
-        .container-fluid {
-            padding: 16px;
-            /* max-height: 100vh; */
-        }
-
-        .table-container {
-            width: 100%;
+            padding-left: 16px;
+            padding-right: 16px;
         }
 
         table {
@@ -63,17 +51,15 @@
             border-collapse: collapse;
         }
 
-
         .form-control,
         label,
         th,
         td {
             border: 1px solid black;
             text-align: center;
-            padding: 5px;
+            padding: 6px;
             font-family: 'Khmer OS Siemreap', sans-serif;
-            font-size: 16px;
-
+            font-size: 14px;
         }
 
         .btn {
@@ -87,11 +73,10 @@
 
         h2 {
             font-family: 'Khmer OS Muol Light', sans-serif;
-            font-size: 24px;
+            font-size: 16px;
         }
 
-        h3,
-        h4 {
+        h3 {
             font-family: 'Khmer OS Muol Light', sans-serif;
             font-size: 16px;
         }

@@ -69,6 +69,7 @@ class ResultMandateController extends Controller
         $loans = $loanQuery->get();
     
         $totals = $this->calculateTotals($dataMandates, $loans);
+
     
         // Pass variables to view
         return view('layouts.table.result-mandate', compact('totals', 'dataMandates', 'loans', 'years', 'currentYear', 'currentMonth', 'selectedYearId', 'month'));
@@ -161,7 +162,6 @@ class ResultMandateController extends Controller
             'reportKey' => [],
         ];
 
-        
 
         foreach ($dataMandates as $dataMandate) {
             $codeId = $dataMandate->code_id;
@@ -196,8 +196,8 @@ class ResultMandateController extends Controller
                     'law_correction' => 0,
                 ];
             }
-            $totals['fin_law'] += $result->fin_law ?? 0;
-            $totals['current_loan'] += $result->current_loan ?? 0;
+            $totals['fin_law'] += $dataMandate->fin_law ?? 0;
+            $totals['current_loan'] += $dataMandate->current_loan ?? 0;
 
             if (!empty($loan)) {
                 $totals['reportKey'][$codeId][$accountKeyId][$subAccountKeyId][$reportKeyId]['fin_law'] += $dataMandate->fin_law;
@@ -220,11 +220,11 @@ class ResultMandateController extends Controller
                 $totalIncrease = $loan->internal_increase + $loan->unexpected_increase + $loan->additional_increase;
                 $totals['total_increase'] += $totalIncrease;
             }
-            $totals['new_credit_status'] += $result->new_credit_status ?? 0;
-            $totals['early_balance'] += $result->early_balance ?? 0;
-            $totals['apply'] += $result->apply ?? 0;
-            $totals['deadline_balance'] += $result->deadline_balance ?? 0;
-            $totals['credit'] += $result->credit ?? 0;
+            $totals['new_credit_status'] += $dataMandate->new_credit_status ?? 0;
+            $totals['early_balance'] += $dataMandate->early_balance ?? 0;
+            $totals['apply'] += $dataMandate->apply ?? 0;
+            $totals['deadline_balance'] += $dataMandate->deadline_balance ?? 0;
+            $totals['credit'] += $dataMandate->credit ?? 0;
         }
 
         $totals['law_average'] = $totals['fin_law'] > 0 || $totals['fin_law'] > 0  ? ($totals['deadline_balance'] / $totals['fin_law']) * 100 : 0;
