@@ -11,11 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
+       if (!Schema::hasTable('mission_tags')) {
+        # code...
         Schema::create('mission_tags', function (Blueprint $table) {
             $table->id();
             $table->string('m_tag')->nullable();
             $table->timestamps();
         });
+       }
     }
 
     /**
