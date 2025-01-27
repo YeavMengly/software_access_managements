@@ -94,6 +94,32 @@
                                     @enderror
                                 </div>
                             </div>
+
+                            <div class="form-group">
+                                <label for="level">ជ្រើសរើសកម្រិត:</label>
+                                <div>
+                                    {{-- Option for មូលដ្ឋាន --}}
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="mission_tag"
+                                            id="mission_tag_local" value="local"
+                                            {{ old('mission_tag') == 'local' ? 'checked' : '' }}>
+                                        <label class="form-check-label" for="mission_tag_local">មូលដ្ឋាន</label>
+                                    </div>
+
+                                    {{-- Option for ថ្នាក់ជាតិ --}}
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="mission_tag"
+                                            id="mission_tag_national" value="national"
+                                            {{ old('mission_tag') == 'national' ? 'checked' : '' }}>
+                                        <label class="form-check-label" for="mission_tag_national">ថ្នាក់ជាតិ</label>
+                                    </div>
+                                </div>
+
+                                {{-- Validation error for mission_tag --}}
+                                @error('mission_tag')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
                         </div>
 
                         <div class="col-md-6">
@@ -371,7 +397,5 @@
                 title: 'ទិន្នន័យដែលបានបញ្ចូលមិនជោគជ័យ',
             });
         </script>
-        <<<<<<< HEAD=======</script>
-            >>>>>>> 291645b93392bf5ef951aecb7229d969c251e878
     @endif
 @endsection

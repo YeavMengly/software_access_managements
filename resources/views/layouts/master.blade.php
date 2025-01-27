@@ -89,6 +89,7 @@
 
                     @yield('content-mission')
                     @yield('content-table-mission-cambodia')
+                    @yield('content-table-mission-cam-international')
                     @yield('content-report-mission-cambodia')
 
 

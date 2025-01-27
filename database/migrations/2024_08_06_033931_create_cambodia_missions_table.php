@@ -37,6 +37,9 @@ class CreateCambodiaMissionsTable extends Migration
                 $table->decimal('accommodation_money', 12, 2)->default(0); // Changed to accommodate larger values
                 $table->decimal('total_accommodation_money', 12, 2)->default(0); // Changed to accommodate larger values
                 $table->decimal('final_total', 12, 2)->default(0);
+
+                $table->unsignedBigInteger('m_tag');
+                $table->foreign('m_tag')->references('id')->on('mission_tags')->onDelete('cascade');
                 $table->timestamps();
             });
         }
