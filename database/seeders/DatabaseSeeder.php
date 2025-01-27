@@ -22,7 +22,8 @@ class DatabaseSeeder extends Seeder
             AccountKeySeeder::class,
             SubAccountKeySeeder::class,
             UserSeeder::class,
-            MissionTypeSeeder::class
+            MissionTypeSeeder::class,
+            MissionTagSeeder::class
         ]);
     }
 }

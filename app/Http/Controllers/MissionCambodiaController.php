@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Exports\CambodiaExport;
+use App\Models\Mission\MissionTag;
 use App\Models\Result\CambodiaMission;
 use Carbon\Carbon;
+use Hamcrest\Core\AllOf;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\Rule;
@@ -47,7 +49,8 @@ class MissionCambodiaController extends Controller
         $endDate = $request->input('end_date');
         $selectedYear = $request->input('year', date('Y'));
         $selectedMonth = $request->input('month', now()->month);
-    
+        $selectedMissionTag = $request->input('m_tag');
+
         // Initialize query builder
         $query = CambodiaMission::query();
 
@@ -97,7 +100,7 @@ class MissionCambodiaController extends Controller
                 return redirect()->back()->withErrors(['date' => 'Invalid date format. Please use YYYY-MM-DD format.']);
             }
         }
-
+        
         // Filter by selected year if provided
         if ($selectedYear) {
             $query->whereYear('created_at', $selectedYear);
@@ -143,7 +146,8 @@ class MissionCambodiaController extends Controller
 
     public function create()
     {
-        return view('layouts.admin.forms.form-mission.form-mission-create');
+        $missionTag = MissionTag::all(); 
+        return view('layouts.admin.forms.form-mission.form-mission-create', compact('missionTag'));
     }
 
     public function store(Request $request)
@@ -213,7 +217,7 @@ class MissionCambodiaController extends Controller
         if ($missionStartDate->lessThan($letterDate)) {
             // Return an error message
             return redirect()->back()->with('error', 'កាលបរិច្ឆេទចាប់ផ្តើមបេសកកម្មមិនអាចមុនកាលបរិច្ឆេទនៃលិខិតនោះទេ។');
-        }   
+        }
 
         // Prepare data for the mission (this will be used for all persons)
         $missionData = [
@@ -363,7 +367,8 @@ class MissionCambodiaController extends Controller
     public function edit($id)
     {
         $missions = CambodiaMission::findOrFail($id);
-        $people = $missions->people;  // This will get the associated people.
+        $people = $missions->people;
+        $missionTag = MissionTag::all();
         return view('layouts.admin.forms.form-mission.mission-edit', [
             'missions' => $missions,
             'people' => $people,

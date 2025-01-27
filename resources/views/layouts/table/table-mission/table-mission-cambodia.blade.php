@@ -74,7 +74,6 @@
                     </form>
                 </div>
             </div>
-
             <div class="row"><button type="submit" class="btn btn-primary ml-3"
                     style="background-color: #007bff;
                     padding: 10px 40px; 
@@ -85,7 +84,6 @@
                     box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);">
                     ស្វែងរក
                 </button>
-
                 <!-- Clear Button -->
                 <button type="button" class="btn btn-secondary ml-3" onclick="clearSearch()"
                     style="padding: 10px 40px;
@@ -108,12 +106,30 @@
                     តារាងទូទាត់
                 </button>
             </div>
+
+            <div class="d-flex justify-content-end">
+                <div class="btn-group mb-3" role="group" aria-label="Mission Type Filter">
+                    <!-- Show 'All' Button -->
+                    <a href="#mission-table" class="btn btn-outline-primary {{ request('m_tag') ? '' : 'active' }}">
+                        ទាំងអស់
+                    </a>
+                    <!-- Check if $missionTag is not empty -->
+                    @if (!empty($missionTag) && $missionTag->count())
+                        @foreach ($missionTag as $tag)
+                            <a href="{{ route('certificate-data.index', ['m_tag' => $tag->id]) }}"
+                                class="btn btn-outline-primary {{ request('m_tag') == $tag->id ? 'active' : '' }}">
+                                {{ $tag->missionTag }}
+                            </a>
+                        @endforeach
+                    @else
+                        <span class="text-muted">No mission tags available</span>
+                    @endif
+                </div>
+            </div>
         </form>
-
-
     </div>
 
-    <div class="border-wrapper mt-3 mr-4 ml-4">
+    <div id="mission-table" class="border-wrapper mt-3 mr-4 ml-4">
         <div class="result-total-table-container">
             <div class="top-header">
                 <h4>ព្រះរាជាណាចក្រកម្ពុជា</h4>

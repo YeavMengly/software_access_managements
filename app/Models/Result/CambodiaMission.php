@@ -1,6 +1,7 @@
 <?php
 namespace App\Models\Result;
 
+use App\Models\Mission\MissionTag;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -32,6 +33,10 @@ class CambodiaMission extends Model
         'travel_allowance',
         'other_allowances',
         'final_total',
+        'm_tag'
     ];
     
+    public function missionTag(){
+        return $this->belongsTo(MissionTag::class, 'm_tag');
+    }
 }

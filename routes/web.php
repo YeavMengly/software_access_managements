@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Auth\AuthController;
+use App\Http\Controllers\CamMissionInternational;
 use App\Http\Controllers\Certificates\AmountCertificateController;
 use App\Http\Controllers\Certificates\CertificateController;
 use App\Http\Controllers\Certificates\CertificateDataController;
@@ -138,6 +139,7 @@ Route::get('/mission-cam/{id}/edit', [MissionCambodiaController::class, 'edit'])
 Route::put('/mission-cam/{id}', [MissionCambodiaController::class, 'update'])->name('missions.update');
 Route::delete('/mission-cam/{mission}', [MissionCambodiaController::class, 'delete'])->name('missions.delete');
 Route::resource('mission-planning', MissionPlanningController::class);
+
 
 //==================>> Manage Mission Exports and Imports
 Route::get('/mission-cambodia/export', [MissionCambodiaController::class, 'export'])->name('table-mission-cambodia');
