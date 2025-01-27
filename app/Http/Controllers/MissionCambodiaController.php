@@ -50,6 +50,8 @@ class MissionCambodiaController extends Controller
     
         // Initialize query builder
         $query = CambodiaMission::query();
+
+        dd($query);
         // Ensure pagination is used
         $missions = CambodiaMission::paginate(20);
 

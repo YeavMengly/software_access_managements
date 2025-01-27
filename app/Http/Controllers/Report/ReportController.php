@@ -191,8 +191,9 @@ class ReportController extends Controller
     {
         $report = Report::findOrFail($id);
         $subAccountKeys = SubAccountKey::all();
+        $years = Year::all();
 
-        return view('layouts.admin.forms.code.report-edit', compact('report', 'subAccountKeys'));
+        return view('layouts.admin.forms.code.report-edit', compact('report', 'subAccountKeys', 'years'));
     }
 
     public function update(Request $request, $id)
@@ -203,6 +204,7 @@ class ReportController extends Controller
             'name_report_key' => 'required|string|max:255',
             'fin_law' => 'required|numeric|min:0',
             'current_loan' => 'required|numeric|min:0',
+            'date_year' => 'required|exists:years,id',
         ]);
         $report = Report::findOrFail($id);
         $loan = $report->loans;

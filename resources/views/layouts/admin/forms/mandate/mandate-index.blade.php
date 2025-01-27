@@ -116,7 +116,7 @@
                                     {{ $md->dataMandate ? $md->dataMandate->report_key : 'N/A' }}
                                 </td>
 
-                                <td style="border: 1px solid black;">{{ $md->value_mandate }}</td>
+                                <td style="border: 1px solid black;">{{ number_format($md->value_mandate, 0, ' ', ' ')  }}</td>
                                 <td style="border: 1px solid black;">
                                     {{ $md->missionType->mission_type ?? 'គ្មានទិន្នន័យ' }}
                                 </td>

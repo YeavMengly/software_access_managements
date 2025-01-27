@@ -49,20 +49,22 @@
                                     <div class="row">
                                         <div class="col-md-6">
                                             <div class="form-group">
-                                                <label for="combinedField"
-                                                    class="font-weight-bold"><strong>លេខអនុគណនី:</strong></label>
+                                                <label for="combinedField" class="font-weight-bold">
+                                                    <strong>លេខអនុគណនី:</strong>
+                                                </label>
                                                 <input type="text" id="combinedField" class="form-control text-center"
-                                                    placeholder="ស្វែងរកលេខអនុគណនី..." onkeyup="filterSubAccountKeys(event)"
-                                                    style="width: 230px; height: 40px;">
+                                                       placeholder="ស្វែងរកលេខអនុគណនី..." onkeyup="filterSubAccountKeys(event)"
+                                                       style="width: 230px; height: 40px;"
+                                                       value="{{ old('combinedField', optional($report->subAccountKey)->sub_account_key) }}">
                                                 <p id="resultCount" style="font-weight: bold; margin-top: 8px;">ចំនួន: 0</p>
-
+                                        
                                                 <select name="sub_account_key" id="subAccountKeySelect" class="form-control"
-                                                    size="5" onclick="getSelectedValue()"
-                                                    style="height: 130px; width: 230px;">
+                                                        size="5" onclick="getSelectedValue()"
+                                                        style="height: 130px; width: 230px;">
                                                     @foreach ($subAccountKeys as $subAccountKey)
                                                         <option value="{{ $subAccountKey->id }}"
-                                                            data-report-key="{{ $subAccountKey->report_key }}"
-                                                            {{ $subAccountKey->id == $report->sub_account_key ? 'selected' : '' }}>
+                                                                data-report-key="{{ $subAccountKey->report_key }}"
+                                                                {{ $subAccountKey->id == old('sub_account_key', $report->sub_account_key) ? 'selected' : '' }}>
                                                             {{ $subAccountKey->sub_account_key }}
                                                         </option>
                                                     @endforeach
@@ -122,12 +124,16 @@
 
                                 <div class="col-md-4">
                                     <div class="form-group">
-                                        <label for="date_year" class="font-weight-bold text-center"><strong>ឆ្នាំចាប់ផ្ដើម</strong></label>
-                                        <select name="date_year" id="date_year" class="form-control @error('date_year') is-invalid @enderror" style="width:  230px;  height: 40px;">
+                                        <label for="date_year"
+                                            class="font-weight-bold text-center"><strong>ឆ្នាំចាប់ផ្ដើម</strong></label>
+                                        <select name="date_year" id="date_year"
+                                            class="form-control @error('date_year') is-invalid @enderror"
+                                            style="width:  230px;  height: 40px;">
                                             <option value="">-- ជ្រើសរើសឆ្នាំ --</option>
-                                            {{-- @foreach ($years as $year)
+                                            @foreach ($years as $year)
                                                 @if ($year->status == 'active')
-                                                    <option value="{{ $year->id }}" {{ old('date_year') == $year->id ? 'selected' : '' }}>
+                                                    <option value="{{ $year->id }}"
+                                                        {{ old('date_year') == $year->id ? 'selected' : '' }}>
                                                         @php
                                                             $date = \Carbon\Carbon::parse($year->date_year);
                                                             $khmerMonth = getKhmerMonth($date->month);
@@ -136,7 +142,7 @@
                                                         {{ $date->day }} {{ $khmerMonth }} {{ $khmerYear }}
                                                     </option>
                                                 @endif
-                                            @endforeach --}}
+                                            @endforeach
                                         </select>
                                         @error('date_year')
                                             <div class="invalid-feedback">{{ $message }}</div>
