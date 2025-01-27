@@ -50,11 +50,11 @@ class MissionCambodiaController extends Controller
         $selectedYear = $request->input('year', date('Y'));
         $selectedMonth = $request->input('month', now()->month);
         $selectedMissionTag = $request->input('m_tag');
+        $missionTag = MissionTag::all();
 
         // Initialize query builder
         $query = CambodiaMission::query();
 
-        dd($query);
         // Ensure pagination is used
         $missions = CambodiaMission::paginate(20);
 
@@ -100,7 +100,7 @@ class MissionCambodiaController extends Controller
                 return redirect()->back()->withErrors(['date' => 'Invalid date format. Please use YYYY-MM-DD format.']);
             }
         }
-        
+
         // Filter by selected year if provided
         if ($selectedYear) {
             $query->whereYear('created_at', $selectedYear);
@@ -110,6 +110,11 @@ class MissionCambodiaController extends Controller
         if ($selectedMonth) {
             $query->whereMonth('created_at', $selectedMonth);
         }
+
+        if ($selectedMissionTag) {
+            $query->where('m_tag', $selectedMissionTag);
+        }
+
 
         // Fetch missions
         $missions = $query->get();
@@ -136,6 +141,7 @@ class MissionCambodiaController extends Controller
 
         // Pass the missions, totals, and groupedTotals to the view
         return view('layouts.table.table-mission.table-mission-cambodia', [
+            'missionTag' => $missionTag,
             'missions' => $missions,
             'totals' => $totals,
             'groupedTotals' => $groupedTotals,
@@ -146,7 +152,7 @@ class MissionCambodiaController extends Controller
 
     public function create()
     {
-        $missionTag = MissionTag::all(); 
+        $missionTag = MissionTag::all();
         return view('layouts.admin.forms.form-mission.form-mission-create', compact('missionTag'));
     }
 

@@ -2,14 +2,13 @@
 @section('form-form-mission')
     <div class="container-fluid">
         <div class="row">
-            <div class="col-lg-12 margin-tb mb-4 mt-4">
+            <div class="col-lg-12 margin-tb ">
                 <div class="d-flex justify-content-between align-items-center"
                     style="font-family: 'Khmer OS Siemreap', sans-serif;">
                     <a class="btn btn-danger" href="{{ route('back') }}"
-                        style="width: 160px; height: 50px; border-radius: 4px; display: flex; align-items: center; justify-content: center;">
-                        <i class="fas fa-arrow-left"></i>&nbsp;&nbsp;
+                        style="width: 120px; height: 40px; border-radius: 4px; display: flex; align-items: center; justify-content: center;">
+                        <i class="fas fa-arrow-left"></i>
                     </a>
-                    <h3 class="card-title">បញ្ចូលតារាងរបាយការណ៏ចំណាយបេសកកម្មក្នុងប្រទេស ឆ្នាំ២០២៤</h3><span></span>
                 </div>
             </div>
         </div>
@@ -39,156 +38,129 @@
                 });
             </script>
         @endif
+        <div class="d-flex justify-content-center align-items-center  mt-4">
+            <div class="card shadow-lg" style="width: 90%;"> <!-- Adjusted width to 1080px -->
 
-        <div class="border-wrapper">
-            <div class="form-container">
-                <form action="{{ route('mission-cam.store') }}" method="POST" enctype="multipart/form-data">
-                    @csrf
-                    <div class="row" style="font-family: 'Khmer OS Siemreap', sans-serif;">
-                        <div class="col-md-6">
-                            <!-- Number of people -->
-                            <div class="form-group">
-                                <label for="num_people">ចំនួនមនុស្ស:</label>
-                                <select id="num_people" class="form-control centered-text" required>
-                                    <option value="">ជ្រើសរើសចំនួនមនុស្ស</option>
-                                    @for ($i = 1; $i <= 10; $i++)
-                                        <option value="{{ $i }}">{{ $i }}</option>
-                                    @endfor
-                                </select>
-                            </div>
+                <h3 class="card-title text-center mt-4" style="font-weight: 500;">បញ្ចូលរបាយការណ៏ចំណាយបេសកកម្មក្នុងប្រទេស
+                </h3> <!-- Moved h3 out of the card-body -->
+                <div class="card-body px-5 py-4">
+                    <form action="{{ route('mission-cam.store') }}" method="POST" enctype="multipart/form-data">
+                        @csrf
+                        <div class="row" style="font-family: 'Khmer OS Siemreap', sans-serif;">
+                            <!-- Column 1 -->
+                            <div class="col-md-3">
+                                <!-- Number of people -->
+                                <div class="form-group">
+                                    <label for="num_people">ជ្រើសរើសចំនួនៈ</label>
+                                    <select id="num_people" class="form-control centered-text custom-height" required>
+                                        <option value="">ជ្រើសរើស</option>
+                                        @for ($i = 1; $i <= 10; $i++)
+                                            <option value="{{ $i }}">{{ $i }}</option>
+                                        @endfor
+                                    </select>
+                                </div>
 
-                            <div id="rows-container"></div>
-
-                            <!-- Mission letter fields -->
-                            <div class="form-group">
-                                <label for="mission_letter">លិខិតបញ្ជាបេសកកម្ម:</label>
-                                <div class="form-subgroup">
-                                    <label for="letter_number">លេខ:</label>
-                                    <div class="input-group mx-3">
-                                        <!-- Number input -->
+                                <!-- Mission Letter -->
+                                <div class="form-group">
+                                    <label for="mission_letter"
+                                        >លិខិតបញ្ជាបេសកកម្ម:</label>
+                                    <div class="d-flex align-items-center gap-2">
                                         <input type="number" name="letter_number" id="letter_number"
-                                            class="form-control @error('letter_number') is-invalid @enderror" min="0"
-                                            placeholder="Enter number" oninput="updateFullLetterNumber()">
-
-                                        <!-- Format selection dropdown -->
-                                        <select id="letter_format" name="letter_format" class="form-select mx-3"
-                                            onchange="updateFullLetterNumber()">
+                                            class="form-control custom-height" min="0" placeholder="ចុះលេខ"
+                                            oninput="updateFullLetterNumber()" style="flex: 1; height: 40px; margin: 2px;">
+                                        <select id="letter_format" name="letter_format" class="form-select custom-height"
+                                            onchange="updateFullLetterNumber()" style="flex: 2; height: 40px;">
                                             <option value=""></option>
                                             <option value=" កប/ល.ប.ក">កប/ល.ប.ក</option>
                                             <option value=" កប/ឧ.ទ.ន">កប/ឧ.ទ.ន</option>
                                             <option value=" កប/ឧ.ទ.ន.ខ.ល">កប/ឧ.ទ.ន.ខ.ល</option>
                                             <option value=" កប/ឧ.ទ.ន.គ.ក.ប">កប/ឧ.ទ.ន.គ.ក.ប</option>
                                         </select>
-
-                                        <!-- Hidden input to store the combined value -->
                                         <input type="hidden" name="full_letter_number" id="full_letter_number">
                                     </div>
                                 </div>
 
-                                <div class="form-subgroup">
+                            </div>
+
+                            <!-- Column 2 -->
+                            <div class="col-md-3">
+                                <!-- Mission Letter Date -->
+                                <div class="form-group">
                                     <label for="letter_date">កាលបរិច្ឆេទ:</label>
                                     <input type="date" name="letter_date" id="letter_date"
-                                        class="form-control form-number @error('letter_date') is-invalid @enderror">
-                                    @error('letter_date')
-                                        <div class="invalid-feedback">{{ $message }}</div>
-                                    @enderror
+                                        class="form-control custom-height">
+                                </div>
+
+                                <!-- Mission Level -->
+                                <div class="form-group">
+                                    <label>ជ្រើសរើសកម្រិត:</label>
+                                    @foreach ($missionTag as $tag)
+                                        <div class="form-check">
+                                            <input class="form-check-input " type="radio" name="mission_tag"
+                                                id="mission_tag_{{ $tag->id }}" value="{{ $tag->value }}">
+                                            <label class="form-check-label"
+                                                for="mission_tag_{{ $tag->id }}">{{ $tag->m_tag }}</label>
+                                        </div>
+                                    @endforeach
                                 </div>
                             </div>
 
-                            <div class="form-group">
-                                <label for="level">ជ្រើសរើសកម្រិត:</label>
-                                <div>
-                                    {{-- Option for មូលដ្ឋាន --}}
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="radio" name="mission_tag"
-                                            id="mission_tag_local" value="local"
-                                            {{ old('mission_tag') == 'local' ? 'checked' : '' }}>
-                                        <label class="form-check-label" for="mission_tag_local">មូលដ្ឋាន</label>
-                                    </div>
+                            <!-- Column 3 -->
+                            <div class="col-md-3">
+                                <!-- Mission Objective -->
+                                <div class="form-group">
+                                    <label for="mission_objective">កម្មវត្ថុនៃការចុះបេសកកម្ម:</label>
+                                    <textarea name="mission_objective" id="mission_objective" rows="5" class="form-control custom-height"
+                                        style="resize: vertical;"></textarea>
+                                </div>
+                            </div>
 
-                                    {{-- Option for ថ្នាក់ជាតិ --}}
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="radio" name="mission_tag"
-                                            id="mission_tag_national" value="national"
-                                            {{ old('mission_tag') == 'national' ? 'checked' : '' }}>
-                                        <label class="form-check-label" for="mission_tag_national">ថ្នាក់ជាតិ</label>
-                                    </div>
+                            <!-- Column 4 -->
+                            <div class="col-md-3">
+                                <!-- Location -->
+                                <div class="form-group">
+                                    <label for="location">ជ្រើសរើសខេត្ត:</label>
+                                    <select name="location" id="location" class="form-control centered-text custom-height">
+                                        <option value="">ជ្រើសរើសខេត្ត</option>
+                                        <option value="កំពង់ធំ">កំពង់ធំ</option>
+                                        <option value="តាកែវ">តាកែវ</option>
+                                        <!-- Add other options here -->
+                                    </select>
                                 </div>
 
-                                {{-- Validation error for mission_tag --}}
-                                @error('mission_tag')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                @enderror
+                                <!-- Mission Dates -->
+                                <div class="form-group">
+                                    <label>កាលបរិច្ឆេទចុះបេសកកម្ម:</label>
+                                    <div class="form-group">
+                                        <label for="mission_start_date">ចាប់ផ្ដើម:</label>
+                                        <input type="date" name="mission_start_date" id="mission_start_date"
+                                            class="form-control custom-height">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="mission_end_date">បញ្ចប់:</label>
+                                        <input type="date" name="mission_end_date" id="mission_end_date"
+                                            class="form-control custom-height">
+                                    </div>
+                                </div>
                             </div>
                         </div>
 
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="internal_increase">កម្មវត្ថុនៃការចុះបេសកកម្ម:</label>
-                                <textarea name="mission_objective" id="internal_increase" rows="5"
-                                    class="form-control @error('internal_increase') is-invalid @enderror"
-                                    style="resize: vertical; font-family: 'Khmer OS Siemreap', sans-serif;"></textarea>
-                                @error('internal_increase')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                @enderror
-                            </div>
+                        <div class="row justify-content-center">
+                            <div class="col-12 text-center">
+                                <!-- Reset Button -->
+                                <button type="reset" class="btn btn-secondary ">
+                                    <i class="fas fa-undo"></i>&nbsp;&nbsp;កំណត់ឡើងវិញ
+                                </button>
 
-                            <div class="form-group">
-                                <label for="location">ជ្រើសរើសខេត្ត:</label>
-                                <select name="location" id="location" class="form-control centered-text">
-                                    <option value="">ជ្រើសរើសខេត្ត</option>
-                                    <option value="កំពង់ធំ">កំពង់ធំ</option>
-                                    <option value="តាកែវ">តាកែវ</option>
-                                    <option value="សៀមរាប">សៀមរាប</option>
-                                    <option value="កំពង់ចាម">កំពង់ចាម</option>
-                                    <option value="បាត់ដំបង">បាត់ដំបង</option>
-                                    <option value="ប៉ៃលិន">ប៉ៃលិន</option>
-                                    <option value="បន្ទាយមានជ័យ">បន្ទាយមានជ័យ</option>
-                                    <option value="ពោធិ៍សាត់">ពោធិ៍សាត់</option>
-                                    <option value="ព្រះសីហនុ">ព្រះសីហនុ</option>
-                                    <option value="កំពត">កំពត</option>
-                                    <option value="កែប">កែប</option>
-                                    <option value="ឧត្តរមានជ័យ">ឧត្តរមានជ័យ</option>
-                                    <option value="ព្រៃវែង">ព្រៃវែង</option>
-                                    <option value="ស្វាយរៀង">ស្វាយរៀង</option>
-                                    <option value="ត្បូងឃ្មុំ">ត្បូងឃ្មុំ</option>
-                                    <option value="ក្រចេះ">ក្រចេះ</option>
-                                    <option value="មណ្ឌលគីរី">មណ្ឌលគីរី</option>
-                                    <option value="រតនគីរី">រតនគីរី</option>
-                                    <option value="កណ្ដាល">កណ្ដាល</option>
-                                    <option value="កោះកុង">កោះកុង</option>
-                                    <option value="កំពង់ស្ពឺ">កំពង់ស្ពឺ</option>
-                                    <option value="ស្ទឹងត្រែង">ស្ទឹងត្រែង</option>
-                                    <option value="ព្រះវិហារ">ព្រះវិហារ</option>
-                                    <option value="កំពង់ឆ្នាំង">កំពង់ឆ្នាំង</option>
-                                </select>
-                            </div>
-
-                            <div class="form-group">
-                                <label for="mission_letter">កាលបរិច្ឆេទចុះបេសកកម្ម:</label>
-                                <div class="form-subgroup">
-                                    <label for="letter_date">ចាប់ផ្ដើម:</label>
-                                    <input type="date" name="mission_start_date" id="letter_date"
-                                        class="form-control form-number @error('letter_date') is-invalid @enderror">
-                                    @error('letter_date')
-                                        <div class="invalid-feedback">{{ $message }}</div>
-                                    @enderror
-                                </div>
-                                <div class="form-subgroup">
-                                    <label for="letter_date">បញ្ចប់:</label>
-                                    <input type="date" name="mission_end_date" id="letter_date"
-                                        class="form-control form-number @error('letter_date') is-invalid @enderror">
-                                    @error('letter_date')
-                                        <div class="invalid-feedback">{{ $message }}</div>
-                                    @enderror
-                                </div>
+                                <!-- Submit Button -->
+                                <button type="submit" class="btn btn-primary ml-3">
+                                    <i class="fas fa-save"></i>&nbsp;&nbsp;រក្សាទុក
+                                </button>
                             </div>
                         </div>
-                    </div>
-                    <div class="d-flex align-items-center" style="font-family: 'Khmer OS Siemreap', sans-serif;">
-                        <button type="submit" class="btn btn-primary ml-auto">បានរក្សាទុក</button>
-                    </div>
-                </form>
+                    </form>
+
+                </div>
             </div>
         </div>
     </div>
@@ -197,8 +169,13 @@
 @section('styles')
     <style>
         .border-wrapper {
-            border: 2px solid black;
-            padding: 10px;
+            border: 1px solid black;
+            padding-left: 16px;
+            padding-right: 16px;
+        }
+
+        .custom-height {
+            height: 50px;
         }
 
         .form-control {
@@ -210,13 +187,6 @@
             border-radius: 4px;
             box-sizing: border-box;
         }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 5px;
-            font-weight: bold;
-        }
-
         .form-group {
             margin-bottom: 20px;
         }
@@ -229,12 +199,7 @@
         }
 
         .centered-text {
-            appearance: none;
-            padding: 10px;
-            height: 45px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            text-align: center;
         }
 
         .form-number {
