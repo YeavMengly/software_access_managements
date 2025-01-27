@@ -21,7 +21,7 @@ class ResultFMCController extends Controller
                 'value_certificate' => isset($report->new_credit_status, $report->apply)
                     ? number_format($report->new_credit_status - $report->deadline_balance, 0, ' ', ' ')
                     : 'គ្មានទិន្នន័យ',
-                'value_mandate' => optional($report->dataMandate->first())->apply && optional($report->dataMandate->first())->new_credit_status
+                'value_mandate' => isset(optional($report->dataMandate->first())->new_credit_status , optional($report->dataMandate->first())->apply)
                     ? number_format(
                         $report->dataMandate->first()->new_credit_status - $report->dataMandate->first()->deadline_balance,
                         0,

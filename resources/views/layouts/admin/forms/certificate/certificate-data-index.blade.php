@@ -151,7 +151,7 @@
                 </tbody>
                 <tfoot>
                     <tr style="background:  rgb(86, 227, 245);">
-                        <td colspan="3" style="border: 1px solid black; text-align: center;"><strong>សរុបថវិកា</strong>
+                        <td colspan="2" style="border: 1px solid black; text-align: center;"><strong>សរុបថវិកា</strong>
                         </td>
                         <td style="border: 1px solid black;">
                             <strong>{{ number_format($totalAmount, 0, ' ', ' ') }}</strong>

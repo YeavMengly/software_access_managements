@@ -128,6 +128,43 @@ class DataMandateController extends Controller
         }
     }
 
+    public function edit($id)
+    {
+        $subAccountKeys = SubAccountKey::all();
+        $dataMandate = DataMandate::findOrFail($id); // Find the record to edit
+        $years = Year::all();
+
+        return view('layouts.admin.forms.code.report-mandate-edit', compact('subAccountKeys', 'dataMandate', 'years'));
+    }
+
+    public function update(Request $request, $id)
+    {
+        $request->validate([
+            'sub_account_key' => 'required|exists:sub_account_keys,id',
+            'report_key' => 'required|numeric',
+            'fin_law' => 'required|numeric',
+            'current_loan' => 'required|numeric',
+            'name_report_key' => 'required|string',
+            'date_year' => 'required|exists:years,id',
+        ]);
+
+        try {
+            $dataMandate = DataMandate::findOrFail($id);
+            $dataMandate->update([
+                'sub_account_key' => $request->sub_account_key,
+                'report_key' => $request->report_key,
+                'fin_law' => $request->fin_law,
+                'current_loan' => $request->current_loan,
+                'name_report_key' => $request->name_report_key,
+                'date_year' => $request->date_year,
+            ]);
+
+            return redirect()->route('data-mandates.index')->with('success', 'Data Mandate updated successfully.');
+        } catch (\Exception $e) {
+            return redirect()->back()->withErrors(['error' => 'Failed to update the record: ' . $e->getMessage()]);
+        }
+    }
+
     public function destroy($id)
     {
         $dataMandate = DataMandate::findOrFail($id);

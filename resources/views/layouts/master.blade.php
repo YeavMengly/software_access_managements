@@ -115,6 +115,7 @@
 
                     @yield('content-report-mandate')
                     @yield('form-report-mandate-upload')
+                    @yield('form-report-mandate-edit')
 
                     @yield('content-loans')
                     @yield('form-content-loans-upload')
