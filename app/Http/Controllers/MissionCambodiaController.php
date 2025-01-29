@@ -204,6 +204,7 @@ class MissionCambodiaController extends Controller
             'location' => 'required',
             'mission_start_date' => 'required|date',
             'mission_end_date' => 'required|date|after_or_equal:mission_start_date',
+            'm_tag' => 'required|exists:mission_tags,id', // Validation rule for m_tag
         ]);
 
         // Retrieve the combined letter number and format
@@ -237,6 +238,7 @@ class MissionCambodiaController extends Controller
             'mission_end_date' => $request->mission_end_date,
             'days_count' => $daysCount,
             'nights_count' => $nightsCount,
+            'm_tag' => $validatedData['m_tag']
         ];
 
         // Variable to hold the final mission ID

@@ -6,7 +6,7 @@
                 <div class="d-flex justify-content-between align-items-center"
                     style="font-family: 'Khmer OS Siemreap', sans-serif;">
                     <a class="btn btn-danger" href="{{ route('back') }}"
-                        style="width: 120px; height: 40px; border-radius: 4px; display: flex; align-items: center; justify-content: center;">
+                        style="width: 120px; height: 40px; border-radius: 4px; display: flex; align-items: center; justify-content: center; margin-left: 4px;">
                         <i class="fas fa-arrow-left"></i>
                     </a>
                 </div>
@@ -48,11 +48,11 @@
                         @csrf
                         <div class="row" style="font-family: 'Khmer OS Siemreap', sans-serif;">
                             <!-- Column 1 -->
-                            <div class="col-md-3">
+                            <div class="col-md-6">
                                 <!-- Number of people -->
                                 <div class="form-group">
                                     <label for="num_people">ជ្រើសរើសចំនួនៈ</label>
-                                    <select id="num_people" class="form-control centered-text custom-height" required>
+                                    <select id="num_people" class="form-control centered-text custom-height" required >
                                         <option value="">ជ្រើសរើស</option>
                                         @for ($i = 1; $i <= 10; $i++)
                                             <option value="{{ $i }}">{{ $i }}</option>
@@ -60,16 +60,17 @@
                                     </select>
                                 </div>
 
+                                <div id="rows-container"></div>
+
                                 <!-- Mission Letter -->
                                 <div class="form-group">
-                                    <label for="mission_letter"
-                                        >លិខិតបញ្ជាបេសកកម្ម:</label>
+                                    <label for="mission_letter">លិខិតបញ្ជាបេសកកម្ម:</label>
                                     <div class="d-flex align-items-center gap-2">
                                         <input type="number" name="letter_number" id="letter_number"
                                             class="form-control custom-height" min="0" placeholder="ចុះលេខ"
-                                            oninput="updateFullLetterNumber()" style="flex: 1; height: 40px; margin: 2px;">
+                                            oninput="updateFullLetterNumber()" style="flex: 1; height: 50px; margin: 2px;">
                                         <select id="letter_format" name="letter_format" class="form-select custom-height"
-                                            onchange="updateFullLetterNumber()" style="flex: 2; height: 40px;">
+                                            onchange="updateFullLetterNumber()" style="flex: 2; height: 50px;">
                                             <option value=""></option>
                                             <option value=" កប/ល.ប.ក">កប/ល.ប.ក</option>
                                             <option value=" កប/ឧ.ទ.ន">កប/ឧ.ទ.ន</option>
@@ -83,9 +84,15 @@
                             </div>
 
                             <!-- Column 2 -->
+                            {{-- <div class="col-md-3">
+                               
+                            </div> --}}
+
+                            <!-- Column 3 -->
                             <div class="col-md-3">
-                                <!-- Mission Letter Date -->
-                                <div class="form-group">
+
+                                 <!-- Mission Letter Date -->
+                                 <div class="form-group">
                                     <label for="letter_date">កាលបរិច្ឆេទ:</label>
                                     <input type="date" name="letter_date" id="letter_date"
                                         class="form-control custom-height">
@@ -93,20 +100,16 @@
 
                                 <!-- Mission Level -->
                                 <div class="form-group">
-                                    <label>ជ្រើសរើសកម្រិត:</label>
+                                    <label>ជ្រើសរើសបញ្ជី:</label>
                                     @foreach ($missionTag as $tag)
                                         <div class="form-check">
-                                            <input class="form-check-input " type="radio" name="mission_tag"
-                                                id="mission_tag_{{ $tag->id }}" value="{{ $tag->value }}">
-                                            <label class="form-check-label"
-                                                for="mission_tag_{{ $tag->id }}">{{ $tag->m_tag }}</label>
+                                            <input class="form-check-input" type="radio" name="m_tag" id="m_tag{{ $tag->id }}" 
+                                                   value="{{ $tag->id }}" required>
+                                            <label class="form-check-label" for="m_tag{{ $tag->id }}">{{ $tag->m_tag }}</label>
                                         </div>
                                     @endforeach
                                 </div>
-                            </div>
-
-                            <!-- Column 3 -->
-                            <div class="col-md-3">
+                                
                                 <!-- Mission Objective -->
                                 <div class="form-group">
                                     <label for="mission_objective">កម្មវត្ថុនៃការចុះបេសកកម្ម:</label>
@@ -177,16 +180,22 @@
         .custom-height {
             height: 50px;
         }
-
+   
         .form-control {
             width: 100%;
+            height: 50px;
             padding: 10px;
             margin: 5px 0 15px 0;
             display: block;
-            border: 1px solid #ccc;
+            border: 1px solid #000000;
             border-radius: 4px;
             box-sizing: border-box;
         }
+.form-check-input,
+        .form-select{
+            border: 1px solid #000000;
+        }
+
         .form-group {
             margin-bottom: 20px;
         }
@@ -293,14 +302,14 @@
                 <div class="row">
                     <div class="col-md-4">
                         <div class="form-group">
-                            <label for="name_${i + 1}">ឈ្មោះមន្ត្រី ${i + 1}:</label>
+                            <label for="name_${i + 1}">ឈ្មោះ ${i + 1}:</label>
                             <input type="text" name="names[]" id="name_${i + 1}" class="form-control" required>
                         </div>
                     </div>
                     <div class="col-md-4">
                         <div class="form-group">
                             <label for="role_${i + 1}">តួនាទី ${i + 1}:</label>
-                            <select name="people[${i}][role]" id="role_${i}" class="form-control centered-text" required>
+                            <select name="people[${i}][role]" id="role_${i}" class="form-control centered text-align-items-start" required >
                                 <option value="">ជ្រើសរើសតួនាទី</option>
                                 <option value="រដ្ឋមន្រ្តី">រដ្ឋមន្រ្តី</option>
                                 <option value="ទីប្រឹក្សាអមក្រសួង">ទីប្រឹក្សាអមក្រសួង</option>
@@ -328,8 +337,8 @@
                     <div class="col-md-4">
                         <div class="form-group">
                             <label for="position_type_${i + 1}">មុខងារ ${i + 1}:</label>
-                            <select name="people[${i}][position_type]" id="position_type_${i}" class="form-control centered-text" required>
-                                <option value="">ជ្រើសរើសប្រភេទតួនាទី</option>
+                            <select name="people[${i}][position_type]" id="position_type_${i}" class="form-control centered-text text-align-items-start" required>
+                                <option value="">ជ្រើសរើសថ្នាក់មុខងារ</option>
                                 <option value="ក">ក</option>
                                 <option value="ខ១">ខ១</option>
                                 <option value="ខ២">ខ២</option>
