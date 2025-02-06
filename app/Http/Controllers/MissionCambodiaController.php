@@ -55,9 +55,6 @@ class MissionCambodiaController extends Controller
         // Initialize query builder
         $query = CambodiaMission::query();
 
-        // Ensure pagination is used
-        $missions = CambodiaMission::paginate(20);
-
         // Filter by text search if provided
         if ($search) {
             $query->where(function ($q) use ($search) {
@@ -65,16 +62,13 @@ class MissionCambodiaController extends Controller
                     ->orWhere('location', 'like', '%' . $search . '%');
             });
 
-            // Get all missions that match the search criteria
-            $matchingMissions = $query->get();
-
-            // Get unique letter_numbers from the matching missions
+            // Clone the query to fetch letter_numbers from filtered results
+            $matchingMissions = clone $query;
             $letterNumbers = $matchingMissions->pluck('letter_number')->unique();
 
-            // If there are multiple letter_numbers or at least one matching mission
+            // If letter_numbers exist, refine the query
             if ($letterNumbers->count() > 0) {
-                // Adjust the query to get all missions with any of the matching 'letter_number' values
-                $query = CambodiaMission::whereIn('letter_number', $letterNumbers);
+                $query->whereIn('letter_number', $letterNumbers);
             }
         }
 
@@ -85,7 +79,6 @@ class MissionCambodiaController extends Controller
                 $endDate = Carbon::createFromFormat('Y-m-d', $endDate)->endOfDay();
                 $query->whereBetween('created_at', [$startDate, $endDate]);
             } catch (\Exception $e) {
-                // Handle invalid date format error
                 Log::error('Invalid date format: ' . $e->getMessage());
                 return redirect()->back()->withErrors(['date' => 'Invalid date format. Please use YYYY-MM-DD format.']);
             }
@@ -95,7 +88,6 @@ class MissionCambodiaController extends Controller
                 $startDate = Carbon::createFromFormat('Y-m-d', $startDate)->startOfDay();
                 $query->where('created_at', '>=', $startDate);
             } catch (\Exception $e) {
-                // Handle invalid date format error
                 Log::error('Invalid date format: ' . $e->getMessage());
                 return redirect()->back()->withErrors(['date' => 'Invalid date format. Please use YYYY-MM-DD format.']);
             }
@@ -111,10 +103,10 @@ class MissionCambodiaController extends Controller
             $query->whereMonth('created_at', $selectedMonth);
         }
 
+        // Filter by mission tag if provided
         if ($selectedMissionTag) {
             $query->where('m_tag', $selectedMissionTag);
         }
-
 
         // Fetch missions
         $missions = $query->get();
@@ -139,7 +131,7 @@ class MissionCambodiaController extends Controller
             ];
         });
 
-        // Pass the missions, totals, and groupedTotals to the view
+        // Pass data to the view
         return view('layouts.table.table-mission.table-mission-cambodia', [
             'missionTag' => $missionTag,
             'missions' => $missions,
@@ -149,6 +141,7 @@ class MissionCambodiaController extends Controller
             'selectedMonth' => $selectedMonth,
         ]);
     }
+
 
     public function create()
     {

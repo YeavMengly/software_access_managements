@@ -17,10 +17,14 @@
             <form class="max-w-md mx-auto " method="GET" action="">
                 <div class="row">
                     <div class="col-md-2 ">
-                        <div class="input-group my-3" style="width: 180px; font-family: 'Khmer OS Siemreap', sans-serif">
-                            <input type="search" name="search" value="{{ request('search') }}" class="form-control"
-                                placeholder="ស្វែងរកទិន្នន័យ" aria-label="Search Address">
-                        </div>
+                        <form method="GET" action="{{ route('mission-cam.index') }}">
+                            <div class="input-group my-3"
+                                style="width: 180px; font-family: 'Khmer OS Siemreap', sans-serif">
+                                <input type="search" name="search" value="{{ request('search') }}" class="form-control"
+                                    placeholder="ស្វែងរកទិន្នន័យ" aria-label="Search Address">
+                                <button type="submit" class="btn btn-primary">Search</button>
+                            </div>
+                        </form>
                     </div>
                     <div class="col-md-2">
                         <form method="GET" action="{{ route('mission-cam.index') }}">
@@ -74,7 +78,8 @@
                         </form>
                     </div>
                 </div>
-                <div class="row"><button type="submit" class="btn btn-primary ml-3"
+                <div class="row">
+                    {{-- <button type="submit" class="btn btn-primary ml-3"
                         style="background-color: #007bff;
                      height: 40px;
                         font-size: 14px; 
@@ -83,7 +88,7 @@
                         transition: background-color 0.3s ease, transform 0.3s ease; 
                         box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);">
                         ស្វែងរក
-                    </button>
+                    </button> --}}
                     <!-- Clear Button -->
                     <button type="button" class="btn btn-secondary ml-3" onclick="clearSearch()"
                         style="
@@ -96,7 +101,7 @@
                         សម្អាតទិន្នន័យ
                     </button>
                     <!-- Report Mission -->
-                    <button type="button" class="btn btn-secondary ml-3"
+                    {{-- <button type="button" class="btn btn-secondary ml-3"
                         onclick="window.location.href='{{ route('reports-missions.index') }}'"
                         style="
                         font-size: 14px; 
@@ -106,7 +111,7 @@
                         width: 120px;
                         transition: background-color 0.3s ease;">
                         តារាងទូទាត់
-                    </button>
+                    </button> --}}
                 </div>
 
                 <div class="d-flex justify-content-end">
@@ -150,14 +155,16 @@
                 <h4>ការិយាល័យហិរញ្ញវត្ថុ</h4>
             </div>
             <div class="third-header">
-                <h4>តារាងរបាយការណ៍ចំណាយបេសកកម្មក្នុងប្រទេសឆ្នាំ {{ convertToKhmerNumber(request('year', date('Y'))) }}  @if (request('m_tag'))
-                    @php
-                        $selectedTag = $missionTag->firstWhere('id', request('m_tag'));
-                    @endphp
-                    @if ($selectedTag)
-                        - {{ $selectedTag->m_tag }}
+                <h4>តារាងរបាយការណ៍ចំណាយបេសកកម្មក្នុងប្រទេសឆ្នាំ {{ convertToKhmerNumber(request('year', date('Y'))) }}
+                    @if (request('m_tag'))
+                        @php
+                            $selectedTag = $missionTag->firstWhere('id', request('m_tag'));
+                        @endphp
+                        @if ($selectedTag)
+                            - {{ $selectedTag->m_tag }}
+                        @endif
                     @endif
-                @endif </h4>
+                </h4>
                 <h4>របស់អគ្គនាយករដ្ឋបាល និងហិរញ្ញវត្ថុ</h4>
             </div>
 
@@ -354,7 +361,7 @@
                                     <td style="border: 1px solid black;">
                                         <strong>{{ number_format($group->sum('final_total'), 0, '.', ',') }}</strong>
                                     </td>
-
+                                    <td></td>
                                 </tr>
                                 @php
                                     $totalIndexCounter++;
@@ -401,7 +408,8 @@
                 'start_date' => request('start_date'),
                 'end_date' => request('end_date') ?? '',
             ]) }}"
-                class="btn btn-danger  btn-width d-flex align-items-center justify-content-center" style="width: 120px;
+                class="btn btn-danger  btn-width d-flex align-items-center justify-content-center"
+                style="width: 120px;
                 height: 40px;">Export</a>
         </div>
     </div>
@@ -413,9 +421,7 @@
             border: 1px solid black;
             padding-left: 16px;
             padding-right: 16px;
-
         }
-
 
         .table-container {
             width: 100%;
@@ -425,7 +431,6 @@
             width: 100%;
             border-collapse: collapse;
         }
-
 
         .btn,
         .form-control,
@@ -437,11 +442,6 @@
             padding: 4px;
             font-family: 'Khmer OS Siemreap', sans-serif;
             font-size: 14px;
-        }
-
-        h2 {
-            font-family: 'Khmer OS Muol Light', sans-serif;
-            font-size: 18px;
         }
 
         h3,
