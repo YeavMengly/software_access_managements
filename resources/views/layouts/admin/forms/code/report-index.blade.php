@@ -29,7 +29,7 @@
                             <a class="btn btn-secondary d-flex justify-content-center align-items-center" href="#"
                                 data-bs-toggle="modal" data-bs-target="#importModal" href="{{ route('loans.create') }}"
                                 style="width: 120px; height: 40px; border-radius: 4px;">
-                                Import &nbsp;<i class="fas fa-file-import"></i>
+                                Import&nbsp;<i class="fas fa-file-import"></i>
                             </a>
                             &nbsp;
                             <a class="btn btn-primary d-flex justify-content-center align-items-center"
@@ -161,26 +161,26 @@
             <table class="table table-striped table-hover">
                 <thead>
                     <tr>
-                        <th style="border: 1px solid black; font-size: 14px; max-width: 50px;">លេខអនុគណនី</th>
-                        <th style="border: 1px solid black; font-size: 14px; max-width: 60px;">លេខកូដកម្មវិធី</th>
+                        <th style="border: 1px solid black; font-size: 14px; width: 120px;">លេខអនុគណនី</th>
+                        <th style="border: 1px solid black; font-size: 14px; width: 120px;">លេខកូដកម្មវិធី</th>
                         <th style="border: 1px solid black; font-size: 14px; max-width: 80px;">ចំណាត់ថ្នាក់</th>
-                        <th style="border: 1px solid black; font-size: 14px; max-width: 80px;">ច្បាប់ហិរញ្ញវត្ថុ</th>
-                        <th style="border: 1px solid black; font-size: 14px; max-width: 80px;">ឥណទានបច្ចុប្បន្ន</th>
-                        <th style="border: 1px solid black; font-size: 14px; max-width: 80px;">សកម្មភាព</th>
+                        <th style="border: 1px solid black; font-size: 14px; width: 160px;">ច្បាប់ហិរញ្ញវត្ថុ</th>
+                        <th style="border: 1px solid black; font-size: 14px; width: 160px;">ឥណទានបច្ចុប្បន្ន</th>
+                        <th style="border: 1px solid black; font-size: 14px; width: 120px;">សកម្មភាព</th>
                     </tr>
                 </thead>
                 <tbody>
                     @forelse ($reports as $report)
                         <tr>
-                            <td style="border: 1px solid black; max-width: 80px; text-align: center">
+                            <td style="border: 1px solid black; text-align: center">
                                 {{ $report->sub_account_key }}</td>
-                            <td style="border: 1px solid black; max-width: 80px; text-align: center">
+                            <td style="border: 1px solid black; text-align: center">
                                 {{ $report->report_key }}</td>
-                            <td style="border: 1px solid black; max-width: 220px; text-align: start;">
+                            <td style="border: 1px solid black; text-align: start;">
                                 {{ $report->name_report_key }}</td>
-                            <td style="border: 1px solid black; max-width: 80px; text-align: center">
+                            <td style="border: 1px solid black;text-align: right">
                                 {{ number_format($report->fin_law, 0, ' ', ' ') }}</td>
-                            <td style="border: 1px solid black; max-width: 80px; text-align: center">
+                            <td style="border: 1px solid black;  text-align: right">
                                 {{ number_format($report->current_loan, 0, ' ', ' ') }}</td>
 
                             <td
@@ -314,6 +314,7 @@
             font-family: 'Khmer OS Siemreap', sans-serif;
             font-size: 14px;
         }
+        
 
     </style>
 @endsection

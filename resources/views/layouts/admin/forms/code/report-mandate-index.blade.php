@@ -25,13 +25,13 @@
                         </a>
                         <h3 style="font-weight: 500;">បញ្ចូលឥណទានអនុម័តដើមឆ្នាំ សម្រាប់អាណត្តិ</h3>
                         <div class="btn-group">
-                            <a class="btn btn-success d-flex justify-content-center align-items-center" href="#"
+                            <a class="btn btn-secondary d-flex justify-content-center align-items-center" href="#"
                                 data-bs-toggle="modal" data-bs-target="#importModal"
                                 style="width: 120px; height: 40px; border-radius: 4px;">
-                                Import
+                                Import&nbsp;<i class="fas fa-file-import"></i>
                             </a>
-                            &nbsp;&nbsp;
-                            <a class="btn btn-success d-flex justify-content-center align-items-center"
+                            &nbsp;
+                            <a class="btn btn-primary d-flex justify-content-center align-items-center"
                                 href="{{ route('data-mandates.create') }}" style="width: 120px; height: 40px; border-radius: 4px;">
                                 បញ្ចូល
                             </a>
@@ -97,7 +97,7 @@
                                     style="width: 120px; height: 40px;">
                             </div>
                             <div class="col-md-12">
-                                <div class="input-group my-3">
+                                <div class="input-group">
                                     <button type="submit" class="btn btn-primary mr-2" style="width: 120px; height: 40px;">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
                                             viewBox="0 0 50 50">
@@ -159,12 +159,12 @@
             <table class="table table-striped table-hover">
                 <thead>
                     <tr>
-                        <th style="border: 1px solid black; font-size: 14px; max-width: 50px;">លេខអនុគណនី</th>
-                        <th style="border: 1px solid black; font-size: 14px; max-width: 60px;">លេខកូដកម្មវិធី</th>
+                        <th style="border: 1px solid black; font-size: 14px; width: 120px;">លេខអនុគណនី</th>
+                        <th style="border: 1px solid black; font-size: 14px; width: 120px;">លេខកូដកម្មវិធី</th>
                         <th style="border: 1px solid black; font-size: 14px; max-width: 80px;">ចំណាត់ថ្នាក់</th>
-                        <th style="border: 1px solid black; font-size: 14px; max-width: 80px;">ច្បាប់ហិរញ្ញវត្ថុ</th>
-                        <th style="border: 1px solid black; font-size: 14px; max-width: 80px;">ឥណទានបច្ចុប្បន្ន</th>
-                        <th style="border: 1px solid black; font-size: 14px; max-width: 80px;">សកម្មភាព</th>
+                        <th style="border: 1px solid black; font-size: 14px; width: 160px;">ច្បាប់ហិរញ្ញវត្ថុ</th>
+                        <th style="border: 1px solid black; font-size: 14px; width: 160px;">ឥណទានបច្ចុប្បន្ន</th>
+                        <th style="border: 1px solid black; font-size: 14px; width: 120px;">សកម្មភាព</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -176,9 +176,9 @@
                                 {{ $dataMandate->report_key }}</td>
                             <td style="border: 1px solid black; max-width: 220px; text-align: start;">
                                 {{ $dataMandate->name_report_key }}</td>
-                            <td style="border: 1px solid black; max-width: 80px; text-align: center">
+                            <td style="border: 1px solid black; max-width: 80px; text-align: right">
                                 {{ number_format($dataMandate->fin_law, 0, ' ', ' ') }}</td>
-                            <td style="border: 1px solid black; max-width: 80px; text-align: center">
+                            <td style="border: 1px solid black; max-width: 80px; text-align: right">
                                 {{ number_format($dataMandate->current_loan, 0, ' ', ' ') }}</td>
 
                             <td style="border: 1px solid black; text-align: center; justify-content: center; width: 120px;">
@@ -320,11 +320,7 @@
             font-size: 14px;
         }
 
-        .btn-primary {
-            border-radius: 5px;
-            font-weight: bold;
-        }
-
+   
         #loadingMessage {
             display: flex;
             flex-direction: column;

@@ -19,7 +19,7 @@
                                 <a class="btn btn-primary d-flex justify-content-center align-items-center" href=""
                                     data-bs-toggle="modal" data-bs-target="#createYear"
                                     style="width: 120px; height: 40px; border-radius: 4px;">
-                                   បញ្ចូល
+                                    បញ្ចូល
                                 </a>
                             @else
                                 <span></span>
@@ -39,6 +39,7 @@
                     </ul>
                 </div>
             @endif
+            {{-- Modal create --}}
 
             <div class="modal fade" id="createYear" tabindex="-1" aria-labelledby="importModalLabel" aria-hidden="true">
                 <div class="modal-dialog modal-dialog-centered">
@@ -71,6 +72,9 @@
                     </div>
                 </div>
             </div>
+
+            {{-- Modal Edit --}}
+
             <div class="d-flex justify-content-end mb-2">
                 <div style="width: 120px;">
                     <select name="per_page" class="form-control" onchange="window.location.href=this.value;">
@@ -90,7 +94,7 @@
                         <th style="border: 1px solid black; width: 120px;">
                             <span> ល.រ</span>
                         </th>
-                        <th style="border: 1px solid black;">
+                        <th style="border: 1px solid black; ">
                             <span> ឆ្នាំ</span>
                         </th>
                         <th style="border: 1px solid black;">
@@ -120,10 +124,20 @@
                                     {{ \Carbon\Carbon::parse($year->date_year)->format('Y') }} <!-- Display year only -->
                                 </td>
                                 <td>
-                                    <span
+                                    {{-- <span
                                         class="status-text {{ $year->status === 'active' ? 'text-success' : ($year->status === 'inactive' ? 'text-danger' : 'text-warning') }}">
                                         {{ ucfirst($year->status) }}
+                                    </span> --}}
+                                    <span class="status-text {{ $year->status === 'active' ? 'text-success' : ($year->status === 'inactive' ? 'text-danger' : 'text-warning') }}">
+                                        @if ($year->status === 'active')
+                                            <i class="fas fa-check-circle"></i> Active
+                                        @elseif ($year->status === 'inactive')
+                                            <i class="fas fa-times-circle"></i> Inactive
+                                        @else
+                                            <i class="fas fa-exclamation-circle"></i> {{ ucfirst($year->status) }}
+                                        @endif
                                     </span>
+                                    
                                 </td>
                             @else
                                 <span></span>
@@ -141,7 +155,7 @@
                                 </td>
                                 <td>
                                     <a class="btn btn-primary {{ $year->status !== 'active' ? 'disabled' : '' }}"
-                                        href="{{ route('years.edit', $year->id) }}">
+                                        href="#editYear{{ $year->id }}" data-bs-toggle="modal">
                                         <i class="fas fa-edit" title="Edit"></i>
                                     </a>
                                     <form id="delete-form-{{ $year->id }}"
@@ -164,6 +178,37 @@
                     @endforeach
                 </tbody>
             </table>
+            <div class="modal fade" id="editYear{{ $year->id }}" tabindex="-1"
+                aria-labelledby="editYearModalLabel{{ $year->id }}" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h3 class="modal-title" id="editYearModalLabel{{ $year->id }}">កែប្រែឆ្នាំ</h3>
+                            <button type="button" class="btn btn-link" data-bs-dismiss="modal" aria-label="Close">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="d-flex justify-content-center align-items-center" style="height: 20vh;">
+                                <form action="{{ route('years.update', $year->id) }}" method="POST"
+                                    style="width: 30%;">
+                                    @csrf
+                                    @method('PUT')
+                                    <div class="mb-3 text-center">
+                                        <input type="text" name="date_year" id="date_year" class="form-control mb-2"
+                                            style="height: 40px;" placeholder="ឆ្នាំចាប់ផ្ដើម"
+                                            value="{{ \Carbon\Carbon::parse($year->date_year)->format('Y') }}">
+                                    </div>
+                                    <div class="mb-3 text-center">
+                                        <button type="submit" class="btn btn-primary"
+                                            style="height: 40px; width: 100%;">កែប្រែ</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 @endsection

@@ -15,21 +15,25 @@ class ResultSummariesController extends Controller
 {
     public function index()
     {
+        // Get reports with the relevant joins
         $reports = Report::getReportSql()->get();
-
-        dd($reports);
+        
+        // Calculate totals based on the reports
         $totals = $this->calculateTotals($reports);
+        
+        // Store summary report
         $this->storeSummaryReport($totals);
-
-        // dd($totals);
-
+    
+        // Optionally sort 'totals' by code
         if (isset($totals['code']) && is_array($totals['code'])) {
             ksort($totals['code']);
         }
-
+    
+        // Pass the totals to the view
         return view('layouts.table.result-total-summaries-table', compact('totals'));
     }
-
+    
+    
     public function export(Request $request)
     {
         try {
@@ -41,7 +45,6 @@ class ResultSummariesController extends Controller
             return response()->json(['error' => $e->getMessage()], 500);
         }
     }
-
 
     public function exportPdf(Request $request)
     {
@@ -89,7 +92,6 @@ class ResultSummariesController extends Controller
         ];
 
         foreach ($reports as $index => $report) {
-
 
             $totals['code']["$report->code"] = $this->calculateSumFields($report);
             $totals['fin_law'] += $report->fin_law ?? 0;
@@ -150,39 +152,6 @@ class ResultSummariesController extends Controller
         ];
     }
 
-    // private function storeSummaryReport($totals)
-    // {
-    //     try {
-    //         DB::transaction(function () use ($totals) {
-    //             foreach ($totals['code'] as $code => $data) {
-    //                 try {
-    //                     SummaryReport::updateOrCreate(
-    //                         ['program' => $code->code],
-    //                         [
-    //                             'fin_law' => $data['fin_law'],
-    //                             'current_loan' => $data['current_loan'],
-    //                             'total_increase' => $data['total_increase'],
-    //                             'decrease' => $data['decrease'],
-    //                             'new_credit_status' => $data['new_credit_status'],
-    //                             'total_early_balance' => $data['early_balance'],
-    //                             'avg_total_early_balance' => $this->calculatePercentage($data['early_balance'], $data['new_credit_status']),
-    //                             'total_apply' => $data['apply'],
-    //                             'avg_total_apply' => $this->calculatePercentage($data['apply'], $data['new_credit_status']),
-    //                             'total_sum_refer' => $data['early_balance'] + $data['apply'],
-    //                             'avg_total_sum_refer' => $this->calculatePercentage($data['early_balance'] + $data['apply'], $data['new_credit_status']),
-    //                             'total_remain' => $data['new_credit_status'] - ($data['early_balance'] + $data['apply']),
-    //                             'avg_total_remain' => $this->calculatePercentage($data['new_credit_status'] - ($data['early_balance'] + $data['apply']), $data['new_credit_status']),
-    //                         ]
-    //                     );
-    //                 } catch (\Exception $e) {
-    //                     Log::error("Error storing summary for code: {$code->code}, Error: " . $e->getMessage());
-    //                 }
-    //             }
-    //         });
-    //     } catch (\Exception $e) {
-    //         Log::error('Transaction failed: ' . $e->getMessage());
-    //     }
-    // }
     private function storeSummaryReport($totals)
     {
         try {
