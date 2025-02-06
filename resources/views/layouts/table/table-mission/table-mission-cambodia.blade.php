@@ -9,12 +9,12 @@
                     style="width: 120px; height: 40px; border-radius: 4px; display: flex; align-items: center; justify-content: center;">
                     <i class="fas fa-arrow-left"></i>&nbsp;
                 </a>
-                <a class="btn btn-success d-flex justify-content-center align-items-center"
+                <a class="btn btn-primary d-flex justify-content-center align-items-center"
                     href="{{ route('mission-cam.create') }}" style="width: 120px; height: 40px; border-radius: 4px;">
                     បញ្ចូល
                 </a>
             </div>
-            <form class="max-w-md mx-auto " method="GET" action="">
+            <form class="max-w-md mx-auto " method="GET" action="{{route('mission-cam.index')}}">
                 <div class="row">
                     <div class="col-md-2 ">
                         <div class="input-group my-3" style="width: 180px; font-family: 'Khmer OS Siemreap', sans-serif">
@@ -81,7 +81,7 @@
                         width: 120px;
                         font-family: 'Khmer OS Siemreap', sans-serif; 
                         transition: background-color 0.3s ease, transform 0.3s ease; 
-                        box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);">
+                        box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);" >
                         ស្វែងរក
                     </button>
                     <!-- Clear Button -->
@@ -131,10 +131,34 @@
                     </div>
                 </div>
 
+                <div class="d-flex justify-content-end">
+                    <div class="btn-group mb-3" role="group" aria-label="Program Format Filter">
+                        <!-- Show 'All Programs' Button -->
+                        <a href="{{ route('mission-cam.index') }}" 
+                           class="btn btn-outline-primary {{ request('p_format') ? '' : 'active' }}">
+                            ទាំងអស់
+                        </a>
+                
+                        <!-- Program Format Buttons -->
+                        @php
+                            $programs = [
+                                'P_1' => 'កម្មវិធីទី ១',
+                                'P_2' => 'កម្មវិធីទី ២',
+                                'P_3' => 'កម្មវិធីទី ៣',
+                                'P_4' => 'កម្មវិធីទី ៤'
+                            ];
+                        @endphp
+                
+                        @foreach ($programs as $key => $label)
+                            <a href="{{ route('mission-cam.index', ['p_format' => $key]) }}" 
+                               class="btn btn-outline-primary {{ request('p_format') == $key ? 'active' : '' }}">
+                                {{ $label }}
+                            </a>
+                        @endforeach
+                    </div>
+                </div>
             </form>
         </div>
-
-
     </div>
 
     <div id="mission-table" class="border-wrapper mr-4 ml-4">
@@ -320,41 +344,40 @@
                                                 </form>
                                             </div>
                                         </td>
-
                                     </tr>
                                 @endforeach
 
                                 <!-- Display the total row for this letter_number group -->
                                 <tr>
                                     <td colspan="12"
-                                        style="border: 1px solid black; font-family: 'Khmer OS Muol Light', sans-serif;">
+                                        >
                                         <strong>{{ 'សរុប' }} {{ $totalIndexCounter }}</strong>
                                     </td>
 
-                                    <td style="border: 1px solid black;">
+                                    <td >
                                         <strong>{{ number_format($group->sum('travel_allowance'), 0, '.', ',') }}</strong>
                                     </td>
 
-                                    <td style="border: 1px solid black;"></td>
-                                    <td style="border: 1px solid black;">
+                                    <td ></td>
+                                    <td >
                                         <strong>{{ number_format($group->sum('total_pocket_money'), 0, '.', ',') }}</strong>
                                     </td>
 
-                                    <td style="border: 1px solid black;"></td>
+                                    <td ></td>
                                     <td style="border:   1px solid black;">
                                         <strong>{{ number_format($group->sum('total_meal_money'), 0, '.', ',') }}</strong>
                                     </td>
 
-                                    <td style="border: 1px solid black;"></td>
-                                    <td style="border: 1px solid black;">
+                                    <td ></td>
+                                    <td >
                                         <strong>{{ number_format($group->sum('total_accommodation_money'), 0, '.', ',') }}</strong>
                                     </td>
-                                    <td style="border: 1px solid black;"></td>
+                                    <td ></td>
 
-                                    <td style="border: 1px solid black;">
+                                    <td >
                                         <strong>{{ number_format($group->sum('final_total'), 0, '.', ',') }}</strong>
                                     </td>
-
+                                    <td></td>
                                 </tr>
                                 @php
                                     $totalIndexCounter++;
@@ -437,11 +460,6 @@
             padding: 4px;
             font-family: 'Khmer OS Siemreap', sans-serif;
             font-size: 14px;
-        }
-
-        h2 {
-            font-family: 'Khmer OS Muol Light', sans-serif;
-            font-size: 18px;
         }
 
         h3,

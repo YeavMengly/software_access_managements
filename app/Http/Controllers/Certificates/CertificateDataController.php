@@ -14,62 +14,23 @@ use Illuminate\Http\Request;
 
 class CertificateDataController extends Controller
 {
-    // public function index(Request $request)
-    // {  
-    //     $missionTypes = MissionType::all();
-    //     $search = $request->input('search');
-    //     $sortField = $request->input('sort_field', 'value_certificate'); 
-    //     $sortDirection = $request->input('sort_direction', 'asc');
-    //     $perPage = $request->input('per_page', 25);
-    //     $selectedMissionType = $request->input('mission_type'); 
-
-    //     if (!in_array($sortField, ['value_certificate', 'report_key'])) {
-    //         $sortField = 'value_certificate'; 
-    //     }
-
-    //     $query = CertificateData::with(['report.subAccountKey.accountKey.key', 'missionType'])
-    //         ->whereHas('report.year', function ($query) {
-    //             $query->where('status', 'active'); 
-    //         })
-    //         ->when($search, function ($query, $search) {
-    //             $query->whereHas('report', function ($query) use ($search) {
-    //                 $query->where('report_key', 'like', "%{$search}%");
-    //             });
-    //         })
-    //         ->when($selectedMissionType, function ($query, $selectedMissionType) {
-    //             $query->where('mission_type', $selectedMissionType); 
-    //         });
-
-    //     $totalAmount = $query->sum('value_certificate');
-
-    //     $certificatesData = $query->orderBy($sortField, $sortDirection)->paginate($perPage);
-
-    //     $totals = $this->calculateTotals($certificatesData);
-
-    //     $dataAvailable = $certificatesData->isNotEmpty();
-
-    //     return view('layouts.admin.forms.certificate.certificate-data-index', compact(
-    //         'certificatesData',
-    //         'totals',
-    //         'dataAvailable',
-    //         'totalAmount',
-    //         'selectedMissionType',
-    //         'missionTypes'
-    //     ));
-    // }
     public function index(Request $request)
     {
         $missionTypes = MissionType::all();
         $search = $request->input('search');
+        $subAccountKeyId = $request->input('sub_account_key_id');
+        $reportKey = $request->input('report_key');
         $sortField = $request->input('sort_field', 'value_certificate');
         $sortDirection = $request->input('sort_direction', 'asc');
         $perPage = $request->input('per_page', 25);
         $selectedMissionType = $request->input('mission_type');
 
+        // Validate the sort field
         if (!in_array($sortField, ['value_certificate', 'report_key'])) {
             $sortField = 'value_certificate';
         }
 
+        // Build the query
         $query = CertificateData::with(['report.subAccountKey.accountKey.key', 'missionType'])
             ->whereHas('report.year', function ($query) {
                 $query->where('status', 'active');
@@ -79,16 +40,24 @@ class CertificateDataController extends Controller
                     $query->where('sub_account_key', 'like', "%{$search}%");
                 });
             })
+            ->when($subAccountKeyId, function ($query, $subAccountKeyId) {
+                $query->whereHas('report.subAccountKey', function ($query) use ($subAccountKeyId) {
+                    $query->where('sub_account_key', 'like', "%{$subAccountKeyId}%");
+                });
+            })
+            ->when($reportKey, function ($query, $reportKey) {
+                $query->whereHas('report', function ($query) use ($reportKey) {
+                    $query->where('report_key', 'like', "%{$reportKey}%");
+                });
+            })
             ->when($selectedMissionType, function ($query, $selectedMissionType) {
                 $query->where('mission_type', $selectedMissionType);
             });
 
+        // Calculate totals
         $totalAmount = $query->sum('value_certificate');
-
         $certificatesData = $query->orderBy($sortField, $sortDirection)->paginate($perPage);
-
         $totals = $this->calculateTotals($certificatesData);
-
         $dataAvailable = $certificatesData->isNotEmpty();
 
         return view('layouts.admin.forms.certificate.certificate-data-index', compact(
@@ -195,16 +164,6 @@ class CertificateDataController extends Controller
         ]);
     }
 
-    // public function edit($id)
-    // {
-    //     $certificateData = CertificateData::findOrFail($id);
-    //     $reports = Report::all();
-    //     $subAccountKeys = SubAccountKey::all();
-    //     $report = Report::find($certificateData->report_key);
-
-    //     return view('layouts.admin.forms.certificate.certificate-data-edit', compact('certificateData', 'reports', 'subAccountKeys', 'report'));
-    // }
-
     public function edit($id)
     {
         $certificateData = CertificateData::findOrFail($id); // Retrieve the certificate data by ID
@@ -216,7 +175,6 @@ class CertificateDataController extends Controller
                 ->where('date_year', '>=', Carbon::now()->startOfYear());
         })->get();
         $missionTypes = MissionType::all();
-
         return view('layouts.admin.forms.certificate.certificate-data-edit', compact(
             'certificateData',
             'reports',
@@ -226,35 +184,6 @@ class CertificateDataController extends Controller
             'missionTypes'
         ));
     }
-
-
-    // public function update(Request $request, $id)
-    // {
-    //     $validated = $request->validate([
-    //         'report_key' => 'required|exists:reports,id',
-    //         'value_certificate' => 'required|numeric',
-    //     ]);
-    //     $certificateData = CertificateData::findOrFail($id);
-    //     $report = Report::find($validated['report_key']);
-    //     $oldReport = $certificateData->report;
-    //     $oldApply = $certificateData->value_certificate;
-
-    //     if (empty($report)) {
-    //         return redirect()->route('certificate-data.index')->with('error', 'មិនមានលេខកូដកម្មវិធីនៅក្នុងអនុគណនី។');
-    //     }
-
-    //     $oldReport->new_credit_status = $oldReport->new_credit_status + $oldApply;
-    //     $oldReport->apply = $oldReport->apply - $oldApply;
-    //     $oldReport->deadline_balance = $oldReport->deadline_balance - $oldApply;
-    //     $oldReport->save();
-    //     $certificateData->value_certificate = $validated['value_certificate'];
-    //     $certificateData->report_key = $validated['report_key'];
-    //     $certificateData->save();
-
-    //     $this->recalculateAndSaveReport($report);
-
-    //     return redirect()->route('certificate-data.index')->with('success', 'សលាកបត្របានកែដោយជោគជ័យ');
-    // }
 
     public function update(Request $request, $id)
     {
@@ -332,37 +261,11 @@ class CertificateDataController extends Controller
         return redirect()->route('certificate-data.index')->with('success', 'សលាកបត្របានលុបដោយជោគជ័យ។');
     }
 
-    // private function recalculateAndSaveReport(Report $report)
-    // {
-    //     $newApplyTotal = CertificateData::where('report_key', $report->id)->sum('value_certificate');
-    //     $report->apply = $newApplyTotal;
-    //     $credit = $report->new_credit_status - $report->deadline_balance;
-    //     $report->credit = $credit;
-    //     $report->deadline_balance = $report->early_balance + $report->apply;
-    //     $report->credit = $report->new_credit_status - $report->deadline_balance;
-    //     $report->law_average = $report->deadline_balance > 0 ? ($report->deadline_balance / $report->fin_law) * 100 : 0;
-    //     $report->law_correction =  $report->deadline_balance > 0 ? ($report->deadline_balance /  $report->new_credit_status) * 100 : 0;
-
-    //     $report->save();
-    // }
     private function recalculateAndSaveReport(Report $report)
     {
-        // $newApplyTotal = CertificateData::where('report_key', $report->id)->sum('value_certificate');
         $newApplyTotal = CertificateData::where('report_key', $report->id)
             ->latest('created_at') // Order by latest created record
-            ->value('value_certificate') ?? 0; // Get only the value_certificate column
-
-        // Fetch all remaining certificate data for the given report_key
-        // $newApplyTotal = CertificateData::where('report_key', $report->id)->get();
-
-        // // If there are certificates, get the last value for apply, otherwise set to 0
-        // if ($newApplyTotal->isNotEmpty()) {
-        //     $report->apply = $newApplyTotal->last()->value_certificate;
-        // } else {
-        //     $report->apply = 0; // Default to 0 if no certificates
-        // }
-
-        // Recalculate early_balance
+            ->value('value_certificate') ?? 0; 
         $report->early_balance = $this->calculateEarlyBalance($report);
 
         $report->apply = $newApplyTotal;
@@ -378,22 +281,18 @@ class CertificateDataController extends Controller
 
     private function calculateEarlyBalance($report)
     {
-        // Fetch all certificate data for the given report_key
         $certificateData = CertificateData::where('report_key', $report->id)->get();
 
-        // If there is only one record, early_balance should be 0
         if ($certificateData->count() === 1) {
             return 0;
         }
 
-        // If there are multiple records, sum all values except the last one
-        $totalEarlyBalance = $certificateData->slice(0, -1) // Exclude the last record
+        $totalEarlyBalance = $certificateData->slice(0, -1) 
             ->filter(function ($item) {
                 return !is_null($item->value_certificate) && $item->value_certificate !== '';
             })
             ->sum('value_certificate');
 
-        // Return the calculated balance, or 0 if no valid certificates
         return $totalEarlyBalance ?: 0;
     }
 
@@ -403,7 +302,6 @@ class CertificateDataController extends Controller
         $totals = [];
         $totals['total_amount_overall'] = 0;
 
-        // Group by code (key code)
         $groupedByCode = $certificatesData->groupBy(function ($certificateData) {
             return optional($certificateData->report->subAccountKey->accountKey->key)->code ?? 'Unknown';
         });

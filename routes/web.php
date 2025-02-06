@@ -88,6 +88,10 @@ Route::resource('data-mandates', DataMandateController::class);
 Route::post('/years/{year}/toggle-status', [YearController::class, 'toggleStatus'])->name('date_year_index');
 Route::post('/years/{id}/toggle-status', [YearController::class, 'toggleStatus'])->name('years.toggleStatus');
 
+Route::get('years/{year}/edit', [YearController::class, 'edit'])->name('years.edit');
+Route::put('years/{year}', [YearController::class, 'update'])->name('years.update');
+
+
 //===============================>> Certificate
 Route::resource('certificate', CertificateController::class);
 Route::resource('certificate-data', CertificateDataController::class);
@@ -109,7 +113,6 @@ Route::get('/table-ms-plan', [ResultMissionPlans::class, 'index'])->name('table-
 Route::get('/reports/{id}/early-balance', [MissionPlanningController::class, 'getEarlyBalance']);
 
 Route::post('loan-mandates', [LoanMandateController::class, 'store'])->name('loan-mandates.store');
-
 
 //===============================>> Manage Result Operation
 Route::get('/total_card/results', [ResultController::class, 'index'])->name('result.index');
@@ -161,9 +164,6 @@ Route::get('/summaries/export', [ResultSummariesController::class, 'export'])->n
 //===============================>> Manage Pdf Print
 Route::get('/results/pdf', [ResultController::class, 'exportPdf'])->name('result.exportPdf');
 Route::get('/summaries/export-pdf', [ResultSummariesController::class, 'exportPdf'])->name('summaries.exportPdf');
-
-// Route::get('/mission-abroad', [MissionAbroadController::class, 'index'])->name('table-mission-abroad');
-
 Route::get('/mission-abroad/export', [MissionAbroadController::class, 'export'])->name('table-mission-abroad');
 
 // Route::get('/report-mission', [ReportMissionController::class, 'showReportMissionForm'])->name('report-mission');
@@ -200,8 +200,10 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::get('/admin/dashboard', function () {
         return view('dashboard.dashboardui');
     })->name('admin.dashboard');
+
+    Route::post('/years/{id}/toggle-status', [YearController::class, 'toggleStatus']);
 });
-Route::post('/years/{id}/toggle-status', [YearController::class, 'toggleStatus'])->middleware('auth');
+// Route::post('/years/{id}/toggle-status', [YearController::class, 'toggleStatus'])->middleware('auth');
 
 
 //===============================>> Manage Role Middlware for user

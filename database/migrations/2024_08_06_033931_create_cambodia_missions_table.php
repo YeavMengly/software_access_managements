@@ -40,6 +40,9 @@ class CreateCambodiaMissionsTable extends Migration
 
                 $table->unsignedBigInteger('m_tag');
                 $table->foreign('m_tag')->references('id')->on('mission_tags')->onDelete('cascade');
+
+                $table->string('p_format');
+                
                 $table->timestamps();
             });
         }

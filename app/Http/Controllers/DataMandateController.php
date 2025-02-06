@@ -132,20 +132,64 @@ class DataMandateController extends Controller
     {
         $subAccountKeys = SubAccountKey::all();
         $dataMandate = DataMandate::findOrFail($id); // Find the record to edit
-        $years = Year::all();
+        $years = Year::where('status', 'active')->get();
 
         return view('layouts.admin.forms.code.report-mandate-edit', compact('subAccountKeys', 'dataMandate', 'years'));
     }
 
+    // public function update(Request $request, $id)
+    // {
+    //     $request->validate([
+    //         'sub_account_key' => 'required|exists:sub_account_keys,sub_account_key',
+    //         'report_key' => 'required|numeric',
+    //         'fin_law' => 'required|numeric',
+    //         'current_loan' => 'required|numeric',
+    //         'name_report_key' => 'required|string',
+    //         'date_year' => 'required|exists:years,id',
+    //     ]);
+
+    //     try {
+    //         $dataMandate = DataMandate::findOrFail($id);
+    //         $dataMandate->update([
+    //             'sub_account_key' => $request->sub_account_key,
+    //             'report_key' => $request->report_key,
+    //             'fin_law' => $request->fin_law,
+    //             'current_loan' => $request->current_loan,
+    //             'name_report_key' => $request->name_report_key,
+    //             'date_year' => $request->date_year,
+    //         ]);
+
+    //         return redirect()->route('data-mandates.index')->with('success', 'Data Mandate updated successfully.');
+    //     } catch (\Exception $e) {
+    //         return redirect()->back()->withErrors(['error' => 'Failed to update the record: ' . $e->getMessage()]);
+    //     }
+    // }
     public function update(Request $request, $id)
     {
         $request->validate([
-            'sub_account_key' => 'required|exists:sub_account_keys,id',
+            'sub_account_key' => 'required|exists:sub_account_keys,sub_account_key',
             'report_key' => 'required|numeric',
+            'name_report_key' => [
+                'required',
+                'string',
+                'regex:/^[\p{L}\p{M}\s]+$/u' // Allows Khmer and other Unicode letters with spaces
+            ],
             'fin_law' => 'required|numeric',
             'current_loan' => 'required|numeric',
-            'name_report_key' => 'required|string',
             'date_year' => 'required|exists:years,id',
+        ], [
+            'sub_account_key.required' => 'សូមបញ្ចូលលេខអនុគណនី។',
+            'sub_account_key.exists' => 'លេខអនុគណនីនេះមិនមាននៅក្នុងប្រព័ន្ធទេ។',
+            'report_key.required' => 'សូមបញ្ចូលលេខរាយការណ៍។',
+            'report_key.numeric' => 'លេខរាយការណ៍ត្រូវតែជាលេខ។',
+            'fin_law.required' => 'សូមបញ្ចូលច្បាប់ហិរញ្ញវត្ថុ។',
+            'fin_law.numeric' => 'ច្បាប់ហិរញ្ញវត្ថុត្រូវតែជាលេខ។',
+            'current_loan.required' => 'សូមបញ្ចូលប្រាក់កម្ចីបច្ចុប្បន្ន។',
+            'current_loan.numeric' => 'ប្រាក់កម្ចីបច្ចុប្បន្នត្រូវតែជាលេខ។',
+            'name_report_key.required' => 'សូមបញ្ចូលចំណាត់ថ្នាក់រាយការណ៍។',
+            'name_report_key.regex' => 'ចំណាត់ថ្នាក់រាយការណ៍អាចមានតែអក្សរខ្មែរ និងចន្លោះ។',
+            'date_year.required' => 'សូមជ្រើសរើសឆ្នាំ។',
+            'date_year.exists' => 'ឆ្នាំដែលបានជ្រើសរើសមិនត្រឹមត្រូវ។',
         ]);
 
         try {
@@ -159,11 +203,12 @@ class DataMandateController extends Controller
                 'date_year' => $request->date_year,
             ]);
 
-            return redirect()->route('data-mandates.index')->with('success', 'Data Mandate updated successfully.');
+            return redirect()->route('data-mandates.index')->with('success', 'ការកែប្រែបានជោគជ័យ។');
         } catch (\Exception $e) {
-            return redirect()->back()->withErrors(['error' => 'Failed to update the record: ' . $e->getMessage()]);
+            return redirect()->back()->withErrors(['error' => 'បរាជ័យក្នុងការកែប្រែ៖ ' . $e->getMessage()]);
         }
     }
+
 
     public function destroy($id)
     {

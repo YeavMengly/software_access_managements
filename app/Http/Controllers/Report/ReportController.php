@@ -89,15 +89,27 @@ class ReportController extends Controller
         $validatedData = $request->validate([
             'sub_account_key' => 'required|exists:sub_account_keys,sub_account_key',
             'report_key' => 'required|string|max:255',
-            'name_report_key' => 'required|string|max:255',
+            'name_report_key' => [
+                'required',
+                'string',
+                'regex:/^[\p{L}\p{M}\s]+$/u' // Allows Khmer and other Unicode letters with spaces
+            ],
             'fin_law' => 'required|numeric|min:0',
             'current_loan' => 'required|numeric|min:0',
             'date_year' => 'required|exists:years,id',
         ], [
-            'sub_account_key.required' => 'សូមជ្រើសរើសគណនីបន្ទាប់។',
-            'report_key.unique' => 'គន្លឹះរបាយការណ៍នេះមានរួចហើយសម្រាប់គណនីបន្ទាប់នេះ។',
+            'sub_account_key.required' => 'សូមបញ្ចូលលេខអនុគណនី។',
+            'sub_account_key.exists' => 'លេខអនុគណនីនេះមិនមាននៅក្នុងប្រព័ន្ធទេ។',
+            'report_key.required' => 'សូមបញ្ចូលលេខរាយការណ៍។',
+            'report_key.numeric' => 'លេខរាយការណ៍ត្រូវតែជាលេខ។',
+            'fin_law.required' => 'សូមបញ្ចូលច្បាប់ហិរញ្ញវត្ថុ។',
+            'fin_law.numeric' => 'ច្បាប់ហិរញ្ញវត្ថុត្រូវតែជាលេខ។',
+            'current_loan.required' => 'សូមបញ្ចូលប្រាក់បច្ចុប្បន្ន។',
+            'current_loan.numeric' => 'ប្រាក់កម្ចីបច្ចុប្បន្នត្រូវតែជាលេខ។',
+            'name_report_key.required' => 'សូមបញ្ចូលចំណាត់ថ្នាក់រាយការណ៍។',
+            'name_report_key.regex' => 'ចំណាត់ថ្នាក់រាយការណ៍អាចមានតែអក្សរខ្មែរ និងចន្លោះ។',
             'date_year.required' => 'សូមជ្រើសរើសឆ្នាំ។',
-            'fin_law.numeric' => 'តម្លៃច្បាប់ហិរញ្ញវត្ថុត្រូវតែជាលេខ។',
+            'date_year.exists' => 'ឆ្នាំដែលបានជ្រើសរើសមិនត្រឹមត្រូវ។',
         ]);
 
         $year = Year::find($validatedData['date_year']);
@@ -199,20 +211,44 @@ class ReportController extends Controller
     public function update(Request $request, $id)
     {
         $validatedData = $request->validate([
-            'sub_account_key' => 'required|exists:sub_account_keys,id',
+            'sub_account_key' => 'required|exists:sub_account_keys,sub_account_key',
             'report_key' => 'required|string|max:255',
             'name_report_key' => 'required|string|max:255',
             'fin_law' => 'required|numeric|min:0',
             'current_loan' => 'required|numeric|min:0',
             'date_year' => 'required|exists:years,id',
+        ], [
+            'sub_account_key.required' => 'សូមជ្រើសរើសគណនីបន្ទាប់។',
+            'report_key.unique' => 'គន្លឹះរបាយការណ៍នេះមានរួចហើយសម្រាប់គណនីបន្ទាប់នេះ។',
+            'date_year.required' => 'សូមជ្រើសរើសឆ្នាំ។',
+            'fin_law.numeric' => 'តម្លៃច្បាប់ហិរញ្ញវត្ថុត្រូវតែជាលេខ។',
         ]);
+
+        $year = Year::find($validatedData['date_year']);
+        if (!$year) {
+            return redirect()->back()->withErrors(['date_year' => 'ឆ្នាំដែលបានជ្រើសរើសមិនត្រឹមត្រូវ។'])->withInput();
+        }
+
+        if ($request->input('current_loan') < 0) {
+            return redirect()->back()->withErrors([
+                'current_loan' => 'ចំនួនទុនបងវិញមិនអាចមានតម្លៃអវិជ្ជមាន។',
+            ])->withInput();
+        }
+
+        if ($request->input('fin_law') < $request->input('current_loan')) {
+            return redirect()->back()->withErrors([
+                'fin_law' => 'ច្បាប់ហិរញ្ញវត្ថុត្រូវតែធំជាងឬស្មើចំនួនទុនបងវិញ។',
+            ])->withInput();
+        }
+
         $report = Report::findOrFail($id);
-        $loan = $report->loans;
-        $validatedData['internal_increase'] = $loan->internal_increase ?? 0;
-        $validatedData['unexpected_increase'] = $loan->unexpected_increase ?? 0;
-        $validatedData['additional_increase'] = $loan->additional_increase ?? 0;
-        $validatedData['decrease'] = $loan->decreas ?? 0;
-        $validatedData['editorial'] = $loan->editorial ?? 0;
+
+        $validatedData['internal_increase'] = $validatedData['internal_increase'] ?? 0;
+        $validatedData['unexpected_increase'] = $validatedData['unexpected_increase'] ?? 0;
+        $validatedData['additional_increase'] = $validatedData['additional_increase'] ?? 0;
+        $validatedData['decrease'] = $validatedData['decrease'] ?? 0;
+        $validatedData['editorial'] = $validatedData['editorial'] ?? 0;
+
         $total_increase = $validatedData['internal_increase'] + $validatedData['unexpected_increase'] + $validatedData['additional_increase'];
         $new_credit_status = $validatedData['current_loan'] + $total_increase - $validatedData['decrease'] - $validatedData['editorial'];
 
@@ -226,6 +262,7 @@ class ReportController extends Controller
 
         $report->update([
             ...$validatedData,
+            'date_year' => $year->id,
             'total_increase' => $total_increase,
             'new_credit_status' => $new_credit_status,
             'apply' => $currentApplyTotal,
@@ -234,6 +271,7 @@ class ReportController extends Controller
             'law_average' => $law_average,
             'law_correction' => $law_correction,
         ]);
+
         $this->recalculateAndSaveReport($report);
 
         return redirect()->route('codes.index')->with('success', 'ថវិការអនុម័តបានកែដោយជោគជ័យ។');
@@ -248,7 +286,7 @@ class ReportController extends Controller
     }
 
 
-    
+
     public function import(Request $request)
     {
         $request->validate([
