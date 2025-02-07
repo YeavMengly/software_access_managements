@@ -16,4 +16,4 @@ class MissionTag extends Model
     public function cambodiaMission(){
         return $this->hasMany(CambodiaMission::class, 'm_tag'); 
     }
-}
+} 

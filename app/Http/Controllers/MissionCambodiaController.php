@@ -63,6 +63,13 @@ class MissionCambodiaController extends Controller
                     ->orWhere('location', 'like', '%' . $search . '%');
             });
 
+            // Clone the query to fetch letter_numbers from filtered results
+            $matchingMissions = clone $query;
+            $letterNumbers = $matchingMissions->pluck('letter_number')->unique();
+
+            // If letter_numbers exist, refine the query
+            if ($letterNumbers->count() > 0) {
+                $query->whereIn('letter_number', $letterNumbers);
             $matchingMissions = $query->get();
             $letterNumbers = $matchingMissions->pluck('letter_number')->unique();
 
@@ -99,10 +106,13 @@ class MissionCambodiaController extends Controller
             $query->whereMonth('created_at', $selectedMonth);
         }
 
+        // Filter by mission tag if provided
+
         // Filter by Mission Tag
-        if ($selectedMissionTag) {
+          if ($selectedMissionTag) {
             $query->where('m_tag', $selectedMissionTag);
         }
+
 
         // 📌 Filter by Program Format
         if ($selectedProgramFormat) {
@@ -132,7 +142,7 @@ class MissionCambodiaController extends Controller
             ];
         });
 
-        // Return to the view
+
         return view('layouts.table.table-mission.table-mission-cambodia', [
             'missionTag' => $missionTag,
             'missions' => $missions,
@@ -143,6 +153,7 @@ class MissionCambodiaController extends Controller
             'selectedProgramFormat' => $selectedProgramFormat, // ✅ Send to the view
         ]);
     }
+
 
     public function create()
     {
