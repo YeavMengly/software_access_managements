@@ -10,7 +10,7 @@
                         <div class="row">
                             <div class="col-md-6 mb-3">
                                 <a href="{{ route('codes.create') }}" class="btn btn-custom btn-block animate-button">
-                                    បញ្ចូលឥណទានអនុម័តដើមឆ្នាំ​ សម្រាប់សលាកបត្រ
+                                    បញ្ចូលឥណទានអនុម័តដើមឆ្នាំ​ {{ now()->year }}
                                 </a>
                             </div>
 
@@ -20,11 +20,11 @@
                                 </a>
                             </div>
 
-                            <div class="col-md-6 mb-3">
+                            {{-- <div class="col-md-6 mb-3">
                                 <a href="{{ route('data-mandates.create') }}" class="btn btn-custom btn-block animate-button">
                                     បញ្ចូលឥណទានអនុម័តដើមឆ្នាំ​ សម្រាប់អាណត្តិ
                                 </a>
-                            </div>
+                            </div> --}}
 
                             <div class="col-md-6 mb-3">
                                 <a href="{{ route('loans.create') }}" class="btn btn-custom btn-block animate-button">
@@ -69,10 +69,10 @@
                                 </a>
                             </div>
 
-                            <div class="col-md-6 mb-3">
+                            {{-- <div class="col-md-6 mb-3">
                                 <a href="{{ route('certificate.create') }}" class="btn btn-custom btn-block animate-button">
                                     បញ្ចូលថវិកាដើមគ្រា </a>
-                            </div>
+                            </div> --}}
 
                             <div class="col-md-6 mb-3">
                                 <a href="{{ route('certificate-data.index') }}"

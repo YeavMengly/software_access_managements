@@ -112,7 +112,7 @@ class Report extends Model
             'loans.decrease',
             'loans.editorial',
             'cd.value_certificate',
-            'cd.amount',
+            // 'cd.amount',
 
             // 'mp.pay_mission',
             // 'mp.name_mission_type'

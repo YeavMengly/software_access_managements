@@ -17,22 +17,28 @@ class MandateController extends Controller
     {
         $missionTypes = MissionType::all();
         $selectedMissionType = $request->input('mission_type');
-        $search = $request->input('search');
-        $sortField = $request->input('sort_field', 'value_mandate'); 
+        $subAccountKeyId = $request->input('sub_account_key_id');
+        $reportKey = $request->input('report_key');
+        $sortField = $request->input('sort_field', 'value_mandate');
         $sortDirection = $request->input('sort_direction', 'asc');
         $perPage = $request->input('per_page', 25);
     
         if (!in_array($sortField, ['value_mandate', 'report_key'])) {
-            $sortField = 'value_mandate'; 
+            $sortField = 'value_mandate';
         }
     
         $query = Mandate::with(['dataMandate.subAccountKey.accountKey.key', 'missionType'])
             ->whereHas('dataMandate.year', function ($query) {
                 $query->where('status', 'active');
             })
-            ->when($search, function ($query, $search) {
-                $query->whereHas('dataMandate', function ($query) use ($search) {
-                    $query->where('report_key', 'like', "%{$search}%");
+            ->when($subAccountKeyId, function ($query, $subAccountKeyId) {
+                $query->whereHas('dataMandate.subAccountKey', function ($query) use ($subAccountKeyId) {
+                    $query->where('sub_account_key', 'like', "%{$subAccountKeyId}%");
+                });
+            })
+            ->when($reportKey, function ($query, $reportKey) {
+                $query->whereHas('dataMandate', function ($query) use ($reportKey) {
+                    $query->where('report_key', 'like', "%{$reportKey}%");
                 });
             })
             ->when($selectedMissionType, function ($query, $selectedMissionType) {
@@ -40,11 +46,11 @@ class MandateController extends Controller
             });
     
         $mandates = $query->orderBy($sortField, $sortDirection)->paginate($perPage);
-    
         $totalAmount = $query->sum('value_mandate');
     
         return view('layouts.admin.forms.mandate.mandate-index', compact('mandates', 'missionTypes', 'selectedMissionType', 'totalAmount'));
     }
+    
     
     public function create()
     {

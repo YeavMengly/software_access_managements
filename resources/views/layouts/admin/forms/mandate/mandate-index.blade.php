@@ -18,30 +18,35 @@
                 </div>
             </div>
 
-            <form class="max-w-md mx-auto mt-2" method="GET" action="">
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="input-group my-3" style="width: 180px; display: flex; align-items: center;">
-                            <!-- Search Input -->
-                            <input type="search" name="search" value="{{ request('search') }}"
-                                class="form-control" placeholder="ស្វែងរកទិន្នន័យ" aria-label="Search Address"
-                                style="flex-grow: 1; height: 40px; border-top-right-radius: 0; border-bottom-right-radius: 0;">
-                            <!-- Search Button -->
-                            <button type="submit" class="btn btn-primary"
-                                style="width: 40px; height: 40px; border-top-left-radius: 0; border-bottom-left-radius: 0;">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
-                                    viewBox="0 0 50 50" fill="white">
-                                    <path
-                                        d="M 21 3 C 11.621094 3 4 10.621094 4 20 C 4 29.378906 11.621094 37 21 37 C 24.710938 37 28.140625 35.804688 30.9375 33.78125 L 44.09375 46.90625 L 46.90625 44.09375 L 33.90625 31.0625 C 36.460938 28.085938 38 24.222656 38 20 C 38 10.621094 30.378906 3 21 3 Z M 21 5 C 29.296875 5 36 11.703125 36 20 C 36 28.296875 29.296875 35 21 35 C 12.703125 35 6 28.296875 6 20 C 6 11.703125 12.703125 5 21 5 Z">
-                                    </path>
+
+            <form id="filterForm" class="max-w-md mx-auto mt-3" method="GET" action="{{ route('mandates.index') }}" onsubmit="return validateDateField()">
+                <div class="row mb-3">
+                    <div class="col-md-2 d-flex">
+                        <input type="text" name="sub_account_key_id" value="{{ request('sub_account_keyz') }}"
+                            class="form-control mb-2" placeholder="អនុគណនី" style="width: 120px; height: 40px;">
+                        &nbsp;
+                        <input type="text" name="report_key" value="{{ request('report_key') }}"
+                            class="form-control mb-2" placeholder="កូដកម្មវិធី" style="width: 120px; height: 40px;">
+                    </div>
+                    <div class="col-md-12">
+                        <div class="input-group">
+                            <button type="submit" class="btn btn-primary mr-2" style="width: 120px; height: 40px;">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 50 50">
+                                    <path d="..."></path>
                                 </svg>
+                                ស្វែងរក
+                            </button>
+                            <button type="button" id="resetBtn" class="btn btn-danger" style="width: 120px; height: 40px;" onclick="resetForm()">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-circle" viewBox="0 0 16 16">
+                                    <path d="..."></path>
+                                </svg>
+                                កំណត់ឡើងវិញ
                             </button>
                         </div>
-
                     </div>
                 </div>
             </form>
-
+            
         </div>
     </div>
 
@@ -116,7 +121,8 @@
                                     {{ $md->dataMandate ? $md->dataMandate->report_key : 'N/A' }}
                                 </td>
 
-                                <td style="border: 1px solid black;">{{ number_format($md->value_mandate, 0, ' ', ' ')  }}</td>
+                                <td style="border: 1px solid black;">{{ number_format($md->value_mandate, 0, ' ', ' ') }}
+                                </td>
                                 <td style="border: 1px solid black;">
                                     {{ $md->missionType->mission_type ?? 'គ្មានទិន្នន័យ' }}
                                 </td>
@@ -169,7 +175,7 @@
                 </tfoot>
             </table>
 
-            
+
             <div class="d-flex justify-content-between align-items-center mt-4">
                 <!-- Custom Pagination Links -->
                 <div>
@@ -197,7 +203,7 @@
                                     <span class="sr-only">Next</span>
                                 </a>
                             </li>
-                            
+
                         </ul>
                     </nav>
                 </div>
@@ -276,4 +282,14 @@
             });
         }
     </script>
+    <script>
+        function resetForm() {
+            // Clear all form input fields
+            document.querySelectorAll('#filterForm input').forEach(input => input.value = '');
+    
+            // Optionally reload the page to reset filters in the URL
+            window.location.href = "{{ route('mandates.index') }}";
+        }
+    </script>
+    
 @endsection

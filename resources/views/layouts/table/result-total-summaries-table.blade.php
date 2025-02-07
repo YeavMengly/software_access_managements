@@ -7,19 +7,31 @@
 @endsection
 
 @section('result-total-table')
-    <div class="d-flex justify-content-between align-items-center  mt-4 mr-4 ml-4">
+    <div class="border-wrapper ">
         <a class="btn btn-danger" href="{{ route('back') }}"
-            style="width: 160px; height: 50px; border-radius: 4px; display: flex; align-items: center; justify-content: center;">
+            style="width: 120px; height: 40px; border-radius: 4px; display: flex; align-items: center; justify-content: center;">
             <i class="fas fa-arrow-left"></i>&nbsp;&nbsp;
         </a>
-    </div>
-    <div class="border-wrapper mt-4 ml-4 mr-4">
+
+         {{-- Start action btn export and print --}}
+         <div class="d-flex justify-content-end mt-3 mb-3 ">
+            <a href="{{ route('result.export', request()->query()) }}"
+                class="btn btn-danger btn-width mr-2 d-flex align-items-center justify-content-center"
+                style="width: 120px; height: 40px; text-align: center; font-size: 14px; ">
+                <i class="fas fa-download"></i> <span class="ml-2">Export</span>
+            </a>
+            <a href="{{ route('result.exportPdf', request()->query()) }}"
+                class="btn btn-primary btn-width mr-2 d-flex align-items-center justify-content-center"
+                style="width: 120px; height: 40px; text-align: center; font-size: 14px;">
+                <i class="fas fa-print"></i> <span class="ml-2">Print</span>
+            </a>
+        </div>
         <div class="result-total-table-container mt-4">
             <!-- Row 1: Centered -->
             <div class="first-header text-center">
                 <h2>ព្រះរាជាណាចក្រកម្ពុជា</h2>
                 <h3>ជាតិ សាសនា ព្រះមហាក្សត្រ</h3>
-                <h3>3</h3>
+         
             </div>
 
             <!-- Row 2: Flex aligned to the left -->
@@ -66,7 +78,7 @@
                         </tr>
                     </thead>
                     <tbody class="cell-border">
-                        <tr style="background-color: rgb(181, 245, 86);">
+                        <tr style="background-color: rgb(145, 145, 142);">
                             <td><strong>សរុបជំពូក</strong></td>
                             <td>{{ number_format($totals['total_sums']['fin_law'], 0, ' ', ' ') }}</td>
                             <td>{{ number_format($totals['total_sums']['current_loan'], 0, ' ', ' ') }}</td>
@@ -164,7 +176,7 @@
                             </tr>
                         @endforeach
 
-                        <tr style="background-color: rgb(181, 245, 86);">
+                        <tr style="background-color: rgb(145, 145, 142);">
                             <td><strong>សរុបកម្មវិធី</strong></td>
                             <td>{{ number_format($totals['total_sums']['fin_law'], 0, ' ', ' ') }}</td>
                             <td>{{ number_format($totals['total_sums']['current_loan'], 0, ' ', ' ') }}</td>
@@ -190,9 +202,7 @@
                                     0%
                                 @endif
                             </td>
-
                             <td>{{ number_format($totals['total_sums']['total_sum_refer'], 0, ' ', ' ') }}</td>
-
                             <td>
                                 @if ($totals['total_sums']['new_credit_status'] > 0)
                                     {{ number_format((($totals['total_sums']['early_balance'] + $totals['total_sums']['apply']) / $totals['total_sums']['new_credit_status']) * 100, 2, '.', ' ') }}%
@@ -261,7 +271,7 @@
                             </tr>
                         @endforeach
 
-                        <tr style="background-color: rgb(181, 245, 86);">
+                        <tr style="background-color: rgb(145, 145, 142);">
                             <td><strong>លម្អិតតាមកម្មវិធី</strong></td>
                             <td>{{ number_format($totals['total_sums']['fin_law'], 0, ' ', ' ') }}</td>
                             <td>{{ number_format($totals['total_sums']['current_loan'], 0, ' ', ' ') }}</td>
@@ -405,7 +415,7 @@
                 </table>
             </div>
             {{--        Start action btn export and print        --}}
-            <div class="d-flex justify-content-end mt-3 mb-3">
+            {{-- <div class="d-flex justify-content-end mt-3 mb-3">
                 <a href="{{ route('summaries.export', request()->query()) }}"
                     class="btn btn-danger btn-width mr-2 d-flex align-items-center justify-content-center mr-2"
                     style="width: 150px; height: 50px; text-align: center;">
@@ -416,7 +426,7 @@
                     style="width: 150px; height: 50px; text-align: center;">
                     <i class="fas fa-print"></i>&nbsp; Print
                 </a>
-            </div>
+            </div> --}}
 
         </div>
     </div>
@@ -425,18 +435,13 @@
 @section('styles')
     <style>
         .border-wrapper {
-            border: 2px solid black;
-            padding: 10px;
+            padding-left: 16px;
+            padding-right: 16px;
         }
-
-        .result-total-table-container {
-            padding: 16px;
-
-        }
-
 
         .table-container {
             width: 100%;
+            padding: 6px;
         }
 
         .total-row {
@@ -453,36 +458,29 @@
             border-collapse: collapse;
         }
 
-        th,
-        td {
-            border: 1px solid black;
-            text-align: center;
-            padding: 5px;
-        }
-
         h2 {
             font-family: 'Khmer OS Muol Light', sans-serif;
-            font-size: 24px;
+            font-size: 18px;
         }
 
         h3,
         h4 {
             font-family: 'Khmer OS Muol Light', sans-serif;
-            font-size: 25px;
+            font-size: 16px;
         }
-
+        
         th,
         td {
             border: 1px solid black;
             text-align: center;
-            padding: 5px;
+            padding: 6px;
             font-family: 'Khmer OS Siemreap', sans-serif;
-            font-size: 16px;
+            font-size: 14px;
         }
 
         h5 {
             font-family: 'Khmer OS Siemreap', sans-serif;
-            font-size: 25px;
+            font-size: 14px;
         }
     </style>
 @endsection

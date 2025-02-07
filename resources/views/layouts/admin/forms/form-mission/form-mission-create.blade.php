@@ -52,7 +52,7 @@
                                 <!-- Number of people -->
                                 <div class="form-group">
                                     <label for="num_people">ជ្រើសរើសចំនួនៈ</label>
-                                    <select id="num_people" class="form-control centered-text custom-height" required >
+                                    <select id="num_people" class="form-control centered-text custom-height" required>
                                         <option value="">ជ្រើសរើស</option>
                                         @for ($i = 1; $i <= 10; $i++)
                                             <option value="{{ $i }}">{{ $i }}</option>
@@ -63,7 +63,7 @@
                                 <div id="rows-container"></div>
 
                                 <!-- Mission Letter -->
-                                <div class="form-group">
+                                {{-- <div class="form-group">
                                     <label for="mission_letter">លិខិតបញ្ជាបេសកកម្ម:</label>
                                     <div class="d-flex align-items-center gap-2">
                                         <input type="number" name="letter_number" id="letter_number"
@@ -71,15 +71,68 @@
                                             oninput="updateFullLetterNumber()" style="flex: 1; height: 50px; margin: 2px;">
                                         <select id="letter_format" name="letter_format" class="form-select custom-height"
                                             onchange="updateFullLetterNumber()" style="flex: 2; height: 50px;">
-                                            <option value=""></option>
+                                            <option value="">ជ្រើសរើសយោង</option>
                                             <option value=" កប/ល.ប.ក">កប/ល.ប.ក</option>
                                             <option value=" កប/ឧ.ទ.ន">កប/ឧ.ទ.ន</option>
                                             <option value=" កប/ឧ.ទ.ន.ខ.ល">កប/ឧ.ទ.ន.ខ.ល</option>
                                             <option value=" កប/ឧ.ទ.ន.គ.ក.ប">កប/ឧ.ទ.ន.គ.ក.ប</option>
                                         </select>
+
                                         <input type="hidden" name="full_letter_number" id="full_letter_number">
+
+                                        <select id="p_format" name="p_format" class="form-select custom-height"
+                                            onchange="updateProgramFormat()" style="flex: 2; height: 50px;">
+                                            <option value="">ជ្រើសរើសកម្មវិធី</option>
+                                            <option value=" P_1">កម្មវិធីទី ១</option>
+                                            <option value=" P_2">កម្មវិធីទី ២</option>
+                                            <option value=" P_3">កម្មវិធីទី ៣</option>
+                                            <option value=" P_4">កម្មវិធីទី ៥</option>
+                                        </select>
+                                    </div>
+                                </div> --}}
+                                <div class="form-group">
+                                    {{-- <label for="mission_letter" style="font-weight: bold;">លិខិតបញ្ជាបេសកកម្ម:</label> --}}
+                                    <div class="d-flex align-items-center gap-2">
+                                
+                                        <!-- Label for Letter Number -->
+                                        <div style="flex: 1; margin: 2px; padding-top: 8px;">
+                                            <label for="letter_number">ចុះលេខ:</label>
+                                            <input type="number" name="letter_number" id="letter_number"
+                                                class="form-control custom-height" min="0" placeholder="ចុះលេខ"
+                                                oninput="updateFullLetterNumber()" style="height: 50px;">
+                                        </div>
+                                
+                                        <!-- Label for Reference Selection -->
+                                        <div style="flex: 2; margin: 2px;">
+                                            <label for="letter_format">ជ្រើសរើសយោង:</label>
+                                            <select id="letter_format" name="letter_format" class="form-select custom-height"
+                                                onchange="updateFullLetterNumber()" style="height: 50px;">
+                                                <option value="">ជ្រើសរើសយោង</option>
+                                                <option value=" កប/ល.ប.ក">កប/ល.ប.ក</option>
+                                                <option value=" កប/ឧ.ទ.ន">កប/ឧ.ទ.ន</option>
+                                                <option value=" កប/ឧ.ទ.ន.ខ.ល">កប/ឧ.ទ.ន.ខ.ល</option>
+                                                <option value=" កប/ឧ.ទ.ន.គ.ក.ប">កប/ឧ.ទ.ន.គ.ក.ប</option>
+                                            </select>
+                                        </div>
+                                
+                                        <input type="hidden" name="full_letter_number" id="full_letter_number">
+                                
+                                        <!-- Label for Program Selection -->
+                                        <div style="flex: 2; margin: 2px;">
+                                            <label for="p_format">ជ្រើសរើសកម្មវិធី:</label>
+                                            <select id="p_format" name="p_format" class="form-select custom-height"
+                                                onchange="updateProgramFormat()" style="height: 50px;">
+                                                <option value="">ជ្រើសរើសកម្មវិធី</option>
+                                                <option value="P_1">កម្មវិធីទី ១</option>
+                                                <option value="P_2">កម្មវិធីទី ២</option>
+                                                <option value="P_3">កម្មវិធីទី ៣</option>
+                                                <option value="P_4">កម្មវិធីទី ៤</option>
+                                            </select>
+                                        </div>
+                                
                                     </div>
                                 </div>
+                                
 
                             </div>
 
@@ -91,8 +144,8 @@
                             <!-- Column 3 -->
                             <div class="col-md-3">
 
-                                 <!-- Mission Letter Date -->
-                                 <div class="form-group">
+                                <!-- Mission Letter Date -->
+                                <div class="form-group">
                                     <label for="letter_date">កាលបរិច្ឆេទ:</label>
                                     <input type="date" name="letter_date" id="letter_date"
                                         class="form-control custom-height">
@@ -103,13 +156,14 @@
                                     <label>ជ្រើសរើសបញ្ជី:</label>
                                     @foreach ($missionTag as $tag)
                                         <div class="form-check">
-                                            <input class="form-check-input" type="radio" name="m_tag" id="m_tag{{ $tag->id }}" 
-                                                   value="{{ $tag->id }}" required>
-                                            <label class="form-check-label" for="m_tag{{ $tag->id }}">{{ $tag->m_tag }}</label>
+                                            <input class="form-check-input" type="radio" name="m_tag"
+                                                id="m_tag{{ $tag->id }}" value="{{ $tag->id }}" required>
+                                            <label class="form-check-label"
+                                                for="m_tag{{ $tag->id }}">{{ $tag->m_tag }}</label>
                                         </div>
                                     @endforeach
                                 </div>
-                                
+
                                 <!-- Mission Objective -->
                                 <div class="form-group">
                                     <label for="mission_objective">កម្មវត្ថុនៃការចុះបេសកកម្ម:</label>
@@ -151,7 +205,7 @@
                         <div class="row justify-content-center">
                             <div class="col-12 text-center">
                                 <!-- Reset Button -->
-                                <button type="reset" class="btn btn-secondary ">
+                                <button type="reset" id="reset-btn" class="btn btn-secondary ">
                                     <i class="fas fa-undo"></i>&nbsp;&nbsp;កំណត់ឡើងវិញ
                                 </button>
 
@@ -180,7 +234,7 @@
         .custom-height {
             height: 50px;
         }
-   
+
         .form-control {
             width: 100%;
             height: 50px;
@@ -191,8 +245,9 @@
             border-radius: 4px;
             box-sizing: border-box;
         }
-.form-check-input,
-        .form-select{
+
+        .form-check-input,
+        .form-select {
             border: 1px solid #000000;
         }
 
@@ -218,6 +273,12 @@
         h3 {
             font-family: 'Khmer OS Muol Light', sans-serif;
             font-size: 16px;
+        }
+
+        #rows-container {
+            max-height: 360px;
+            overflow-x: auto;
+            padding: 16px;
         }
     </style>
 @endsection
@@ -289,9 +350,11 @@
 
         })(jQuery);
 
+
         $(document).ready(function() {
             const numPeopleSelect = $('#num_people');
             const rowsContainer = $('#rows-container');
+            const resetBtn = $('#reset-btn');
 
             numPeopleSelect.on('change', function() {
                 const numPeople = parseInt($(this).val(), 10);
@@ -299,7 +362,7 @@
 
                 for (let i = 0; i < numPeople; i++) {
                     const rowHtml = `
-                <div class="row">
+                <div class="row mb-2">
                     <div class="col-md-4">
                         <div class="form-group">
                             <label for="name_${i + 1}">ឈ្មោះ ${i + 1}:</label>
@@ -309,7 +372,7 @@
                     <div class="col-md-4">
                         <div class="form-group">
                             <label for="role_${i + 1}">តួនាទី ${i + 1}:</label>
-                            <select name="people[${i}][role]" id="role_${i}" class="form-control centered text-align-items-start" required >
+                            <select name="people[${i}][role]" id="role_${i}" class="form-control " required>
                                 <option value="">ជ្រើសរើសតួនាទី</option>
                                 <option value="រដ្ឋមន្រ្តី">រដ្ឋមន្រ្តី</option>
                                 <option value="ទីប្រឹក្សាអមក្រសួង">ទីប្រឹក្សាអមក្រសួង</option>
@@ -337,7 +400,7 @@
                     <div class="col-md-4">
                         <div class="form-group">
                             <label for="position_type_${i + 1}">មុខងារ ${i + 1}:</label>
-                            <select name="people[${i}][position_type]" id="position_type_${i}" class="form-control centered-text text-align-items-start" required>
+                            <select name="people[${i}][position_type]" id="position_type_${i}" class="form-control" required>
                                 <option value="">ជ្រើសរើសថ្នាក់មុខងារ</option>
                                 <option value="ក">ក</option>
                                 <option value="ខ១">ខ១</option>
@@ -353,7 +416,12 @@
                     rowsContainer.append(rowHtml);
                 }
             });
-            document.getElementById('place').addEventListener('change', updateLocationOptions);
+
+            // Reset button functionality
+            resetBtn.on('click', function() {
+                numPeopleSelect.val(''); // Reset dropdown
+                rowsContainer.empty(); // Clear all generated rows
+            });
         });
     </script>
     <script>
@@ -361,6 +429,10 @@
             const letterNumber = document.getElementById('letter_number').value;
             const letterFormat = document.getElementById('letter_format').value;
             document.getElementById('full_letter_number').value = letterNumber + letterFormat;
+        }
+
+        function updateProgramFormat(){
+            const pFormat = document.getElementById('p_format').value;
         }
     </script>
     @if (session('error'))

@@ -40,13 +40,13 @@
         </li>
 
         <!-- Centered Fullscreen Button -->
-        <a id="fullscreen-btn" class="btn btn-dark d-flex justify-content-center align-items-center mr-2 mt-3"
+        {{-- <a id="fullscreen-btn" class="btn btn-dark d-flex justify-content-center align-items-center mr-2 mt-3"
             style="height: 36px; width: 36px;">
             <i class="fas fa-expand"></i>
-        </a>
+        </a> --}}
 
 
-        <li class="nav-item dropdown no-arrow mx-1">
+        {{-- <li class="nav-item dropdown no-arrow mx-1">
             <a class="nav-link dropdown-toggle" href="#" id="alertsDropdown" role="button" data-toggle="dropdown"
                 aria-haspopup="true" aria-expanded="false">
                 <i class="fa fa-language text-danger" aria-hidden="true"></i> <!-- Using text-danger for red color -->
@@ -67,12 +67,12 @@
                     Khmer
                 </a>
             </div>
-        </li>
+        </li> --}}
 
 
 
         <!-- Nav Item - Messages -->
-        <li class="nav-item dropdown no-arrow mx-1">
+        {{-- <li class="nav-item dropdown no-arrow mx-1">
             <a class="nav-link dropdown-toggle" href="#" id="messagesDropdown" role="button"
                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 <i class="fas fa-envelope fa-fw"></i>
@@ -134,7 +134,7 @@
                 <a class="dropdown-item text-center small text-gray-500" href="#">Read More
                     Messages</a>
             </div>
-        </li>
+        </li> --}}
 
         <div class="topbar-divider d-none d-sm-block"></div>
 

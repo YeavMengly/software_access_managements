@@ -59,21 +59,25 @@ class YearController extends Controller
 
     public function edit(Year $year)
     {
+        // Check what $year contains
         return view('layouts.admin.date_year.edit', compact('year'));
     }
-
+    
+    
     public function update(Request $request, Year $year)
     {
         $validatedData = $request->validate([
-            'date_year' => 'required|string'
+            'date_year' => 'required|string',
         ]);
-
-        $validatedData['date_year'] = $validatedData['date_year'] . '-01-01';
-
+    
+        // Ensure the year format is correct before saving
+        $validatedData['date_year'] = $validatedData['date_year'] . '-01-01';  // Assuming you're using this format
+    
         $year->update($validatedData);
-
+    
         return redirect()->route('years.index')->with('success', 'ឆ្នាំបានកែប្រែដោយជោគជ័យ!');
     }
+    
 
     public function destroy($id)
     {

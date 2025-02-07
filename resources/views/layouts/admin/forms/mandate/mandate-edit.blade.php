@@ -46,13 +46,11 @@
                                 <div class="col-md-4 d-flex flex-column align-items-center">
                                     <div class="form-group">
                                         <strong>លេខកូដកម្មវិធី:</strong>
-                                        <input type="text" id="searchReportKey" class="form-control"
+                                        <input type="text" id="searchReportKey" class="form-control mt-2 mb-2"
                                             placeholder="ស្វែងរកលេខកូដកម្មវិធី..." onkeyup="filterReportKeys(event)"
                                             style="width: 230px; height: 40px; text-align: left; line-height: 40px;">
                                         <p id="resultCount" style="font-weight: bold;">ចំនួន: 0</p>
-
                                         @php
-                                            // Sort the reports by report_key in ascending order
                                             $sortedReports = $dataMandate->sortBy('sub_account_key');
                                         @endphp
 
@@ -74,7 +72,7 @@
                                     <div class="form-group">
                                         <strong>ចំនួនទឹកប្រាក់:</strong>
                                         <input type="number" name="value_mandate" id="value_mandate"
-                                            class="form-control @error('value_mandate') is-invalid @enderror"
+                                            class="form-control mt-2 @error('value_mandate') is-invalid @enderror"
                                             value="{{ old('value_mandate', $mandate->value_mandate) }}"
                                             style="width: 100%; height: 40px; text-align: center; line-height: 60px;"
                                             oninput="updateApplyValue()">
@@ -345,18 +343,14 @@
             const fileList = document.getElementById('fileList'); // Get the file list container
             const files = Array.from(fileInput.files); // Convert FileList to Array
 
-            // Clear the list before displaying new files
             fileList.innerHTML = '';
 
-            // Sort files by name
             files.sort((a, b) => a.name.localeCompare(b.name));
 
-            // Loop through files and display their names with icons
             files.forEach((file, index) => {
                 const listItem = document.createElement('li');
                 listItem.style.cssText = 'display: flex; align-items: center; margin-bottom: 5px;';
 
-                // Create icon element based on file type
                 const icon = document.createElement('i');
                 if (file.name.endsWith('.pdf')) {
                     icon.className = 'fas fa-file-pdf';
@@ -365,19 +359,16 @@
                     icon.className = 'fas fa-file-word';
                     icon.style.color = 'blue';
                 } else {
-                    icon.className = 'fas fa-file-alt'; // Default icon for other file types
+                    icon.className = 'fas fa-file-alt'; 
                     icon.style.color = 'gray';
                 }
                 icon.style.marginRight = '10px';
 
-                // Add text for file name
                 const text = document.createTextNode(`${index + 1}. ${file.name}`);
 
-                // Append icon and text to the list item
                 listItem.appendChild(icon);
                 listItem.appendChild(text);
 
-                // Append list item to file list
                 fileList.appendChild(listItem);
             });
         }
