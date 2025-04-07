@@ -2,7 +2,6 @@
 
 @section('content-table-mission-cambodia')
     <div class="result-total-table-container">
-
         <div class="col-lg-12 margin-tb mb-4">
             <div class="d-flex justify-content-between align-items-center">
                 <a class="btn btn-danger" href="{{ route('total_card') }}"
@@ -136,7 +135,7 @@
                     </div>
                 </div>
 
-                <div class="d-flex justify-content-end">
+                {{-- <div class="d-flex justify-content-end">
                     <div class="btn-group mb-3" role="group" aria-label="Program Format Filter">
                         <!-- Show 'All Programs' Button -->
                         <a href="{{ route('mission-cam.index') }}" 
@@ -161,7 +160,7 @@
                             </a>
                         @endforeach
                     </div>
-                </div>
+                </div> --}}
             </form>
         </div>
     </div>

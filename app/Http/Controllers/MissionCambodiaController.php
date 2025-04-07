@@ -6,7 +6,6 @@ use App\Exports\CambodiaExport;
 use App\Models\Mission\MissionTag;
 use App\Models\Result\CambodiaMission;
 use Carbon\Carbon;
-use Hamcrest\Core\AllOf;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\Rule;
@@ -48,9 +47,10 @@ class MissionCambodiaController extends Controller
         $startDate = $request->input('start_date');
         $endDate = $request->input('end_date');
         $selectedYear = $request->input('year', date('Y'));
-        $selectedMonth = $request->input('month', now()->month);
+        $selectedMonth = $request->input('month', Carbon::now()->month);
         $selectedMissionTag = $request->input('m_tag');
-        $selectedProgramFormat = $request->input('p_format'); // 📌 Capture program format
+        $perPage = $request->input('per_page', 100); // Get pagination value from request, default to 100
+
         $missionTag = MissionTag::all();
 
         // Initialize query builder
@@ -70,9 +70,9 @@ class MissionCambodiaController extends Controller
             // If letter_numbers exist, refine the query
             if ($letterNumbers->count() > 0) {
                 $query->whereIn('letter_number', $letterNumbers);
-            $matchingMissions = $query->get();
-            $letterNumbers = $matchingMissions->pluck('letter_number')->unique();
-
+                $matchingMissions = $query->get();
+                $letterNumbers = $matchingMissions->pluck('letter_number')->unique();
+            }
             if ($letterNumbers->count() > 0) {
                 $query = CambodiaMission::whereIn('letter_number', $letterNumbers);
             }
@@ -106,21 +106,13 @@ class MissionCambodiaController extends Controller
             $query->whereMonth('created_at', $selectedMonth);
         }
 
-        // Filter by mission tag if provided
-
         // Filter by Mission Tag
-          if ($selectedMissionTag) {
+        if ($selectedMissionTag) {
             $query->where('m_tag', $selectedMissionTag);
         }
 
-
-        // 📌 Filter by Program Format
-        if ($selectedProgramFormat) {
-            $query->where('p_format', $selectedProgramFormat);
-        }
-
-        // Fetch missions
-        $missions = $query->paginate(20); // ✅ Use pagination
+        // Fetch missions with dynamic pagination
+        $missions = $query->paginate($perPage);
 
         // Calculate totals
         $totals = [
@@ -142,7 +134,6 @@ class MissionCambodiaController extends Controller
             ];
         });
 
-
         return view('layouts.table.table-mission.table-mission-cambodia', [
             'missionTag' => $missionTag,
             'missions' => $missions,
@@ -150,10 +141,9 @@ class MissionCambodiaController extends Controller
             'groupedTotals' => $groupedTotals,
             'selectedYear' => $selectedYear,
             'selectedMonth' => $selectedMonth,
-            'selectedProgramFormat' => $selectedProgramFormat, // ✅ Send to the view
+            'perPage' => $perPage, // Pass perPage to the view
         ]);
     }
-
 
     public function create()
     {
@@ -210,11 +200,11 @@ class MissionCambodiaController extends Controller
             'mission_start_date' => 'required|date',
             'mission_end_date' => 'required|date|after_or_equal:mission_start_date',
             'm_tag' => 'required|exists:mission_tags,id', // Validation rule for m_tag
-            'p_format' => 'required|string',
+            // 'p_format' => 'required|string',
         ]);
 
-        // Retrieve the combined letter number and format
-        $fullLetterNumber = $request->input('full_letter_number');
+        // Define full letter number correctly
+        $fullLetterNumber = $request->full_letter_number;
 
         // Calculate the duration of the mission
         $missionStartDate = new \DateTime($request->mission_start_date);
@@ -245,7 +235,7 @@ class MissionCambodiaController extends Controller
             'days_count' => $daysCount,
             'nights_count' => $nightsCount,
             'm_tag' => $validatedData['m_tag'],
-            'p_format' => $request->p_format
+            // 'p_format' => $request->p_format
         ];
 
         // Variable to hold the final mission ID
@@ -423,8 +413,8 @@ class MissionCambodiaController extends Controller
             'ទីប្រឹក្សាអមក្រសួង',
             'រដ្ឋលេខាធិការ',
             'អនុរដ្ឋលេខាធិការ',
-            'អគ្កាធិការ',
-            'អគ្កាធិការរង',
+            'អគ្គាធិការ',
+            'អគ្គាធិការរង',
             'អគ្គនាយក',
             'អគ្គនាយករង',
             'អគ្គលេខាធិការ',
@@ -464,8 +454,11 @@ class MissionCambodiaController extends Controller
             'mission_start_date' => 'required|date',
             'mission_end_date' => 'required|date|after_or_equal:mission_start_date',
             'm_tag' => 'required|exists:mission_tags,id', // Validation rule for m_tag
-            'p_format' => 'required|string',
+            // 'p_format' => 'required|string',
         ]);
+
+        // Define full letter number correctly
+        $fullLetterNumber = $request->full_letter_number;
 
         // Calculate the duration of the mission
         $missionStartDate = new \DateTime($request->mission_start_date);
@@ -487,7 +480,7 @@ class MissionCambodiaController extends Controller
         $missionData = [
             'letter_number' => $request->letter_number,
             'letter_format' => $request->letter_format,
-            // 'full_letter_number' => $fullLetterNumber,
+            'full_letter_number' => $fullLetterNumber,
             'letter_date' => $request->letter_date,
             'mission_objective' => $request->mission_objective,
             'location' => $request->location,
@@ -496,7 +489,7 @@ class MissionCambodiaController extends Controller
             'days_count' => $daysCount,
             'nights_count' => $nightsCount,
             'm_tag' => $validatedData['m_tag'],
-            'p_format' => $request->p_format
+            // 'p_format' => $request->p_format
         ];
 
 

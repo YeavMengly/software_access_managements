@@ -52,7 +52,7 @@
                                 <!-- Number of people -->
                                 <div class="form-group">
                                     <label for="num_people">ជ្រើសរើសចំនួនៈ</label>
-                                    <select id="num_people" class="form-control centered-text custom-height" required>
+                                    <select id="num_people" class="form-control centered-text custom-height" name="num_people" required>
                                         <option value="">ជ្រើសរើស</option>
                                         @for ($i = 1; $i <= 10; $i++)
                                             <option value="{{ $i }}">{{ $i }}</option>
@@ -93,7 +93,6 @@
                                 <div class="form-group">
                                     {{-- <label for="mission_letter" style="font-weight: bold;">លិខិតបញ្ជាបេសកកម្ម:</label> --}}
                                     <div class="d-flex align-items-center gap-2">
-                                
                                         <!-- Label for Letter Number -->
                                         <div style="flex: 1; margin: 2px; padding-top: 8px;">
                                             <label for="letter_number">ចុះលេខ:</label>
@@ -101,24 +100,25 @@
                                                 class="form-control custom-height" min="0" placeholder="ចុះលេខ"
                                                 oninput="updateFullLetterNumber()" style="height: 50px;">
                                         </div>
-                                
                                         <!-- Label for Reference Selection -->
                                         <div style="flex: 2; margin: 2px;">
                                             <label for="letter_format">ជ្រើសរើសយោង:</label>
-                                            <select id="letter_format" name="letter_format" class="form-select custom-height"
-                                                onchange="updateFullLetterNumber()" style="height: 50px;">
+                                            <select id="letter_format" name="letter_format"
+                                                class="form-select custom-height" onchange="updateFullLetterNumber()"
+                                                style="height: 50px;">
                                                 <option value="">ជ្រើសរើសយោង</option>
                                                 <option value=" កប/ល.ប.ក">កប/ល.ប.ក</option>
                                                 <option value=" កប/ឧ.ទ.ន">កប/ឧ.ទ.ន</option>
                                                 <option value=" កប/ឧ.ទ.ន.ខ.ល">កប/ឧ.ទ.ន.ខ.ល</option>
                                                 <option value=" កប/ឧ.ទ.ន.គ.ក.ប">កប/ឧ.ទ.ន.គ.ក.ប</option>
+                                                <option value=" កប/ឧ.ទ.ន.ហ.ទ.រ">កប/ឧ.ទ.ន.ហ.ទ.រ</option>
                                             </select>
                                         </div>
-                                
+
                                         <input type="hidden" name="full_letter_number" id="full_letter_number">
-                                
+
                                         <!-- Label for Program Selection -->
-                                        <div style="flex: 2; margin: 2px;">
+                                        {{-- <div style="flex: 2; margin: 2px;">
                                             <label for="p_format">ជ្រើសរើសកម្មវិធី:</label>
                                             <select id="p_format" name="p_format" class="form-select custom-height"
                                                 onchange="updateProgramFormat()" style="height: 50px;">
@@ -128,11 +128,10 @@
                                                 <option value="P_3">កម្មវិធីទី ៣</option>
                                                 <option value="P_4">កម្មវិធីទី ៤</option>
                                             </select>
-                                        </div>
-                                
+                                        </div> --}}
                                     </div>
                                 </div>
-                                
+
 
                             </div>
 
@@ -179,9 +178,30 @@
                                     <label for="location">ជ្រើសរើសខេត្ត:</label>
                                     <select name="location" id="location" class="form-control centered-text custom-height">
                                         <option value="">ជ្រើសរើសខេត្ត</option>
+                                        <option value="រតនគិរី">រតនគិរី</option>
+                                        <option value="មណ្ឌលគិរី">មណ្ឌលគិរី</option>
+                                        <option value="ឧត្តរមានជ័យ">ឧត្តរមានជ័យ</option>
+                                        <option value="បាត់ដំបង">បាត់ដំបង</option>
+                                        <option value="កណ្ដាល">កណ្ដាល</option>
+                                        <option value="កោះកុង">កោះកុង</option>
+                                        <option value="កំពង់ចាម">កំពង់ចាម</option>
+                                        <option value="ស្វាយរៀង">ស្វាយរៀង</option>
+                                        <option value="កំពត">កំពត</option>
+                                        <option value="ព្រះសីហនុ">ព្រះសីហនុ</option>
+                                        <option value="បន្ទាយមានជ័យ">បន្ទាយមានជ័យ</option>
                                         <option value="កំពង់ធំ">កំពង់ធំ</option>
+                                        <option value="កំពង់ស្ពឺ">កំពង់ស្ពឺ</option>
+                                        <option value="កែប">កែប</option>
+                                        <option value="កំពង់ឆ្នាំង">កំពង់ឆ្នាំង</option>
+                                        <option value="ប៉ៃលិន">ប៉ៃលិន</option>
+                                        <option value="ក្រចេះ">ក្រចេះ</option>
+                                        <option value="ស្ទឹងត្រែង">ស្ទឹងត្រែង</option>
+                                        <option value="ពោធិ៍សាត់">ពោធិ៍សាត់</option>
+                                        <option value="ព្រះវិហារ">ព្រះវិហារ</option>
+                                        <option value="សៀមរាប">សៀមរាប</option>
+                                        <option value="ព្រៃវែង">ព្រៃវែង</option>
                                         <option value="តាកែវ">តាកែវ</option>
-                                        
+                                        <option value="ត្បូងឃ្មុំ">ត្បូងឃ្មុំ</option>
                                     </select>
                                 </div>
 
@@ -216,7 +236,6 @@
                             </div>
                         </div>
                     </form>
-
                 </div>
             </div>
         </div>
@@ -360,8 +379,9 @@
                 const numPeople = parseInt($(this).val(), 10);
                 rowsContainer.empty(); // Clear previous rows
 
-                for (let i = 0; i < numPeople; i++) {
-                    const rowHtml = `
+                if (numPeople > 0) {
+                    for (let i = 0; i < numPeople; i++) {
+                        const rowHtml = `
                 <div class="row mb-2">
                     <div class="col-md-4">
                         <div class="form-group">
@@ -372,14 +392,14 @@
                     <div class="col-md-4">
                         <div class="form-group">
                             <label for="role_${i + 1}">តួនាទី ${i + 1}:</label>
-                            <select name="people[${i}][role]" id="role_${i}" class="form-control " required>
+                            <select name="people[${i}][role]" id="role_${i}" class="form-control" required>
                                 <option value="">ជ្រើសរើសតួនាទី</option>
                                 <option value="រដ្ឋមន្រ្តី">រដ្ឋមន្រ្តី</option>
                                 <option value="ទីប្រឹក្សាអមក្រសួង">ទីប្រឹក្សាអមក្រសួង</option>
                                 <option value="រដ្ឋលេខាធិការ">រដ្ឋលេខាធិការ</option>
                                 <option value="អនុរដ្ឋលេខាធិការ">អនុរដ្ឋលេខាធិការ</option>
-                                <option value="អគ្កាធិការ">អគ្កាធិការ</option>
-                                <option value="អគ្កាធិការរង">អគ្កាធិការរង</option>
+                                <option value="អគ្គាធិការ">អគ្គាធិការ</option>
+                                <option value="អគ្គាធិការរង">អគ្គាធិការរង</option>
                                 <option value="អគ្គនាយក">អគ្គនាយក</option>
                                 <option value="អគ្គនាយករង">អគ្គនាយករង</option>
                                 <option value="អគ្គលេខាធិការ">អគ្គលេខាធិការ</option>
@@ -412,9 +432,13 @@
                         </div>
                     </div>
                 </div>
-            `;
-                    rowsContainer.append(rowHtml);
+                `;
+                        rowsContainer.append(rowHtml);
+                    }
                 }
+
+                console.log(`Number of people selected: ${numPeople}`); // Debugging
+                console.log(`Generated rows count: ${$('.row.mb-2').length}`); // Debugging
             });
 
             // Reset button functionality
@@ -431,7 +455,7 @@
             document.getElementById('full_letter_number').value = letterNumber + letterFormat;
         }
 
-        function updateProgramFormat(){
+        function updateProgramFormat() {
             const pFormat = document.getElementById('p_format').value;
         }
     </script>
