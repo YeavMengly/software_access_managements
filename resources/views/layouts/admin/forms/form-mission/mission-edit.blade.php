@@ -42,13 +42,13 @@
                         @method('PUT')
                         <div class="row" style="font-family: 'Khmer OS Siemreap', sans-serif;">
                             <div class="col-md-6">
-                              
                                 <div class="form-group">
                                     <div class="row mb-2">
                                         <div class="col-md-4">
                                             <div class="form-group">
                                                 <label for="name">ឈ្មោះ :</label>
-                                                <input type="text" name="names[]" id="name" class="form-control" required value="{{ $mission->name }}">
+                                                <input type="text" name="names[]" id="name" class="form-control"
+                                                    required value="{{ $mission->name }}">
                                             </div>
                                         </div>
                                         <div class="col-md-4">
@@ -57,7 +57,9 @@
                                                 <select name="roles[]" class="form-control" required>
                                                     <option value="">ជ្រើសរើសតួនាទី</option>
                                                     @foreach ($roles as $role)
-                                                        <option value="{{ $role }}" {{ old('roles', $mission->role) == $role ? 'selected' : '' }}>{{ $role }}</option>
+                                                        <option value="{{ $role }}"
+                                                            {{ old('roles', $mission->role) == $role ? 'selected' : '' }}>
+                                                            {{ $role }}</option>
                                                     @endforeach
                                                 </select>
                                             </div>
@@ -68,15 +70,17 @@
                                                 <select name="position_types[]" class="form-control" required>
                                                     <option value="">ជ្រើសរើសថ្នាក់មុខងារ</option>
                                                     @foreach (['ក', 'ខ១', 'ខ២', 'គ', 'ឃ', 'ង'] as $type)
-                                                        <option value="{{ $type }}" {{ old('position_types', $mission->position_type) == $type ? 'selected' : '' }}>{{ $type }}</option>
+                                                        <option value="{{ $type }}"
+                                                            {{ old('position_types', $mission->position_type) == $type ? 'selected' : '' }}>
+                                                            {{ $type }}</option>
                                                     @endforeach
                                                 </select>
                                             </div>
                                         </div>
                                     </div>
-                                    
+
                                 </div>
-                                
+
                                 <div id="rows-container"></div>
                                 <div class="form-group">
                                     {{-- <label for="mission_letter" style="font-weight: bold;">លិខិតបញ្ជាបេសកកម្ម:</label> --}}
@@ -112,13 +116,17 @@
                                                 <option value="កប/ឧ.ទ.ន.គ.ក.ប"
                                                     {{ old('letter_format', $mission->letter_format) == 'កប/ឧ.ទ.ន.គ.ក.ប' ? 'selected' : '' }}>
                                                     កប/ឧ.ទ.ន.គ.ក.ប</option>
+
+                                                <option value="កប/ឧ.ទ.ន.ហ.ទ.រ"
+                                                    {{ old('letter_format', $mission->letter_format) == 'កប/ឧ.ទ.ន.ហ.ទ.រ' ? 'selected' : '' }}>
+                                                    កប/ឧ.ទ.ន.ហ.ទ.រ</option>
                                             </select>
                                         </div>
 
                                         <input type="hidden" name="full_letter_number" id="full_letter_number">
 
                                         <!-- Label for Program Selection -->
-                                        <div style="flex: 2; margin: 2px;">
+                                        {{-- <div style="flex: 2; margin: 2px;">
                                             <label for="p_format">ជ្រើសរើសកម្មវិធី:</label>
                                             <select id="p_format" name="p_format" class="form-select custom-height"
                                                 style="height: 50px;">
@@ -132,7 +140,7 @@
                                                 <option value="P_4" {{ $mission->p_format == 'P_4' ? 'selected' : '' }}>
                                                     កម្មវិធីទី ៤</option>
                                             </select>
-                                        </div>
+                                        </div> --}}
 
                                     </div>
                                 </div>
@@ -171,10 +179,54 @@
                                     <select name="location" id="location"
                                         class="form-control centered-text custom-height">
                                         <option value="">ជ្រើសរើសខេត្ត</option>
+                                        <option value="រតនគិរី" {{ $mission->location == 'រតនគិរី' ? 'selected' : '' }}>
+                                            រតនគិរី</option>
+                                        <option value="មណ្ឌលគិរី" {{ $mission->location == 'មណ្ឌលគិរី' ? 'selected' : '' }}>
+                                            មណ្ឌលគិរី</option>
+                                        <option value="ឧត្តរមានជ័យ" {{ $mission->location == 'ឧត្តរមានជ័យ' ? 'selected' : '' }}>
+                                            ឧត្តរមានជ័យ</option>
+                                        <option value="បាត់ដំបង" {{ $mission->location == 'បាត់ដំបង' ? 'selected' : '' }}>
+                                            បាត់ដំបង</option>
+                                        <option value="កណ្ដាល" {{ $mission->location == 'កណ្ដាល' ? 'selected' : '' }}>
+                                            កណ្ដាល</option>
+                                        <option value="កោះកុង" {{ $mission->location == 'កោះកុង' ? 'selected' : '' }}>
+                                            កោះកុង</option>
+                                        <option value="កំពង់ចាម" {{ $mission->location == 'កំពង់ចាម' ? 'selected' : '' }}>
+                                            កំពង់ចាម</option>
+                                        <option value="ស្វាយរៀង" {{ $mission->location == 'ស្វាយរៀង' ? 'selected' : '' }}>
+                                            ស្វាយរៀង</option>
+                                        <option value="កំពត" {{ $mission->location == 'កំពត' ? 'selected' : '' }}>
+                                            កំពត</option>
+                                        <option value="ព្រះសីហនុ" {{ $mission->location == 'ព្រះសីហនុ' ? 'selected' : '' }}>
+                                            ព្រះសីហនុ</option>
+                                        <option value="បន្ទាយមានជ័យ" {{ $mission->location == 'បន្ទាយមានជ័យ' ? 'selected' : '' }}>
+                                            បន្ទាយមានជ័យ</option>
                                         <option value="កំពង់ធំ" {{ $mission->location == 'កំពង់ធំ' ? 'selected' : '' }}>
                                             កំពង់ធំ</option>
+                                        <option value="កំពង់ស្ពឺ" {{ $mission->location == 'កំពង់ស្ពឺ' ? 'selected' : '' }}>
+                                            កំពង់ស្ពឺ</option>
+                                        <option value="កែប" {{ $mission->location == 'កែប' ? 'selected' : '' }}>
+                                            កែប</option>
+                                        <option value="កំពង់ឆ្នាំង" {{ $mission->location == 'កំពង់ឆ្នាំង' ? 'selected' : '' }}>
+                                            កំពង់ឆ្នាំង</option>
+                                        <option value="ប៉ៃលិន" {{ $mission->location == 'ប៉ៃលិន' ? 'selected' : '' }}>
+                                            ប៉ៃលិន</option>
+                                        <option value="ក្រចេះ" {{ $mission->location == 'ក្រចេះ' ? 'selected' : '' }}>
+                                            ក្រចេះ</option>
+                                        <option value="ស្ទឹងត្រែង" {{ $mission->location == 'ស្ទឹងត្រែង' ? 'selected' : '' }}>
+                                            ស្ទឹងត្រែង</option>
+                                        <option value="ពោធិ៍សាត់" {{ $mission->location == 'ពោធិ៍សាត់' ? 'selected' : '' }}>
+                                            ពោធិ៍សាត់</option>
+                                        <option value="ព្រះវិហារ" {{ $mission->location == 'ព្រះវិហារ' ? 'selected' : '' }}>
+                                            ព្រះវិហារ</option>
+                                        <option value="សៀមរាប" {{ $mission->location == 'សៀមរាប' ? 'selected' : '' }}>
+                                            សៀមរាប</option>
+                                        <option value="ព្រៃវែង" {{ $mission->location == 'ព្រៃវែង' ? 'selected' : '' }}>
+                                            ព្រៃវែង</option>
                                         <option value="តាកែវ" {{ $mission->location == 'តាកែវ' ? 'selected' : '' }}>
                                             តាកែវ</option>
+                                        <option value="ត្បូងឃ្មុំ" {{ $mission->location == 'ត្បូងឃ្មុំ' ? 'selected' : '' }}>
+                                            ត្បូងឃ្មុំ</option>
                                     </select>
                                 </div>
                                 <div class="form-group">

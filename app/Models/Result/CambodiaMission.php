@@ -34,7 +34,6 @@ class CambodiaMission extends Model
         'other_allowances',
         'final_total',
         'm_tag',
-        'p_format'
     ];
     
     public function missionTag(){
