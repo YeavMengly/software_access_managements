@@ -14,10 +14,20 @@
                 </div>
 
                 @if (session('success'))
-                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    <div class="alert alert-success alert-dismissible fade show" role="alert" id="success-alert">
                         {{ session('success') }}
                         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                     </div>
+
+                    <script>
+                        setTimeout(function() {
+                            let alert = document.getElementById("success-alert");
+                            if (alert) {
+                                let bsAlert = new bootstrap.Alert(alert);
+                                bsAlert.close();
+                            }
+                        }, 1500); // 5 seconds
+                    </script>
                 @endif
 
                 @if ($errors->any())
@@ -52,7 +62,7 @@
                                                 size="5" onchange="updateReportInputField()"
                                                 style="width: 230px; height: 120px;">
                                                 @foreach ($reports as $report)
-                                                    <option value="{{ $report->id }}"><span>{{ $report->subAccountKey->sub_account_key }} > {{ $report->report_key }}</span>
+                                                    <option value="{{ $report->id }}"><span>{{ $report->subAccountKey->sub_account_key }} | {{ $report->report_key }}</span>
                                                     </option>
                                                 @endforeach
                                             </select>
@@ -95,7 +105,7 @@
                                     <div class="col-md-4 d-flex flex-column align-items-start">
                                         <div class="form-group">
                                             <!-- File Input -->
-                                            <label for="attachments"><strong>ជ្រើសរើស ថ្ងៃ ខែ ឆ្នាំ:</strong></label>
+                                            <label for="attachments"><strong>កាលបរិច្ឆេទ:</strong></label>
                                             <input type="date" class="form-control" id="date_certificate"
                                                 name="date_certificate" multiple style="height: 40px; width: 230px;">
                                         </div>
@@ -194,6 +204,18 @@
             text-align: center;
             font-family: 'Khmer OS Siemreap', sans-serif;
             font-size: 14px;
+        }
+
+        /* Hide number input arrows in Chrome, Safari, Edge, and Opera */
+        input[type=number]::-webkit-inner-spin-button,
+        input[type=number]::-webkit-outer-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+
+        /* Hide number input arrows in Firefox */
+        input[type=number] {
+            -moz-appearance: textfield;
         }
     </style>
 @endsection

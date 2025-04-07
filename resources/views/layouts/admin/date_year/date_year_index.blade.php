@@ -11,7 +11,7 @@
                             <i class="fas fa-arrow-left"></i>&nbsp;&nbsp;
                         </a>
 
-                        <h3 class="mx-auto" style="font-weight: 700;">តារាងឆ្នាំ</h3>
+                        <h3 class="mx-auto" style="font-weight: 500;">តារាងឆ្នាំ</h3>
 
                         <div class="btn-group">
                             @if (auth()->check() && auth()->user()->role == 'admin')
@@ -25,7 +25,6 @@
                                 <span></span>
                             @endif
                         </div>
-
                     </div>
                 </div>
             </div>
@@ -47,7 +46,7 @@
                         <div class="modal-header">
                             <h3 class="modal-title" id="importModalLabel">បង្កើតឆ្នាំ</h3>
                             <button type="button" class="btn btn-link" data-bs-dismiss="modal" aria-label="Close">
-                                <i class="fas fa-times"></i>
+                                <i class="fas fa-times" style="color: red;"></i>
                             </button>
                         </div>
                         <div class="modal-body">
@@ -128,7 +127,8 @@
                                         class="status-text {{ $year->status === 'active' ? 'text-success' : ($year->status === 'inactive' ? 'text-danger' : 'text-warning') }}">
                                         {{ ucfirst($year->status) }}
                                     </span> --}}
-                                    <span class="status-text {{ $year->status === 'active' ? 'text-success' : ($year->status === 'inactive' ? 'text-danger' : 'text-warning') }}">
+                                    <span
+                                        class="status-text {{ $year->status === 'active' ? 'text-success' : ($year->status === 'inactive' ? 'text-danger' : 'text-warning') }}">
                                         @if ($year->status === 'active')
                                             <i class="fas fa-check-circle"></i> Active
                                         @elseif ($year->status === 'inactive')
@@ -137,7 +137,7 @@
                                             <i class="fas fa-exclamation-circle"></i> {{ ucfirst($year->status) }}
                                         @endif
                                     </span>
-                                    
+
                                 </td>
                             @else
                                 <span></span>
@@ -178,6 +178,8 @@
                     @endforeach
                 </tbody>
             </table>
+
+            {{-- Modal Edit  --}}
             <div class="modal fade" id="editYear{{ $year->id }}" tabindex="-1"
                 aria-labelledby="editYearModalLabel{{ $year->id }}" aria-hidden="true">
                 <div class="modal-dialog modal-dialog-centered">
@@ -185,7 +187,7 @@
                         <div class="modal-header">
                             <h3 class="modal-title" id="editYearModalLabel{{ $year->id }}">កែប្រែឆ្នាំ</h3>
                             <button type="button" class="btn btn-link" data-bs-dismiss="modal" aria-label="Close">
-                                <i class="fas fa-times"></i>
+                                <i class="fas fa-times" style="color: red;"></i>
                             </button>
                         </div>
                         <div class="modal-body">

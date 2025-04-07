@@ -24,20 +24,18 @@
                         </a>
                         <h3 style="font-weight: 500;">តារាងរបាយការណ៍បញ្ចូលនិយ័តថវិកា</h3>
                         <div class="btn-group">
-                           
-                            <a class="btn btn-secondary d-flex justify-content-center align-items-center"
-                            href="#"
-                            data-bs-toggle="modal" data-bs-target="#importModal"
-                                href="{{ route('loans.create') }}" style="width: 120px; height: 40px; border-radius: 4px;">
+
+                            <a class="btn btn-secondary d-flex justify-content-center align-items-center" href="#"
+                                data-bs-toggle="modal" data-bs-target="#importModal" href="{{ route('loans.create') }}"
+                                style="width: 120px; height: 40px; border-radius: 4px;">
                                 Import &nbsp;<i class="fas fa-file-import"></i>
                             </a>
                             &nbsp;
                             <a class="btn btn-primary d-flex justify-content-center align-items-center"
-                            href="{{ route('loans.create') }}"
-                            style="width: 120px; height: 40px; border-radius: 4px;">
-                           បញ្ចូល
-                         </a>
-                         
+                                href="{{ route('loans.create') }}" style="width: 120px; height: 40px; border-radius: 4px;">
+                                បញ្ចូល
+                            </a>
+
                         </div>
                     </div>
 
@@ -96,15 +94,22 @@
                                 <input type="text" name="sub_account_key_id" value="{{ request('sub_account_key_id') }}"
                                     class="form-control mb-2" placeholder="លេខអនុគណនី" style="width: 120px; height: 40px;">
                                 &nbsp;
-                                &nbsp;
                                 <input type="text" name="report_key" value="{{ request('report_key') }}"
                                     class="form-control mb-2" placeholder="លេខកូដកម្មវិធី"
                                     style="width: 120px; height: 40px;">
+
+                                &nbsp;
+                                <input type="date" name="start_date" id="start_date" value="{{ request('start_date') }}"
+                                    class="form-control" style="height: 40px; width: 200px;">
+                                &nbsp;
+                                <input type="date" name="end_date" id="end_date" value="{{ request('end_date') }}"
+                                    class="form-control" style="height: 40px; width: 200px;">
                             </div>
 
                             <div class="col-md-12">
                                 <div class="input-group ">
-                                    <button type="submit" class="btn btn-primary mr-2" style="width: 120px; height: 40px;">
+                                    <button type="submit" class="btn btn-primary mr-2"
+                                        style="width: 120px; height: 40px;">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
                                             viewBox="0 0 50 50">
                                             <path
@@ -179,7 +184,10 @@
                     </tr>
                 </thead>
                 <tbody>
+
                     @forelse ($loans as $loan)
+
+                    
                         <tr>
                             <td style="border: 1px solid black; max-width: 80px; text-align: center  width: 120px;">
                                 @if ($loan->report && $loan->report->subAccountKey)
@@ -189,7 +197,7 @@
                                 @endif
                             </td>
                             <td style="border: 1px solid black; max-width: 80px; text-align: center">
-                                {{ $loan->report_key }}
+                                {{ $loan->report->report_key }}
                             </td>
                             <td style="border: 1px solid black; max-width: 80px; text-align: center">
                                 {{ number_format($loan->internal_increase, 0, ' ', ' ') }}
@@ -198,10 +206,10 @@
                                 {{ number_format($loan->unexpected_increase, 0, ' ', ' ') }}
                             </td>
                             <td style="border: 1px solid black; max-width: 80px; text-align: center">
-                                {{ number_format($loan->additional_increase) }}
+                                {{ number_format($loan->additional_increase, 0, ' ', ' ') }}
                             </td>
                             <td style="border: 1px solid black; max-width: 80px; text-align: center">
-                                {{ number_format($loan->total_increase) }}
+                                {{ number_format($loan->total_increase, 0, ' ', ' ') }}
                             </td>
                             <td style="border: 1px solid black; max-width: 80px; text-align: center">
                                 {{ number_format($loan->decrease, 0, ' ', ' ') }}
@@ -209,7 +217,8 @@
                             <td style="border: 1px solid black; max-width: 80px; text-align: center">
                                 {{ number_format($loan->editorial, 0, ' ', ' ') }}
                             </td>
-                            <td style="border: 1px solid black; text-align: center; justify-content: center;  width: 120px;">
+                            <td
+                                style="border: 1px solid black; text-align: center; justify-content: center;  width: 120px;">
                                 <form id="delete-form-{{ $loan->id }}"
                                     action="{{ route('loans.destroy', $loan->id) }}" method="POST"
                                     style="display: none;">

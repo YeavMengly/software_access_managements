@@ -11,10 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
+        if (!Schema::hasTable('title_usage_units')) {
 
-        if (!Schema::hasTable('remains')) {
-            Schema::create('remains', function (Blueprint $table) {
+            Schema::create('title_usage_units', function (Blueprint $table) {
                 $table->increments('id', true);
+                $table->string('title_usage_unit')->nullable();
+                $table->string('location_number')->nullable();
+                $table->string('province_city');
                 $table->timestamps();
             });
         }
@@ -25,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('remains');
+        Schema::dropIfExists('title_usage_units');
     }
 };

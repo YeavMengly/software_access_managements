@@ -33,12 +33,6 @@
                         តារាង​ច្បាប់ហិរញ្ញ អាណត្តិ និងសលាកបត្រ
                     </a>
                 </div>
-               
-                {{-- <div class="col-md-4 mb-3">
-                    <a href="{{ route('result-total-general-table') }}" class="btn btn-custom btn-block animate-button">
-                        ផែនការថវិការដ្ឋ
-                    </a>
-                </div> --}}
 
                 <div class="col-md-4 mb-3">
                     <a href="{{ route('result-success') }}" class="btn btn-custom btn-block animate-button">

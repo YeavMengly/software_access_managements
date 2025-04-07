@@ -4,6 +4,8 @@ namespace App\Exceptions;
 
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Throwable;
+use Illuminate\Database\QueryException;
+use Illuminate\Database\DatabaseManager;
 
 class Handler extends ExceptionHandler
 {
@@ -44,5 +46,14 @@ class Handler extends ExceptionHandler
         $this->reportable(function (Throwable $e) {
             //
         });
+    }
+
+    public function render($request, Throwable $exception)
+    {
+        if ($exception instanceof \PDOException || $exception instanceof QueryException) {
+            return response()->view('errors.500', [], 500);
+        }
+
+        return parent::render($request, $exception);
     }
 }

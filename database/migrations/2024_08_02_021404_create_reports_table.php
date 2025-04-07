@@ -29,7 +29,7 @@ return new class extends Migration
 
                 // Foreign key column for year_id
                 $table->unsignedBigInteger('date_year');
-                $table->foreign('date_year')->references('idZ')->on('years')->onDelete('cascade'); // Reference to years table
+                $table->foreign('date_year')->references('id')->on('years')->onDelete('cascade'); // Reference to years table
 
                 $table->decimal('new_credit_status', 15, 2)->default(0);
                 $table->decimal('early_balance', 15, 2)->default(0);

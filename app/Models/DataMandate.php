@@ -55,7 +55,9 @@ class DataMandate extends Model
         return $this->belongsTo(Report::class, 'report_key', 'report_key');
     }
 
-
+    public function loanMandate(){
+        return $this->hasOne(LoanMandate::class, 'report_key', 'id');
+    }
 
     public static function getReportSql()
     {

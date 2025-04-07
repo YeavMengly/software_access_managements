@@ -34,11 +34,6 @@ class Loans extends Model
         return $this->belongsTo(Report::class, 'report_key', 'id');
     }
 
-    public function dataMandate()
-    {
-        return $this->belongsTo(DataMandate::class, 'report_key', 'report_key');
-    }
-
     public function certificatData(){
         return $this->hasMany(CertificateData::class, 'report_key');
     }

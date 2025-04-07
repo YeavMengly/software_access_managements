@@ -11,13 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        if (!Schema::hasTable('amount_certificates')) {
-            Schema::create('amount_certificates', function (Blueprint $table) {
-                $table->id();
-                $table->decimal('amount')->default(0);
-                $table->timestamps();
-            });
-        }
+        Schema::create('fuel_tags', function (Blueprint $table) {
+            $table->id();
+            $table->string('fuel_tag')->nullable();
+            $table->timestamps();
+        });
     }
 
     /**
@@ -25,6 +23,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('amount_certificates');
+        Schema::dropIfExists('fuel_tags');
     }
 };

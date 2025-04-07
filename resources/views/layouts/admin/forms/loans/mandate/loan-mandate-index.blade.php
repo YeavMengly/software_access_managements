@@ -19,22 +19,23 @@
                 <div class="col-lg-12 margin-tb">
                     <div class="d-flex justify-content-between align-items-center">
                         <a class="btn btn-danger" href="{{ route('back') }}"
-                            style="width: 160px; height: 50px; border-radius: 4px; display: flex; align-items: center; justify-content: center;">
-                            <i class="fas fa-arrow-left"></i>&nbsp;&nbsp;
+                            style="width: 120px; height: 40px; border-radius: 4px; display: flex; align-items: center; justify-content: center;">
+                            <i class="fas fa-arrow-left"></i>
                         </a>
                         <h3 style="font-weight: 500;">តារាងរបាយការណ៍បញ្ចូលនិយ័តថវិកា</h3>
                         <div class="btn-group">
-                           
-                            <a class="btn btn-success d-flex justify-content-center align-items-center"
-                            href="#"
-                            data-bs-toggle="modal" data-bs-target="#importModal"
-                                href="{{ route('loan-mandates.create') }}" style="width: 160px; height: 50px; border-radius: 4px;">
-                                Import &nbsp;<i class="fas fa-file-import"></i>
+
+                            <a class="btn btn-secondary d-flex justify-content-center align-items-center" href="#"
+                                data-bs-toggle="modal" data-bs-target="#importModal"
+                                href="{{ route('loan-mandates.create') }}"
+                                style="width: 120px; height: 40px; border-radius: 4px;">
+                                Import
                             </a>
                             &nbsp;
-                            <a class="btn btn-success d-flex justify-content-center align-items-center"
-                                href="{{ route('loan-mandates.create') }}" style="width: 160px; height: 50px; border-radius: 4px;">
-                                បញ្ចូលទិន្នន័យ &nbsp;&nbsp;<i class="fas fa-plus" style="margin-left: 8px;"></i>
+                            <a class="btn btn-primary d-flex justify-content-center align-items-center"
+                                href="{{ route('loan-mandates.create') }}"
+                                style="width: 120px; height: 40px; border-radius: 4px;">
+                                បញ្ចូល
                             </a>
 
                         </div>
@@ -181,11 +182,9 @@
                     @forelse ($loanMandates as $loanMandate)
                         <tr>
                             <td style="border: 1px solid black; max-width: 80px; text-align: center">
-                                {{-- @if ($loanMandate->dataMandates && $loanMandate->reportKey->subAccountKey) --}}
-                                    {{ $loanMandate->report->sub_account_key }}
-                                {{-- @else
-                                    N/A
-                                @endif --}}
+
+                                {{ $loanMandate->report->sub_account_key }}
+
                             </td>
                             <td style="border: 1px solid black; max-width: 80px; text-align: center">
                                 {{ $loanMandate->report->report_key }}
@@ -208,7 +207,8 @@
                             <td style="border: 1px solid black; max-width: 80px; text-align: center">
                                 {{ number_format($loanMandate->editorial, 0, ' ', ' ') }}
                             </td>
-                            <td style="border: 1px solid black; text-align: center; justify-content: center ; width: 120px;">
+                            <td
+                                style="border: 1px solid black; text-align: center; justify-content: center ; width: 120px;">
                                 <form id="delete-form-{{ $loanMandate->id }}"
                                     action="{{ route('loan-mandates.destroy', $loanMandate->id) }}" method="POST"
                                     style="display: none;">
@@ -287,7 +287,8 @@
         }
 
         .border-wrapper {
-            padding: 32px;
+            padding-left: 16px;
+            padding-right: 16px;
         }
 
         .description {
@@ -343,7 +344,7 @@
         td {
             border: 1px solid black;
             text-align: center;
-            padding: 5px;
+            padding: 6px;
             font-family: 'Khmer OS Siemreap', sans-serif;
             font-size: 14px;
         }

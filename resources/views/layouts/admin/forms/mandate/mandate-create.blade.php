@@ -54,7 +54,7 @@
                                                 size="5" onchange="updateReportInputField()"
                                                 style="width: 230px; height: 120px;">
                                                 @foreach ($sortedReports as $dataMandate)
-                                                    <option value="{{ $dataMandate->id }}"> {{ $dataMandate->subAccountKey->sub_account_key ?? 'N/A' }} > {{ $dataMandate->report_key }}
+                                                    <option value="{{ $dataMandate->id }}">{{ $dataMandate->subAccountKey->sub_account_key ?? 'N/A' }} | {{ $dataMandate->report_key }}
                                                     </option>
                                                 @endforeach
                                             </select>
@@ -97,7 +97,7 @@
                                     <div class="col-md-4 d-flex flex-column align-items-start">
                                         <div class="form-group">
                                             <!-- File Input -->
-                                            <label for="attachments"><strong>ជ្រើសរើស ថ្ងៃ ខែ ឆ្នាំ:</strong></label>
+                                            <label for="attachments"><strong>កាលបរិច្ឆេទ:</strong></label>
                                             <input type="date" class="form-control" id="date_mandate" name="date_mandate"
                                                 multiple style="height: 40px; width: 230px;">
                                         </div>
@@ -200,6 +200,18 @@
             font-family: 'Khmer OS Siemreap', sans-serif;
             font-size: 14px;
         }
+
+        /* Hide number input arrows in Chrome, Safari, Edge, and Opera */
+        input[type=number]::-webkit-inner-spin-button,
+        input[type=number]::-webkit-outer-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+
+        /* Hide number input arrows in Firefox */
+        input[type=number] {
+            -moz-appearance: textfield;
+        }
     </style>
 @endsection
 
@@ -259,7 +271,7 @@
 
                 // Fetch additional data if required
                 const mandateId = selectedOption.value; // Get the ID of the selected report
-                  fetch(`/mandate/${mandateId}/early-balance`)
+                fetch(`/mandate/${mandateId}/early-balance`)
                     .then(response => response.json())
                     .then(data => {
                         document.getElementById('fin_law').textContent = formatNumber(data.fin_law);

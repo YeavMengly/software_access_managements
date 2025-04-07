@@ -14,8 +14,14 @@ class ResultApplyController extends Controller
         $reports = Report::all();
         $totals = $this->calculateTotals($reports);
         $this->storeSummaryReport($totals);
+
         if (isset($totals['code']) && is_array($totals['code'])) {
             ksort($totals['code']);
+        }
+
+        // Sort report_key directly in index
+        if (isset($totals['report_key']) && is_array($totals['report_key'])) {
+            ksort($totals['report_key']);
         }
 
         return view('layouts.table.result-applied-table', compact('totals'));

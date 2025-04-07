@@ -110,7 +110,7 @@
                                     <div class="col-md-4 d-flex flex-column align-items-start">
                                         <div class="form-group">
                                             <!-- File Input -->
-                                            <label for="attachments"><strong>ជ្រើសរើស ថ្ងៃ ខែ ឆ្នាំ:</strong></label>
+                                            <label for="attachments"><strong>កាលបរិច្ឆេទ:</strong></label>
                                             <input type="date" class="form-control" id="date_certificate"
                                                 name="date_certificate"  value="{{ old('date_certificate', $certificateData->date_certificate) }}"
                                                 style="height: 40px; width: 230px;">
@@ -306,79 +306,6 @@
             document.getElementById('reportResultCount').innerText = `ចំនួន: ${count}`;
         }
     </script>
-    {{-- <script>
-        let credit = 0;
-
-        async function updateReportInputField() {
-            const select = document.getElementById('reportKeySelect');
-            const selectedOption = select.options[select.selectedIndex];
-
-            if (selectedOption) {
-                document.getElementById('searchReportKey').value = selectedOption.textContent;
-                const reportKeyId = selectedOption.value;
-
-                try {
-                    const response = await fetch(`/reports/${reportKeyId}/early-balance`);
-                    if (!response.ok) throw new Error("Network response was not ok");
-
-                    const data = await response.json();
-                    // Update values from data returned by the backend
-
-                    document.getElementById('fin_law').textContent = formatNumber(data.fin_law);
-                    document.getElementById('credit_movement').textContent = formatNumber(data.credit_movement);
-                    document.getElementById('new_credit_status').textContent = formatNumber(data.new_credit_status);
-                    document.getElementById('credit').textContent = formatNumber(data.credit);
-                    document.getElementById('deadline_balance').textContent = formatNumber(data.deadline_balance);
-
-                    // Update credit and remaining credit
-                    credit = data.credit;
-                    updateRemainingCredit(data.apply || 0);
-                } catch (error) {
-                    console.error('Error fetching report data:', error);
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Error',
-                        text: 'Could not fetch report data. Please try again later.',
-                        confirmButtonText: 'OK'
-                    });
-                }
-            }
-        }
-
-        function updateRemainingCredit(apply) {
-            const creditValue = parseFloat(document.getElementById('credit').textContent.replace(/,/g, '')) || 0;
-            const remainingCredit = creditValue - apply;
-
-            if (remainingCredit < 0) {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Notice',
-                    text: 'Insufficient remaining credit.',
-                    confirmButtonText: 'OK'
-                });
-                document.getElementById('remaining_credit').textContent = "0";
-                return false;
-            }
-
-            document.getElementById('remaining_credit').textContent = formatNumber(remainingCredit);
-            return true;
-        }
-
-        function updateApplyValue() {
-            const apply = parseFloat(document.getElementById('value_certificate').value) || 0;
-            document.getElementById('applying').textContent = formatNumber(apply);
-            updateRemainingCredit(apply);
-        }
-
-        function formatNumber(num) {
-            return Number.isInteger(num) ?
-                num.toLocaleString() :
-                num.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-        }
-
-        // Add input event listener to the value_certificate input
-        document.getElementById('value_certificate').addEventListener('input', updateApplyValue);
-    </script> --}}
     <script>
         function updateReportInputField() {
             const select = document.getElementById('reportKeySelect');
