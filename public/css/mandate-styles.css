@@ -1,0 +1,46 @@
+/* public/css/mandate-styles.css */
+
+.border-wrapper {
+    padding-left: 16px;
+    padding-right: 16px;
+}
+
+.description {
+    height: 220px;
+    overflow-y: auto;
+}
+
+.table-container {
+    width: 100%;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+h3 {
+    font-family: 'Khmer OS Muol Light', sans-serif;
+    font-size: 16px;
+}
+
+h5 {
+    font-family: 'Khmer OS Siemreap', sans-serif;
+    font-size: 14px;
+}
+
+.btn,
+.form-control,
+label,
+th,
+td {
+    border: 1px solid black;
+    text-align: center;
+    font-family: 'Khmer OS Siemreap', sans-serif;
+    font-size: 14px;
+    padding: 6px;
+}
+
+.wrap-text {
+    white-space: nowrap;
+}

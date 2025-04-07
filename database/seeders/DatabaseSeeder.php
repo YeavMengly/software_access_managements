@@ -3,6 +3,8 @@
 namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+
+use App\Models\PC\ProvinceCity;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -23,7 +25,13 @@ class DatabaseSeeder extends Seeder
             SubAccountKeySeeder::class,
             UserSeeder::class,
             MissionTypeSeeder::class,
-            MissionTagSeeder::class
+            MissionTagSeeder::class,
+
+            // Province City
+            ProvinceCitySeeder::class,
+
+            // Fuel 
+            FuelSeeder::class
         ]);
     }
 }

@@ -11,42 +11,49 @@
                 </a>
                 <h3 style="font-weight: 500;">តារាងអាណត្តិ</h3>
                 <div class="btn-group">
-                    <a class="btn btn-primary d-flex justify-content-center align-items-center"
+                    <a id="submit-button" class="btn btn-primary d-flex justify-content-center align-items-center"
                         href="{{ route('mandates.create') }}" style="width: 120px; height: 40px; border-radius: 4px;">
                         បញ្ចូល
                     </a>
+
+
+                    {{-- Include Loading Modal --}}
+                    @include('partials.loading-modal')
                 </div>
             </div>
 
 
-            <form id="filterForm" class="max-w-md mx-auto mt-3" method="GET" action="{{ route('mandates.index') }}" onsubmit="return validateDateField()">
+            <form id="filterForm" class="max-w-md mx-auto mt-3" method="GET" action="{{ route('mandates.index') }}"
+                onsubmit="return validateDateField()">
                 <div class="row mb-3">
                     <div class="col-md-2 d-flex">
-                        <input type="text" name="sub_account_key_id" value="{{ request('sub_account_keyz') }}"
+                        <input type="text" name="sub_account_key_id" value="{{ request('sub_account_key_id') }}"
                             class="form-control mb-2" placeholder="អនុគណនី" style="width: 120px; height: 40px;">
                         &nbsp;
                         <input type="text" name="report_key" value="{{ request('report_key') }}"
                             class="form-control mb-2" placeholder="កូដកម្មវិធី" style="width: 120px; height: 40px;">
+                        &nbsp;
+                        <input type="date" name="start_date" id="start_date" value="{{ request('start_date') }}"
+                            class="form-control" style="height: 40px; width: 200px;">
+                        &nbsp;
+                        <input type="date" name="end_date" id="end_date" value="{{ request('end_date') }}"
+                            class="form-control" style="height: 40px; width: 200px;">
                     </div>
                     <div class="col-md-12">
                         <div class="input-group">
                             <button type="submit" class="btn btn-primary mr-2" style="width: 120px; height: 40px;">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 50 50">
-                                    <path d="..."></path>
-                                </svg>
                                 ស្វែងរក
                             </button>
-                            <button type="button" id="resetBtn" class="btn btn-danger" style="width: 120px; height: 40px;" onclick="resetForm()">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-circle" viewBox="0 0 16 16">
-                                    <path d="..."></path>
-                                </svg>
+                            <button type="button" id="resetBtn" class="btn btn-danger" style="width: 120px; height: 40px;"
+                                onclick="resetForm()">
                                 កំណត់ឡើងវិញ
                             </button>
                         </div>
                     </div>
                 </div>
             </form>
-            
+
+
         </div>
     </div>
 
@@ -93,11 +100,12 @@
             <table class="table-border">
                 <thead>
                     <tr>
+                        <th style="border: 1px solid black; width: 120px;">ល.រ</th>
                         <th style="border: 1px solid black; width: 120px;">អនុគណនី</th>
                         <th style="border: 1px solid black; width: 120px;">កម្មវិធី</th>
                         <th style="border: 1px solid black;">ថវិកា</th>
                         <th style="border: 1px solid black; width: 120px;">ប្រភេទ</th>
-                        <th style="border: 1px solid black; width: 120px;">ថ្ងៃខែឆ្នាំ</th>
+                        <th style="border: 1px solid black; width: 120px;">កាលបរិច្ឆេទ</th>
                         <th style="border: 1px solid black; ">ឯកសារភ្ជាប់</th>
                         <th style="border: 1px solid black; width: 120px;">ស្ថានភាព</th>
                     </tr>
@@ -114,6 +122,12 @@
                     @else
                         @foreach ($mandates as $index => $md)
                             <tr>
+
+                                <td style="border: 1px solid black; text-align: center;">
+                                    {{ ($mandates->currentPage() - 1) * $mandates->perPage() + $index + 1 }}
+
+                                </td>
+
                                 <td style="border: 1px solid black; text-align: center;">
                                     {{ $md->dataMandate && $md->dataMandate->subAccountKey ? $md->dataMandate->subAccountKey->sub_account_key : 'N/A' }}
                                 </td>
@@ -127,13 +141,22 @@
                                     {{ $md->missionType->mission_type ?? 'គ្មានទិន្នន័យ' }}
                                 </td>
                                 <td style="border: 1px solid black;">{{ $md->date_mandate ?? 'គ្មានទិន្នន័យ' }}</td>
-                                <td style="border: 1px solid black;  ">
+
+                                <td style="border: 1px solid black;">
                                     @if ($md->attachments)
                                         <div style="margin-top: 5px;">
                                             @foreach (json_decode($md->attachments) as $attachment)
                                                 <a href="{{ Storage::url($attachment) }}" target="_blank"
-                                                    class="btn btn-info btn-sm">
-                                                    📄PDF
+                                                    class="btn btn-light btn-sm" style="margin-bottom: 5px;"
+                                                    data-bs-toggle="tooltip" data-bs-placement="top" title="Open File">
+                                                    <i class="fa fa-folder-open"></i>
+                                                </a>
+
+                                                <a href="{{ Storage::url($attachment) }}" download
+                                                    class="btn btn-success btn-sm" style="margin-bottom: 5px;"
+                                                    data-bs-toggle="tooltip" data-bs-placement="top"
+                                                    title="Download File">
+                                                    <i class="fa fa-download"></i>
                                                 </a>
                                                 <br>
                                             @endforeach
@@ -142,6 +165,7 @@
                                         <span>គ្មានឯកសារ</span>
                                     @endif
                                 </td>
+
                                 <td style="border: 1px solid black; text-align: center;">
                                     <div style="display: flex; justify-content: center; gap: 5px;">
                                         <a href="{{ route('mandates.edit', $md->id) }}" class="btn btn-primary btn-sm">
@@ -166,7 +190,7 @@
                 </tbody>
                 <tfoot>
                     <tr style="background:  rgb(86, 227, 245);">
-                        <td colspan="2" style="border: 1px solid black; text-align: center;">
+                        <td colspan="3" style="border: 1px solid black; text-align: center;">
                             <strong>សរុបថវិកា</strong>
                         </td>
                         <td style="border: 1px solid black;"><strong>{{ number_format($totalAmount, 2) }}</strong></td>
@@ -220,14 +244,14 @@
 
 @section('styles')
     <style>
-        .description {
-            height: 220px;
-            overflow-y: auto;
-        }
-
         .border-wrapper {
             padding-left: 16px;
             padding-right: 16px;
+        }
+
+        .description {
+            height: 220px;
+            overflow-y: auto;
         }
 
         .table-container {
@@ -244,6 +268,11 @@
             font-size: 16px;
         }
 
+        h5 {
+            font-family: 'Khmer OS Siemreap', sans-serif;
+            font-size: 14px;
+        }
+
         .btn,
         .form-control,
         label,
@@ -251,9 +280,9 @@
         td {
             border: 1px solid black;
             text-align: center;
-            padding: 6px;
             font-family: 'Khmer OS Siemreap', sans-serif;
             font-size: 14px;
+            padding: 6px;
         }
 
         .wrap-text {
@@ -286,10 +315,43 @@
         function resetForm() {
             // Clear all form input fields
             document.querySelectorAll('#filterForm input').forEach(input => input.value = '');
-    
+
             // Optionally reload the page to reset filters in the URL
             window.location.href = "{{ route('mandates.index') }}";
         }
     </script>
-    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+            var tooltipList = tooltipTriggerList.map(function(tooltipTriggerEl) {
+                return new bootstrap.Tooltip(tooltipTriggerEl);
+            });
+        });
+    </script>
+
+    <script>
+        function validateDateField() {
+            const startDate = document.getElementById('start_date').value;
+            const endDate = document.getElementById('end_date').value;
+
+            if (startDate && endDate && startDate > endDate) {
+                alert("ថ្ងៃចាប់ផ្តើម មិនអាចធំជាង ថ្ងៃបញ្ចប់បានទេ!");
+                return false;
+            }
+            return true;
+        }
+    </script>
+
+    <script>
+        function resetForm() {
+            // Clear all input fields
+            document.querySelector('input[name="sub_account_key_id"]').value = '';
+            document.querySelector('input[name="report_key"]').value = '';
+            document.getElementById('start_date').value = '';
+            document.getElementById('end_date').value = '';
+
+            // Optionally, submit the form to reset the query
+            document.getElementById('filterForm').submit();
+        }
+    </script>
 @endsection

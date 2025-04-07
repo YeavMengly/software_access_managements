@@ -13,34 +13,38 @@
             <i class="fas fa-arrow-left"></i>&nbsp;&nbsp;
         </a>
 
-         {{-- Start action btn export and print --}}
-         <div class="d-flex justify-content-end mt-3 mb-3 ">
+        <div class="d-flex justify-content-end mt-3 mb-3">
             <a href="{{ route('result.export', request()->query()) }}"
-                class="btn btn-danger btn-width mr-2 d-flex align-items-center justify-content-center"
-                style="width: 120px; height: 40px; text-align: center; font-size: 14px; ">
-                <i class="fas fa-download"></i> <span class="ml-2">Export</span>
-            </a>
-            <a href="{{ route('result.exportPdf', request()->query()) }}"
-                class="btn btn-primary btn-width mr-2 d-flex align-items-center justify-content-center"
+                class="btn btn-danger btn-width mr-2 d-flex align-items-center justify-content-center position-relative"
                 style="width: 120px; height: 40px; text-align: center; font-size: 14px;">
-                <i class="fas fa-print"></i> <span class="ml-2">Print</span>
+                <i class="fas fa-file-excel fa-1x"></i>
+                <span class="ml-2">បម្លែង xls</span>
+                <div class="hover-text">Export to Excel</div> <!-- Hover Text -->
+            </a>
+
+            <a href="{{ route('result.exportPdf', request()->query()) }}"
+                class="btn btn-primary btn-width mr-2 d-flex align-items-center justify-content-center position-relative"
+                style="width: 120px; height: 40px; text-align: center; font-size: 14px;">
+                <i class="fas fa-print"></i>
+                <span class="ml-2">បោះពុម្ភ</span>
+                <div class="hover-text">Print PDF</div> <!-- Hover Text -->
             </a>
         </div>
+
         <div class="result-total-table-container mt-4">
             <!-- Row 1: Centered -->
-            <div class="first-header text-center">
+            {{-- <div class="first-header text-center">
                 <h2>ព្រះរាជាណាចក្រកម្ពុជា</h2>
                 <h3>ជាតិ សាសនា ព្រះមហាក្សត្រ</h3>
-         
-            </div>
+            </div> --}}
 
             <!-- Row 2: Flex aligned to the left -->
-            <div class="ministry-text">
+            {{-- <div class="ministry-text">
                 <h3>ក្រសួងការងារ​ នឹងបណ្ដុះបណ្ដាលវិជ្ជាជីវៈ</h3>
                 <h3>នាយកដ្ខានរដ្ខាបាល និងហិរញ្ញវត្ថុ</h3>
                 <h3>នាយកដ្ខានហិរញ្ញវត្ថុ និងទ្រព្យសម្បត្តិរដ្ឋ</h3>
                 <h3>ការិយាល័យហិរញ្ញវត្ថុ</h3>
-            </div>
+            </div> --}}
 
             <!-- Row 3: Centered -->
             <div class="second-header text-center">
@@ -80,12 +84,18 @@
                     <tbody class="cell-border">
                         <tr style="background-color: rgb(145, 145, 142);">
                             <td><strong>សរុបជំពូក</strong></td>
-                            <td>{{ number_format($totals['total_sums']['fin_law'], 0, ' ', ' ') }}</td>
-                            <td>{{ number_format($totals['total_sums']['current_loan'], 0, ' ', ' ') }}</td>
-                            <td>{{ number_format($totals['total_sums']['total_increase'], 0, ' ', ' ') }}</td>
-                            <td>{{ number_format($totals['total_sums']['decrease'], 0, ' ', ' ') }}</td>
-                            <td>{{ number_format($totals['total_sums']['new_credit_status'], 0, ' ', ' ') }}</td>
-                            <td>{{ number_format($totals['total_sums']['early_balance'], 0, ' ', ' ') }}</td>
+                            <td style="text-align: right; padding-right: 32px;">
+                                {{ number_format($totals['total_sums']['fin_law'], 0, ' ', ' ') }}</td>
+                            <td style="text-align: right; padding-right: 32px;">
+                                {{ number_format($totals['total_sums']['current_loan'], 0, ' ', ' ') }}</td>
+                            <td style="text-align: right; padding-right: 32px;">
+                                {{ number_format($totals['total_sums']['total_increase'], 0, ' ', ' ') }}</td>
+                            <td style="text-align: right; padding-right: 32px;">
+                                {{ number_format($totals['total_sums']['decrease'], 0, ' ', ' ') }}</td>
+                            <td style="text-align: right; padding-right: 32px;">
+                                {{ number_format($totals['total_sums']['new_credit_status'], 0, ' ', ' ') }}</td>
+                            <td style="text-align: right; padding-right: 32px;">
+                                {{ number_format($totals['total_sums']['early_balance'], 0, ' ', ' ') }}</td>
 
                             <td>
                                 @if ($totals['total_sums']['new_credit_status'] > 0)
@@ -95,7 +105,8 @@
                                 @endif
                             </td>
 
-                            <td>{{ number_format($totals['total_sums']['apply'], 0, ' ', ' ') }}</td>
+                            <td style="text-align: right; padding-right: 32px;">
+                                {{ number_format($totals['total_sums']['apply'], 0, ' ', ' ') }}</td>
 
                             <td>
                                 @if ($totals['total_sums']['new_credit_status'] > 0)
@@ -105,7 +116,8 @@
                                 @endif
                             </td>
 
-                            <td>{{ number_format($totals['total_sums']['total_sum_refer'], 0, ' ', ' ') }}</td>
+                            <td style="text-align: right; padding-right: 32px;">
+                                {{ number_format($totals['total_sums']['total_sum_refer'], 0, ' ', ' ') }}</td>
 
                             <td>
                                 @if ($totals['total_sums']['new_credit_status'] > 0)
@@ -115,7 +127,8 @@
                                 @endif
                             </td>
 
-                            <td>{{ number_format($totals['total_sums']['total_remain'], 0, ' ', ' ') }}</td>
+                            <td style="text-align: right; padding-right: 32px;">
+                                {{ number_format($totals['total_sums']['total_remain'], 0, ' ', ' ') }}</td>
 
 
                             <td>
@@ -130,13 +143,20 @@
                         @foreach ($totals['code'] as $codeId => $totalsByCode)
                             <tr>
                                 <td>{{ $codeId }}</td>
-                                <td>{{ number_format($totalsByCode['fin_law'], 0, ' ', ' ') }}</td>
-                                <td>{{ number_format($totalsByCode['current_loan'], 0, ' ', ' ') }}</td>
-                                <td>{{ number_format($totalsByCode['total_increase'], 0, ' ', ' ') }}</td>
-                                <td>{{ number_format($totalsByCode['decrease'], 0, ' ', ' ') }}</td>
-                                <td>{{ number_format($totalsByCode['new_credit_status'], 0, ' ', ' ') }}</td>
-
-                                <td>{{ number_format($totalsByCode['early_balance'], 0, ' ', ' ') }}</td>
+                                <td style="text-align: right; padding-right: 32px;">
+                                    {{ number_format($totalsByCode['fin_law'], 0, ' ', ' ') }}</td>
+                                <td style="text-align: right; padding-right: 32px;">
+                                    {{ number_format($totalsByCode['current_loan'], 0, ' ', ' ') }}</td>
+                                <td style="text-align: right; padding-right: 32px;">
+                                    {{ number_format($totalsByCode['total_increase'], 0, ' ', ' ') }}</td>
+                                <td style="text-align: right; padding-right: 32px;">
+                                    {{ number_format($totalsByCode['decrease'], 0, ' ', ' ') }}</td>
+                                <td style="text-align: right; padding-right: 32px;">
+                                    {{ number_format($totalsByCode['new_credit_status'], 0, ' ', ' ') }}</td>
+                                <td
+                                    style="{{ $totalsByCode['early_balance'] == 0 ? 'text-align: center;' : 'text-align: right; padding-right: 32px;' }}">
+                                    {{ number_format($totalsByCode['early_balance'], 0, ' ', ' ') }}
+                                </td>
                                 <td>
                                     @if ($totalsByCode['new_credit_status'] > 0)
                                         {{ number_format(($totalsByCode['early_balance'] / $totalsByCode['new_credit_status']) * 100, 2, '.', ' ') }}%
@@ -145,7 +165,11 @@
                                     @endif
                                 </td>
 
-                                <td>{{ number_format($totalsByCode['apply'], 0, ' ', ' ') }}</td>
+                                <td
+                                    style="{{ $totalsByCode['apply'] == 0 ? 'text-align: center;' : 'text-align: right; padding-right: 32px;' }}">
+                                    {{ number_format($totalsByCode['apply'], 0, ' ', ' ') }}
+                                </td>
+
                                 <td>
                                     @if ($totalsByCode['new_credit_status'] > 0)
                                         {{ number_format(($totalsByCode['apply'] / $totalsByCode['new_credit_status']) * 100, 2, '.', ' ') }}%
@@ -154,7 +178,9 @@
                                     @endif
                                 </td>
 
-                                <td>{{ number_format($totalsByCode['early_balance'] + $totalsByCode['apply'], 0, ' ', ' ') }}
+                                <td
+                                    style="{{ $totalsByCode['early_balance'] + $totalsByCode['apply'] == 0 ? 'text-align: center;' : 'text-align: right; padding-right: 32px;' }}">
+                                    {{ number_format($totalsByCode['early_balance'] + $totalsByCode['apply'], 0, ' ', ' ') }}
                                 </td>
                                 <td>
                                     @if ($totalsByCode['new_credit_status'] > 0)
@@ -164,7 +190,9 @@
                                     @endif
                                 </td>
 
-                                <td>{{ number_format($totalsByCode['new_credit_status'] - ($totalsByCode['early_balance'] + $totalsByCode['apply']), 0, ' ', ' ') }}
+                                <td
+                                    style="{{ $totalsByCode['new_credit_status'] - ($totalsByCode['early_balance'] + $totalsByCode['apply']) == 0 ? 'text-align: center;' : 'text-align: right; padding-right: 32px;' }}">
+                                    {{ number_format($totalsByCode['new_credit_status'] - ($totalsByCode['early_balance'] + $totalsByCode['apply']), 0, ' ', ' ') }}
                                 </td>
                                 <td>
                                     @if ($totalsByCode['new_credit_status'] > 0)
@@ -178,12 +206,18 @@
 
                         <tr style="background-color: rgb(145, 145, 142);">
                             <td><strong>សរុបកម្មវិធី</strong></td>
-                            <td>{{ number_format($totals['total_sums']['fin_law'], 0, ' ', ' ') }}</td>
-                            <td>{{ number_format($totals['total_sums']['current_loan'], 0, ' ', ' ') }}</td>
-                            <td>{{ number_format($totals['total_sums']['total_increase'], 0, ' ', ' ') }}</td>
-                            <td>{{ number_format($totals['total_sums']['decrease'], 0, ' ', ' ') }}</td>
-                            <td>{{ number_format($totals['total_sums']['new_credit_status'], 0, ' ', ' ') }}</td>
-                            <td>{{ number_format($totals['total_sums']['early_balance'], 0, ' ', ' ') }}</td>
+                            <td style="text-align: right; padding-right: 32px;">
+                                {{ number_format($totals['total_sums']['fin_law'], 0, ' ', ' ') }}</td>
+                            <td style="text-align: right; padding-right: 32px;">
+                                {{ number_format($totals['total_sums']['current_loan'], 0, ' ', ' ') }}</td>
+                            <td style="text-align: right; padding-right: 32px;">
+                                {{ number_format($totals['total_sums']['total_increase'], 0, ' ', ' ') }}</td>
+                            <td style="text-align: right; padding-right: 32px;">
+                                {{ number_format($totals['total_sums']['decrease'], 0, ' ', ' ') }}</td>
+                            <td style="text-align: right; padding-right: 32px;">
+                                {{ number_format($totals['total_sums']['new_credit_status'], 0, ' ', ' ') }}</td>
+                            <td style="text-align: right; padding-right: 32px;">
+                                {{ number_format($totals['total_sums']['early_balance'], 0, ' ', ' ') }}</td>
 
                             <td>
                                 @if ($totals['total_sums']['new_credit_status'] > 0)
@@ -193,7 +227,8 @@
                                 @endif
                             </td>
 
-                            <td>{{ number_format($totals['total_sums']['apply'], 0, ' ', ' ') }}</td>
+                            <td style="text-align: right; padding-right: 32px;">
+                                {{ number_format($totals['total_sums']['apply'], 0, ' ', ' ') }}</td>
 
                             <td>
                                 @if ($totals['total_sums']['new_credit_status'] > 0)
@@ -202,7 +237,8 @@
                                     0%
                                 @endif
                             </td>
-                            <td>{{ number_format($totals['total_sums']['total_sum_refer'], 0, ' ', ' ') }}</td>
+                            <td style="text-align: right; padding-right: 32px;">
+                                {{ number_format($totals['total_sums']['total_sum_refer'], 0, ' ', ' ') }}</td>
                             <td>
                                 @if ($totals['total_sums']['new_credit_status'] > 0)
                                     {{ number_format((($totals['total_sums']['early_balance'] + $totals['total_sums']['apply']) / $totals['total_sums']['new_credit_status']) * 100, 2, '.', ' ') }}%
@@ -211,7 +247,8 @@
                                 @endif
                             </td>
 
-                            <td>{{ number_format($totals['total_sums']['total_remain'], 0, ' ', ' ') }}</td>
+                            <td style="text-align: right; padding-right: 32px;">
+                                {{ number_format($totals['total_sums']['total_remain'], 0, ' ', ' ') }}</td>
                             <td>
                                 @if ($totals['total_sums']['new_credit_status'] > 0)
                                     {{ number_format((($totals['total_sums']['new_credit_status'] - ($totals['total_sums']['early_balance'] + $totals['total_sums']['apply'])) / $totals['total_sums']['new_credit_status']) * 100, 2, '.', ' ') }}%
@@ -224,12 +261,18 @@
                         @foreach ($totals['report_key'] as $prefix => $totalsByCode)
                             <tr>
                                 <td>{{ $prefix }}</td>
-                                <td>{{ number_format($totalsByCode['fin_law'], 0, ' ', ' ') }}</td>
-                                <td>{{ number_format($totalsByCode['current_loan'], 0, ' ', ' ') }}</td>
-                                <td>{{ number_format($totalsByCode['total_increase'], 0, ' ', ' ') }}</td>
-                                <td>{{ number_format($totalsByCode['decrease'], 0, ' ', ' ') }}</td>
-                                <td>{{ number_format($totalsByCode['new_credit_status'], 0, ' ', ' ') }}</td>
-                                <td>{{ number_format($totalsByCode['early_balance'], 0, ' ', ' ') }}</td>
+                                <td style="text-align: right; padding-right: 32px;">
+                                    {{ number_format($totalsByCode['fin_law'], 0, ' ', ' ') }}</td>
+                                <td style="text-align: right; padding-right: 32px;">
+                                    {{ number_format($totalsByCode['current_loan'], 0, ' ', ' ') }}</td>
+                                <td style="text-align: right; padding-right: 32px;">
+                                    {{ number_format($totalsByCode['total_increase'], 0, ' ', ' ') }}</td>
+                                <td style="text-align: right; padding-right: 32px;">
+                                    {{ number_format($totalsByCode['decrease'], 0, ' ', ' ') }}</td>
+                                <td style="text-align: right; padding-right: 32px;">
+                                    {{ number_format($totalsByCode['new_credit_status'], 0, ' ', ' ') }}</td>
+                                <td style="text-align: right; padding-right: 32px;">
+                                    {{ number_format($totalsByCode['early_balance'], 0, ' ', ' ') }}</td>
 
                                 <td>
                                     @if ($totals['total_sums']['new_credit_status'] > 0)
@@ -239,7 +282,8 @@
                                     @endif
                                 </td>
 
-                                <td>{{ number_format($totals['total_sums']['apply'], 0, ' ', ' ') }}</td>
+                                <td style="text-align: right; padding-right: 32px;">
+                                    {{ number_format($totals['total_sums']['apply'], 0, ' ', ' ') }}</td>
 
                                 <td>
                                     @if ($totals['total_sums']['new_credit_status'] > 0)
@@ -249,7 +293,8 @@
                                     @endif
                                 </td>
 
-                                <td>{{ number_format($totals['total_sums']['total_sum_refer'], 0, ' ', ' ') }}</td>
+                                <td style="text-align: right; padding-right: 32px;">
+                                    {{ number_format($totals['total_sums']['total_sum_refer'], 0, ' ', ' ') }}</td>
 
                                 <td>
                                     @if ($totals['total_sums']['new_credit_status'] > 0)
@@ -259,7 +304,8 @@
                                     @endif
                                 </td>
 
-                                <td>{{ number_format($totals['total_sums']['total_remain'], 0, ' ', ' ') }}</td>
+                                <td style="text-align: right; padding-right: 32px;">
+                                    {{ number_format($totals['total_sums']['total_remain'], 0, ' ', ' ') }}</td>
 
                                 <td>
                                     @if ($totals['total_sums']['new_credit_status'] > 0)
@@ -273,12 +319,18 @@
 
                         <tr style="background-color: rgb(145, 145, 142);">
                             <td><strong>លម្អិតតាមកម្មវិធី</strong></td>
-                            <td>{{ number_format($totals['total_sums']['fin_law'], 0, ' ', ' ') }}</td>
-                            <td>{{ number_format($totals['total_sums']['current_loan'], 0, ' ', ' ') }}</td>
-                            <td>{{ number_format($totals['total_sums']['total_increase'], 0, ' ', ' ') }}</td>
-                            <td>{{ number_format($totals['total_sums']['decrease'], 0, ' ', ' ') }}</td>
-                            <td>{{ number_format($totals['total_sums']['new_credit_status'], 0, ' ', ' ') }}</td>
-                            <td>{{ number_format($totals['total_sums']['early_balance'], 0, ' ', ' ') }}</td>
+                            <td style="text-align: right; padding-right: 32px;">
+                                {{ number_format($totals['total_sums']['fin_law'], 0, ' ', ' ') }}</td>
+                            <td style="text-align: right; padding-right: 32px;">
+                                {{ number_format($totals['total_sums']['current_loan'], 0, ' ', ' ') }}</td>
+                            <td style="text-align: right; padding-right: 32px;">
+                                {{ number_format($totals['total_sums']['total_increase'], 0, ' ', ' ') }}</td>
+                            <td style="text-align: right; padding-right: 32px;">
+                                {{ number_format($totals['total_sums']['decrease'], 0, ' ', ' ') }}</td>
+                            <td style="text-align: right; padding-right: 32px;">
+                                {{ number_format($totals['total_sums']['new_credit_status'], 0, ' ', ' ') }}</td>
+                            <td style="text-align: right; padding-right: 32px;">
+                                {{ number_format($totals['total_sums']['early_balance'], 0, ' ', ' ') }}</td>
 
                             <td>
                                 @if ($totals['total_sums']['new_credit_status'] > 0)
@@ -288,7 +340,8 @@
                                 @endif
                             </td>
 
-                            <td>{{ number_format($totals['total_sums']['apply'], 0, ' ', ' ') }}</td>
+                            <td style="text-align: right; padding-right: 32px;">
+                                {{ number_format($totals['total_sums']['apply'], 0, ' ', ' ') }}</td>
 
                             <td>
                                 @if ($totals['total_sums']['new_credit_status'] > 0)
@@ -298,7 +351,8 @@
                                 @endif
                             </td>
 
-                            <td>{{ number_format($totals['total_sums']['early_balance'] + $totals['total_sums']['apply'], 0, ' ', ' ') }}
+                            <td style="text-align: right; padding-right: 32px;">
+                                {{ number_format($totals['total_sums']['early_balance'] + $totals['total_sums']['apply'], 0, ' ', ' ') }}
                             </td>
 
                             <td>
@@ -309,7 +363,8 @@
                                 @endif
                             </td>
 
-                            <td>{{ number_format($totals['total_sums']['new_credit_status'] - ($totals['total_sums']['early_balance'] + $totals['total_sums']['apply']), 0, ' ', ' ') }}
+                            <td style="text-align: right; padding-right: 32px;">
+                                {{ number_format($totals['total_sums']['new_credit_status'] - ($totals['total_sums']['early_balance'] + $totals['total_sums']['apply']), 0, ' ', ' ') }}
                             </td>
 
                             <td>
@@ -325,12 +380,18 @@
                             {{-- Display total row above the detailed rows --}}
                             <tr style="background-color: rgb(181, 245, 86);">
                                 <td> កម្មវិធី {{ $prefix }}</td>
-                                <td>{{ number_format($totalsByCode['fin_law'], 0, ' ', ' ') }}</td>
-                                <td>{{ number_format($totalsByCode['current_loan'], 0, ' ', ' ') }}</td>
-                                <td>{{ number_format($totalsByCode['total_increase'], 0, ' ', ' ') }}</td>
-                                <td>{{ number_format($totalsByCode['decrease'], 0, ' ', ' ') }}</td>
-                                <td>{{ number_format($totalsByCode['new_credit_status'], 0, ' ', ' ') }}</td>
-                                <td>{{ number_format($totalsByCode['early_balance'], 0, ' ', ' ') }}</td>
+                                <td style="text-align: right; padding-right: 32px;">
+                                    {{ number_format($totalsByCode['fin_law'], 0, ' ', ' ') }}</td>
+                                <td style="text-align: right; padding-right: 32px;">
+                                    {{ number_format($totalsByCode['current_loan'], 0, ' ', ' ') }}</td>
+                                <td style="text-align: right; padding-right: 32px;">
+                                    {{ number_format($totalsByCode['total_increase'], 0, ' ', ' ') }}</td>
+                                <td style="text-align: right; padding-right: 32px;">
+                                    {{ number_format($totalsByCode['decrease'], 0, ' ', ' ') }}</td>
+                                <td style="text-align: right; padding-right: 32px;">
+                                    {{ number_format($totalsByCode['new_credit_status'], 0, ' ', ' ') }}</td>
+                                <td style="text-align: right; padding-right: 32px;">
+                                    {{ number_format($totalsByCode['early_balance'], 0, ' ', ' ') }}</td>
                                 <td>
                                     @if ($totalsByCode['new_credit_status'] > 0)
                                         {{ number_format(($totalsByCode['early_balance'] / $totalsByCode['new_credit_status']) * 100, 2, '.', ' ') }}%
@@ -338,7 +399,8 @@
                                         0%
                                     @endif
                                 </td>
-                                <td>{{ number_format($totalsByCode['apply'], 0, ' ', ' ') }}</td>
+                                <td style="text-align: right; padding-right: 32px;">
+                                    {{ number_format($totalsByCode['apply'], 0, ' ', ' ') }}</td>
                                 <td>
                                     @if ($totalsByCode['new_credit_status'] > 0)
                                         {{ number_format(($totalsByCode['apply'] / $totalsByCode['new_credit_status']) * 100, 2, '.', ' ') }}%
@@ -346,7 +408,8 @@
                                         0%
                                     @endif
                                 </td>
-                                <td>{{ number_format($totalsByCode['early_balance'] + $totalsByCode['apply'], 0, ' ', ' ') }}
+                                <td style="text-align: right; padding-right: 32px;">
+                                    {{ number_format($totalsByCode['early_balance'] + $totalsByCode['apply'], 0, ' ', ' ') }}
                                 </td>
                                 <td>
                                     @if ($totalsByCode['new_credit_status'] > 0)
@@ -355,7 +418,8 @@
                                         0%
                                     @endif
                                 </td>
-                                <td>{{ number_format($totalsByCode['new_credit_status'] - ($totalsByCode['early_balance'] + $totalsByCode['apply']), 0, ' ', ' ') }}
+                                <td style="text-align: right; padding-right: 32px;">
+                                    {{ number_format($totalsByCode['new_credit_status'] - ($totalsByCode['early_balance'] + $totalsByCode['apply']), 0, ' ', ' ') }}
                                 </td>
                                 <td>
                                     @if ($totalsByCode['new_credit_status'] > 0)
@@ -369,12 +433,18 @@
                             @foreach ($totalsByCode['report_key_seven'] as $index => $total)
                                 <tr>
                                     <td>{{ $index }}</td>
-                                    <td>{{ number_format($total['fin_law'], 0, ' ', ' ') }}</td>
-                                    <td>{{ number_format($total['current_loan'], 0, ' ', ' ') }}</td>
-                                    <td>{{ number_format($total['total_increase'], 0, ' ', ' ') }}</td>
-                                    <td>{{ number_format($total['decrease'], 0, ' ', ' ') }}</td>
-                                    <td>{{ number_format($total['new_credit_status'], 0, ' ', ' ') }}</td>
-                                    <td>{{ number_format($total['early_balance'], 0, ' ', ' ') }}</td>
+                                    <td style="text-align: right; padding-right: 32px;">
+                                        {{ number_format($total['fin_law'], 0, ' ', ' ') }}</td>
+                                    <td style="text-align: right; padding-right: 32px;">
+                                        {{ number_format($total['current_loan'], 0, ' ', ' ') }}</td>
+                                    <td style="text-align: right; padding-right: 32px;">
+                                        {{ number_format($total['total_increase'], 0, ' ', ' ') }}</td>
+                                    <td style="text-align: right; padding-right: 32px;">
+                                        {{ number_format($total['decrease'], 0, ' ', ' ') }}</td>
+                                    <td style="text-align: right; padding-right: 32px;">
+                                        {{ number_format($total['new_credit_status'], 0, ' ', ' ') }}</td>
+                                    <td style="text-align: right; padding-right: 32px;">
+                                        {{ number_format($total['early_balance'], 0, ' ', ' ') }}</td>
                                     <td>
                                         @if ($total['new_credit_status'] > 0)
                                             {{ number_format(($total['early_balance'] / $total['new_credit_status']) * 100, 2, '.', ' ') }}%
@@ -382,7 +452,8 @@
                                             0%
                                         @endif
                                     </td>
-                                    <td>{{ number_format($total['apply'], 0, ' ', ' ') }}</td>
+                                    <td style="text-align: right; padding-right: 32px;">
+                                        {{ number_format($total['apply'], 0, ' ', ' ') }}</td>
                                     <td>
                                         @if ($total['new_credit_status'] > 0)
                                             {{ number_format(($total['apply'] / $total['new_credit_status']) * 100, 2, '.', ' ') }}%
@@ -390,7 +461,8 @@
                                             0%
                                         @endif
                                     </td>
-                                    <td>{{ number_format($total['early_balance'] + $total['apply'], 0, ' ', ' ') }}</td>
+                                    <td style="text-align: right; padding-right: 32px;">
+                                        {{ number_format($total['early_balance'] + $total['apply'], 0, ' ', ' ') }}</td>
                                     <td>
                                         @if ($total['new_credit_status'] > 0)
                                             {{ number_format((($total['early_balance'] + $total['apply']) / $total['new_credit_status']) * 100, 2, '.', ' ') }}%
@@ -398,7 +470,8 @@
                                             0%
                                         @endif
                                     </td>
-                                    <td>{{ number_format($total['new_credit_status'] - ($total['early_balance'] + $total['apply']), 0, ' ', ' ') }}
+                                    <td style="text-align: right; padding-right: 32px;">
+                                        {{ number_format($total['new_credit_status'] - ($total['early_balance'] + $total['apply']), 0, ' ', ' ') }}
                                     </td>
                                     <td>
                                         @if ($total['new_credit_status'] > 0)
@@ -410,30 +483,15 @@
                                 </tr>
                             @endforeach
                         @endforeach
-
                     </tbody>
                 </table>
             </div>
-            {{--        Start action btn export and print        --}}
-            {{-- <div class="d-flex justify-content-end mt-3 mb-3">
-                <a href="{{ route('summaries.export', request()->query()) }}"
-                    class="btn btn-danger btn-width mr-2 d-flex align-items-center justify-content-center mr-2"
-                    style="width: 150px; height: 50px; text-align: center;">
-                    <i class="fas fa-download"></i>&nbsp; Export
-                </a>
-                <a href="{{ route('summaries.exportPdf', request()->query()) }}"
-                    class="btn btn-primary btn-width mr-2 d-flex align-items-center justify-content-center"
-                    style="width: 150px; height: 50px; text-align: center;">
-                    <i class="fas fa-print"></i>&nbsp; Print
-                </a>
-            </div> --}}
-
         </div>
     </div>
 @endsection
 
 @section('styles')
-    <style>
+    {{-- <style>
         .border-wrapper {
             padding-left: 16px;
             padding-right: 16px;
@@ -441,12 +499,15 @@
 
         .table-container {
             width: 100%;
-            padding: 6px;
+            overflow-x: auto;
+            /* Enable horizontal scrolling */
         }
 
-        .total-row {
-            background-color: #f8f9fa;
-            border-top: 2px solid #dee2e6;
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 1200px;
+            /* Ensure table does not shrink too much */
         }
 
         .btn-width {
@@ -468,7 +529,7 @@
             font-family: 'Khmer OS Muol Light', sans-serif;
             font-size: 16px;
         }
-        
+
         th,
         td {
             border: 1px solid black;
@@ -481,6 +542,112 @@
         h5 {
             font-family: 'Khmer OS Siemreap', sans-serif;
             font-size: 14px;
+        }
+
+        .hover-text {
+            display: none;
+            position: absolute;
+            bottom: 50px;
+            background-color: #333;
+            color: #fff;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 12px;
+            white-space: nowrap;
+            z-index: 1;
+            transition: opacity 0.3s ease;
+        }
+
+        a:hover .hover-text {
+            display: block;
+            opacity: 1;
+        }
+    </style> --}}
+
+    <style>
+        .border-wrapper {
+            padding-left: 16px;
+            padding-right: 16px;
+        }
+
+        .table-container {
+            width: 100%;
+            overflow-x: auto;
+            /* Enable horizontal scrolling */
+            white-space: nowrap;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 1200px;
+            /* Ensures the table doesn't shrink too much */
+        }
+
+        .btn-width {
+            width: 120px;
+        }
+
+        h2 {
+            font-family: 'Khmer OS Muol Light', sans-serif;
+            font-size: 18px;
+        }
+
+        h3,
+        h4 {
+            font-family: 'Khmer OS Muol Light', sans-serif;
+            font-size: 16px;
+        }
+
+        th,
+        td {
+            border: 1px solid black;
+            text-align: center;
+            padding: 6px;
+            font-family: 'Khmer OS Siemreap', sans-serif;
+            font-size: 14px;
+            white-space: nowrap;
+            /* Prevents text from wrapping */
+        }
+
+        h5 {
+            font-family: 'Khmer OS Siemreap', sans-serif;
+            font-size: 14px;
+        }
+
+        /* Hover text */
+        .hover-text {
+            display: none;
+            position: absolute;
+            bottom: 50px;
+            background-color: #333;
+            color: #fff;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 12px;
+            white-space: nowrap;
+            z-index: 1;
+            transition: opacity 0.3s ease;
+        }
+
+        a:hover .hover-text {
+            display: block;
+            opacity: 1;
+        }
+
+        /* Make table fully responsive */
+        @media (max-width: 768px) {
+            .table-container {
+                overflow-x: auto;
+                display: block;
+                width: 100%;
+            }
+
+            table {
+                width: 100%;
+                min-width: 900px;
+                /* Adjust this value based on content */
+            }
         }
     </style>
 @endsection

@@ -21,7 +21,7 @@
             <div class="d-flex justify-content-center align-items-center">
                 <div class="card shadow-lg" style="width: 90%;">
                     <h3 class="card-title text-center mt-4" style="font-weight: 500;">បង្កើតទិន្នន័យឥណទានអនុម័តដើមឆ្នាំ
-                        សម្រាប់សលាកបត្រ</h3> 
+                        សម្រាប់សលាកបត្រ</h3>
                     <div class="card-body px-5 py-4">
                         <form action="{{ route('codes.store') }}" method="POST" enctype="multipart/form-data"
                             onsubmit="validateForm(event)">
@@ -45,8 +45,7 @@
                                                     style="height: 130px; width:  230px; ">
                                                     @foreach ($subAccountKeys as $subAccountKey)
                                                         <option
-                                                            value="{{ $subAccountKey->sub_account_key }}"{{ old('sub_account_key') == $subAccountKey->id ? 'selected' : '' }}>
-                                                            {{ $subAccountKey->sub_account_key }}
+                                                            value="{{ $subAccountKey->sub_account_key }}"{{ old('sub_account_key') == $subAccountKey->id ? 'selected' : '' }}>{{ $subAccountKey->sub_account_key }}
                                                         </option>
                                                     @endforeach
                                                 </select>
@@ -188,6 +187,18 @@
             font-family: 'Khmer OS Siemreap', sans-serif;
             font-size: 14px;
         }
+
+        /* Hide number input arrows in Chrome, Safari, Edge, and Opera */
+        input[type=number]::-webkit-inner-spin-button,
+        input[type=number]::-webkit-outer-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+
+        /* Hide number input arrows in Firefox */
+        input[type=number] {
+            -moz-appearance: textfield;
+        }
     </style>
 @endsection
 
@@ -286,54 +297,4 @@
             updateSubAccountInputField();
         }
     </script>
-    {{-- <script>
-        function validateForm(event) {
-            let isValid = true;
-            document.getElementById('subAccountKeyError').style.display = 'none';
-            document.getElementById('reportKeyError').style.display = 'none';
-            document.getElementById('finLawError').style.display = 'none';
-            document.getElementById('currentLoanError').style.display = 'none';
-            document.getElementById('nameReportKeyError').style.display = 'none';
-            document.getElementById('yearError').style.display = 'none';
-
-            // Check if 'sub_account_key' is empty
-            if (document.getElementById('subAccountKeySelect').value === "") {
-                isValid = false;
-                document.getElementById('subAccountKeyError').style.display = 'inline'; // Show error message
-            }
-
-            // Check if 'report_key' is empty
-            if (document.getElementById('report_key').value === "") {
-                isValid = false;
-                document.getElementById('reportKeyError').style.display = 'inline'; // Show error message
-            }
-
-            // Check if 'fin_law' is empty
-            if (document.getElementById('fin_law').value === "") {
-                isValid = false;
-                document.getElementById('finLawError').style.display = 'inline'; // Show error message
-            }
-
-            // Check if 'current_loan' is empty
-            if (document.getElementById('current_loan').value === "") {
-                isValid = false;
-                document.getElementById('currentLoanError').style.display = 'inline'; // Show error message
-            }
-
-            // Check if 'name_report_key' is empty
-            if (document.getElementById('name_report_key').value.trim() === "") {
-                isValid = false;
-                document.getElementById('nameReportKeyError').style.display = 'inline'; // Show error message
-            }
-
-            if (document.getElementById('year_id').value.trim() === "") {
-                isValid = false;
-                document.getElementById('yearError').style.display = 'inline'; // Show error message
-            }
-
-            if (!isValid) {
-                event.preventDefault();
-            }
-        }
-    </script> --}}
 @endsection

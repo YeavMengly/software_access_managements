@@ -10,7 +10,7 @@
         <h3>តារាង​ច្បាប់ អាណត្តិ និងសលាកបត្រ</h3>
         <h5></h5>
     </div>
-    <div class="table-container mt-4 pr-4 pl-4">
+    <div class="table-container mt-4 pr-4 pl-4 mb-4">
         <table class="table-border">
             <thead class="header-border">
                 <tr>

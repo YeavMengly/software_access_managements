@@ -89,11 +89,7 @@ class ReportController extends Controller
         $validatedData = $request->validate([
             'sub_account_key' => 'required|exists:sub_account_keys,sub_account_key',
             'report_key' => 'required|string|max:255',
-            'name_report_key' => [
-                'required',
-                'string',
-                'regex:/^[\p{L}\p{M}\s]+$/u' // Allows Khmer and other Unicode letters with spaces
-            ],
+            'name_report_key' => 'nullable|string',
             'fin_law' => 'required|numeric|min:0',
             'current_loan' => 'required|numeric|min:0',
             'date_year' => 'required|exists:years,id',

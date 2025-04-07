@@ -41,7 +41,7 @@
 
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
-    
+
 
     @yield('styles')
 </head>
@@ -70,15 +70,10 @@
                     @yield('dashboardui')
 
                     @yield('programs')
-                    @yield('card_certificate')
                     @yield('total_card')
 
                     @yield('result')
                     @yield('result-total-table')
-                    @yield('result-total-general-table')
-
-
-
 
                     @yield('result-success')
                     @yield('result-general-pay')
@@ -156,8 +151,24 @@
                     @yield('form-mandate-upload')
                     @yield('form-mandate-edit')
 
-                    {{--                        End Mandate                            --}}
+                    {{--                        Start Mandate                          --}}
+                    @yield('content-electric')
+                    @yield('form-electric-upload')
+                    @yield('form-electric-edit')
 
+
+                    @yield('content-usage-units')
+                    @yield('content-usage-units-water')
+
+                    @yield('content-water')
+                    @yield('form-water-upload')
+                    @yield('form-water-edit')
+
+                    @yield('content-fuel')
+                    @yield('content-fuel-edit')
+                    @yield('form-fuel-upload')
+
+                    {{--                        End Mandate                            --}}
 
                     {{--                        Start Loans Total                         --}}
 
@@ -175,13 +186,19 @@
                     {{--                        Start Table                         --}}
 
                     @yield('content-table-ms-plan')
-        
+
                     @yield('result-total-fmc-table')
 
                     @yield('table-mandate')
 
                     {{--                        End Table                           --}}
+
+                    {{-- Error Page --}}
+                    @yield('content')
                 </div>
+
+
+
 
             </div>
             <!-- /.container-fluid -->

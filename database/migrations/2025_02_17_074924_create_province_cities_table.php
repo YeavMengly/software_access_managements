@@ -11,9 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        if (!Schema::hasTable('new_loans')) {
-            Schema::create('new_loans', function (Blueprint $table) {
-                $table->increments('id', true);
+        if (!Schema::hasTable('province_cities')) {
+            Schema::create('province_cities', function (Blueprint $table) {
+                $table->id();
+                $table->string('province_city')->nullable();
                 $table->timestamps();
             });
         }
@@ -24,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('new_loans');
+        Schema::dropIfExists('province_cities');
     }
 };

@@ -15,155 +15,44 @@ use Maatwebsite\Excel\Facades\Excel;
 
 class ResultController extends Controller
 {
-
-    // public function index(Request $request)
-    // {
-    //     $years = Year::all(); // Fetch all years
-    //     $currentYear = \Carbon\Carbon::now()->year;
-    //     $currentMonth = \Carbon\Carbon::now()->month;
-
-    //     // Get selected year or default to current year
-    //     $selectedYearId = $request->get('per_page');
-    //     $selectedYear = Year::find($selectedYearId);
-    //     $year = $selectedYear ? \Carbon\Carbon::parse($selectedYear->date_year)->year : $currentYear;
-
-    //     // Get selected month or default to current month
-    //     $month = $request->get('month', $currentMonth);
-
-    //     // Apply filters
-    //     $reportQuery = Report::query()->whereHas('year', function ($query) use ($year) {
-    //         $query->whereYear('date_year', $year);
-    //     });
-    //     $loanQuery = Loans::query()->whereYear('created_at', $year);
-
-    //     if ($month) {
-    //         $reportQuery->whereMonth('created_at', $month);
-    //         $loanQuery->whereMonth('created_at', $month);
-    //     }
-
-    //     $this->applyFilters($reportQuery, $request);
-    //     $this->applyFilters($loanQuery, $request);
-
-    //     // Handle export functionality
-    //     if ($request->has('export')) {
-    //         $combinedResults = $reportQuery->get()->merge($loanQuery->get());
-    //         return Excel::download(new ResultExport($combinedResults), 'results.xlsx');
-    //     }
-
-    //     // Fetch data
-    //     $reports = $reportQuery->get();
-    //     $loans = $loanQuery->get();
-
-    //     $totals = $this->calculateTotals($reports, $loans);
-
-    //     // Pass variables to view
-    //     return view('layouts.table.result', compact('totals', 'reports', 'loans', 'years', 'currentYear', 'currentMonth', 'selectedYearId', 'month'));
-    // }
-    // public function index(Request $request)
-    // {
-    //     $years = Year::all(); // Fetch all years
-    //     $currentYear = date('Y'); // Get the current year
-    //     $currentMonth = date('m'); // Get the current month
-
-    //     // Get selected year or default to current year
-    //     $selectedYearId = $request->get('per_page'); // Assuming 'per_page' is used for year selection
-    //     $selectedYear = Year::find($selectedYearId);
-    //     $year = $selectedYear ? $selectedYear->id : null;
-
-    //     // Get selected month or default to current month
-    //     $month = $request->get('month', $currentMonth);
-
-    //     // Apply filters based on the selected year and month
-    //     $reportQuery = Report::query()->whereHas('year', function ($query) use ($year, $month) {
-    //         if ($year) {
-    //             $query->where('id', $year); // Filter by year ID
-    //         }
-    //         if ($month) {
-    //             $query->whereMonth('date_year', $month); // Filter by month
-    //         }
-    //     });
-
-    //     $loanQuery = Report::query()->whereHas('year', function ($query) use ($year, $month) {
-    //         if ($year) {
-    //             $query->where('id', $year); // Filter by year ID
-    //         }
-    //         if ($month) {
-    //             $query->whereMonth('date_year', $month); // Filter by month
-    //         }
-    //     });
-
-    //     $this->applyFilters($reportQuery, $request);
-    //     $this->applyFilters($loanQuery, $request);
-
-    //     // Handle export functionality
-    //     if ($request->has('export')) {
-    //         $combinedResults = $reportQuery->get()->merge($loanQuery->get());
-    //         return Excel::download(new ResultExport($combinedResults), 'results.xlsx');
-    //     }
-
-    //     // Fetch data
-    //     $reports = $reportQuery->get();
-    //     $loans = $loanQuery->get();
-
-    //     $totals = $this->calculateTotals($reports, $loans);
-
-    //     // Pass variables to view
-    //     return view('layouts.table.result', compact('totals', 'reports', 'loans', 'years', 'currentYear', 'currentMonth', 'selectedYearId', 'month'));
-    // }
     public function index(Request $request)
     {
-        // Fetch only active years
-        $years = Year::where('status', 'active')->get(); // Filter active years only
-
-        $currentYear = date('Y'); // Get the current year
-        $currentMonth = date('m'); // Get the current month
-
-        // Get selected year or default to current year
-        $selectedYearId = $request->get('per_page'); // Assuming 'per_page' is used for year selection
+        $years = Year::where('status', 'active')->get();
+        $currentYear = date('Y');
+        $selectedYearId = $request->get('per_page');
         $selectedYear = Year::find($selectedYearId);
         $year = $selectedYear ? $selectedYear->id : null;
-
-        // Get selected month or default to current month
-        $month = $request->get('month', $currentMonth);
-
-        // Apply filters based on the selected year and month
+        $month = $request->get('month');
         $reportQuery = Report::query()->whereHas('year', function ($query) use ($year, $month) {
             if ($year) {
-                $query->where('id', $year); // Filter by year ID
+                $query->where('id', $year);
             }
-            if ($month) {
-                $query->whereMonth('date_year', $month); // Filter by month
-            }
-        });
-
-        $loanQuery = Report::query()->whereHas('year', function ($query) use ($year, $month) {
-            if ($year) {
-                $query->where('id', $year); // Filter by year ID
-            }
-            if ($month) {
-                $query->whereMonth('date_year', $month); // Filter by month
+            if (!empty($month)) {
+                $query->whereMonth('date_year', $month);
             }
         });
 
+        $loanQuery = Report::with('loans')
+            ->whereHas('year', function ($query) use ($year, $month) {
+                if ($year) {
+                    $query->where('id', $year);
+                }
+                if (!empty($month)) {
+                    $query->whereMonth('date_year', $month);
+                }
+            });
         $this->applyFilters($reportQuery, $request);
         $this->applyFilters($loanQuery, $request);
-
-        // Handle export functionality
         if ($request->has('export')) {
             $combinedResults = $reportQuery->get()->merge($loanQuery->get());
             return Excel::download(new ResultExport($combinedResults), 'results.xlsx');
         }
-
-        // Fetch data
         $reports = $reportQuery->get();
         $loans = $loanQuery->get();
-
         $totals = $this->calculateTotals($reports, $loans);
 
-        // Pass variables to view
-        return view('layouts.table.result', compact('totals', 'reports', 'loans', 'years', 'currentYear', 'currentMonth', 'selectedYearId', 'month'));
+        return view('layouts.table.result', compact('totals', 'reports', 'loans', 'years', 'selectedYearId', 'month'));
     }
-
 
     public function export(Request $request)
     {
@@ -245,7 +134,6 @@ class ResultController extends Controller
         }
         $this->applyDateFilter($query, $startDate, $endDate);
     }
-
 
     private function applyCodeFilter($query, $input, $column, $length, $relation = null)
     {

@@ -55,7 +55,8 @@
                                         <select name="account_key" id="accountKeySelect" class="form-control" size="5"
                                             onclick="getSelectedAccountValue()" style="width: 230px; height: 120px;">
                                             @foreach ($accountKeys as $accountKey)
-                                                <option value="{{ $accountKey->account_key }}">{{ $accountKey->account_key }}</option>
+                                                <option value="{{ $accountKey->account_key }}">
+                                                    {{ $accountKey->account_key }}</option>
                                             @endforeach
                                         </select>
                                     </div>
@@ -96,7 +97,7 @@
                                     <button type="reset" class="btn btn-secondary ">
                                         <i class="fas fa-undo"></i>&nbsp;&nbsp;កំណត់ឡើងវិញ
                                     </button>
-    
+
                                     <!-- Submit Button -->
                                     <button type="submit" class="btn btn-primary ml-3">
                                         <i class="fas fa-save"></i>&nbsp;&nbsp;រក្សាទុក
@@ -123,6 +124,18 @@
         h3 {
             font-family: 'Khmer OS Muol Light', sans-serif;
             font-size: 16px;
+        }
+
+        /* Hide number input arrows in Chrome, Safari, Edge, and Opera */
+        input[type=number]::-webkit-inner-spin-button,
+        input[type=number]::-webkit-outer-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+
+        /* Hide number input arrows in Firefox */
+        input[type=number] {
+            -moz-appearance: textfield;
         }
     </style>
 @endsection

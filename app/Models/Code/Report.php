@@ -38,13 +38,11 @@ class Report extends Model
     ];
     protected $dates = ['date_column'];
 
-
     // belong table to subAccount class
     public function subAccountKey()
     {
         return $this->belongsTo(SubAccountKey::class, 'sub_account_key', 'sub_account_key'); // Adjust this if needed
     }
-
 
     // Point to total class
     public function total()
@@ -68,10 +66,9 @@ class Report extends Model
         return $this->hasOne(Mandate::class, 'report_key', 'report_key');
     }
 
-
     public function loans()
     {
-        return $this->hasOne(Loans::class, 'report_key', 'report_key');
+        return $this->hasOne(Loans::class, 'report_key', 'id');
     }
 
     public function year()

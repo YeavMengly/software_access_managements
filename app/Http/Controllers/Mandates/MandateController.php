@@ -13,20 +13,60 @@ use Illuminate\Http\Request;
 class MandateController extends Controller
 {
     //
+    // public function index(Request $request)
+    // {
+    //     $missionTypes = MissionType::all();
+    //     $selectedMissionType = $request->input('mission_type');
+    //     $subAccountKeyId = $request->input('sub_account_key_id');
+    //     $reportKey = $request->input('report_key');
+    //     $sortField = $request->input('sort_field', 'value_mandate');
+    //     $sortDirection = $request->input('sort_direction', 'asc');
+    //     $perPage = $request->input('per_page', 25);
+
+    //     if (!in_array($sortField, ['value_mandate', 'report_key'])) {
+    //         $sortField = 'value_mandate';
+    //     }
+
+    //     $query = Mandate::with(['dataMandate.subAccountKey.accountKey.key', 'missionType'])
+    //         ->whereHas('dataMandate.year', function ($query) {
+    //             $query->where('status', 'active');
+    //         })
+    //         ->when($subAccountKeyId, function ($query, $subAccountKeyId) {
+    //             $query->whereHas('dataMandate.subAccountKey', function ($query) use ($subAccountKeyId) {
+    //                 $query->where('sub_account_key', 'like', "%{$subAccountKeyId}%");
+    //             });
+    //         })
+    //         ->when($reportKey, function ($query, $reportKey) {
+    //             $query->whereHas('dataMandate', function ($query) use ($reportKey) {
+    //                 $query->where('report_key', 'like', "%{$reportKey}%");
+    //             });
+    //         })
+    //         ->when($selectedMissionType, function ($query, $selectedMissionType) {
+    //             $query->where('mission_type', $selectedMissionType);
+    //         });
+
+    //     $mandates = $query->orderBy($sortField, $sortDirection)->paginate($perPage);
+    //     $totalAmount = $query->sum('value_mandate');
+
+    //     return view('layouts.admin.forms.mandate.mandate-index', compact('mandates', 'missionTypes', 'selectedMissionType', 'totalAmount'));
+    // }
+
     public function index(Request $request)
     {
         $missionTypes = MissionType::all();
         $selectedMissionType = $request->input('mission_type');
         $subAccountKeyId = $request->input('sub_account_key_id');
         $reportKey = $request->input('report_key');
+        $startDate = $request->input('start_date');
+        $endDate = $request->input('end_date');
         $sortField = $request->input('sort_field', 'value_mandate');
         $sortDirection = $request->input('sort_direction', 'asc');
         $perPage = $request->input('per_page', 25);
-    
+
         if (!in_array($sortField, ['value_mandate', 'report_key'])) {
             $sortField = 'value_mandate';
         }
-    
+
         $query = Mandate::with(['dataMandate.subAccountKey.accountKey.key', 'missionType'])
             ->whereHas('dataMandate.year', function ($query) {
                 $query->where('status', 'active');
@@ -43,15 +83,21 @@ class MandateController extends Controller
             })
             ->when($selectedMissionType, function ($query, $selectedMissionType) {
                 $query->where('mission_type', $selectedMissionType);
+            })
+            ->when($startDate, function ($query, $startDate) {
+                $query->whereDate('created_at', '>=', $startDate);
+            })
+            ->when($endDate, function ($query, $endDate) {
+                $query->whereDate('created_at', '<=', $endDate);
             });
-    
+
         $mandates = $query->orderBy($sortField, $sortDirection)->paginate($perPage);
         $totalAmount = $query->sum('value_mandate');
-    
+
         return view('layouts.admin.forms.mandate.mandate-index', compact('mandates', 'missionTypes', 'selectedMissionType', 'totalAmount'));
     }
-    
-    
+
+
     public function create()
     {
         $missionTypes = MissionType::all();
@@ -161,21 +207,21 @@ class MandateController extends Controller
             'attachments.*' => 'file|mimes:pdf|max:2048',
             'date_mandate' => 'required|date',
         ]);
-    
+
         $mandate = Mandate::findOrFail($id); // Find the specific mandate by ID
         $dataMandate = DataMandate::findOrFail($validatedData['report_key']);
-    
+
         if (!$dataMandate || !$dataMandate->subAccountKey) {
             return redirect()->back()->withErrors(['error' => 'មិនមាន អនុគណនី ឬកូដកម្មវិធី។']);
         }
-    
+
         $applyValue = $validatedData['value_mandate'];
         $remainingCredit = $dataMandate->credit - $applyValue + $mandate->value_mandate;
-    
+
         if ($remainingCredit < 0) {
             return redirect()->back()->withErrors(['error' => 'ឥណាទានមិនអាចតិចជាងសូន្យ។']);
         }
-    
+
         // Handle attachments
         $storedFilePaths = $mandate->attachments ? json_decode($mandate->attachments, true) : [];
         if ($request->hasFile('attachments')) {
@@ -186,7 +232,7 @@ class MandateController extends Controller
                 }
             }
         }
-    
+
         $mandate->update([
             'report_key' => $validatedData['report_key'],
             'value_mandate' => $applyValue,
@@ -194,17 +240,17 @@ class MandateController extends Controller
             'attachments' => json_encode($storedFilePaths),
             'date_mandate' => $validatedData['date_mandate'],
         ]);
-    
+
         $this->calculateAndSaveReportWithMandate($dataMandate);
-    
+
         $dataMandate->refresh();
         $lastMandate = Mandate::where('report_key', $validatedData['report_key'])->latest()->first();
         $dataMandate->apply = $lastMandate->value_mandate;
         $dataMandate->save();
-    
+
         return redirect()->back()->with('success', 'អាណត្តិបានកែប្រែដោយជោគជ័យ');
     }
-    
+
     public function destroy($id)
     {
         $mandate = Mandate::findOrFail($id);

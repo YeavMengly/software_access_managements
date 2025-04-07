@@ -273,7 +273,7 @@
                                         <td>
                                             {{ $totalIndexCounter }}.{{ $index + 1 }}
                                         </td>
-                                        <td style="width:180px; f">
+                                        <td style="width:180px; ">
                                             {{ $mission->name }}
                                         </td>
                                         <td style=" width: 100px;">

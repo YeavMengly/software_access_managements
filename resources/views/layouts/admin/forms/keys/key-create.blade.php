@@ -101,10 +101,22 @@
             padding-left: 16px;
             padding-right: 16px;
         }
-      
+
         h3 {
             font-family: 'Khmer OS Muol Light', sans-serif;
             font-size: 16px;
+        }
+
+        /* Hide number input arrows in Chrome, Safari, Edge, and Opera */
+        input[type=number]::-webkit-inner-spin-button,
+        input[type=number]::-webkit-outer-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+
+        /* Hide number input arrows in Firefox */
+        input[type=number] {
+            -moz-appearance: textfield;
         }
     </style>
 @endsection

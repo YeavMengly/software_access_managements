@@ -4,10 +4,9 @@ namespace App\Http\Controllers\Result;
 
 use App\Exports\Results\ResultExport;
 use App\Http\Controllers\Controller;
-use App\Models\Code\Loans;
-use App\Models\Code\Report;
 use App\Models\Code\Year;
 use App\Models\DataMandate;
+use App\Models\LoanMandate;
 use App\Models\Mandates\Mandate;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -16,65 +15,82 @@ use Maatwebsite\Excel\Facades\Excel;
 
 class ResultMandateController extends Controller
 {
-    //
-    // public function index(){
-    //     return view('layouts.table.result-mandate');
-    // }
+
     public function index(Request $request)
     {
-        // Fetch only active years
         $years = Year::where('status', 'active')->get();
-    
-        $currentYear = date('Y'); // Get the current year
-        $currentMonth = date('m'); // Get the current month
-    
-        // Get selected year or default to current year
-        $selectedYearId = $request->get('per_page'); // Assuming 'per_page' is used for year selection
+        $currentYear = date('Y');
+        $selectedYearId = $request->get('per_page');
         $selectedYear = Year::find($selectedYearId);
         $year = $selectedYear ? $selectedYear->id : null;
-    
-        // Get selected month or default to current month
-        $month = $request->get('month', $currentMonth);
-    
-        // Apply filters based on the selected year and month
-        $reportQuery = DataMandate::query()->whereHas('year', function ($query) use ($year, $month) {
+        $month = $request->get('month');
+
+        $dataMandateQuery = DataMandate::query()->whereHas('year', function ($query) use ($year, $month) {
             if ($year) {
-                $query->where('id', $year); // Filter by year ID
+                $query->where('id', $year);
             }
-            if ($month) {
-                $query->whereMonth('date_year', $month); // Filter by month
+            if (!empty($month)) {
+                $query->whereMonth('date_year', $month);
             }
         });
-    
-        $loanQuery = DataMandate::query()->whereHas('year', function ($query) use ($year, $month) {
-            if ($year) {
-                $query->where('id', $year); // Filter by year ID
-            }
-            if ($month) {
-                $query->whereMonth('date_year', $month); // Filter by month
-            }
-        });
-    
-        $this->applyFilters($reportQuery, $request);
-        $this->applyFilters($loanQuery, $request);
-    
-        // Handle export functionality
+
+        $loanMandateQuery = DataMandate::with('loanMandate')
+            ->whereHas('year', function ($query) use ($year, $month) {
+                if ($year) {
+                    $query->where('id', $year);
+                }
+                if (!empty($month)) {
+                    $query->whereMonth('date_year', $month);
+                }
+            });
+        $this->applyFilters($dataMandateQuery, $request);
+        $this->applyFilters($loanMandateQuery, $request);
         if ($request->has('export')) {
-            $combinedResults = $reportQuery->get()->merge($loanQuery->get());
+            $combinedResults = $dataMandateQuery->get()->merge($loanMandateQuery->get());
             return Excel::download(new ResultExport($combinedResults), 'results.xlsx');
         }
-    
-        // Fetch data
-        $dataMandates = $reportQuery->get();
-        $loans = $loanQuery->get();
-    
-        $totals = $this->calculateTotals($dataMandates, $loans);
-
-    
+        $dataMandates = $dataMandateQuery->get();
+        $loanMandates = $loanMandateQuery->get();
+        $totals = $this->calculateTotals($dataMandates, $loanMandates);
         // Pass variables to view
-        return view('layouts.table.result-mandate', compact('totals', 'dataMandates', 'loans', 'years', 'currentYear', 'currentMonth', 'selectedYearId', 'month'));
+        return view('layouts.table.result-mandate', compact('totals', 'dataMandates', 'loanMandates', 'years', 'selectedYearId', 'month'));
     }
-    
+
+    public function export(Request $request)
+    {
+        try {
+            $query = DataMandate::query();
+            $this->applyFilters($query, $request);
+            $results = $query->get();
+            Log::info('Exported Report Results Count: ' . $results->count());
+            if ($results->isEmpty()) {
+                Log::warning('No results found for export.');
+                return response()->json(['error' => 'No results found to export.'], 404);
+            }
+            $resultExport = new ResultExport($results);
+            return $resultExport->export($request);
+        } catch (\Exception $e) {
+            Log::error('Export Error: ' . $e->getMessage());
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
+    }
+
+    public function exportPdf(Request $request)
+    {
+        try {
+            $query = DataMandate::query();
+            $this->applyFilters($query, $request);
+            $reports = $query->get();
+            $html = view('layouts.pdf.result_pdf', compact('reports', 'totals'))->render();
+
+            $mpdf = new \Mpdf\Mpdf(['format' => 'A2-L']);
+            $mpdf->WriteHTML($html);
+
+            return $mpdf->Output('របាយការណ៍ធានាចំណាយថវិការ.pdf', 'D');
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
+    }
 
     private function applyDateFilter($query, $startDate, $endDate)
     {
@@ -111,7 +127,7 @@ class ResultMandateController extends Controller
         $startDate = $request->input('start_date');
         $endDate = $request->input('end_date');
 
-        if ($query->getModel() instanceof Loans) {
+        if ($query->getModel() instanceof LoanMandate) {
         } elseif ($query->getModel() instanceof DataMandate) {
             $this->applyCodeFilter($query, $codeId, 'code', 2, 'subAccountKey.accountKey.key');
             $this->applyCodeFilter($query, $accountKeyId, 'account_key', 4, 'subAccountKey.accountKey');
@@ -168,10 +184,10 @@ class ResultMandateController extends Controller
             $accountKeyId = $dataMandate->account_key_id;
             $subAccountKeyId = $dataMandate->sub_account_key_id;
             $reportKeyId = $dataMandate->report_key;
-            // $loan = $dataMandate->loans;
-               $loan = $dataMandate;
+            $loanMandates = $dataMandate->loanMandate;
 
-            // dd($loan);
+            // dd($loanMandates);
+            //    $loan = $dataMandate;
 
             if (!isset($totals['reportKey'][$codeId][$accountKeyId][$subAccountKeyId])) {
                 $totals['reportKey'][$codeId][$accountKeyId][$subAccountKeyId] = [];
@@ -199,25 +215,25 @@ class ResultMandateController extends Controller
             $totals['fin_law'] += $dataMandate->fin_law ?? 0;
             $totals['current_loan'] += $dataMandate->current_loan ?? 0;
 
-            if (!empty($loan)) {
+            if (!empty($loanMandates)) {
                 $totals['reportKey'][$codeId][$accountKeyId][$subAccountKeyId][$reportKeyId]['fin_law'] += $dataMandate->fin_law;
                 $totals['reportKey'][$codeId][$accountKeyId][$subAccountKeyId][$reportKeyId]['current_loan'] += $dataMandate->current_loan;
-                $totals['reportKey'][$codeId][$accountKeyId][$subAccountKeyId][$reportKeyId]['internal_increase'] += $loan->internal_increase;
-                $totals['reportKey'][$codeId][$accountKeyId][$subAccountKeyId][$reportKeyId]['unexpected_increase'] += $loan->unexpected_increase;
-                $totals['reportKey'][$codeId][$accountKeyId][$subAccountKeyId][$reportKeyId]['additional_increase'] += $loan->additional_increase;
-                $totals['reportKey'][$codeId][$accountKeyId][$subAccountKeyId][$reportKeyId]['decrease'] += $loan->decrease;
-                $totals['reportKey'][$codeId][$accountKeyId][$subAccountKeyId][$reportKeyId]['editorial'] += $loan->editorial;
+                $totals['reportKey'][$codeId][$accountKeyId][$subAccountKeyId][$reportKeyId]['internal_increase'] += $loanMandates->internal_increase;
+                $totals['reportKey'][$codeId][$accountKeyId][$subAccountKeyId][$reportKeyId]['unexpected_increase'] += $loanMandates->unexpected_increase;
+                $totals['reportKey'][$codeId][$accountKeyId][$subAccountKeyId][$reportKeyId]['additional_increase'] += $loanMandates->additional_increase;
+                $totals['reportKey'][$codeId][$accountKeyId][$subAccountKeyId][$reportKeyId]['decrease'] += $loanMandates->decrease;
+                $totals['reportKey'][$codeId][$accountKeyId][$subAccountKeyId][$reportKeyId]['editorial'] += $loanMandates->editorial;
                 $totals['reportKey'][$codeId][$accountKeyId][$subAccountKeyId][$reportKeyId]['new_credit_status'] += $dataMandate->new_credit_status;
                 $totals['reportKey'][$codeId][$accountKeyId][$subAccountKeyId][$reportKeyId]['early_balance'] += $dataMandate->early_balance;
                 $totals['reportKey'][$codeId][$accountKeyId][$subAccountKeyId][$reportKeyId]['apply'] += $dataMandate->apply;
                 $totals['reportKey'][$codeId][$accountKeyId][$subAccountKeyId][$reportKeyId]['deadline_balance'] += $dataMandate->deadline_balance;
                 $totals['reportKey'][$codeId][$accountKeyId][$subAccountKeyId][$reportKeyId]['credit'] += $dataMandate->credit;
-                $totals['internal_increase'] += $loan->internal_increase ?? 0;
-                $totals['unexpected_increase'] += $loan->unexpected_increase ?? 0;
-                $totals['additional_increase'] += $loan->additional_increase ?? 0;
-                $totals['decrease'] += $loan->decrease ?? 0;
-                $totals['editorial'] += $loan->editorial ?? 0;
-                $totalIncrease = $loan->internal_increase + $loan->unexpected_increase + $loan->additional_increase;
+                $totals['internal_increase'] += $loanMandates->internal_increase ?? 0;
+                $totals['unexpected_increase'] += $loanMandates->unexpected_increase ?? 0;
+                $totals['additional_increase'] += $loanMandates->additional_increase ?? 0;
+                $totals['decrease'] += $loanMandates->decrease ?? 0;
+                $totals['editorial'] += $loanMandates->editorial ?? 0;
+                $totalIncrease = $loanMandates->internal_increase + $loanMandates->unexpected_increase + $loanMandates->additional_increase;
                 $totals['total_increase'] += $totalIncrease;
             }
             $totals['new_credit_status'] += $dataMandate->new_credit_status ?? 0;
@@ -288,23 +304,23 @@ class ResultMandateController extends Controller
             'law_correction' => 0,
         ];
 
-        foreach ($dataMandates as $report) {
-            $loan = $report->loans;
-            $sumFields['fin_law'] += $report->fin_law;
-            $sumFields['current_loan'] += $report->current_loan;
+        foreach ($dataMandates as $dataMandate) {
+            $loanMandates = $dataMandate->loanMandate;
+            $sumFields['fin_law'] += $dataMandate->fin_law;
+            $sumFields['current_loan'] += $dataMandate->current_loan;
 
-            if (!empty($loan)) {
-                $sumFields['internal_increase'] += $loan->internal_increase;
-                $sumFields['unexpected_increase'] += $loan->unexpected_increase;
-                $sumFields['additional_increase'] += $loan->additional_increase;
-                $sumFields['decrease'] += $loan->decrease;
-                $sumFields['editorial'] += $loan->editorial;
+            if (!empty($loanMandates)) {
+                $sumFields['internal_increase'] += $loanMandates->internal_increase;
+                $sumFields['unexpected_increase'] += $loanMandates->unexpected_increase;
+                $sumFields['additional_increase'] += $loanMandates->additional_increase;
+                $sumFields['decrease'] += $loanMandates->decrease;
+                $sumFields['editorial'] += $loanMandates->editorial;
             }
-            $sumFields['new_credit_status'] += $report->new_credit_status;
-            $sumFields['early_balance'] += $report->early_balance;
-            $sumFields['apply'] += $report->apply;
-            $sumFields['deadline_balance'] += $report->deadline_balance;
-            $sumFields['credit'] += $report->credit;
+            $sumFields['new_credit_status'] += $dataMandate->new_credit_status;
+            $sumFields['early_balance'] += $dataMandate->early_balance;
+            $sumFields['apply'] += $dataMandate->apply;
+            $sumFields['deadline_balance'] += $dataMandate->deadline_balance;
+            $sumFields['credit'] += $dataMandate->credit;
         }
         $sumFields['total_increase'] = $sumFields['internal_increase'] + $sumFields['unexpected_increase'] + $sumFields['additional_increase'];
         $sumFields['law_average'] = ($sumFields['fin_law'] < 0 || $sumFields['deadline_balance'] > 0) ?
@@ -314,4 +330,4 @@ class ResultMandateController extends Controller
 
         return $sumFields;
     }
-} 
+}

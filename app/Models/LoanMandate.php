@@ -26,4 +26,9 @@ class LoanMandate extends Model
     public function report(){
         return $this->belongsTo(Report::class, 'report_key');
     }
+
+    public function dataMandate()
+    {
+        return $this->belongsTo(DataMandate::class, 'report_key', 'id');
+    }
 }

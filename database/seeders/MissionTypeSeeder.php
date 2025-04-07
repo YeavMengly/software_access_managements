@@ -38,6 +38,11 @@ class MissionTypeSeeder extends Seeder
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
+            [
+                'mission_type' => 'បុរេប្រទាន',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
         ]);
     }
 }

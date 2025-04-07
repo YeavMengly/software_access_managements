@@ -17,13 +17,15 @@ class CertificateDataController extends Controller
     public function index(Request $request)
     {
         $missionTypes = MissionType::all();
-        $search = $request->input('search');
-        $subAccountKeyId = $request->input('sub_account_key_id');
-        $reportKey = $request->input('report_key');
-        $sortField = $request->input('sort_field', 'value_certificate');
-        $sortDirection = $request->input('sort_direction', 'asc');
-        $perPage = $request->input('per_page', 25);
+        $search              = $request->input('search');
+        $subAccountKeyId     = $request->input('sub_account_key_id');
+        $reportKey           = $request->input('report_key');
         $selectedMissionType = $request->input('mission_type');
+        $startDate           = $request->input('start_date');
+        $endDate             = $request->input('end_date');
+        $sortField     = $request->input('sort_field', 'value_certificate');
+        $sortDirection = $request->input('sort_direction', 'asc');
+        $perPage       = $request->input('per_page', 25);
 
         // Validate the sort field
         if (!in_array($sortField, ['value_certificate', 'report_key'])) {
@@ -52,13 +54,19 @@ class CertificateDataController extends Controller
             })
             ->when($selectedMissionType, function ($query, $selectedMissionType) {
                 $query->where('mission_type', $selectedMissionType);
+            })
+            ->when($startDate, function ($query, $startDate) {
+                $query->whereDate('created_at', '>=', $startDate);
+            })
+            ->when($endDate, function ($query, $endDate) {
+                $query->whereDate('created_at', '<=', $endDate);
             });
 
-        // Calculate totals
-        $totalAmount = $query->sum('value_certificate');
+        // Calculate totals and paginate the results
+        $totalAmount      = $query->sum('value_certificate');
         $certificatesData = $query->orderBy($sortField, $sortDirection)->paginate($perPage);
-        $totals = $this->calculateTotals($certificatesData);
-        $dataAvailable = $certificatesData->isNotEmpty();
+        $totals           = $this->calculateTotals($certificatesData);
+        $dataAvailable    = $certificatesData->isNotEmpty();
 
         return view('layouts.admin.forms.certificate.certificate-data-index', compact(
             'certificatesData',
@@ -230,7 +238,7 @@ class CertificateDataController extends Controller
 
         $this->recalculateAndSaveReport($report);
 
-        return redirect()->route('certificate-data.edit', $id)
+        return redirect()->route('certificate-data.index', $id)
             ->with('success', 'សលាកបត្របានធ្វើបច្ចុប្បន្នភាពដោយជោគជ័យ');
     }
 
@@ -265,7 +273,7 @@ class CertificateDataController extends Controller
     {
         $newApplyTotal = CertificateData::where('report_key', $report->id)
             ->latest('created_at') // Order by latest created record
-            ->value('value_certificate') ?? 0; 
+            ->value('value_certificate') ?? 0;
         $report->early_balance = $this->calculateEarlyBalance($report);
 
         $report->apply = $newApplyTotal;
@@ -287,7 +295,7 @@ class CertificateDataController extends Controller
             return 0;
         }
 
-        $totalEarlyBalance = $certificateData->slice(0, -1) 
+        $totalEarlyBalance = $certificateData->slice(0, -1)
             ->filter(function ($item) {
                 return !is_null($item->value_certificate) && $item->value_certificate !== '';
             })

@@ -12,6 +12,9 @@ use App\Http\Controllers\Components\CertificateCardController;
 use App\Http\Controllers\Components\TotalCardController;
 use App\Http\Controllers\Components\TotalProgramsController;
 use App\Http\Controllers\DataMandateController;
+use App\Http\Controllers\ElectricController;
+use App\Http\Controllers\Fuels\FuelController;
+use App\Http\Controllers\Fuels\FuelTotalController;
 use App\Http\Controllers\LoanMandateController;
 use App\Http\Controllers\MissionAbroadController;
 use App\Http\Controllers\MissionCambodiaController;
@@ -36,6 +39,9 @@ use App\Http\Controllers\ReportMissionController;
 use App\Http\Controllers\Result\ResultApplyController;
 use App\Http\Controllers\Result\ResultMandateController;
 use App\Http\Controllers\Result\TablesMission\ResultMissionPlans;
+use App\Http\Controllers\TitleUsageUnitController;
+use App\Http\Controllers\Waters\TitleUsageUnitWaterController;
+use App\Http\Controllers\Waters\WaterController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -71,7 +77,6 @@ Route::get('/report-mission', function () {
 
 //===============================>> Manage Route Components Grid
 Route::get('/programs', [TotalProgramsController::class, 'index'])->name('programs');
-Route::get('/card_certificate', [CertificateCardController::class, 'index'])->name('card_certificate');
 Route::get('/total_card', [TotalCardController::class, 'index'])->name('total_card');
 
 //===============================>> Manage Resource
@@ -101,9 +106,24 @@ Route::get('/certificate-amount', [AmountCertificateController::class, 'index'])
 Route::resource('mandates', MandateController::class);
 Route::get('/mandate/{id}/early-balance', [MandateController::class, 'getEarlyBalance']);
 
+//===============================>> Electric
+Route::resource('electrics', ElectricController::class);
+
+
+//===============================>> Water
+Route::resource('waters', WaterController::class);
+
+//===============================>> fuel-total
+Route::resource('fuel-totals', FuelTotalController::class);
+Route::resource('fuels', FuelController::class);
+
+
+Route::resource('usage_units', TitleUsageUnitController::class);
+Route::resource('usage_units_water', TitleUsageUnitWaterController::class);
+
 
 Route::get('/result-total-fmc', [ResultFMCController::class, 'index'])->name('result-fin-mandate-certificate');
-Route::get('/result-mandate', [ResultMandateController::class, 'index'])->name('result-mandate.index');
+Route::get('/total_card/result-mandate', [ResultMandateController::class, 'index'])->name('result-mandate.index');
 
 
 //===============================>> Manage Mission
@@ -117,7 +137,6 @@ Route::post('loan-mandates', [LoanMandateController::class, 'store'])->name('loa
 //===============================>> Manage Result Operation
 Route::get('/total_card/results', [ResultController::class, 'index'])->name('result.index');
 Route::get('/result-total', [ResultTotalController::class, 'index'])->name('result-total-table');
-Route::get('/result-total-general', [ResultGeneralController::class, 'index'])->name('result-total-general-table');
 Route::get('/result-operation', [ResultOperationController::class, 'index'])->name('result-total-operation-table');
 Route::get('/result-summaries', [ResultSummariesController::class, 'index'])->name('result-total-summaries-table');
 Route::get('/result-apply', [ResultApplyController::class, 'index'])->name('result-applied-table');
@@ -159,10 +178,12 @@ Route::post('/loans/import', [LoansController::class, 'import'])->name('loans.im
 
 //===============================>> Manage Mission Exports
 Route::get('/results/export', [ResultController::class, 'export'])->name('result.export');
+Route::get('/results-mandate/export', [ResultMandateController::class, 'export'])->name('result-mandate.export');
 Route::get('/summaries/export', [ResultSummariesController::class, 'export'])->name('summaries.export');
 
 //===============================>> Manage Pdf Print
 Route::get('/results/pdf', [ResultController::class, 'exportPdf'])->name('result.exportPdf');
+Route::get('/results-mandate/pdf', [ResultMandateController::class, 'exportPdf'])->name('result-mandate.exportPdf');
 Route::get('/summaries/export-pdf', [ResultSummariesController::class, 'exportPdf'])->name('summaries.exportPdf');
 Route::get('/mission-abroad/export', [MissionAbroadController::class, 'export'])->name('table-mission-abroad');
 

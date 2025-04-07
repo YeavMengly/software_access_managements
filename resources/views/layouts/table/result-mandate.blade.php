@@ -6,15 +6,16 @@
             <div class="d-flex justify-content-between align-items-center">
                 <a class="btn btn-danger" href="{{ route('total_card') }}"
                     style="width: 120px; height: 40px; border-radius: 4px; display: flex; align-items: center; justify-content: center;">
-                    <i class="fas fa-arrow-left"></i>&nbsp;&nbsp;
+                    <i class="fas fa-arrow-left"></i>
                 </a>
             </div>
         </div>
     </div>
+
     <div class="border-wrapper mt-2 mr-4 ml-4">
         <div class="container-fluid">
             {{-- Start Form Search --}}
-            <form id="filterForm" class="max-w-md mx-auto mt-3" method="GET" action="{{ route('result.index') }}"
+            <form id="filterForm" class="max-w-md mx-auto mt-3" method="GET" action="{{ route('result-mandate.index') }}"
                 onsubmit="return validateDateField()">
                 <div class="row mb-3">
                     {{-- Filter Sub-Account --}}
@@ -71,7 +72,7 @@
                 <div class="d-flex">
                     <!-- Month Dropdown -->
                     <div style="width: 120px; height: 40px; margin-right: 10px;">
-                        <form method="GET" action="{{ route('result.index') }}">
+                        <form method="GET" action="{{ route('result-mandate.index') }}">
                             <select name="month" class="form-control" onchange="this.form.submit()">
                                 <option value="">ជ្រើសរើសខែ</option>
                                 @foreach (range(1, 12) as $month)
@@ -89,9 +90,9 @@
 
                     <!-- Year Dropdown -->
                     <div style="width: 120px; height: 40px;  margin-right: 10px;">
-                        <form method="GET" action="{{ route('result.index') }}">
+                        <form method="GET" action="{{ route('result-mandate.index') }}">
                             <select name="per_page" class="form-control" onchange="this.form.submit()">
-                                <option value="">ជ្រើសរើសឆ្នាំ</option>
+                                {{-- <option value="">ជ្រើសរើសឆ្នាំ</option> --}}
                                 @foreach ($years as $year)
                                     @php
                                         $date = \Carbon\Carbon::parse($year->date_year);
@@ -111,15 +112,15 @@
 
             {{-- Start action btn export and print --}}
             <div class="d-flex justify-content-end mt-3 mb-3 ">
-                <a href="{{ route('result.export', request()->query()) }}"
+                <a href="{{ route('result-mandate.export', request()->query()) }}"
                     class="btn btn-danger btn-width mr-2 d-flex align-items-center justify-content-center"
                     style="width: 120px; height: 40px; text-align: center; font-size: 14px; ">
-                    <i class="fas fa-download"></i> <span class="ml-2">Export</span>
+                    <i class="fas fa-file-excel fa-1x"></i>  <span class="ml-2">បម្លែង xls</span>
                 </a>
-                <a href="{{ route('result.exportPdf', request()->query()) }}"
+                <a href="{{ route('result-mandate.exportPdf', request()->query()) }}"
                     class="btn btn-primary btn-width mr-2 d-flex align-items-center justify-content-center"
                     style="width: 120px; height: 40px; text-align: center; font-size: 14px;">
-                    <i class="fas fa-print"></i> <span class="ml-2">Print</span>
+                    <i class="fas fa-print"></i> <span class="ml-2">បោះពុម្ភ</span>
                 </a>
             </div>
 
@@ -556,7 +557,7 @@
 @endsection
 
 @section('styles')
-    <style>
+    {{-- <style>
         .border-wrapper {
             border: 1px solid rgb(133, 131, 131);
         }
@@ -609,6 +610,79 @@
 
         .hidden-row {
             display: none;
+        }
+    </style> --}}
+    <style>
+        .border-wrapper {
+            border: 1px solid rgb(133, 131, 131);
+        }
+
+        .result-total-table-container{
+            padding: 6px;
+            overflow: auto;
+
+        }
+
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .btn,
+        .form-control,
+        label,
+        th,
+        td {
+            border: 1px solid rgb(133, 131, 131);
+            text-align: center;
+            padding: 4px;
+            font-family: 'Khmer OS Siemreap', sans-serif;
+            font-size: 12px;
+        }
+
+
+        h2 {
+            font-family: 'Khmer OS Muol Light', sans-serif;
+            font-size: 16px;
+        }
+
+        h3,
+        h4 {
+            font-family: 'Khmer OS Muol Light', sans-serif;
+            font-size: 14px;
+        }
+
+        .btn-width {
+            width: 120px;
+        }
+
+        .filterable {
+            cursor: pointer;
+            background-color: #f0f0f0;
+        }
+
+        .hidden-row {
+            display: none;
+        }
+
+        .hover-text {
+            display: none;
+            position: absolute;
+            bottom: 50px;
+            background-color: #333;
+            color: #fff;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 12px;
+            white-space: nowrap;
+            z-index: 1;
+            transition: opacity 0.3s ease;
+        }
+
+        a:hover .hover-text {
+            display: block;
+            opacity: 1;
         }
     </style>
 @endsection

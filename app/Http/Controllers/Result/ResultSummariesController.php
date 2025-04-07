@@ -15,25 +15,31 @@ class ResultSummariesController extends Controller
 {
     public function index()
     {
-        // Get reports with the relevant joins
-        $reports = Report::getReportSql()->get();
-        
+        // Get reports
+        $reports = Report::all();
+
         // Calculate totals based on the reports
         $totals = $this->calculateTotals($reports);
-        
+
         // Store summary report
         $this->storeSummaryReport($totals);
-    
-        // Optionally sort 'totals' by code
+
+        // Sort 'totals' by code
         if (isset($totals['code']) && is_array($totals['code'])) {
             ksort($totals['code']);
         }
-    
-        // Pass the totals to the view
+
+        // Sort 'totals'['report_key'] by value in ascending order
+         // Sort report_key directly in index
+         if (isset($totals['report_key']) && is_array($totals['report_key'])) {
+            ksort($totals['report_key']);
+        }
+        // Pass the sorted totals to the view
         return view('layouts.table.result-total-summaries-table', compact('totals'));
     }
-    
-    
+
+
+
     public function export(Request $request)
     {
         try {
@@ -135,7 +141,6 @@ class ResultSummariesController extends Controller
             $totals['report_key']["$report1"]['total_remain'] += $totals['report_key']["$report1"]['report_key_seven']["$report->report_key"]['new_credit_status']
                 - ($totals['report_key']["$report1"]['report_key_seven']["$report->report_key"]['early_balance'] + $totals['report_key']["$report1"]['report_key_seven']["$report->report_key"]['apply']);
         }
-
         return $totals;
     }
 

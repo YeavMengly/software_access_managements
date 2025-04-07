@@ -6,7 +6,7 @@
             <div class="d-flex justify-content-between align-items-center">
                 <a class="btn btn-danger" href="{{ route('total_card') }}"
                     style="width: 120px; height: 40px; border-radius: 4px; display: flex; align-items: center; justify-content: center;">
-                    <i class="fas fa-arrow-left"></i>&nbsp;&nbsp;
+                    <i class="fas fa-arrow-left"></i>
                 </a>
             </div>
         </div>
@@ -73,7 +73,7 @@
                     <div style="width: 120px; height: 40px; margin-right: 10px;">
                         <form method="GET" action="{{ route('result.index') }}">
                             <select name="month" class="form-control" onchange="this.form.submit()">
-                                <option value="">ជ្រើសរើសខែ</option>
+
                                 @foreach (range(1, 12) as $month)
                                     @php
                                         $khmerMonth = getKhmerMonth($month); // Custom function for Khmer month names
@@ -91,7 +91,7 @@
                     <div style="width: 120px; height: 40px;  margin-right: 10px;">
                         <form method="GET" action="{{ route('result.index') }}">
                             <select name="per_page" class="form-control" onchange="this.form.submit()">
-                                <option value="">ជ្រើសរើសឆ្នាំ</option>
+
                                 @foreach ($years as $year)
                                     @php
                                         $date = \Carbon\Carbon::parse($year->date_year);
@@ -109,17 +109,22 @@
                 </div>
             </div>
 
-            {{-- Start action btn export and print --}}
-            <div class="d-flex justify-content-end mt-3 mb-3 ">
+
+            <div class="d-flex justify-content-end mt-3 mb-3">
                 <a href="{{ route('result.export', request()->query()) }}"
-                    class="btn btn-danger btn-width mr-2 d-flex align-items-center justify-content-center"
-                    style="width: 120px; height: 40px; text-align: center; font-size: 14px; ">
-                    <i class="fas fa-download"></i> <span class="ml-2">Export</span>
-                </a>
-                <a href="{{ route('result.exportPdf', request()->query()) }}"
-                    class="btn btn-primary btn-width mr-2 d-flex align-items-center justify-content-center"
+                    class="btn btn-danger btn-width mr-2 d-flex align-items-center justify-content-center position-relative"
                     style="width: 120px; height: 40px; text-align: center; font-size: 14px;">
-                    <i class="fas fa-print"></i> <span class="ml-2">Print</span>
+                    <i class="fas fa-file-excel fa-1x"></i>
+                    <span class="ml-2">បម្លែង xls</span>
+                    <div class="hover-text">Export to Excel</div> <!-- Hover Text -->
+                </a>
+
+                <a href="{{ route('result.exportPdf', request()->query()) }}"
+                    class="btn btn-primary btn-width mr-2 d-flex align-items-center justify-content-center position-relative"
+                    style="width: 120px; height: 40px; text-align: center; font-size: 14px;">
+                    <i class="fas fa-print"></i>
+                    <span class="ml-2">បោះពុម្ភ</span>
+                    <div class="hover-text">Print PDF</div> <!-- Hover Text -->
                 </a>
             </div>
 
@@ -217,7 +222,7 @@
                                         <td colspan="1"></td>
                                         <td colspan="1"></td>
                                         <td colspan="1"></td>
-                                        <td colspan="1">
+                                        <td colspan="1" style="text-align: start;">
                                             {{ $totalsByCode['name'] }}</td>
                                         <td>{{ number_format($totalsByCode['fin_law'], 0, ' ', ' ') }}</td>
                                         <td>{{ number_format($totalsByCode['current_loan'], 0, ' ', ' ') }}</td>
@@ -495,7 +500,7 @@
                                 {{--                  Total                  --}}
                                 <tr>
                                     <td colspan="5" style="border: 1px solid black; text-align: center;">
-                                        <strong>សរុប</strong>: ការរាយការណ៍
+                                        <strong>សរុប:</strong>
                                     </td>
                                     <td colspan="1" style="color: {{ $totals['fin_law'] < 0 ? 'red' : 'black' }};">
                                         {{ number_format($totals['fin_law'], 0, ' ', ' ') }}</td>
@@ -561,9 +566,8 @@
             border: 1px solid rgb(133, 131, 131);
         }
 
-        .result-total-table-container,
-        .container-fluid {
-            padding: 4px;
+        .result-total-table-container {
+            padding: 6px;
             overflow: auto;
 
         }
@@ -583,19 +587,19 @@
             text-align: center;
             padding: 4px;
             font-family: 'Khmer OS Siemreap', sans-serif;
-            font-size: 14px;
+            font-size: 12px;
         }
 
 
         h2 {
             font-family: 'Khmer OS Muol Light', sans-serif;
-            font-size: 18px;
+            font-size: 16px;
         }
 
         h3,
         h4 {
             font-family: 'Khmer OS Muol Light', sans-serif;
-            font-size: 16px;
+            font-size: 14px;
         }
 
         .btn-width {
@@ -609,6 +613,25 @@
 
         .hidden-row {
             display: none;
+        }
+
+        .hover-text {
+            display: none;
+            position: absolute;
+            bottom: 50px;
+            background-color: #333;
+            color: #fff;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 12px;
+            white-space: nowrap;
+            z-index: 1;
+            transition: opacity 0.3s ease;
+        }
+
+        a:hover .hover-text {
+            display: block;
+            opacity: 1;
         }
     </style>
 @endsection

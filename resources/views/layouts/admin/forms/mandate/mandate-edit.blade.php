@@ -103,7 +103,7 @@
                                 <div class="col-md-4 d-flex flex-column align-items-start">
                                     <!-- Date Field -->
                                     <div class="form-group">
-                                        <label for="date_mandate"><strong>ជ្រើសរើស ថ្ងៃ ខែ ឆ្នាំ:</strong></label>
+                                        <label for="date_mandate"><strong>កាលបរិច្ឆេទ:</strong></label>
                                         <input type="date" class="form-control" id="date_mandate" name="date_mandate"
                                             value="{{ old('date_mandate', $mandate->date_mandate) }}"
                                             style="height: 40px; width: 230px;">

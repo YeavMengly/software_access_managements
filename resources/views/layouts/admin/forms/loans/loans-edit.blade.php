@@ -148,12 +148,12 @@
                     <div class="card-body px-5 py-4">
                         <form action="{{ route('loans.update', $loan->id) }}" method="POST" enctype="multipart/form-data">
                             @csrf
-                            @method('PUT') 
+                            @method('PUT')
 
                             <div class="row mb-4">
                                 <!-- Column 1 -->
                                 <div class="col-md-4">
-                                    <div class="form-group">
+                                    {{-- <div class="form-group">
                                         <label for="searchReportKey"
                                             class="form-label"><strong>លេខកូដកម្មវិធី:</strong></label>
                                         <input type="text" id="searchReportKey" class="form-control"
@@ -164,6 +164,37 @@
                                             onclick="getSelectedReportKey()">
                                             @foreach ($reports as $report)
                                                 <option value="{{ $report->id }}">
+                                                    {{ $report->subAccountKey->sub_account_key }} >
+                                                    {{ $report->report_key }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                    </div> --}}
+                                    <div class="form-group">
+                                        <label for="searchReportKey"
+                                            class="font-weight-bold"><strong>លេខកូដកម្មវិធី:</strong></label>
+
+                                        <!-- Input field for searching -->
+                                        <input type="text" id="searchReportKey" class="form-control"
+                                            placeholder="ស្វែងរកលេខកូដ អនុគណនី​ នឹងកម្មវិធី..."
+                                            onkeyup="filterReportKeys(event)"
+                                            style="width: 230px; height: 40px; text-align: center;"
+                                            oninput="resetReportKeySelection()">
+
+                                        <!-- Hidden input to store the selected report key value -->
+                                        <input type="hidden" name="report_key" id="hiddenReportKeyInput"
+                                            value="{{ $loan->report_key }}">
+
+                                        <!-- Display the count of search results -->
+                                        <p id="reportResultCount" style="font-weight: bold; margin-top: 8px;">ចំនួន: 0</p>
+
+                                        <!-- Dropdown for selecting the report -->
+                                        <select id="reportKeySelect" class="form-control" size="5"
+                                            onclick="getSelectedReportKey()"
+                                            style="height: 120px; width: 230px; text-align: left; ">
+                                            @foreach ($reports as $report)
+                                                <option value="{{ $report->id }}"
+                                                    {{ $report->id == $loan->report_key ? 'selected' : '' }}>
                                                     {{ $report->subAccountKey->sub_account_key }} >
                                                     {{ $report->report_key }}
                                                 </option>
@@ -215,8 +246,8 @@
                                         <label for="decrease"><strong>ថយ:</strong></label>
                                         <input type="number" name="decrease" id="decrease"
                                             class="form-control @error('decrease') is-invalid @enderror" min="0"
-                                            style="width: 230px; height: 40px;" value="{{ old('decrease', $loan->decrease) }}"
-                                            oninput="formatNumber(this)">
+                                            style="width: 230px; height: 40px;"
+                                            value="{{ old('decrease', $loan->decrease) }}" oninput="formatNumber(this)">
                                         @error('decrease')
                                             <div class="invalid-feedback">{{ $message }}</div>
                                         @enderror
@@ -226,7 +257,8 @@
                                         <input type="number" name="editorial" id="editorial"
                                             class="form-control @error('editorial') is-invalid @enderror" min="0"
                                             style="width: 230px; height: 40px;"
-                                            value="{{ old('editorial', $loan->editorial) }}" oninput="formatNumber(this)">
+                                            value="{{ old('editorial', $loan->editorial) }}"
+                                            oninput="formatNumber(this)">
                                         @error('editorial')
                                             <div class="invalid-feedback">{{ $message }}</div>
                                         @enderror
@@ -332,8 +364,40 @@
 
         })(jQuery); // End of use strict
     </script>
-
     <script>
+        // Function to handle the selected report key and update the input field
+        function getSelectedReportKey() {
+            const selectElement = document.getElementById('reportKeySelect');
+            const selectedOption = selectElement.options[selectElement.selectedIndex];
+            const searchInputElement = document.getElementById('searchReportKey');
+
+            // Set the input field value to the selected option's text
+            searchInputElement.value = selectedOption.text.trim();
+
+            // Also ensure the form is submitting the correct report_key value
+            document.getElementById('hiddenReportKeyInput').value = selectedOption.value;
+        }
+
+        // Function to filter report keys based on user input
+        function filterReportKeys(event) {
+            const searchValue = event.target.value.toLowerCase();
+            const selectElement = document.getElementById('reportKeySelect');
+            const options = selectElement.options;
+
+            let count = 0;
+            for (let i = 0; i < options.length; i++) {
+                const optionText = options[i].text.toLowerCase();
+                const isMatch = optionText.includes(searchValue);
+
+                options[i].style.display = isMatch ? 'block' : 'none';
+                if (isMatch) count++;
+            }
+
+            document.getElementById('reportResultCount').innerText = `ចំនួន: ${count}`;
+        }
+    </script>
+
+    {{-- <script>
         function updateApplyValue() {
             let finLaw = parseFloat(document.getElementById('fin_law').value) || 0;
             let internalIncrease = parseFloat(document.getElementById('internal_increase').value) || 0;
@@ -388,5 +452,5 @@
             const selectedValue = selectElement.value;
             console.log('Selected Report Key ID:', selectedValue); // For debugging
         }
-    </script>
+    </script> --}}
 @endsection

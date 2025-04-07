@@ -36,97 +36,6 @@
                 </div>
             @endif
 
-            {{-- <div class="form-container">
-                <form action="{{ route('loans.store') }}" method="POST" enctype="multipart/form-data">
-                    @csrf
-
-                    <div class="row d-flex justify-content-center">
-                        <div class="col-md-3 d-flex flex-column align-items-center">
-                            <div class="form-group">
-                                <label for="searchReportKey"
-                                    class="font-weight-bold"><strong>លេខកូដកម្មវិធី:</strong></label>
-                                <input type="text" id="searchReportKey" class="form-control"
-                                    placeholder="ស្វែងរកលេខកូដ អនុគណនី​ នឹងកម្មវិធី..." onkeyup="filterReportKeys(event)"
-                                    style="width: 100%; height: 40px; text-align: center;"
-                                    oninput="resetReportKeySelection()">
-                                <p id="reportResultCount" style="font-weight: bold; margin-top: 8px;">ចំនួន: 0</p>
-                                <select name="report_key" id="reportKeySelect" class="form-control" size="5"
-                                    onclick="getSelectedReportKey()" style="height: 130px; width: 100%; text-align: left;">
-                                    @foreach ($reports as $report)
-                                        <option value="{{ $report->id }}">
-                                            {{ $report->subAccountKey->sub_account_key }} > {{ $report->report_key }}
-                                        </option>
-                                    @endforeach
-                                </select>
-                            </div>
-                        </div>
-
-                        <div class="col-md-3 d-flex flex-column align-items-center">
-                            <div class="form-group">
-                                <label for=""> <strong>កើនផ្ទៃក្នុង:</strong></label>
-                                <input type="number" name="internal_increase" id="internal_increase"
-                                    class="form-control @error('internal_increase') is-invalid @enderror"
-                                    style="width: 100%; height: 40px;" min="0" oninput="formatNumber(this)">
-                                @error('internal_increase')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                @enderror
-                            </div>
-
-                            <div class="form-group">
-                                <label for=""> <strong>មិនបានគ្រោងទុក:</strong></label>
-                                <input type="number" name="unexpected_increase" id="unexpected_increase"
-                                    class="form-control @error('unexpected_increase') is-invalid @enderror"
-                                    style="width: 100%; height: 40px;" min="0" oninput="formatNumber(this)">
-                                @error('unexpected_increase')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                @enderror
-                            </div>
-
-                            <div class="form-group">
-                                <label for="">
-                                    <strong>បំពេញបន្ថែម:</strong>
-                                </label>
-                                <input type="number" name="additional_increase" id="additional_increase"
-                                    class="form-control @error('additional_increase') is-invalid @enderror"
-                                    style="width: 100%; height: 40px;" min="0" oninput="formatNumber(this)">
-                                @error('additional_increase')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                @enderror
-                            </div>
-                        </div>
-
-                        <div class="col-md-3 d-flex flex-column align-items-center">
-                            <div class="form-group">
-                                <label for="">
-                                    <strong>ថយ:</strong>
-                                </label>
-                                <input type="number" name="decrease" id="decrease"
-                                    class="form-control @error('decrease') is-invalid @enderror" min="0"
-                                    style="width: 100%; height: 40px;" oninput="formatNumber(this)">
-                                @error('decrease')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                @enderror
-                            </div>
-
-                            <div class="form-group">
-                                <label for=""> <strong>វិចារណកម្ម:</strong></label>
-                                <input type="number" name="editorial" id="editorial"
-                                    class="form-control @error('editorial') is-invalid @enderror" min="0"
-                                    style="width: 100%; height: 40px;" oninput="formatNumber(this)">
-                                @error('editorial')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                @enderror
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="d-flex align-items-center">
-                        <button type="submit" class="btn btn-primary ml-auto" style="width: 120px; height: 40px;">
-                            <i class="fas fa-save"></i>&nbsp;រក្សាទុក
-                        </button>
-                    </div>
-                </form>
-            </div> --}}
             <div class="d-flex justify-content-center align-items-center  ">
                 <div class="card shadow-lg w-65" style="max-width: 900px;">
                     <!-- Centered Card Title -->
@@ -147,11 +56,10 @@
                                             onkeyup="filterReportKeys(event)" oninput="resetReportKeySelection()">
                                         <p id="reportResultCount" class="mt-2 font-weight-bold">ចំនួន: 0</p>
                                         <select name="report_key" id="reportKeySelect" class="form-control" size="5"
-                                            onclick="getSelectedReportKey()">
+                                            onclick="getSelectedReportKey()"
+                                            style="height: 130px; width: 100%; text-align: left;">
                                             @foreach ($reports as $report)
-                                                <option value="{{ $report->id }}">
-                                                    {{ $report->subAccountKey->sub_account_key }} >
-                                                    {{ $report->report_key }}
+                                                <option value="{{ $report->id }}">{{ $report->subAccountKey->sub_account_key }} | {{ $report->report_key }}
                                                 </option>
                                             @endforeach
                                         </select>
@@ -273,6 +181,18 @@
             font-size: 14px;
             height: 40px;
             width: 230px;
+        }
+
+        /* Hide number input arrows in Chrome, Safari, Edge, and Opera */
+        input[type=number]::-webkit-inner-spin-button,
+        input[type=number]::-webkit-outer-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+
+        /* Hide number input arrows in Firefox */
+        input[type=number] {
+            -moz-appearance: textfield;
         }
     </style>
 @endsection

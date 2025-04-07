@@ -8,38 +8,19 @@
                     style="width: 120px; height: 40px;">
                     <i class="fas fa-arrow-left"></i>
                 </a>
-                <h3 style="font-weight: 500;">តារាងទិន្នន័យសលាកបត្រ</h3>
+                <h3 style="font-weight: 500;">តារាងសលាកបត្រ</h3>
                 <a id="submit-button" class="btn btn-primary d-flex align-items-center justify-content-center"
                     href="{{ route('certificate-data.create') }}" style="width: 120px; height: 40px; border-radius: 4px;">
                     បញ្ចូល
                 </a>
+
+                {{-- Include Loading Modal --}}
+                @include('partials.loading-modal')
+
             </div>
 
-            {{-- <form class="max-w-md mx-auto mt-2" method="GET" action="">
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="input-group my-3" style="width: 180px; display: flex; align-items: center;">
-                            <!-- Search Input -->
-                            <input type="search" name="search" value="{{ request('search') }}"
-                                class="form-control" placeholder="ស្វែងរកអនុគណនី" aria-label="Search Sub Account Key"
-                                style="flex-grow: 1; height: 40px; border-top-right-radius: 0; border-bottom-right-radius: 0;">
-                            <!-- Search Button -->
-                            <button type="submit" class="btn btn-primary"
-                                style="width: 40px; height: 40px; border-top-left-radius: 0; border-bottom-left-radius: 0;">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
-                                    viewBox="0 0 50 50" fill="white">
-                                    <path
-                                        d="M 21 3 C 11.621094 3 4 10.621094 4 20 C 4 29.378906 11.621094 37 21 37 C 24.710938 37 28.140625 35.804688 30.9375 33.78125 L 44.09375 46.90625 L 46.90625 44.09375 L 33.90625 31.0625 C 36.460938 28.085938 38 24.222656 38 20 C 38 10.621094 30.378906 3 21 3 Z M 21 5 C 29.296875 5 36 11.703125 36 20 C 36 28.296875 29.296875 35 21 35 C 12.703125 35 6 28.296875 6 20 C 6 11.703125 12.703125 5 21 5 Z">
-                                    </path>
-                                </svg>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </form> --}}
-
-            {{-- <form id="filterForm" class="max-w-md mx-auto mt-3" method="GET" action=""
-                onsubmit="return validateDateField()">
+            <form id="filterForm" class="max-w-md mx-auto mt-3" method="GET"
+                action="{{ route('certificate-data.index') }}" onsubmit="return validateDateField()">
                 <div class="row mb-3">
                     <div class="col-md-2 d-flex">
                         <input type="text" name="sub_account_key_id" value="{{ request('sub_account_key_id') }}"
@@ -47,54 +28,14 @@
                         &nbsp;
                         <input type="text" name="report_key" value="{{ request('report_key') }}"
                             class="form-control mb-2" placeholder="កូដកម្មវិធី" style="width: 120px; height: 40px;">
-                    </div>
-                    <div class="col-md-2">
-                        <div class="row mb-3">
-                            <div class="col-md-6">
-                                <label for="start_date">ថ្ងៃចាប់ផ្ដើម</label>
-                                <input type="date" name="start_date" value="{{ request('start_date') }}"
-                                    class="form-control mb-2" placeholder="Start Date (YYYY-MM-DD)">
-                            </div>
-                            <div class="col-md-6">
-                                <label for="end_date">ថ្ងៃបញ្ចប់</label>
-                                <input type="date" name="end_date" value="{{ request('end_date') }}"
-                                    class="form-control mb-2" placeholder="End Date (YYYY-MM-DD)">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-12">
-                        <div class="input-group ">
-                            <button type="submit" class="btn btn-primary mr-2" style="width: 120px; height: 40px;">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 50 50">
-                                    <path
-                                        d="M 21 3 C 11.621094 3 4 10.621094 4 20 C 4 29.378906 11.621094 37 21 37 C 24.710938 37 28.140625 35.804688 30.9375 33.78125 L 44.09375 46.90625 L 46.90625 44.09375 L 33.90625 31.0625 C 36.460938 28.085938 38 24.222656 38 20 C 38 10.621094 30.378906 3 21 3 Z M 21 5 C 29.296875 5 36 11.703125 36 20 C 36 28.296875 29.296875 35 21 35 C 12.703125 35 6 28.296875 6 20 C 6 11.703125 12.703125 5 21 5 Z">
-                                    </path>
-                                </svg>
-                                ស្វែងរក
-                            </button>
-                            <button type="button" id="resetBtn" class="btn btn-danger"
-                                style="width: 120px; height: 40px;">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                                    class="bi bi-x-circle" viewBox="0 0 16 16">
-                                    <path
-                                        d="M8 1a7 7 0 1 0 0 14A7 7 0 0 0 8 1zm3.646 4.646a.5.5 0 0 1 0 .708L8.707 8l2.939 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.939a.5.5 0 1 1-.708-.708L7.293 8 4.354 5.354a.5.5 0 1 1 .708-.708L8 7.293l2.646-2.647a.5.5 0 0 1 .707 0z" />
-                                </svg>
-                                កំណត់ឡើងវិញ
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </form> --}}
-
-            <form id="filterForm" class="max-w-md mx-auto mt-3" method="GET" action="{{ route('certificate-data.index') }}" onsubmit="return validateDateField()">
-                <div class="row mb-3">
-                    <div class="col-md-2 d-flex">
-                        <input type="text" name="sub_account_key_id" value="{{ request('sub_account_key_id') }}"
-                            class="form-control mb-2" placeholder="អនុគណនី" style="width: 120px; height: 40px;">
                         &nbsp;
-                        <input type="text" name="report_key" value="{{ request('report_key') }}"
-                            class="form-control mb-2" placeholder="កូដកម្មវិធី" style="width: 120px; height: 40px;">
+                        <input type="date" name="start_date" id="start_date" value="{{ request('start_date') }}"
+                            class="form-control" style="height: 40px; width: 200px;">
+                        &nbsp;
+                        <input type="date" name="end_date" id="end_date" value="{{ request('end_date') }}"
+                            class="form-control" style="height: 40px; width: 200px;">
                     </div>
+
                     <div class="col-md-12">
                         <div class="input-group">
                             <button type="submit" class="btn btn-primary mr-2" style="width: 120px; height: 40px;">
@@ -103,8 +44,10 @@
                                 </svg>
                                 ស្វែងរក
                             </button>
-                            <button type="button" id="resetBtn" class="btn btn-danger" style="width: 120px; height: 40px;" onclick="resetForm()">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-circle" viewBox="0 0 16 16">
+                            <button type="button" id="resetBtn" class="btn btn-danger" style="width: 120px; height: 40px;"
+                                onclick="resetForm()">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                    class="bi bi-x-circle" viewBox="0 0 16 16">
                                     <path d="..."></path>
                                 </svg>
                                 កំណត់ឡើងវិញ
@@ -113,13 +56,12 @@
                     </div>
                 </div>
             </form>
-            
         </div>
     </div>
 
     <div class="border-wrapper ml-2 mr-2">
         <div class="d-flex justify-content-end">
-            <div class="btn-group mb-3" role="group" aria-label="Mission Type Filter">
+            {{-- <div class="btn-group mb-3" role="group" aria-label="Mission Type Filter">
                 <a href="{{ route('certificate-data.index') }}"
                     class="btn btn-outline-primary {{ !$selectedMissionType ? 'active' : '' }}">
                     ទាំងអស់
@@ -130,20 +72,34 @@
                         {{ $type->mission_type }}
                     </a>
                 @endforeach
+            </div> --}}
+            <div class="btn-group mb-3" role="group" aria-label="Mission Type Filter">
+                <a href="{{ route('certificate-data.index', array_merge(request()->all(), ['mission_type' => ''])) }}"
+                    class="btn btn-outline-primary {{ empty($selectedMissionType) ? 'active' : '' }}">
+                    ទាំងអស់
+                </a>
+                @foreach ($missionTypes as $type)
+                    <a href="{{ route('certificate-data.index', array_merge(request()->all(), ['mission_type' => $type->id])) }}"
+                        class="btn btn-outline-primary {{ $selectedMissionType == $type->id ? 'active' : '' }}">
+                        {{ $type->mission_type }}
+                    </a>
+                @endforeach
             </div>
+
         </div>
         <div class="result-total-table-container">
             <div class="d-flex justify-content-end mb-2">
                 <div style="width: 120px;">
-                    <select name="per_page" class="form-control" onchange="window.location.href=this.value;">
-                        <option value="{{ url()->current() }}?per_page=25"
+                    <select name="per_page" class="form-control" onchange="window.location.href = this.value;">
+                        <option value="{{ request()->fullUrlWithQuery(['per_page' => 25]) }}"
                             {{ request('per_page') == 25 ? 'selected' : '' }}>បង្ហាញ 25</option>
-                        <option value="{{ url()->current() }}?per_page=50"
+                        <option value="{{ request()->fullUrlWithQuery(['per_page' => 50]) }}"
                             {{ request('per_page') == 50 ? 'selected' : '' }}>បង្ហាញ 50</option>
-                        <option value="{{ url()->current() }}?per_page=100"
+                        <option value="{{ request()->fullUrlWithQuery(['per_page' => 100]) }}"
                             {{ request('per_page') == 100 ? 'selected' : '' }}>បង្ហាញ 100</option>
                     </select>
                 </div>
+
             </div>
             <table class="table table-striped table-hover ">
                 <thead>
@@ -153,8 +109,8 @@
                         <th style="border: 1px solid black; width: 120px;">កម្មវិធី</th>
                         <th style="border: 1px solid black;">ថវិកា</th>
                         <th style="border: 1px solid black; width: 120px;">ប្រភេទ</th>
-                        <th style="border: 1px solid black; width: 120px;">ថ្ងៃខែឆ្នាំ</th>
-                        <th style="border: 1px solid black;">ឯកសារភ្ជាប់</th>
+                        <th style="border: 1px solid black; width: 120px;">កាលបរិច្ឆេទ</th>
+                        <th style="border: 1px solid black; ">ឯកសារភ្ជាប់</th>
                         <th style="border: 1px solid black; width: 120px;">ស្ថានភាព</th>
                     </tr>
                 </thead>
@@ -168,10 +124,11 @@
                     @else
                         @foreach ($certificatesData as $index => $certificateData)
                             <tr>
-                                
+
                                 <td style="border: 1px solid black; text-align: center;">
-                                    {{ $index +1}}
+                                    {{ ($certificatesData->currentPage() - 1) * $certificatesData->perPage() + $index + 1 }}
                                 </td>
+
                                 <td style="border: 1px solid black; text-align: center;">
                                     {{ $certificateData->report && $certificateData->report->subAccountKey ? $certificateData->report->subAccountKey->sub_account_key : 'N/A' }}
                                 </td>
@@ -185,21 +142,32 @@
                                     {{ $certificateData->missionType->mission_type ?? 'N/A' }}</td>
                                 <td style="border: 1px solid black;">
                                     {{ $certificateData->date_certificate ?? 'N/A' }}</td>
+
                                 <td style="border: 1px solid black;">
                                     @if ($certificateData->attachments)
                                         <div style="margin-top: 5px;">
                                             @foreach (json_decode($certificateData->attachments) as $attachment)
                                                 <a href="{{ Storage::url($attachment) }}" target="_blank"
-                                                    class="btn btn-info btn-sm">
-                                                    📄PDF
+                                                    class="btn btn-light btn-sm" style="margin-bottom: 5px;"
+                                                    data-bs-toggle="tooltip" data-bs-placement="top" title="Open File">
+                                                    <i class="fa fa-folder-open"></i>
                                                 </a>
+
+                                                <a href="{{ Storage::url($attachment) }}" download
+                                                    class="btn btn-success btn-sm" style="margin-bottom: 5px;"
+                                                    data-bs-toggle="tooltip" data-bs-placement="top"
+                                                    title="Download File">
+                                                    <i class="fa fa-download"></i>
+                                                </a>
+
                                                 <br>
                                             @endforeach
                                         </div>
                                     @else
-                                        <span>No attachment available</span>
+                                        <span>គ្មានឯកសារ</span>
                                     @endif
                                 </td>
+
                                 <td style="border: 1px solid black; text-align: center; width: 120px;">
                                     <div style="display: flex; justify-content: center; gap: 5px;">
                                         <form id="delete-form-{{ $certificateData->id }}"
@@ -233,27 +201,34 @@
                     </tr>
                 </tfoot>
             </table>
+
             <div class="d-flex justify-content-between align-items-center mt-4">
                 <div>
+                    <!-- Existing Pagination Code -->
                     <nav aria-label="Page navigation example">
                         <ul class="pagination">
+                            {{-- Previous Button --}}
                             <li class="page-item{{ $certificatesData->onFirstPage() ? ' disabled' : '' }}">
                                 <a class="page-link"
-                                    href="{{ $certificatesData->previousPageUrl() }}&per_page={{ request('per_page') }}"
+                                    href="{{ $certificatesData->previousPageUrl() ? request()->fullUrlWithQuery(array_merge(request()->query(), ['page' => $certificatesData->currentPage() - 1])) : '#' }}"
                                     aria-label="Previous">
                                     <span aria-hidden="true">&laquo;</span>
                                     <span class="sr-only">Previous</span>
                                 </a>
                             </li>
+
+                            {{-- Page Numbers --}}
                             @for ($i = 1; $i <= $certificatesData->lastPage(); $i++)
                                 <li class="page-item{{ $certificatesData->currentPage() == $i ? ' active' : '' }}">
                                     <a class="page-link"
-                                        href="{{ $certificatesData->url($i) }}&per_page={{ request('per_page') }}">{{ $i }}</a>
+                                        href="{{ request()->fullUrlWithQuery(array_merge(request()->query(), ['page' => $i])) }}">{{ $i }}</a>
                                 </li>
                             @endfor
+
+                            {{-- Next Button --}}
                             <li class="page-item{{ !$certificatesData->hasMorePages() ? ' disabled' : '' }}">
                                 <a class="page-link"
-                                    href="{{ $certificatesData->nextPageUrl() }}&per_page={{ request('per_page') }}"
+                                    href="{{ $certificatesData->nextPageUrl() ? request()->fullUrlWithQuery(array_merge(request()->query(), ['page' => $certificatesData->currentPage() + 1])) : '#' }}"
                                     aria-label="Next">
                                     <span aria-hidden="true">&raquo;</span>
                                     <span class="sr-only">Next</span>
@@ -262,6 +237,7 @@
                         </ul>
                     </nav>
                 </div>
+
                 <div>
                     <p class="text-muted">បង្ហាញ {{ $certificatesData->firstItem() }} ដល់
                         {{ $certificatesData->lastItem() }}
@@ -269,6 +245,7 @@
                         {{ $certificatesData->total() }} លទ្ធផល</p>
                 </div>
             </div>
+
         </div>
     </div>
 @endsection
@@ -278,21 +255,31 @@
             padding-left: 16px;
             padding-right: 16px;
         }
+
         .description {
             height: 220px;
             overflow-y: auto;
         }
+
         .table-container {
             width: 100%;
         }
+
         table {
             width: 100%;
             border-collapse: collapse;
         }
+
         h3 {
             font-family: 'Khmer OS Muol Light', sans-serif;
             font-size: 16px;
         }
+
+        h5 {
+            font-family: 'Khmer OS Siemreap', sans-serif;
+            font-size: 14px;
+        }
+
         .btn,
         .form-control,
         label,
@@ -304,6 +291,7 @@
             font-size: 14px;
             padding: 6px;
         }
+
         .wrap-text {
             white-space: nowrap;
         }
@@ -341,29 +329,23 @@
             });
         }
     </script>
+
     <script>
-        document.getElementById('submit-button').addEventListener('click', function() {
-            var loader = document.getElementById('loader');
-            var plusIcon = document.getElementById('plus-icon');
+        function resetForm() {
+            // Clear all form input fields
+            document.querySelectorAll('#filterForm input').forEach(input => input.value = '');
 
-            loader.style.display = 'inline-block';
-            plusIcon.style.display = 'none';
-
-            setTimeout(function() {
-                loader.style.display = 'none';
-                plusIcon.style.display = 'inline-block';
-            }, 2000); 
-        });
+            // Optionally reload the page to reset filters in the URL
+            window.location.href = "{{ route('certificate-data.index') }}";
+        }
     </script>
 
-<script>
-    function resetForm() {
-        // Clear all form input fields
-        document.querySelectorAll('#filterForm input').forEach(input => input.value = '');
-
-        // Optionally reload the page to reset filters in the URL
-        window.location.href = "{{ route('certificate-data.index') }}";
-    }
-</script>
-
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+            var tooltipList = tooltipTriggerList.map(function(tooltipTriggerEl) {
+                return new bootstrap.Tooltip(tooltipTriggerEl);
+            });
+        });
+    </script>
 @endsection
