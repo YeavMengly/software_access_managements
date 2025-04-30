@@ -13,6 +13,12 @@ class UserSeeder extends Seeder
      */
     public function run(): void
     {
+
+        /*
+        |-------------------------------------------------------------------------------
+        | Create data into table
+        |-------------------------------------------------------------------------------
+        */
         User::create([
             'name' => 'admin',
             'phone_number' => '077335157',

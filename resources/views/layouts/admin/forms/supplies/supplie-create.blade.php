@@ -1,11 +1,11 @@
 @extends('layouts.master')
 
-@section('form-fuel-upload')
+@section('form-supplie-upload')
     <div class="border-wrapper">
         <div class="result-total-table-container">
             <div class="row">
                 <div class="col-lg-12 d-flex justify-content-between align-items-center margin-tb mb-4">
-                    <a class="btn btn-danger" href="{{ route('fuels.index') }}"
+                    <a class="btn btn-danger" href="{{ route('supplies.index') }}"
                         style="width: 120px; height: 40px; border-radius: 4px; display: flex; align-items: center; justify-content: center;">
                         <i class="fas fa-arrow-left"></i>
                     </a>
@@ -36,40 +36,27 @@
 
             <div class="d-flex justify-content-center align-items-center">
                 <div class="card shadow-lg" style="width: 70%;">
-                    <h3 class="card-title text-center mt-4" style="font-weight: 500;">បង្កើតទិន្នន័យប្រេងឥន្ធនៈ</h3>
+                    <h3 class="card-title text-center mt-4" style="font-weight: 500;">បង្កើតទិន្នន័យសម្ភារៈ</h3>
                     <div class="card-body px-5 py-4">
 
-                        <form action="{{ route('fuels.store') }}" method="POST" enctype="multipart/form-data"
+                        <form action="{{ route('supplies.store') }}" method="POST" enctype="multipart/form-data"
                             onsubmit="validateForm(event)">
                             @csrf
                             <div class="row g-3">
                                 <!-- Left Column -->
                                 <div class="col-md-4">
                                     <div class="form-group">
-                                        <label for="fuel_date"><strong>ស្តុកប្រេង:</strong></label>
+                                        <label for="fuel_date"><strong>ស្តុកសម្ភារៈ :</strong></label>
 
-                                        <select id="fuel_id" name="fuel_id" class="form-control" style="height: 40px;"
+                                        <select id="supplie_id" name="supplie_id" class="form-control" style="height: 40px;"
                                             required onclick="getSelectedValue()">
                                             <option style="text-align: left;" value="">-- ជ្រើសរើសកាលបរិច្ឆេទ --
                                             </option>
-                                            @foreach ($fuelData as $fuel)
-                                                <option value="{{ $fuel->warehouse_entry_number }}">
-                                                    {{ $fuel->warehouse_entry_number }} - {{ $fuel->release_date }}
-                                                </option>
+                                            @foreach ($totalSupplie as $ts)
+                                                <option value="{{ $ts->release_date }}">{{ $ts->release_date }}</option>
                                             @endforeach
                                         </select>
-
-                                        {{-- <select id="fuel_id" name="fuel_id" class="form-control select2"
-                                            style="height: 40px;" required>
-                                            <option value="">-- ជ្រើសរើសកាលបរិច្ឆេទ --</option>
-                                            @foreach ($fuelData as $fuel)
-                                                <option value="{{ $fuel->warehouse_entry_number }}">
-                                                    {{ $fuel->warehouse_entry_number }} - {{ $fuel->release_date }}
-                                                </option>
-                                            @endforeach
-                                        </select> --}}
-
-                                        @error('fuel_id')
+                                        @error('supplie_id')
                                             <div class="invalid-feedback">{{ $message }}</div>
                                         @enderror
                                     </div>
@@ -107,45 +94,15 @@
 
                                 <!-- Right Column (Dynamic Fields) -->
                                 <div class="col-md-4">
-                                    <div id="dynamic-field-container">
-                                        <div class="row" id="dynamic-row-1">
-                                            <div class="col-md-6">
-                                                <div class="form-group">
-                                                    <label for="oil_type"><strong>ប្រភេទប្រេង:</strong></label>
-                                                    <select name="oil_type[]" class="form-control"
-                                                        style="height: 40px; width: 100%;">
-                                                        <option value="" disabled selected>ជ្រើសរើសប្រភេទប្រេង
-                                                        </option>
-                                                        @foreach ($fuelTags as $fuelTag)
-                                                            <option value="{{ $fuelTag->fuel_tag }}"
-                                                                style="text-align: start;">
-                                                                {{ $fuelTag->fuel_tag }}
-                                                            </option>
-                                                        @endforeach
-                                                    </select>
-                                                    @error('oil_type')
-                                                        <div class="invalid-feedback">{{ $message }}</div>
-                                                    @enderror
-                                                </div>
-                                            </div>
-                                            <div class="col-md-6">
-                                                <div class="form-group">
-                                                    <label for=""><strong>បញ្ចេញ:</strong></label>
-                                                    <input type="text" name="quantity[]" class="form-control"
-                                                        style="height: 40px; width: 100%;">
-                                                    @error('quantity')
-                                                        <div class="invalid-feedback">{{ $message }}</div>
-                                                    @enderror
-                                                </div>
-                                            </div>
-                                        </div>
+                                    <div class="form-group">
+                                        <label for="quantity">បរិមាណ</label>
+                                        <input type="text" class="form-control" name="quantity_used" id="quantity_used"
+                                            required>
                                     </div>
 
-                                    <div class="mt-2">
-                                        <button type="button" class="btn btn-success" id="add-row"><i
-                                                class="fas fa-plus"></i> បន្ថែម</button>
-                                        <button type="button" class="btn btn-danger" id="remove-row"><i
-                                                class="fas fa-trash"></i> លុប</button>
+                                    <div class="form-group">
+                                        <label for="unit">ឯកតា</label>
+                                        <input type="text" class="form-control" name="unit" id="unit" required>
                                     </div>
                                 </div>
                             </div>
@@ -343,7 +300,7 @@
         // Filter options as user types in the search input
         function filterOptions() {
             var input = document.getElementById("searchInput").value.toLowerCase();
-            var select = document.getElementById("fuel_id");
+            var select = document.getElementById("supplie_id");
             var options = select.getElementsByTagName("option");
             var count = 0;
 
@@ -363,7 +320,7 @@
 
         // Populate the input field with the selected value when an option is clicked
         function getSelectedValue() {
-            var selectElement = document.getElementById("fuel_id");
+            var selectElement = document.getElementById("supplie_id");
             var selectedOption = selectElement.options[selectElement.selectedIndex];
 
             if (selectedOption) {
@@ -372,60 +329,12 @@
             }
         }
     </script>
-    <script>
-        let rowCount = 1; // Track the row count
-
-        // Add row function
-        document.getElementById('add-row').addEventListener('click', function() {
-            rowCount++;
-            let newRow = document.createElement('div');
-            newRow.classList.add('row');
-            newRow.setAttribute('id', 'dynamic-row-' + rowCount);
-
-            newRow.innerHTML = `
-            <div class="col-md-6">
-                <div class="form-group">
-                    <label for="oil_type"><strong>ប្រភេទប្រេង:</strong></label>
-                        <select name="oil_type[]" class="form-control" style="height: 40px; width: 100%;">
-                            <option value="" disabled selected>ជ្រើសរើសប្រភេទប្រេង</option>
-                            @foreach ($fuelTags as $fuelTag)
-                                <option value="{{ $fuelTag->fuel_tag }}" style="text-align: start;"> {{ $fuelTag->fuel_tag }}</option>
-                            @endforeach
-                        </select>
-                        @error('oil_type')
-                            <div class="invalid-feedback">{{ $message }}</div>
-                        @enderror
-                </div>
-            </div>
-            <div class="col-md-6">
-                <div class="form-group">
-                    <label for=""><strong>បញ្ចេញ:</strong></label>
-                    <input type="text" name="quantity[]" class="form-control"
-                        style="height: 40px; width: 100%;">
-                    @error('quantity')
-                        <div class="invalid-feedback">{{ $message }}</div>
-                    @enderror
-                </div>
-            </div>
-        `;
-            document.getElementById('dynamic-field-container').appendChild(newRow);
-        });
-
-        // Remove row function
-        document.getElementById('remove-row').addEventListener('click', function() {
-            if (rowCount > 1) {
-                let rowToRemove = document.getElementById('dynamic-row-' + rowCount);
-                rowToRemove.remove();
-                rowCount--;
-            }
-        });
-    </script>
 
     {{-- Script for action search  --}}
     <script>
         $(document).ready(function() {
-            $('#fuel_id').select2({
-                placeholder: "-- ជ្រើសរើសកាលបរិច្ឆេទ --",
+            $('#supplie_id').select2({
+                placeholder: "-- ជ្រើសរើសកាលបរិច្ឆេទស្តុកសម្ភារៈ --",
                 allowClear: true,
                 width: '100%'
             });

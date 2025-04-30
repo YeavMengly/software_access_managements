@@ -12,12 +12,12 @@ return new class extends Migration
     public function up(): void
     {
         if (!Schema::hasTable('mission_types')) {
-        Schema::create('mission_types', function (Blueprint $table) {
-            $table->id();
-            $table->string('mission_type')->nullable();
-            $table->timestamps();
-        });
-    }
+            Schema::create('mission_types', function (Blueprint $table) {
+                $table->id();
+                $table->string('mission_type')->nullable();
+                $table->timestamps();
+            });
+        }
     }
 
     /**

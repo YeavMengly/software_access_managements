@@ -14,30 +14,38 @@ class FuelController extends Controller
     /**
      * Display a listing of the fuel records.
      */
-
     public function index(Request $request)
     {
         $query = Fuel::query();
         $fuelTags = FuelTag::all();
 
-        if ($request->filled('date')) {
-            $query->where('date', $request->date);
+        $search = $request->input('search');
+        $startDate = $request->input('start_date');
+        $endDate = $request->input('end_date');
+        $perPage = $request->input('per_page', 25); // Default to 10 if not set
+
+
+        if (!empty($search)) {
+            $query->where(function ($q) use ($search) {
+                $q->where('fuel_id', 'like', "%$search%")
+                    ->orWhere('description', 'like', "%$search%")
+                    ->orWhere('receipt_number', 'like', "%$search%")
+                    ->orWhere('oil_type', 'like', "%$search%") // Added this line
+                    ->orWhere('quantity', 'like', "%$search%");
+            });
         }
 
-        if ($request->filled('receipt_number')) {
-            $query->where('receipt_number', 'LIKE', '%' . $request->receipt_number . '%');
+        if (!empty($startDate) && !empty($endDate)) {
+            $query->whereBetween('date', [$startDate, $endDate]);
+        } elseif (!empty($startDate)) {
+            $query->whereDate('date', '>=', $startDate);
+        } elseif (!empty($endDate)) {
+            $query->whereDate('date', '<=', $endDate);
         }
 
-        if ($request->filled('description')) {
-            $query->where('description', 'LIKE', '%' . $request->description . '%');
-        }
+        $fuels = $query->latest()->paginate($perPage)->appends($request->except('perPage'));
 
-        if ($request->has('fuel_date') && !empty($request->fuel_date)) {
-            $date = Carbon::parse($request->fuel_date)->format('Y-m-d');
-            $query->whereDate('created_at', $date);
-        }
 
-        $fuels = $query->latest()->get();
         $fuelTotal = FuelTotal::latest()->first();
         $fuelTotals = FuelTotal::latest()->get();
 
@@ -57,7 +65,7 @@ class FuelController extends Controller
             }
         }
 
-        $groupedFuels = $fuels->groupBy(function ($fuel) {
+        $groupedFuels = collect($fuels->items())->groupBy(function ($fuel) {
             return implode('|', [
                 $fuel->fuel_date,
                 $fuel->date,
@@ -72,7 +80,32 @@ class FuelController extends Controller
             return Carbon::parse($item->created_at)->format('Y-m-d');
         });
 
-        return view('layouts.admin.forms.fuels.fuel-index', compact('fuels', 'fuelTags', 'fuelTotalsByDate', 'groupedFuels'));
+        $rowspanCounts = [];
+        foreach ($fuels as $fuel) {
+            $fuelId = $fuel->fuel_id;
+            $date = $fuel->date;
+            $receiptNumber = $fuel->receipt_number;
+            $desc = $fuel->description;
+
+            $rowspanCounts[$fuelId][$date][$receiptNumber][$desc] = ($rowspanCounts[$fuelId][$date][$receiptNumber][$desc] ?? 0) + 1;
+        }
+        $lastFuelValues = [];
+
+        foreach ($fuels as $fuel) {
+            $fuelId = $fuel->fuel_id;
+            $oilType = $fuel->oil_type;
+
+            // Check if the oil type exists in the tags
+            if ($fuelTags->contains('fuel_tag', $oilType)) {
+                $lastFuelValues[$fuelId][$oilType] = [
+                    'quantity' => $fuel->quantity,
+                    'quantity_used' => $fuel->total,
+                    'total' =>  $fuel->quantity - $fuel->total
+                ];
+            }
+        }
+        
+        return view('layouts.admin.forms.fuels.fuel-index', compact('fuels', 'fuelTags', 'fuelTotalsByDate', 'groupedFuels', 'rowspanCounts', 'lastFuelValues'));
     }
 
     /**
@@ -80,11 +113,11 @@ class FuelController extends Controller
      */
     public function create()
     {
-
         $fuelData = FuelTotal::select('release_date', 'warehouse_entry_number')
             ->groupBy('warehouse_entry_number', 'release_date')
             ->orderBy('warehouse_entry_number', 'desc')
             ->get();
+
         $fuelTags = FuelTag::all();
 
         return view('layouts.admin.forms.fuels.fuel-create', compact('fuelTags', 'fuelData'));
@@ -95,50 +128,88 @@ class FuelController extends Controller
      */
     public function store(Request $request)
     {
-        // Validate the incoming data
         $validated = $request->validate([
-            'fuel_id' => 'required|exists:fuel_totals,id', // Check the 'id' of the fuel_total
-            'date' => 'required|date',
-            'receipt_number' => 'required|string|unique:fuels',
-            'description' => 'nullable|string',
-            'oil_type' => 'required|array',
-            'oil_type.*' => 'string',
-            'quantity' => 'required|array',
-            'quantity.*' => 'numeric|min:0',
+            'fuel_id'       => 'required|string|exists:fuel_totals,warehouse_entry_number',
+            'date'          => 'required|date',
+            'receipt_number' => 'required|string|max:255',
+            'description'   => 'nullable|string',
+            'oil_type'      => 'required|array',
+            'oil_type.*'    => 'required|string',
+            'quantity'      => 'required|array',
+            'quantity.*'    => 'required|numeric|min:0',
         ]);
 
-        if (count($validated['oil_type']) !== count($validated['quantity'])) {
-            return redirect()->back()->withErrors(['error' => 'Oil type and quantity count mismatch.']);
+        try {
+
+            $fuelTotal = FuelTotal::where('warehouse_entry_number', $validated['fuel_id'])->first();
+
+            if (!$fuelTotal) {
+                return redirect()->back()
+                    ->withErrors(['fuel_id' => 'លេខបញ្ចូលស្តុកមិនត្រឹមត្រូវទេ។'])
+                    ->withInput();
+            }
+
+            $usageTotals = [];
+            foreach ($validated['oil_type'] as $index => $oilType) {
+                if (!isset($usageTotals[$oilType])) {
+                    $usageTotals[$oilType] = 0;
+                }
+                $usageTotals[$oilType] += $validated['quantity'][$index];
+            }
+
+            // Check loop 
+            foreach ($usageTotals as $oilType => $totalUsed) {
+                // 1. Find the matching FuelTotal
+                $matchedFuelTotal = FuelTotal::where('warehouse_entry_number', $validated['fuel_id'])
+                    ->where('product_name', $oilType)
+                    ->first();
+                $matchedQuantity = $matchedFuelTotal && is_numeric($matchedFuelTotal->quantity)
+                    ? $matchedFuelTotal->quantity
+                    : 0;
+
+
+                // Check validation fuel_id 
+                $totalUsedFuel = Fuel::where('fuel_id', $validated['fuel_id'])
+                    ->where('oil_type', $oilType)
+                    ->where('quantity', $matchedQuantity)
+                    ->whereNotNull('quantity_used')
+                    ->sum('quantity_used');
+
+                // $totalFuel = $matchedQuantity - $totalUsedFuel;
+                $remainingFuel = $matchedQuantity - $totalUsedFuel;
+
+                // ✅ Prevent saving if usage exceeds available fuel
+                if ($totalUsed > $remainingFuel) {
+                    return redirect()->back()
+                        ->withErrors([
+                            'quantity' => "ចំនួនសម្រាប់ប្រេង '$oilType' ច្រើនជាងបរិមាណដែលនៅសល់ ($remainingFuel)លីត្រ។"
+                        ])
+                        ->withInput();
+                }
+
+                $fuel = Fuel::create([
+                    'fuel_id'        => $validated['fuel_id'],
+                    'date'           => $validated['date'],
+                    'receipt_number' => $validated['receipt_number'],
+                    'description'    => $validated['description'],
+                    'oil_type'       => $oilType,
+                    'quantity'       => $matchedQuantity,
+                    'quantity_used'  => $totalUsed,
+                ]);
+
+
+                // Update fuel total after calculate 
+                $fuel->update([
+                    'total'          => $remainingFuel - $totalUsed,
+                ]);
+            }
+
+            return redirect()->route('fuels.index')->with('success', 'ទិន្នន័យបានរក្សាទុកដោយជោគជ័យ។');
+        } catch (\Exception $e) {
+            return redirect()->back()
+                ->withErrors(['store_error' => 'មានបញ្ហាក្នុងការរក្សាទុកទិន្នន័យ: ' . $e->getMessage()])
+                ->withInput();
         }
-
-        // Retrieve the FuelTotal entry based on the selected fuel_id
-        $fuelTotal = FuelTotal::find($validated['fuel_id']);
-
-        if (!$fuelTotal) {
-            return redirect()->back()->withErrors(['error' => 'Fuel Total not found.']);
-        }
-
-        // Decode fuelTotal quantity if stored as JSON
-        $fuelTotalQuantity = is_array($fuelTotal->quantity) ?
-            $fuelTotal->quantity : json_decode($fuelTotal->quantity, true);
-
-        if (!is_array($fuelTotalQuantity)) {
-            $fuelTotalQuantity = [];
-        }
-
-        // Ensure that `quantity_used` is stored directly without summing previous values
-        Fuel::create([
-            'fuel_id' => $validated['fuel_id'], // Store the selected fuel_id directly
-            'date' => $validated['date'],
-            'receipt_number' => $validated['receipt_number'],
-            'description' => $validated['description'],
-            'fuel_total_id' => $fuelTotal->id, // Store the related fuel_total_id
-            'oil_type' => $validated['oil_type'], // Store entire oil_type array
-            'quantity' => $fuelTotalQuantity, // Store indexed array of quantity
-            'quantity_used' => $validated['quantity'], // Directly store without summing
-        ]);
-
-        return redirect()->route('fuels.index')->with('success', 'Fuel record created successfully.');
     }
 
     /**
@@ -166,7 +237,7 @@ class FuelController extends Controller
 
         $fuel->update($validated);
 
-        return redirect()->route('fuels.index')->with('success', 'Fuel record updated successfully.');
+        return redirect()->route('fuels.index')->with('success', 'ប្រេងឥន្ធនៈបានកែប្រែដោយជោគជ័យ');
     }
 
     /**
@@ -176,6 +247,6 @@ class FuelController extends Controller
     {
         $fuel->delete();
 
-        return redirect()->route('fuels.index')->with('success', 'Fuel record deleted successfully.');
+        return redirect()->route('fuels.index')->with('success', 'ប្រេងឥន្ធនៈបានលុបដោយជោគជ័យ។');
     }
 }

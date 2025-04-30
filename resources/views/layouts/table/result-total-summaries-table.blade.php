@@ -96,7 +96,6 @@
                                 {{ number_format($totals['total_sums']['new_credit_status'], 0, ' ', ' ') }}</td>
                             <td style="text-align: right; padding-right: 32px;">
                                 {{ number_format($totals['total_sums']['early_balance'], 0, ' ', ' ') }}</td>
-
                             <td>
                                 @if ($totals['total_sums']['new_credit_status'] > 0)
                                     {{ number_format(($totals['total_sums']['early_balance'] / $totals['total_sums']['new_credit_status']) * 100, 2, '.', ' ') }}%
@@ -104,10 +103,8 @@
                                     0%
                                 @endif
                             </td>
-
                             <td style="text-align: right; padding-right: 32px;">
                                 {{ number_format($totals['total_sums']['apply'], 0, ' ', ' ') }}</td>
-
                             <td>
                                 @if ($totals['total_sums']['new_credit_status'] > 0)
                                     {{ number_format(($totals['total_sums']['apply'] / $totals['total_sums']['new_credit_status']) * 100, 2, '.', ' ') }}%
@@ -140,7 +137,9 @@
                             </td>
                         </tr>
 
-                        @foreach ($totals['code'] as $codeId => $totalsByCode)
+                        @foreach ($totals['report_key'] as $codeId => $totalsByCode)
+
+                        
                             <tr>
                                 <td>{{ $codeId }}</td>
                                 <td style="text-align: right; padding-right: 32px;">
@@ -430,7 +429,10 @@
                                 </td>
                             </tr>
 
+                            {{-- @dd($totalsByCode['report_key_seven'] ) --}}
                             @foreach ($totalsByCode['report_key_seven'] as $index => $total)
+
+                     
                                 <tr>
                                     <td>{{ $index }}</td>
                                     <td style="text-align: right; padding-right: 32px;">

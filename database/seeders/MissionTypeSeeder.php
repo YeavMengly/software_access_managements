@@ -13,10 +13,18 @@ class MissionTypeSeeder extends Seeder
      */
     public function run(): void
     {
-        // Clear existing data
+        /*
+        |-------------------------------------------------------------------------------
+        |  Clear existing data
+        |-------------------------------------------------------------------------------
+        */
         DB::table('mission_types')->truncate();
 
-        // Insert new data
+        /*
+        |-------------------------------------------------------------------------------
+        | Insert data into mission_types table
+        |-------------------------------------------------------------------------------
+        */
         DB::table('mission_types')->insert([
             [
                 'mission_type' => 'រជ្ចទេយ្យ',

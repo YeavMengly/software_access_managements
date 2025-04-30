@@ -43,7 +43,6 @@ class AccountKeySeeder extends Seeder
                 ['account_key' => '6005', 'name_account_key' => 'សម្ភារតូចតាច សង្ហារឹម និងសម្ភារបរិក្ខារ'],
                 ['account_key' => '6006', 'name_account_key' => 'ថាមពល​ និងទឺក'],
                 ['account_key' => '6007', 'name_account_key' => 'សម្ភារបរិក្ខារថែទាំសុខភាព'],
-
             ],
             '61' => [
                 ['account_key' => '6101', 'name_account_key' => 'កិច្ចសន្យានៃការផ្តល់សេវាជាមួយសហគ្រាស'],
@@ -59,8 +58,6 @@ class AccountKeySeeder extends Seeder
                 ['account_key' => '6113', 'name_account_key' => 'សោហ៊ុយបេសកកម្មក្រៅប្រទេស'],
                 ['account_key' => '6114', 'name_account_key' => 'សោហ៊ុយប្រៃសណីយ៍ និងទូរគមនាគមន៍'],
                 ['account_key' => '6198', 'name_account_key' => 'សេវាកម្មផ្សេងៗទៀត'],
-
-
             ],
             '62' => [
                 ['account_key' => '6202', 'name_account_key' => 'ជំនួយសង្គមដល់ប្រជាពលរដ្ឋ'],
@@ -78,15 +75,12 @@ class AccountKeySeeder extends Seeder
                 ['account_key' => '6405', 'name_account_key' => 'ប្រាក់វិភាជន៍សង្គមសម្រាប់មន្ត្រីរាជការ និងបុគ្គលិកផ្សេងៗ'],
                 ['account_key' => '6406', 'name_account_key' => 'ប្រាក់វិភាជន៍សង្គមសម្រាប់គ្រួសារមន្ត្រីរាជការ'],
                 ['account_key' => '6498', 'name_account_key' => 'បន្ទុកបុគ្គលិកផ្សេងៗទៀត'],
-
             ],
             '65' => [
                 ['account_key' => '6502', 'name_account_key' => 'ឧបត្ថម្ភធនដល់អង្គការសាធារណៈ'],
                 ['account_key' => '6503', 'name_account_key' => 'ឧបត្ថម្ភធនដល់គ្រឹះស្ថានសាធារណៈមាន លក្ខណៈរដ្ឋបាល'],
                 ['account_key' => '6506', 'name_account_key' => 'វិភាគទាន​ដល់​អង្គការ​ សមាគម សហព័ន្ធអន្តរជាតិ​នានា'],
             ],
-
-
         ];
 
         /*

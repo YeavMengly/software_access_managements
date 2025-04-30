@@ -12,7 +12,18 @@ class MissionTagSeeder extends Seeder
      */
     public function run(): void
     {
+        /*
+        |-------------------------------------------------------------------------------
+        |  Clear existing data
+        |-------------------------------------------------------------------------------
+        */
         DB::table('mission_tags')->truncate();
+
+        /*
+        |-------------------------------------------------------------------------------
+        | Insert data into mission_tags table
+        |-------------------------------------------------------------------------------
+        */
         DB::table('mission_tags')->insert([
             ['m_tag' => 'ថ្នាក់ជាតិ', 'created_at' => now(), 'updated_at' => now()],
             ['m_tag' => 'មូលដ្ឋាន', 'created_at' => now(), 'updated_at' => now()]

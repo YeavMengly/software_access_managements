@@ -38,7 +38,7 @@ class FuelTotalController extends Controller
             $query->whereDate('release_date', '<=', $endDate);
         }
 
-        $fuelTotals = $query->orderBy('created_at', 'desc')->paginate(10);
+        $fuelTotals = $query->orderBy('created_at', 'desc')->paginate(25);
         $sortedCollection = $fuelTotals->getCollection()->sortByDesc('created_at');
 
         $fuelTotalsGrouped = $sortedCollection->groupBy(function ($item) {
@@ -58,9 +58,9 @@ class FuelTotalController extends Controller
                 ];
             }
 
-            $yearlyTotals[$year]['total_quantity'] += is_array($fuelTotal->quantity) ? array_sum($fuelTotal->quantity) : 0;
-            $yearlyTotals[$year]['total_unit_price'] += is_array($fuelTotal->unit_price) ? array_sum($fuelTotal->unit_price) : 0;
-            $yearlyTotals[$year]['total_fuel_total'] += is_array($fuelTotal->fuel_total) ? array_sum($fuelTotal->fuel_total) : 0;
+            $yearlyTotals[$year]['total_quantity'] += is_numeric($fuelTotal->quantity) ? $fuelTotal->quantity : 0;
+            $yearlyTotals[$year]['total_unit_price'] += is_numeric($fuelTotal->unit_price) ? $fuelTotal->unit_price : 0;
+            $yearlyTotals[$year]['total_fuel_total'] += is_numeric($fuelTotal->fuel_total) ? $fuelTotal->fuel_total : 0;
         }
 
         $rowspanCounts = [];
@@ -68,29 +68,10 @@ class FuelTotalController extends Controller
             $createdYear = Carbon::parse($fuelTotal->created_at)->format('Y');
             $rowspanCounts[$createdYear] = ($rowspanCounts[$createdYear] ?? 0) + 1;
         }
-
-        $descriptionRowspanCounts = [];
-        foreach ($sortedCollection as $fuelTotal) {
-            $createdYear = Carbon::parse($fuelTotal->created_at)->format('Y');
-            $desc = $fuelTotal->description;
-            $warehouseEntry = $fuelTotal->warehouse_entry_number;
-            $companyName = $fuelTotal->company_name;
-            $refers = $fuelTotal->refers;
-            $releaseDate = $fuelTotal->release_date;
-            $warehouse = $fuelTotal->warehouse;
-            $key = $createdYear . '|' . $desc . '|' . $warehouseEntry . '|' . $companyName . '|' . $refers . '|' . $releaseDate . '|' . $warehouse;
-            if (!isset($descriptionRowspanCounts[$key])) {
-                $descriptionRowspanCounts[$key] = 0;
-            }
-            $descriptionRowspanCounts[$key]++;
-        }
-
         return view('layouts.admin.forms.fuels.fuel-total.fuel_total', [
             'fuelTotals' => $fuelTotals,
             'fuelTotalsGrouped' => $fuelTotalsGrouped,
             'yearlyTotals' => $yearlyTotals,
-            'rowspanCounts' => $rowspanCounts,
-            'descriptionRowspanCounts' => $descriptionRowspanCounts,
             'fuelTags' => $fuelTags
         ]);
     }

@@ -28,7 +28,7 @@ class FuelTotal extends Model
     // FuelTotal Model
     public function fuels()
     {
-        return $this->hasMany(Fuel::class, 'fuel_id', 'id'); // Assuming 'fuel_id' exists in Fuel model
+        return $this->hasMany(Fuel::class, 'fuel_id', 'warehouse_entry_number'); // Assuming 'fuel_id' exists in Fuel model
     }
 
     public function fuelTag()

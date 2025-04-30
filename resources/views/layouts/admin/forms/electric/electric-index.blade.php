@@ -61,76 +61,6 @@
                                 </div>
                                 <div class="modal-body custom-scrollable">
                                     <div class="result-total-table-container">
-                                        {{-- <form id="filterForm" class="max-w-md mx-auto mt-3" method="GET"
-                                            action="{{ route('electrics.index') }}" onsubmit="return validateDateField()">
-                                            <div class="row mb-3">
-                                                <div class="col-md-12 d-flex">
-                                                    <!-- Search field for title_usage_unit or location_number -->
-                                                    <input type="text" name="search" value="{{ request('search') }}"
-                                                        class="form-control mb-2"
-                                                        placeholder="Search by Usage Unit or Location Number"
-                                                        style="width: 240px; height: 40px;">
-                                                    &nbsp;
-                                                    <!-- Start Date -->
-                                                    <input type="date" name="start_date" id="start_date"
-                                                        value="{{ request('start_date') }}" class="form-control"
-                                                        style="height: 40px; width: 200px;">
-                                                    &nbsp;
-                                                    <!-- End Date -->
-                                                    <input type="date" name="end_date" id="end_date"
-                                                        value="{{ request('end_date') }}" class="form-control"
-                                                        style="height: 40px; width: 200px;">
-                                                </div>
-
-                                                <div class="col-md-12">
-                                                    <div class="input-group">
-                                                        <!-- Search button -->
-                                                        <button type="submit" class="btn btn-primary"
-                                                            style="width: 120px; height: 40px;">
-                                                            <svg xmlns="http://www.w3.org/2000/svg" width="16"
-                                                                height="16" viewBox="0 0 50 50">
-                                                                <path
-                                                                    d="M 21 3 C 11.621094 3 4 10.621094 4 20 C 4 29.378906 11.621094 37 21 37 C 24.710938 37 28.140625 35.804688 30.9375 33.78125 L 44.09375 46.90625 L 46.90625 44.09375 L 33.90625 31.0625 C 36.460938 28.085938 38 24.222656 38 20 C 38 10.621094 30.378906 3 21 3 Z M 21 5 C 29.296875 5 36 11.703125 36 20 C 36 28.296875 29.296875 35 21 35 C 12.703125 35 6 28.296875 6 20 C 6 11.703125 12.703125 5 21 5 Z">
-                                                                </path>
-                                                            </svg>
-                                                            ស្វែងរក
-                                                        </button>
-                                                        &nbsp;
-                                                        <!-- Reset button -->
-                                                        <button type="button" id="resetBtn" class="btn btn-danger"
-                                                            style="width: 120px; height: 40px;" onclick="resetForm()">
-                                                            <svg xmlns="http://www.w3.org/2000/svg" width="16"
-                                                                height="16" fill="currentColor" class="bi bi-x-circle"
-                                                                viewBox="0 0 16 16">
-                                                                <path
-                                                                    d="M8 1a7 7 0 1 0 0 14A7 7 0 0 0 8 1zm3.646 4.646a.5.5 0 0 1 0 .708L8.707 8l2.939 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.939a.5.5 0 1 1-.708-.708L7.293 8 4.354 5.354a.5.5 0 1 1 .708-.708L8 7.293l2.646-2.647a.5.5 0 0 1 .707 0z" />
-                                                            </svg>
-                                                            កំណត់ឡើងវិញ
-                                                        </button>
-                                                        &nbsp;
-
-
-                                                        <a href=""
-                                                            class="btn btn-secondary btn- d-flex align-items-center justify-content-center position-relative"
-                                                            style="width: 120px; height: 40px; text-align: center; font-size: 14px;">
-                                                            <i class="fas fa-file-excel fa-1x"></i>
-                                                            <span class="ml-2">បម្លែង xls</span>
-                                                            <div class="hover-text">Export to Excel</div>
-                                                            <!-- Hover Text -->
-                                                        </a>
-                                                        &nbsp;
-
-                                                        <a href=""
-                                                            class="btn btn-secondary btn-width mr-2 d-flex align-items-center justify-content-center position-relative"
-                                                            style="width: 120px; height: 40px; text-align: center; font-size: 14px;">
-                                                            <i class="fas fa-print"></i>
-                                                            <span class="ml-2">បោះពុម្ភ</span>
-                                                            <div class="hover-text">Print PDF</div> <!-- Hover Text -->
-                                                        </a>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </form> --}}
                                         <div class="table-container">
                                             <table class="table-border ">
                                                 <thead>
@@ -146,7 +76,6 @@
                                                         </th>
                                                         <th style="border: 1px solid black; font-size: 14px; width: 200px;">
                                                             រយៈពេលប្រើប្រាស់</th>
-
                                                         <th style="border: 1px solid black; font-size: 14px; width: 160px;">
                                                             ថាមពលគីឡូវ៉ាត់
                                                         </th>
@@ -156,7 +85,6 @@
                                                         <th style="border: 1px solid black; font-size: 14px; width: 160px;">
                                                             ប្រាក់សរុបជារៀល
                                                         </th>
-
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -164,9 +92,7 @@
                                                         $previousLocation = null;
                                                         $previousUsageUnit = null;
                                                         $previousCreatedYear = null;
-                                                        $index = 1; // Initialize the index
-
-                                                        // Sort the electrics by created year, with 2025 first, then 2024
+                                                        $index = 1; 
                                                         $sortedElectrics = $electrics->sortByDesc(function ($electric) {
                                                             return \Carbon\Carbon::parse($electric->created_at)->format(
                                                                 'Y',
@@ -178,48 +104,38 @@
                                                         @php
                                                             $createdYear = \Carbon\Carbon::parse(
                                                                 $electric->created_at,
-                                                            )->format('Y'); // Extract year from created_at
+                                                            )->format('Y'); 
                                                         @endphp
 
                                                         @if ($createdYear !== $previousCreatedYear)
-                                                            <!-- Add a row to show the Year -->
                                                             <tr>
                                                                 <td colspan="8"
                                                                     style="text-align: center; font-weight: bold; background-color: #f2f2f2;">
                                                                     {{ $createdYear }}
                                                                 </td>
                                                             </tr>
-
                                                             @php
-                                                                // Reset index for the new year
                                                                 $index = 1;
                                                             @endphp
                                                         @endif
 
                                                         @if (
-                                                            $electric->location_number !== $previousLocation ||
+                                                            $electric->location_number !== $previousLocation || 
                                                                 $electric->usage_unit !== $previousUsageUnit ||
                                                                 $createdYear !== $previousCreatedYear)
                                                             <tr>
-                                                                <!-- Index Column with Rowspan -->
                                                                 <td style="border: 1px solid black; text-align: center"
                                                                     rowspan="{{ $rowspanCounts[$electric->location_number][$electric->usage_unit][$createdYear] ?? 1 }}">
-                                                                    {{ $index++ }} <!-- Increment the index -->
+                                                                    {{ $index++ }} 
                                                                 </td>
-
-                                                                <!-- Usage Unit Column -->
                                                                 <td style="border: 1px solid black; text-align: start;"
                                                                     rowspan="{{ $rowspanCounts[$electric->location_number][$electric->usage_unit][$createdYear] ?? 1 }}">
                                                                     {{ $electric->usage_unit }}
                                                                 </td>
-
-                                                                <!-- Location Number Column -->
                                                                 <td style="border: 1px solid black; text-align: center;"
                                                                     rowspan="{{ $rowspanCounts[$electric->location_number][$electric->usage_unit][$createdYear] ?? 1 }}">
                                                                     {{ $electric->location_number }}
                                                                 </td>
-
-                                                                <!-- Other columns -->
                                                                 <td style="border: 1px solid black; text-align: center;">
                                                                     {{ \Carbon\Carbon::parse($electric->usage_date)->format('d-m-Y') }}
                                                                 </td>
@@ -242,9 +158,7 @@
                                                                 </td>
                                                             </tr>
                                                         @else
-                                                            <!-- For rows that are merged, skip the index increment -->
                                                             <tr>
-                                                                <!-- Usage Date Column (merged) -->
                                                                 <td style="border: 1px solid black; text-align: center;">
                                                                     {{ \Carbon\Carbon::parse($electric->usage_date)->format('d-m-Y') }}
                                                                 </td>
@@ -269,15 +183,12 @@
                                                         @endif
 
                                                         @php
-                                                            // Update previous values for the next iteration comparison
                                                             $previousLocation = $electric->location_number;
                                                             $previousUsageUnit = $electric->usage_unit;
                                                             $previousCreatedYear = $createdYear;
                                                         @endphp
                                                     @endforeach
                                                 </tbody>
-
-
                                             </table>
                                         </div>
                                     </div>
@@ -346,7 +257,7 @@
                             <div class="col-md-12 d-flex">
                                 <!-- Search Field -->
                                 <input type="text" name="search" value="{{ request('search') }}"
-                                    class="form-control mb-2" placeholder="Search by Usage Unit or Location Number"
+                                    class="form-control mb-2" placeholder="ស្វែងរកអង្គភាព និងលេខទីតាំង"
                                     style="width: 240px; height: 40px;">
                                 &nbsp;
 
@@ -457,7 +368,6 @@
                 </thead>
                 <tbody>
 
-                    {{-- @dd($electrics) --}}
                     @forelse ($electrics as $index => $electric)
                         <tr>
                             <td style="border: 1px solid black; text-align: center">

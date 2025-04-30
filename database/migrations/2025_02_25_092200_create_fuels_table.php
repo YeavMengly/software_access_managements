@@ -11,23 +11,20 @@ return new class extends Migration
      */
     public function up(): void
     {
-        if (!Schema::hasTable('fuel_totals')) {
-            throw new Exception('fuel_totals table does not exist. Run its migration first.');
+        if (!Schema::hasTable('fuels')) {
+            Schema::create('fuels', function (Blueprint $table) {
+                $table->id();
+                $table->string('fuel_id');
+                $table->date('date');
+                $table->string('receipt_number');
+                $table->text('description')->nullable();
+                $table->string('oil_type');
+                $table->decimal('quantity', 15, 0)->default(0);
+                $table->decimal('quantity_used', 15, 0)->default(0);
+                $table->decimal('total', 15, 0)->default(0);
+                $table->timestamps();
+            });
         }
-
-        Schema::create('fuels', function (Blueprint $table) {
-            $table->id();
-            $table->date('fuel_date')->nullable(); // Allow NULL values
-            $table->date('date');
-            $table->string('receipt_number')->unique();
-            $table->text('description')->nullable();
-            $table->unsignedBigInteger('fuel_total_id')->nullable();
-            $table->foreign('fuel_total_id')->references('id')->on('fuel_totals')->onDelete('cascade');
-            $table->json('oil_type');
-            $table->json('quantity');
-            $table->json('quantity_used')->nullable(); // Make it nullable
-            $table->timestamps();
-        });
     }
 
     /**

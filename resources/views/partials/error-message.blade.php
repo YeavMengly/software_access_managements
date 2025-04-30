@@ -12,6 +12,6 @@
         setTimeout(function() {
             document.querySelector('.alert-danger').style.display = 'none'; // Hide the alert
             document.getElementById('uploadForm').reset(); // Reset the form
-        }, 5000); // 5000 milliseconds = 5 seconds
+        }, 10000); // 5000 milliseconds = 5 seconds
     </script>
 @endif

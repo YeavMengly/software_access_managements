@@ -1,6 +1,6 @@
 @extends('layouts.master')
 
-@section('content-fuel')
+@section('content-supplie')
     <div class="border-wrapper">
 
         @if (isset($connectionError) && $connectionError)
@@ -18,25 +18,13 @@
         <div class="result-total-table-container">
             <div class="row">
                 <div class="col-lg-12 margin-tb">
-
                     <div class="d-flex justify-content-between align-items-center">
                         <a class="btn btn-danger d-flex justify-content-center align-items-center" href="{{ route('back') }}"
                             style="width: 120px; height: 40px;">
                             <i class="fas fa-arrow-left"></i>
                         </a>
-                        <h3 style="font-weight: 500;">បញ្ចូលប្រេងឥន្ធនៈ</h3>
+                        <h3 style="font-weight: 500;">បញ្ចូលគ្រឿងសម្ផារៈ</h3>
                         <div class="btn-group">
-
-
-
-
-                            <a href="" data-bs-toggle="modal" data-bs-target="#createFuelTotal"
-                                class="btn btn-danger btn-width d-flex align-items-center justify-content-center"
-                                style="width: 120px; text-align: center; color: rgb(245, 245, 245); border-radius: 4px;"
-                                data-bs-toggle="tooltip" title="បង្ហាញលទ្ធផលសរុប">
-                                <i class="fas fa-file-alt"></i>
-                            </a>
-                            &nbsp;
                             <a href="" data-bs-toggle="modal" data-bs-target="#createFuel"
                                 class="btn btn-sm btn-width d-flex align-items-center justify-content-center"
                                 style="width: 120px; text-align: center; color: rgb(245, 245, 245); border-radius: 4px;"
@@ -44,14 +32,10 @@
                                 <i class="bi bi-fuel-pump-fill me-2" style="color: #007bff"></i>
                             </a>
                             &nbsp;
-                            <a class="btn btn-secondary d-flex justify-content-center align-items-center" href="#"
-                                data-bs-toggle="modal" data-bs-target="#importModal" href=""
-                                style="width: 120px; height: 40px; border-radius: 4px;">
-                                Import&nbsp;<i class="fas fa-file-import"></i>
-                            </a>
-                            &nbsp;
+
                             <a class="btn btn-primary d-flex justify-content-center align-items-center"
-                                href="{{ route('fuels.create') }}" style="width: 120px; height: 40px; border-radius: 4px;">
+                                href="{{ route('supplies.create') }}"
+                                style="width: 120px; height: 40px; border-radius: 4px;">
                                 បញ្ចូល
                             </a>
                         </div>
@@ -94,190 +78,12 @@
                                                         </th>
                                                         <th rowspan="2"
                                                             style="border: 1px solid black; font-size: 14px;">បរិយាយ</th>
-                                                        @foreach ($fuelTags as $fuelTag)
-                                                            <th colspan="3" style="border: 1px solid black;">
-                                                                {{ $fuelTag->fuel_tag }}
-                                                            </th>
-                                                        @endforeach
+
 
                                                     </tr>
-                                                    <tr>
-                                                        <th style="border: 1px solid black; font-size: 14px; width: 80px;">
-                                                            បញ្ចូល</th>
-                                                        <th style="border: 1px solid black; font-size: 14px; width: 80px;">
-                                                            បញ្ចេញ</th>
-                                                        <th rowspan="2"
-                                                            style="border: 1px solid black; font-size: 14px; width: 80px;">
-                                                            សមតុល្យ</th>
-                                                        <th style="border: 1px solid black; font-size: 14px; width: 80px;">
-                                                            បញ្ចូល</th>
-                                                        <th style="border: 1px solid black; font-size: 14px; width: 80px;">
-                                                            បញ្ចេញ</th>
-                                                        <th rowspan="2"
-                                                            style="border: 1px solid black; font-size: 14px; width: 80px;">
-                                                            សមតុល្យ</th>
-                                                        <th style="border: 1px solid black; font-size: 14px; width: 80px;">
-                                                            បញ្ចូល</th>
-                                                        <th style="border: 1px solid black; font-size: 14px; width: 80px;">
-                                                            បញ្ចេញ</th>
-                                                        <th rowspan="2"
-                                                            style="border: 1px solid black; font-size: 14px; width: 80px;">
-                                                            សមតុល្យ</th>
-                                                    </tr>
+
                                                 </thead>
                                                 <tbody>
-
-                                                    @foreach ($fuels as $fuel)
-                                                        <tr>
-                                                            <td style="border: 1px solid black;">{{ $loop->iteration }}</td>
-                                                            <td style="border: 1px solid black;">{{ $fuel->fuel_id }}</td>
-                                                            <td style="border: 1px solid black;">{{ $fuel->date }}</td>
-                                                            <td style="border: 1px solid black;">{{ $fuel->receipt_number }}
-                                                            </td>
-                                                            <td style="border: 1px solid black; text-align: start;">
-                                                                {{ $fuel->description }}</td>
-                                                            @php
-                                                                $oilType = $fuel->oil_type;
-                                                            @endphp
-                                                            @foreach ($fuelTags as $fuelTag)
-                                                                @if ($fuelTag->fuel_tag === $oilType)
-                                                                    <td style="border: 1px solid black;">
-                                                                        {{ number_format($fuel->quantity, 0) }}</td>
-                                                                    <td style="border: 1px solid black;">
-                                                                        {{ number_format($fuel->quantity_used, 0) }}</td>
-                                                                    <td style="border: 1px solid black;">
-                                                                        {{ number_format($fuel->total, 0) }}
-                                                                    </td>
-                                                                @else
-                                                                    <td style="border: 1px solid black;">0</td>
-                                                                    <td style="border: 1px solid black;">0</td>
-                                                                    <td style="border: 1px solid black;">0</td>
-                                                                @endif
-                                                            @endforeach
-                                                            {{-- <td style="border: 1px solid black;">
-                                                                {{ $fuel->total }}
-                                                            </td> --}}
-                                                        </tr>
-                                                    @endforeach
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="modal-footer d-flex justify-content-center" style="height: 70px;">
-                                    <a href=""
-                                        class="btn btn-primary btn-width mr-2 d-flex align-items-center justify-content-center"
-                                        style="width: 120px; height: 40px; text-align: center; font-size: 14px;"
-                                        data-bs-toggle="tooltip" title="បោះពុម្ភឯកសារ">
-                                        <i class="fas fa-print"></i> <span class="ml-2">បោះពុម្ភ</span>
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="modal fade" id="createFuelTotal" tabindex="-1" aria-labelledby="importModalLabel"
-                        aria-hidden="true">
-                        <div class="modal-dialog modal-fullscreen modal-dialog-centered modal-dialog-scrollable">
-                            <div class="modal-content ">
-                                <div class="modal-header">
-
-                                    <h3 class="modal-title text-center" id="importModalLabel">
-                                        តារាងសរុបសមតុល្យប្រេងឥន្ធនៈគ្រប់ប្រភេទ <i class="bi bi-fuel-pump-fill me-2"
-                                            style="color: #007bff"></i></h3>
-                                    <button type="button" class="btn btn-link" data-bs-dismiss="modal"
-                                        aria-label="Close">
-                                        <i class="fas fa-times" style="color: red;"></i>
-                                    </button>
-                                </div>
-                                <div class="modal-body custom-scrollable">
-                                    <div class="result-total-table-container">
-
-                                        <label for="" style="border: none; float: right;">ឯកតាជាលីត្រ</label>
-                                        <div class="table-container">
-                                            <table class="table table-bordered text-center">
-                                                <thead>
-                                                    <tr>
-                                                        <th rowspan="2"
-                                                            style="border: 1px solid black; font-size: 14px; width: 80px;">
-                                                            ល.រ</th>
-                                                        <th rowspan="2"
-                                                            style="border: 1px solid black; font-size: 14px; width: 120px;">
-                                                            លេខបញ្ចូលឃ្លាំង
-                                                        </th>
-                                                        <th rowspan="2"
-                                                            style="border: 1px solid black; font-size: 14px; width: 120px;">
-                                                            កាលបរិច្ឆេទ
-                                                        </th>
-                                                        @foreach ($fuelTags as $fuelTag)
-                                                            <th colspan="3" style="border: 1px solid black;">
-                                                                {{ $fuelTag->fuel_tag }}
-                                                            </th>
-                                                        @endforeach
-
-                                                    </tr>
-                                                    <tr>
-                                                        <th style="border: 1px solid black; font-size: 14px; width: 80px;">
-                                                            បញ្ចូល</th>
-                                                        <th style="border: 1px solid black; font-size: 14px; width: 80px;">
-                                                            បញ្ចេញ</th>
-                                                        <th rowspan="2"
-                                                            style="border: 1px solid black; font-size: 14px; width: 80px;">
-                                                            សមតុល្យ</th>
-                                                        <th style="border: 1px solid black; font-size: 14px; width: 80px;">
-                                                            បញ្ចូល</th>
-                                                        <th style="border: 1px solid black; font-size: 14px; width: 80px;">
-                                                            បញ្ចេញ</th>
-                                                        <th rowspan="2"
-                                                            style="border: 1px solid black; font-size: 14px; width: 80px;">
-                                                            សមតុល្យ</th>
-                                                        <th style="border: 1px solid black; font-size: 14px; width: 80px;">
-                                                            បញ្ចូល</th>
-                                                        <th style="border: 1px solid black; font-size: 14px; width: 80px;">
-                                                            បញ្ចេញ</th>
-                                                        <th rowspan="2"
-                                                            style="border: 1px solid black; font-size: 14px; width: 80px;">
-                                                            សមតុល្យ</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-
-                                                    @php
-                                                        $groupedFuels = $fuels->groupBy('fuel_id');
-                                                    @endphp
-
-                                                    @foreach ($groupedFuels as $fuelId => $fuelGroup)
-                                                        @php
-                                                            $firstFuel = $fuelGroup->first(); // Take the first record for rowspan columns
-                                                            $rowspan = $fuelGroup->count(); // Number of rows to span
-                                                        @endphp
-                                                        <tr>
-                                                            <td style="border: 1px solid black;">{{ $loop->iteration }}
-                                                            </td>
-                                                            <td style="border: 1px solid black;">{{ $fuelId }}</td>
-                                                            <td style="border: 1px solid black;">{{ $firstFuel->date }}
-                                                            </td>
-                                                            {{-- Fuel Tag Quantities --}}
-                                                            @foreach ($fuelTags as $fuelTag)
-                                                                @php
-                                                                    $tag = $fuelTag->fuel_tag;
-                                                                    $quantity =
-                                                                        $lastFuelValues[$fuelId][$tag]['quantity'] ?? 0;
-                                                                    $quantity_used =
-                                                                        $lastFuelValues[$fuelId][$tag][
-                                                                            'quantity_used'
-                                                                        ] ?? 0;
-                                                                    $total =
-                                                                        $lastFuelValues[$fuelId][$tag]['total'] ?? 0;
-                                                                @endphp
-                                                                <td style="border: 1px solid black;">
-                                                                    {{ number_format($quantity, 0) }}</td>
-                                                                <td style="border: 1px solid black;">
-                                                                    {{ number_format($quantity_used, 0) }}</td>
-                                                                <td style="border: 1px solid black;">
-                                                                    {{ number_format($total, 0) }}</td>
-                                                            @endforeach
-                                                        </tr>
-                                                    @endforeach
 
                                                 </tbody>
                                             </table>
@@ -302,8 +108,7 @@
                             <div class="modal-content">
                                 <div class="modal-header">
                                     <h5 class="modal-title" id="importModalLabel">Import Excel Data</h5>
-                                    <button type="button" class="btn btn-link" data-bs-dismiss="modal"
-                                        aria-label="Close">
+                                    <button type="button" class="btn btn-link" data-bs-dismiss="modal" aria-label="Close">
                                         <i class="fas fa-times" style="color: red;"></i>
                                     </button>
                                 </div>
@@ -313,8 +118,8 @@
                                         <div class="mb-3">
                                             <label for="excelFile" class="form-label">Choose Excel File</label>
                                             <div class="custom-file-upload">
-                                                <input type="file" id="excelFile" name="excel_file"
-                                                    accept=".xlsx, .xls" required>
+                                                <input type="file" id="excelFile" name="excel_file" accept=".xlsx, .xls"
+                                                    required>
                                                 <label for="excelFile" id="fileLabel">
                                                     <i class="fas fa-file-upload"></i> <span id="fileName">No file
                                                         chosen</span>
@@ -360,7 +165,6 @@
                                 <input type="date" name="end_date" id="end_date" value="{{ request('end_date') }}"
                                     class="form-control" style="height: 40px; width: 200px;">
                             </div>
-
                             <div class="col-md-12">
                                 <div class="input-group">
                                     <!-- Search button -->
@@ -375,7 +179,7 @@
                                         ស្វែងរក
                                     </button>
                                     <!-- Reset button -->
-                                    <a href="{{ route('supplie-totals.index') }}" class="btn btn-danger"
+                                    <a href="{{ route('supplies.index') }}" class="btn btn-danger"
                                         style="width: 120px; height: 40px;"> <svg xmlns="http://www.w3.org/2000/svg"
                                             width="16" height="16" fill="currentColor" class="bi bi-x-circle"
                                             viewBox="0 0 16 16">
@@ -425,32 +229,35 @@
             <table class="table table-bordered text-center">
                 <thead>
                     <tr>
-                        <th rowspan="2" style="border: 1px solid black; font-size: 14px; width: 80px;">ល.រ</th>
-                        <th rowspan="2" style="border: 1px solid black; font-size: 14px; width: 120px;">
-                            លេខបញ្ចូលឃ្លាំង
+                        <th style="border: 1px solid black; width: 40px;">
+                            <span> ល.រ</span>
                         </th>
-                        <th rowspan="2" style="border: 1px solid black; font-size: 14px; width: 120px;">កាលបរិច្ឆេទ
+
+                        <th style="border: 1px solid black;  width: 160px;">
+                            <span> លេខបញ្ចូលឃ្លាំង</span>
                         </th>
-                        <th rowspan="2" style="border: 1px solid black; font-size: 14px; width: 120px;">លេខប័ណ្ណបញ្ចេញ
+
+                        <th style="border: 1px solid black;width: 120px; ">
+                            <span> កាលបរិច្ឆេទ</span>
                         </th>
-                        <th rowspan="2" style="border: 1px solid black; font-size: 14px;">បរិយាយ</th>
-                        @foreach ($fuelTags as $fuelTag)
-                            <th colspan="3" style="border: 1px solid black;">
-                                {{ $fuelTag->fuel_tag }}
-                            </th>
-                        @endforeach
-                        <th rowspan="2" style="border: 1px solid black; font-size: 14px; width: 120px;">សកម្មភាព</th>
-                    </tr>
-                    <tr>
-                        <th style="border: 1px solid black; font-size: 14px; width: 80px;">បញ្ចូល</th>
-                        <th style="border: 1px solid black; font-size: 14px; width: 80px;">បញ្ចេញ</th>
-                        <th rowspan="2" style="border: 1px solid black; font-size: 14px; width: 80px;">សមតុល្យ</th>
-                        <th style="border: 1px solid black; font-size: 14px; width: 80px;">បញ្ចូល</th>
-                        <th style="border: 1px solid black; font-size: 14px; width: 80px;">បញ្ចេញ</th>
-                        <th rowspan="2" style="border: 1px solid black; font-size: 14px; width: 80px;">សមតុល្យ</th>
-                        <th style="border: 1px solid black; font-size: 14px; width: 80px;">បញ្ចូល</th>
-                        <th style="border: 1px solid black; font-size: 14px; width: 80px;">បញ្ចេញ</th>
-                        <th rowspan="2" style="border: 1px solid black; font-size: 14px; width: 80px;">សមតុល្យ</th>
+
+                        <th style="border: 1px solid black; width: 120px; ">
+                            <span> លេខប័ណ្ណបញ្ចេញ</span>
+                        </th>
+
+                        <th style="border: 1px solid black; ">
+                            <span> រាយមុខទំនិញ</span>
+                        </th>
+                        <th style="border: 1px solid black;width: 80px; ">
+                            <span> ឯកតា</span>
+                        </th>
+                        <th style="border: 1px solid black; width: 80px; ">
+                            <span> បរិមាណ</span>
+                        </th>
+
+                        <th style="border: 1px solid black;" width="80px">
+                            <span> សកម្មភាព</span>
+                        </th>
                     </tr>
                 </thead>
                 <tbody>
@@ -500,7 +307,7 @@
                 </tbody>
             </table>
             {{-- Custom Pagination --}}
-            <div class="d-flex justify-content-between align-items-center mt-4">
+            {{-- <div class="d-flex justify-content-between align-items-center mt-4">
                 <div>
                     <nav aria-label="Page navigation example">
                         <ul class="pagination">
@@ -533,7 +340,7 @@
                     <p class="text-muted">បង្ហាញ {{ $fuels->firstItem() }} ដល់ {{ $fuels->lastItem() }} នៃ
                         {{ $fuels->total() }} លទ្ធផល</p>
                 </div>
-            </div>
+            </div> --}}
         </div>
     </div>
 @endsection
@@ -621,7 +428,6 @@
                 fileSizeWarning.classList.add('d-none');
             }
         });
-
 
         document.getElementById('uploadButton').addEventListener('click', function() {
             const fileInput = document.getElementById('excelFile');

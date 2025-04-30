@@ -16,10 +16,7 @@ return new class extends Migration
                 $table->increments('id', true);
 
                 $table->string('usage_unit'); // Change from unsignedBigInteger to string
-                // $table->foreign('usage_unit')->references('usage_unit')->on('title_usage_units')->onDelete('cascade');
                 $table->string('location_number')->nullable();
-
-                // $table->string('location_number')->nullable();    // លេខទីតាំង
                 $table->date('usage_date')->nullable();     // កាលបរិច្ឆេទ
                 $table->date('usage_start')->nullable();    // រយៈពេលចាប់ផ្ដើម
                 $table->date('usage_end')->nullable();  // រយៈពេលបញ្ចប់

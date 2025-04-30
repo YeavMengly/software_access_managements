@@ -301,7 +301,7 @@
                             <div class="col-md-12 d-flex">
                                 <!-- Search field for title_usage_unit or location_number -->
                                 <input type="text" name="search" value="{{ request('search') }}"
-                                    class="form-control mb-2" placeholder="Search by Usage Unit or Location Number"
+                                    class="form-control mb-2" placeholder="ស្វែងរកអង្គភាព និងលេខទីតាំង"
                                     style="width: 240px; height: 40px;">
                                 &nbsp;
                                 <!-- Start Date -->
@@ -310,7 +310,7 @@
                                     style="height: 40px; width: 200px;">
                                 &nbsp;
                                 <!-- End Date -->
-                                <input type="date" name="end_date" id="end_date" value="{{ request('end_date') }}"
+                                <input type="date" name="end_date" id="end_date" value="{{ request('end_date') }}" 
                                     class="form-control" style="height: 40px; width: 200px;">
                             </div>
 
