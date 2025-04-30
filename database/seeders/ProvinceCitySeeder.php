@@ -13,11 +13,18 @@ class ProvinceCitySeeder extends Seeder
      */
     public function run(): void
     {
-        //
-        // Clear existing data
+        /*
+        |-------------------------------------------------------------------------------
+        |  Clear existing data
+        |-------------------------------------------------------------------------------
+        */
         DB::table('province_cities')->truncate();
 
-        // Insert new data
+        /*
+        |-------------------------------------------------------------------------------
+        | Insert data into province_cities table
+        |-------------------------------------------------------------------------------
+        */
         DB::table('province_cities')->insert([
             ['province_city' => 'ភ្នំពេញ', 'created_at' => now(), 'updated_at' => now()],
             ['province_city' => 'កណ្ដាល', 'created_at' => now(), 'updated_at' => now()],
@@ -44,7 +51,6 @@ class ProvinceCitySeeder extends Seeder
             ['province_city' => 'ត្បូងឃ្មុំ', 'created_at' => now(), 'updated_at' => now()],
             ['province_city' => 'ព្រៃវែង', 'created_at' => now(), 'updated_at' => now()],
             ['province_city' => 'បាត់ដំបង', 'created_at' => now(), 'updated_at' => now()],
-
         ]);
     }
 }

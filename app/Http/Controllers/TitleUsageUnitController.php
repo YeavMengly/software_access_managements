@@ -84,7 +84,7 @@ class TitleUsageUnitController extends Controller
 
     public function edit(TitleUsageUnit $usageUnit)
     {
-        return response()->json($usageUnit);
+        // return response()->json($usageUnit);
     }
 
     public function update(Request $request, TitleUsageUnit $usageUnit)

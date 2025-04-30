@@ -63,7 +63,7 @@ class TitleUsageUnitWaterController extends Controller
 
     public function edit(TitleUsageUnitWater $usageUnit)
     {
-        return response()->json($usageUnit);
+        // return response()->json($usageUnit);
     }
 
     public function update(Request $request, TitleUsageUnitWater $titleUsageUnitWater)

@@ -29,16 +29,12 @@ class ResultSummariesController extends Controller
             ksort($totals['code']);
         }
 
-        // Sort 'totals'['report_key'] by value in ascending order
-         // Sort report_key directly in index
-         if (isset($totals['report_key']) && is_array($totals['report_key'])) {
+        if (isset($totals['report_key']) && is_array($totals['report_key'])) {
             ksort($totals['report_key']);
         }
         // Pass the sorted totals to the view
         return view('layouts.table.result-total-summaries-table', compact('totals'));
     }
-
-
 
     public function export(Request $request)
     {
@@ -100,12 +96,12 @@ class ResultSummariesController extends Controller
         foreach ($reports as $index => $report) {
 
             $totals['code']["$report->code"] = $this->calculateSumFields($report);
-            $totals['fin_law'] += $report->fin_law ?? 0;
-            $totals['current_loan'] += $report->current_loan ?? 0;
-            $totals['decrease'] += $report->decrease ?? 0;
-            $totals['new_credit_status'] += $report->new_credit_status ?? 0;
-            $totals['early_balance'] += $report->early_balance ?? 0;
-            $totals['apply'] += $report->apply ?? 0;
+            // $totals['fin_law'] += $report->fin_law ?? 0;
+            // $totals['current_loan'] += $report->current_loan ?? 0;
+            // $totals['decrease'] += $report->decrease ?? 0;
+            // $totals['new_credit_status'] += $report->new_credit_status ?? 0;
+            // $totals['early_balance'] += $report->early_balance ?? 0;
+            // $totals['apply'] += $report->apply ?? 0;
             $report1 = substr($report->report_key, 2, 1);
             $totals['total_sums']['fin_law'] += ($totals['code']["$report->code"]['fin_law'] ?? 0);
             $totals['total_sums']['current_loan'] += ($totals['code']["$report->code"]['current_loan'] ?? 0);

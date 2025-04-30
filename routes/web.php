@@ -39,6 +39,8 @@ use App\Http\Controllers\ReportMissionController;
 use App\Http\Controllers\Result\ResultApplyController;
 use App\Http\Controllers\Result\ResultMandateController;
 use App\Http\Controllers\Result\TablesMission\ResultMissionPlans;
+use App\Http\Controllers\Supllies\SupplieController;
+use App\Http\Controllers\Supplies\TotalSupplieController;
 use App\Http\Controllers\TitleUsageUnitController;
 use App\Http\Controllers\Waters\TitleUsageUnitWaterController;
 use App\Http\Controllers\Waters\WaterController;
@@ -109,7 +111,6 @@ Route::get('/mandate/{id}/early-balance', [MandateController::class, 'getEarlyBa
 //===============================>> Electric
 Route::resource('electrics', ElectricController::class);
 
-
 //===============================>> Water
 Route::resource('waters', WaterController::class);
 
@@ -117,6 +118,9 @@ Route::resource('waters', WaterController::class);
 Route::resource('fuel-totals', FuelTotalController::class);
 Route::resource('fuels', FuelController::class);
 
+//===============================>> fuel-total
+Route::resource('supplie-totals', TotalSupplieController::class);
+Route::resource('supplies', SupplieController::class);
 
 Route::resource('usage_units', TitleUsageUnitController::class);
 Route::resource('usage_units_water', TitleUsageUnitWaterController::class);

@@ -1,6 +1,6 @@
 @extends('layouts.master')
 
-@section('content-fuel-edit')
+@section('content-fuel-total')
     <div class="border-wrapper">
         <div class="result-total-table-container">
             <div class="row">
@@ -38,7 +38,7 @@
             </div>
 
             <!-- Modal for Tabel FuelTotal -->
-            {{-- <div class="modal fade" id="createResultFuelTotal" tabindex="-1" aria-labelledby="importModalLabel"
+            <div class="modal fade" id="createResultFuelTotal" tabindex="-1" aria-labelledby="importModalLabel"
                 aria-hidden="true">
                 <div class="modal-dialog modal-fullscreen modal-dialog-centered modal-dialog-scrollable">
                     <div class="modal-content ">
@@ -122,62 +122,20 @@
 
                                                     @endphp
 
-                                                    @php
-                                                        // Determine the maximum number of rows required for this entry
-                                                        $maxRows = max(
-                                                            count($fuelTotal->product_name ?? []),
-                                                            count($fuelTotal->quantity ?? []),
-                                                            count($fuelTotal->unit_price ?? []),
-                                                            count($fuelTotal->fuel_total ?? []),
-                                                        );
-                                                    @endphp
-                                                    @for ($i = 0; $i < $maxRows; $i++)
-                                                        <tr>
-                                                            <td style="border: 1px solid black; text-align: center;">
-                                                                {{ $index + 1 }}</td>
-                                                            <td style="border: 1px solid black; text-align: start;">
-                                                                {{ $fuelTotal->product_name[$i] ?? '' }}
-                                                            </td>
-                                                            <td style="border: 1px solid black;">លីត្រ</td>
-                                                            <td
-                                                                style="border: 1px solid black;text-align: right; padding-right: 16px;">
-                                                                {{ number_format($fuelTotal->quantity[$i] ?? 0, 0, ' ', ' ') }}
-                                                            </td>
-                                                            <td
-                                                                style="border: 1px solid black;text-align: right; padding-right: 16px;">
-                                                                {{ number_format($fuelTotal->unit_price[$i] ?? 0, 0, ' ', ' ') }}
-                                                            </td>
-                                                            <td
-                                                                style="border: 1px solid black;text-align: right; padding-right: 16px;">
-                                                                {{ number_format($fuelTotal->fuel_total[$i] ?? 0, 0, ' ', ' ') }}
-                                                            </td>
-                                                            @if (!isset($printedDescriptions[$key]))
-                                                                <td style="border: 1px solid black;"
-                                                                    rowspan="{{ $descriptionRowspanCounts[$key] }}">
-                                                                    {{ $companyName }}
-                                                                </td>
-                                                                <td style="border: 1px solid black;"
-                                                                    rowspan="{{ $descriptionRowspanCounts[$key] }}">
-                                                                    {{ $warehouseEntry }}
-                                                                </td>
-                                                                <td style="border: 1px solid black;"
-                                                                    rowspan="{{ $descriptionRowspanCounts[$key] }}">
-                                                                    {{ $desc }}
-                                                                </td>
-
-                                                                @php $printedDescriptions[$key] = true; @endphp
-                                                            @endif
-
-
-                                                            @if (!isset($seenYears[$createdYear]))
-                                                                <td style="border: 1px solid black; text-align: center;"
-                                                                    rowspan="{{ $rowspanCounts[$createdYear] }}">
-                                                                    {{ $createdYear }}
-                                                                </td>
-                                                                @php $seenYears[$createdYear] = true; @endphp
-                                                            @endif
-                                                        </tr>
-                                                    @endfor
+                                                    <tr>
+                                                        <td>
+                                                            {{ $index + 1 }}
+                                                        </td>
+                                                        <td>{{ $fuelTotal->product_name }}</td>
+                                                        <td>លីត្រ</td>
+                                                        <td>{{ $fuelTotal->quantity }}</td>
+                                                        <td>{{ number_format($fuelTotal->unit_price, 0) }}</td>
+                                                        <td>{{ number_format($fuelTotal->fuel_total, 0) }}</td>
+                                                        <td>{{$warehouse}}</td>
+                                                        <td>{{ $fuelTotal->warehouse_entry_number }}</td>
+                                                        <td>{{ $fuelTotal->description }}</td>
+                                                        <td>{{ $fuelTotal->release_date }}</td>
+                                                    </tr>
                                                 @endforeach
                                                 @php
                                                     $year = \Carbon\Carbon::parse($date)->format('d-m-Y');
@@ -198,26 +156,24 @@
                                                             {{ $year }}
                                                         </td>
                                                         <td
-                                                            style="border: 1px solid black; text-align: right;  padding-right: 16px;">
+                                                            style="border: 1px solid black; text-align: center; ">
                                                             {{ number_format($yearlyTotals[$year]['total_quantity'], 0, ' ', ' ') }}
                                                         </td>
                                                         <td
-                                                            style="border: 1px solid black; text-align: right;  padding-right: 16px;">
+                                                            style="border: 1px solid black; text-align: center; ">
                                                             {{ number_format($yearlyTotals[$year]['total_unit_price'], 0, ' ', ' ') }}
                                                         </td>
                                                         <td
-                                                            style="border: 1px solid black; text-align: right;  padding-right: 16px;">
+                                                            style="border: 1px solid black; text-align: center; ">
                                                             {{ number_format($yearlyTotals[$year]['total_fuel_total'], 0, ' ', ' ') }}
                                                         </td>
                                                         <td colspan="4"
-                                                            style="border: 1px solid black; text-align: right;  padding-right: 16px;">
+                                                            style="border: 1px solid black; text-align: center; ">
                                                         </td>
                                                     </tr>
                                                 @endif
                                             @endforeach
                                         </tbody>
-
-
                                     </table>
                                 </div>
                             </div>
@@ -232,7 +188,7 @@
                         </div>
                     </div>
                 </div>
-            </div> --}}
+            </div>
 
             {{-- Modal Import --}}
             <div class="modal fade" id="importModal" tabindex="-1" aria-labelledby="importModalLabel" aria-hidden="true">
@@ -631,40 +587,59 @@
 
                 <tbody>
 
-                    {{-- @dd($fuelTotals) --}}
+                    @foreach ($fuelTotalsGrouped as $date => $group)
+                        @php $year = \Carbon\Carbon::parse($date)->format('d-m-Y'); @endphp
+                        @foreach ($group as $index => $fuelTotal)
+                            <tr>
+                                <td>{{ $index + 1 }}</td>
+                                <td>{{ $fuelTotal->company_name }}</td>
+                                <td>{{ $fuelTotal->warehouse_entry_number }}</td>
+                                <td>{{ $fuelTotal->description }}</td>
+                                <td>{{ $fuelTotal->refers }}</td>
+                                <td>{{ $fuelTotal->release_date }}</td>
+                                <td>{{ $fuelTotal->warehouse }}</td>
+                                <td>{{ $fuelTotal->product_name }}</td>
+                                <td>លីត្រ</td>
+                                <td>{{ $fuelTotal->quantity }}</td>
+                                <td>{{ number_format($fuelTotal->unit_price, 0) }}</td>
+                                <td>{{ number_format($fuelTotal->fuel_total, 0) }}</td>
+                                <td style="border: 1px solid black; text-align: center;">
 
-                    @foreach ($fuelTotals as $index => $fuelTotal)
-                        <tr>
-                            <td>{{ $index + 1 }}</td>
-                            <td>{{ $fuelTotal->company_name }}</td>
-                            <td>{{ $fuelTotal->warehouse_entry_number }}</td>
-                            <td>{{ $fuelTotal->description }}</td>
-                            <td>{{ $fuelTotal->refers }}</td>
-                            <td>{{ $fuelTotal->release_date }}</td>
-                            <td>{{ $fuelTotal->warehouse }}</td>
-                            <td>{{ $fuelTotal->product_name }}</td>
-                            <td>លីត្រ</td>
-                            <td>{{ $fuelTotal->quantity }}</td>
-                            <td>{{ number_format($fuelTotal->unit_price, 0) }}</td>
-                            <td>{{ number_format($fuelTotal->fuel_total, 0) }}</td>
-                            <td style="border: 1px solid black; text-align: center;">
+                                    <a class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#edit_fuel">
+                                        <i class="fas fa-edit"></i>
+                                    </a>
 
-                                <a class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#edit_fuel">
-                                    <i class="fas fa-edit"></i>
-                                </a>
+                                    <form id="delete-form-{{ $fuelTotal->id }}"
+                                        action="{{ route('fuel-totals.destroy', $fuelTotal->id) }}" method="POST"
+                                        style="display: inline;">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="button" class="btn btn-danger btn-sm"
+                                            onclick="confirmDelete({{ $fuelTotal->id }})">
+                                            <i class="fas fa-trash-alt"></i>
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                        @endforeach
 
-                                <form id="delete-form-{{ $fuelTotal->id }}"
-                                    action="{{ route('fuel-totals.destroy', $fuelTotal->id) }}" method="POST"
-                                    style="display: inline;">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="button" class="btn btn-danger btn-sm"
-                                        onclick="confirmDelete({{ $fuelTotal->id }})">
-                                        <i class="fas fa-trash-alt"></i>
-                                    </button>
-                                </form>
-                            </td>
-                        </tr>
+                        {{-- @dd($yearlyTotals[$year]) --}}
+                        @if (isset($yearlyTotals[$year]))
+                            <tr style="background-color: #73ade7;">
+                                <td colspan="9" style="border: 1px solid black; text-align: center;">
+                                    {{ $year }}</td>
+                                <td style="border: 1px solid black; text-align: center;  ">
+                                    {{ number_format($yearlyTotals[$year]['total_quantity'], 0, ' ', ' ') }}
+                                </td>
+                                <td style="border: 1px solid black; text-align: center; ">
+                                    {{ number_format($yearlyTotals[$year]['total_unit_price'], 0, ' ', ' ') }}
+                                </td>
+                                <td style="border: 1px solid black;text-align: center;  ">
+                                    {{ number_format($yearlyTotals[$year]['total_fuel_total'], 0, ' ', ' ') }}
+                                </td>
+                                <td style="border: 1px solid black;text-align: center;  "></td>
+                            </tr>
+                        @endif
                     @endforeach
                 </tbody>
 

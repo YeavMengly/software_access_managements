@@ -14,24 +14,20 @@ class Fuel extends Model
         'date',
         'receipt_number',
         'description',
-        // 'fuel_total_id',
         'oil_type',
         'quantity',
         'quantity_used',
+        'total'
     ];
 
-    protected $casts = [
-        'fuel_date' => 'date',
-        'oil_type' => 'array',
-        'quantity' => 'array',
-        'quantity_used' => 'array',
-    ];
-
+    // public function fuelTotal()
+    // {
+    //     return $this->belongsTo(FuelTotal::class, 'fuel_id', 'warehouse_entry_number');
+    // }
     public function fuelTotal()
     {
-        return $this->belongsTo(FuelTotal::class, 'fuel_id', 'id');
+        return $this->hasOne(FuelTotal::class, 'warehouse_entry_number', 'fuel_id');
     }
-
 
 
     public function getOilTypeWithQuantity()

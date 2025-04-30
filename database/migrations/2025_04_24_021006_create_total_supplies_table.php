@@ -11,19 +11,21 @@ return new class extends Migration
      */
     public function up(): void
     {
-        if (!Schema::hasTable('fuel_totals')) {
-            Schema::create('fuel_totals', function (Blueprint $table) {
+        if (!Schema::hasTable('total_supplies')) {
+            Schema::create('total_supplies', function (Blueprint $table) {
                 $table->id();
                 $table->string('company_name'); // បញ្ចូលឈ្មោះក្រុមហ៊ុន
                 $table->date('release_date'); // កាលបរិច្ឆេទចេញផ្សាយ
                 $table->string('refers');   //  យោង
                 $table->string('description');  //  ពណ៍នា
-                $table->string('warehouse_entry_number');
                 $table->string('warehouse'); // សារពើភ័ណ្ឌ
-                $table->string('product_name');
+                $table->text('product_name');
+                $table->string('unit');
                 $table->integer('quantity');
-                $table->decimal('unit_price', 10, 0); // 10 digits total, 2 decimal places
-                $table->decimal('fuel_total', 12, 0); // More space for total value
+                $table->decimal('unit_price', 12, 0);
+                $table->decimal('total_price', 12, 0);
+                $table->string('source')->nullable();
+                $table->date('production_year')->nullable();
                 $table->timestamps();
             });
         }
@@ -34,6 +36,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('fuel_totals');
+        Schema::dropIfExists('total_supplies');
     }
 };

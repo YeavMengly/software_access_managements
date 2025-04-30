@@ -8,7 +8,7 @@
                 <div class="col-md-10 col-lg-8">
                     <div class="container-box animate-box mt-3">
                         <div class="row">
-                            <div class="col-md-6 mb-3">
+                            {{-- <div class="col-md-6 mb-3">
                                 <a href="{{ route('codes.create') }}"
                                     class="btn btn-custom btn-block animate-button submit-button">
                                     បញ្ចូលឥណទានអនុម័តដើមឆ្នាំ​ {{ now()->year }}
@@ -19,22 +19,89 @@
                                     class="btn btn-custom btn-block animate-button submit-button">
                                     កំណត់ឆ្នាំចាប់ផ្ដើម
                                 </a>
-                            </div>
+                            </div> --}}
 
                             <div class="col-md-6 mb-3">
-                                <a href="{{route('fuel-totals.index')}}"
+                                <div class="dropdown">
+                                    <button class="btn btn-custom dropdown-toggle w-100 shadow-lg animate-button"
+                                        type="button" id="creditDropdown" data-bs-toggle="dropdown" aria-expanded="false"
+                                        style="border-radius: 12px; height: 50px;">
+                                        <i class="bi bi-calendar2-plus me-2"></i> ការកំណត់ឥណទាន/ឆ្នាំ
+                                    </button>
+                                    <ul class="dropdown-menu w-100 border-0 shadow rounded-3 mt-2"
+                                        aria-labelledby="creditDropdown">
+                                        <label for="" style="padding-left: 16px; ">កំណត់</label>
+                                        <li>
+                                            <a class="dropdown-item py-2" href="{{ route('years.index') }}">
+                                                <i class="bi bi-calendar-check me-2 text-success"></i>
+                                                កំណត់ឆ្នាំចាប់ផ្ដើម
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a class="dropdown-item py-2" href="{{ route('codes.index') }}">
+                                                <i class="bi bi-file-plus me-2 text-primary"></i>
+                                                បញ្ចូលឥណទានអនុម័តដើមឆ្នាំ {{ now()->year }}
+                                            </a>
+                                        </li>
+
+                                    </ul>
+                                </div>
+                            </div>
+
+
+                            {{-- <div class="col-md-6 mb-3">
+                                <a href="{{ route('fuel-totals.index') }}"
                                     class="btn btn-custom btn-block animate-button submit-button">
                                     បញ្ចូលអត្រាប្រេងឥន្ធនៈសរុប
                                 </a>
                             </div>
                             <div class="col-md-6 mb-3">
-                                <a href="{{route('fuels.create')}}"
+                                <a href="{{ route('fuels.create') }}"
                                     class="btn btn-custom btn-block animate-button submit-button">
                                     បញ្ចូលអត្រាប្រេងឥន្ធនៈអង្គភាព
                                 </a>
+                            </div> --}}
+                            <div class="col-md-6 mb-3">
+                                <div class="dropdown">
+                                    <button class="btn btn-custom dropdown-toggle w-100 shadow-lg animate-button"
+                                        type="button" id="fuelDropdown" data-bs-toggle="dropdown" aria-expanded="false"
+                                        style="border-radius: 12px; height: 50px;">
+                                        <i class="bi bi-fuel-pump-fill me-2"></i>ការិយាល័យផ្គត់ផ្គង់
+                                    </button>
+                                    <ul class="dropdown-menu w-100 border-0 shadow rounded-3 mt-2"
+                                        aria-labelledby="fuelDropdown">
+                                        <label for="" style="padding-left: 16px; ">បញ្ចូលទិន្នន័យប្រេង</label>
+                                        <li>
+                                            <a class="dropdown-item py-2" href="{{ route('fuel-totals.index') }}">
+                                                <i class="bi bi-clipboard-plus me-2 text-primary"></i>
+                                                បញ្ចូលអត្រាប្រេងឥន្ធនៈសរុប
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a class="dropdown-item py-2" href="{{ route('fuels.index') }}">
+                                                <i class="bi bi-building me-2 text-success"></i>
+                                                បញ្ចូលអត្រាប្រេងឥន្ធនៈអង្គភាព
+                                            </a>
+                                        </li>
+                                        <label for=""
+                                            style="padding-left: 16px;margin-top: 6px;">បញ្ចូលទិន្នន័យសម្ភារ</label>
+                                        <li>
+                                            <a class="dropdown-item py-2" href="{{ route('supplie-totals.index') }}">
+                                                <i class="bi bi-box-seam me-2 text-primary"></i>
+                                                បញ្ចូលគ្រឿងសម្ភារសរុប
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a class="dropdown-item py-2" href="{{ route('supplies.index') }}">
+                                                <i class="bi bi-building me-2 text-primary"></i>
+                                                បញ្ចូលគ្រឿងសម្ភារអង្គភាព
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
                             </div>
 
-                            <div class="col-md-6 mb-3">
+                            {{-- <div class="col-md-6 mb-3">
                                 <a href="{{ route('usage_units.index') }}"
                                     class="btn btn-custom btn-block animate-button submit-button">
                                     បញ្ចូលអង្គភាពអគ្គិសនី
@@ -42,13 +109,57 @@
                             </div>
 
                             <div class="col-md-6 mb-3">
-                                <a href="{{route('usage_units_water.index')}}"
+                                <a href="{{ route('usage_units_water.index') }}"
                                     class="btn btn-custom btn-block animate-button submit-button">
                                     បញ្ចូលអង្គភាពទឹក
                                 </a>
+                            </div> --}}
+                            <div class="col-md-6 mb-3">
+                                <div class="dropdown">
+
+
+                                    <button class="btn btn-custom dropdown-toggle w-100 shadow-lg animate-button"
+                                        type="button" id="unitUsageDropdown" data-bs-toggle="dropdown"
+                                        aria-expanded="false" style="border-radius: 12px; height: 50px;">
+                                        <i class="bi bi-speedometer2 me-2"></i>
+                                        អគ្គិសនី និងរដ្ឋករទឹក
+                                    </button>
+
+
+                                    <ul class="dropdown-menu w-100 border-0 shadow rounded-3 mt-2"
+                                        aria-labelledby="unitUsageDropdown">
+                                        <label for="" style="padding-left: 16px; ">បញ្ចូលទិន្នន័យ</label>
+                                        <li>
+                                            <a class="dropdown-item py-2" href="{{ route('electrics.index') }}">
+                                                <i class="bi bi-lightbulb-fill me-2 text-warning"></i> បញ្ចូលអគ្គិសនី
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a class="dropdown-item py-2" href="{{ route('waters.index') }}">
+                                                <i class="bi bi-droplet-fill me-2 text-info"></i> បញ្ចូលទឹក
+                                            </a>
+                                        </li>
+                                        <label for="" style="padding-left: 16px; ">ការប្រើប្រាស់នាមអង្គភាព</label>
+                                        <li>
+                                            <a class="dropdown-item py-2" href="{{ route('usage_units.index') }}">
+                                                <i class="bi bi-lightning-charge-fill me-2 text-warning"></i>
+                                                បញ្ចូលនាមអង្គភាពអគ្គិសនី
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a class="dropdown-item py-2" href="{{ route('usage_units_water.index') }}">
+                                                <i class="bi bi-droplet-half me-2 text-primary"></i> បញ្ចូលនាមអង្គភាពទឹក
+                                            </a>
+                                        </li>
+
+                                    </ul>
+                                </div>
                             </div>
 
-                            <div class="col-md-6 mb-3">
+
+
+
+                            {{-- <div class="col-md-6 mb-3">
                                 <a href="{{ route('loans.create') }}"
                                     class="btn btn-custom btn-block animate-button submit-button">
                                     ចុះបញ្ជីនិយ័តភាពថវិកា សម្រាប់សលាកបត្រ
@@ -60,23 +171,46 @@
                                     class="btn btn-custom btn-block animate-button submit-button">
                                     ចុះបញ្ជីនិយ័តភាពថវិកា​ សម្រាប់អាណត្តិ
                                 </a>
+                            </div> --}}
+                            <div class="col-md-6 mb-3">
+                                <div class="dropdown">
+                                    <button class="btn btn-custom dropdown-toggle w-100 shadow-lg animate-button"
+                                        type="button" id="loanDropdown" data-bs-toggle="dropdown" aria-expanded="false"
+                                        style="border-radius: 12px; height: 50px;">
+                                        <i class="bi bi-cash-coin me-2"></i> និយ័តភាពថវិកា
+                                    </button>
+                                    <ul class="dropdown-menu w-100 border-0 shadow rounded-3 mt-2"
+                                        aria-labelledby="loanDropdown">
+                                        <label for="" style="padding-left: 16px; ">និយ័តទិន្នន័យ</label>
+                                        <li>
+                                            <a class="dropdown-item py-2" href="{{ route('loans.index') }}">
+                                                <i class="bi bi-file-earmark-text me-2 text-primary"></i> ចុះនិយ័តសលាកបត្រ
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a class="dropdown-item py-2" href="{{ route('loan-mandates.index') }}">
+                                                <i class="bi bi-person-lines-fill me-2 text-success"></i> ចុះនិយ័តអាណត្តិ
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
                             </div>
 
-                            <div class="col-md-6 mb-3">
+                            {{-- <div class="col-md-6 mb-3">
                                 <a href="{{ route('programs') }}"
                                     class="btn btn-custom btn-block animate-button submit-button">
                                     កែសម្រួល ជំពូក គណនី អនុគណនី
                                 </a>
-                            </div>
+                            </div> --}}
 
-                            <div class="col-md-6 mb-3">
+                            {{-- <div class="col-md-6 mb-3">
                                 <a href="{{ route('mandates.create') }}"
                                     class="btn btn-custom btn-block animate-button submit-button">
                                     បញ្ចូលអាណត្តិ
                                 </a>
-                            </div>
+                            </div> --}}
 
-                            <div class="col-md-6 mb-3">
+                            {{-- <div class="col-md-6 mb-3">
                                 <a href="{{ route('electrics.index') }}"
                                     class="btn btn-custom btn-block animate-button submit-button">
                                     បញ្ចូលអគ្គិសនី
@@ -88,23 +222,75 @@
                                     class="btn btn-custom btn-block animate-button submit-button">
                                     បញ្ចូលទឹក
                                 </a>
-                            </div>
+                            </div> --}}
 
-                            <div class="col-md-6 mb-3">
+                            {{-- <div class="col-md-6 mb-3">
+                                <div class="dropdown">
+                                    <button class="btn btn-success dropdown-toggle w-100 shadow-lg animate-button"
+                                        type="button" id="resourceUsageDropdown" data-bs-toggle="dropdown"
+                                        aria-expanded="false"
+                                        style="font-weight: bold; font-size: 18px; border-radius: 12px; height: 50px;">
+                                        <i class="bi bi-receipt-cutoff me-2"></i> ការប្រើប្រាស់ធនធាន អគ្គិសនី និងរដ្ឋករទឹក
+                                    </button>
+                                    <ul class="dropdown-menu w-100 border-0 shadow rounded-3 mt-2"
+                                        aria-labelledby="resourceUsageDropdown">
+
+                                        <label for="" style="padding-left: 16px; ">បញ្ចូលទិន្នន័យ</label>
+                                        <li>
+                                            <a class="dropdown-item py-2" href="{{ route('electrics.index') }}">
+                                                <i class="bi bi-lightbulb-fill me-2 text-warning"></i> បញ្ចូលអគ្គិសនី
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a class="dropdown-item py-2" href="{{ route('waters.index') }}">
+                                                <i class="bi bi-droplet-fill me-2 text-info"></i> បញ្ចូលទឹក
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div> --}}
+
+                            {{-- <div class="col-md-6 mb-3">
                                 <a href="{{ route('codes.index') }}"
                                     class="btn btn-custom btn-block animate-button submit-button">
                                     កែសម្រួលឥណទានអនុម័តដើមឆ្នាំ​
                                 </a>
-                            </div>
+                            </div> --}}
 
-                            <div class="col-md-6 mb-3">
+                            {{-- <div class="col-md-6 mb-3">
                                 <a href="{{ route('certificate-data.create') }}"
                                     class="btn btn-custom btn-block animate-button submit-button">
                                     បញ្ចូលសលាកប័ត្រ
                                 </a>
-                            </div>
+                            </div> --}}
 
                             <div class="col-md-6 mb-3">
+                                <div class="dropdown">
+                                    <button class="btn btn-custom dropdown-toggle w-100 shadow-lg animate-button"
+                                        type="button" id="certificateDropdown" data-bs-toggle="dropdown"
+                                        aria-expanded="false" style="border-radius: 12px; height: 50px;">
+                                        <i class="bi bi-file-earmark-text-fill me-2"></i> ការបញ្ចូលឯកសារ
+                                    </button>
+                                    <ul class="dropdown-menu w-100 border-0 shadow rounded-3 mt-2"
+                                        aria-labelledby="certificateDropdown">
+                                        <label for="" style="padding-left: 16px; ">បញ្ចូលទិន្នន័យ</label>
+                                        <li>
+                                            <a class="dropdown-item py-2" href="{{ route('certificate-data.index') }}">
+                                                <i class="bi bi-file-earmark-check-fill me-2 text-primary"></i>
+                                                បញ្ចូលសលាកប័ត្រ
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a class="dropdown-item py-2" href="{{ route('mandates.index') }}">
+                                                <i class="bi bi-person-badge-fill me-2 text-success"></i> បញ្ចូលអាណត្តិ
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+
+
+                            {{-- <div class="col-md-6 mb-3">
                                 <a href="{{ route('loans.index') }}"
                                     class="btn btn-custom btn-block animate-button submit-button">
                                     កែសម្រួលនិយ័តភាពថវិកា
@@ -116,7 +302,46 @@
                                     class="btn btn-custom btn-block animate-button submit-button">
                                     កែសម្រួល អាណត្តិ​ សលាកបត្រ
                                 </a>
+                            </div> --}}
+
+                            <div class="col-md-6 mb-3">
+                                <div class="dropdown">
+                                    <button class="btn btn-custom dropdown-toggle w-100 shadow-lg animate-button"
+                                        type="button" id="editDropdown" data-bs-toggle="dropdown" aria-expanded="false"
+                                        style="border-radius: 12px; height: 50px;">
+                                        <i class="bi bi-pencil-square me-2"></i> កែសម្រួលទិន្នន័យ
+                                    </button>
+                                    <ul class="dropdown-menu w-100 border-0 shadow rounded-3 mt-2"
+                                        aria-labelledby="editDropdown"> <label for=""
+                                            style="padding-left: 16px; ">ការកែសម្រួល</label>
+                                        <li>
+                                            <a class="dropdown-item py-2" href="{{ route('programs') }}">
+                                                <i class="bi bi-diagram-3-fill me-2 text-primary"></i>
+                                                កែសម្រួល ជំពូក គណនី អនុគណនី
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a class="dropdown-item py-2" href="{{ route('codes.index') }}">
+                                                <i class="bi bi-cash-coin me-2 text-success"></i>
+                                                កែសម្រួលឥណទានអនុម័តដើមឆ្នាំ​
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a class="dropdown-item py-2" href="{{ route('loans.index') }}">
+                                                <i class="bi bi-bank2 me-2 text-warning"></i>
+                                                កែសម្រួលនិយ័តភាពថវិកា
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a class="dropdown-item py-2" href="{{ route('certificate-data.index') }}">
+                                                <i class="bi bi-collection me-2 text-danger"></i>
+                                                កែសម្រួល អាណត្តិ​ សលាកបត្រ
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
                             </div>
+
 
                             <div class="col-md-6 mb-3">
                                 <a href="{{ route('mission-cam.create') }}"
