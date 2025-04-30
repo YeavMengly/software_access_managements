@@ -19,7 +19,7 @@ class MissionCambodiaController extends Controller
         'សៀមរាប' => 499200,
         'កំពង់ចាម' => 201600,
         'បាត់ដំបង' => 465600,
-        'ប៉ៃលិន' => 630400,
+        'ប៉ៃលិន' => 630400, 
         'បន្ទាយមានជ័យ' => 576000,
         'ពោធិ៍សាត់' => 296000,
         'ព្រះសីហនុ' => 361600,
@@ -46,8 +46,10 @@ class MissionCambodiaController extends Controller
         $search = $request->input('search');
         $startDate = $request->input('start_date');
         $endDate = $request->input('end_date');
+
         $selectedYear = $request->input('year', date('Y'));
         $selectedMonth = $request->input('month', Carbon::now()->month);
+
         $selectedMissionTag = $request->input('m_tag');
         $perPage = $request->input('per_page', 100); // Get pagination value from request, default to 100
 
@@ -78,27 +80,30 @@ class MissionCambodiaController extends Controller
             }
         }
 
-        // Filter by date range
-        if ($startDate && $endDate) {
-            try {
-                $startDate = Carbon::createFromFormat('Y-m-d', $startDate)->startOfDay();
-                $endDate = Carbon::createFromFormat('Y-m-d', $endDate)->endOfDay();
-                $query->whereBetween('created_at', [$startDate, $endDate]);
-            } catch (\Exception $e) {
-                Log::error('Invalid date format: ' . $e->getMessage());
-                return redirect()->back()->withErrors(['date' => 'Invalid date format. Please use YYYY-MM-DD format.']);
+        // If no start and end date are provided, filter by today's date
+        if (!$startDate && !$endDate) {
+            $today = Carbon::today();
+            $query->whereDate('created_at', $today);
+        }
+        // Filter by created_at date range 
+        try {
+            if ($request->filled('start_date') && $request->filled('end_date')) {
+                $query->whereBetween('mission_start_date', [
+                    Carbon::parse($startDate)->startOfDay(),
+                    Carbon::parse($endDate)->endOfDay()
+                ]);
+            } elseif ($request->filled('start_date')) {
+                $query->whereDate('mission_start_date', '>=', Carbon::parse($startDate)->startOfDay());
+            } elseif ($request->filled('end_date')) {
+                // Optional: if only end_date is provided, filter before that date
+                $query->whereDate('mission_start_date', '<=', Carbon::parse($endDate)->endOfDay());
             }
-        } elseif ($startDate) {
-            try {
-                $startDate = Carbon::createFromFormat('Y-m-d', $startDate)->startOfDay();
-                $query->where('created_at', '>=', $startDate);
-            } catch (\Exception $e) {
-                Log::error('Invalid date format: ' . $e->getMessage());
-                return redirect()->back()->withErrors(['date' => 'Invalid date format. Please use YYYY-MM-DD format.']);
-            }
+        } catch (\Exception $e) {
+            Log::error('Invalid date format: ' . $e->getMessage());
+            return redirect()->back()->withErrors(['date' => 'Invalid date format. Please use YYYY-MM-DD.']);
         }
 
-        // Filter by selected year and month
+        // Filter by selected  year and month
         if ($selectedYear) {
             $query->whereYear('created_at', $selectedYear);
         }
@@ -106,10 +111,17 @@ class MissionCambodiaController extends Controller
             $query->whereMonth('created_at', $selectedMonth);
         }
 
+        // if ($request->filled('start_date') && $request->filled('end_date')) {
+        //     $query->whereBetween('mission_start_date', [$request->start_date, $request->end_date]);
+        // }
+
         // Filter by Mission Tag
         if ($selectedMissionTag) {
             $query->where('m_tag', $selectedMissionTag);
         }
+
+        // Order by created_at DESC (latest first)
+        $query->orderBy('created_at', 'desc');
 
         // Fetch missions with dynamic pagination
         $missions = $query->paginate($perPage);

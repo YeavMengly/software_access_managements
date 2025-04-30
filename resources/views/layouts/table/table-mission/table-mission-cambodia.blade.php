@@ -13,104 +13,46 @@
                     បញ្ចូល
                 </a>
             </div>
-            <form class="max-w-md mx-auto " method="GET" action="{{route('mission-cam.index')}}">
+            {{-- <form class="max-w-md mx-auto" method="GET" action="{{ route('mission-cam.index') }}">
                 <div class="row">
-                    <div class="col-md-2 ">
-                        <form method="GET" action="{{ route('mission-cam.index') }}">
-                            <div class="input-group my-3"
-                                style="width: 180px; font-family: 'Khmer OS Siemreap', sans-serif">
-                                <input type="search" name="search" value="{{ request('search') }}" class="form-control"
-                                    placeholder="ស្វែងរកទិន្នន័យ" aria-label="Search Address">
-                                <button type="submit" class="btn btn-primary">Search</button>
-                            </div>
-                        </form>
+                    <!-- Search Box -->
+                    <div class="col-md-12 d-flex">
+                        <div class="input-group my-3" style="width: 180px; font-family: 'Khmer OS Siemreap', sans-serif">
+                            <input type="search" name="search" value="{{ request('search') }}" class="form-control"
+                                placeholder="ស្វែងរកទិន្នន័យ" aria-label="Search Address">
+                            <button type="submit" class="btn btn-primary">Search</button>
+                        </div>
                     </div>
-                    <div class="col-md-2">
-                        <form method="GET" action="{{ route('mission-cam.index') }}">
-                            <div class="input-group my-3" style="width: 100%; font-family: 'Khmer OS Siemreap', sans-serif">
-                                <!-- Year Selection -->
-                                <div class="input-group-prepend">
-                                    <span class="input-group-text"
-                                        style="background-color: #007bff; color: white;">ឆ្នាំ</span>
-                                </div>
-                                <select name="year" class="form-control" onchange="this.form.submit()">
-                                    <option value="" disabled>ជ្រើសរើសឆ្នាំ</option>
-                                    @for ($year = date('Y'); $year >= 2022; $year--)
-                                        <option value="{{ $year }}"
-                                            {{ request('year', date('Y')) == $year ? 'selected' : '' }}>
-                                            {{ convertToKhmerNumber($year) }}
-                                        </option>
-                                    @endfor
-                                </select>
 
-                                <!-- Month Selection -->
-                                @php
-                                    $khmerMonths = [
-                                        1 => 'មករា',
-                                        2 => 'កុម្ភៈ',
-                                        3 => 'មិនា',
-                                        4 => 'មេសា',
-                                        5 => 'ឧសភា',
-                                        6 => 'មិថុនា',
-                                        7 => 'កក្កដា',
-                                        8 => 'សីហា',
-                                        9 => 'កញ្ញា',
-                                        10 => 'តុលា',
-                                        11 => 'វិច្ឆិកា',
-                                        12 => 'ធ្នូ',
-                                    ];
-                                @endphp
-                                <div class="input-group-prepend ml-2">
-                                    <span class="input-group-text"
-                                        style="background-color: #007bff; color: white;">ខែ</span>
-                                </div>
-                                <select name="month" class="form-control" onchange="this.form.submit()">
-                                    <option value="" disabled selected>ជ្រើសរើសខែ</option>
-                                    @for ($month = 1; $month <= 12; $month++)
-                                        <option value="{{ $month }}"
-                                            {{ request('month', now()->month) == $month ? 'selected' : '' }}>
-                                            {{ $khmerMonths[$month] }}
-                                        </option>
-                                    @endfor
-                                </select>
+                    <!-- Start Date -->
+                    <div class="col-md-12">
+                        <div class="input-group my-3" style="width: 100%; font-family: 'Khmer OS Siemreap', sans-serif">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"
+                                    style="background-color: #28a745; color: white;">ចាប់ពីថ្ងៃ</span>
                             </div>
-                        </form>
+                            <input type="date" name="start_date" value="{{ request('start_date') }}" class="form-control"
+                                onchange="this.form.submit()">
+                        </div>
+                    </div>
+
+                    <!-- End Date -->
+                    <div class="col-md-3">
+                        <div class="input-group my-3" style="width: 100%; font-family: 'Khmer OS Siemreap', sans-serif">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"
+                                    style="background-color: #dc3545; color: white;">ដល់ថ្ងៃ</span>
+                            </div>
+                            <input type="date" name="end_date" value="{{ request('end_date') }}" class="form-control"
+                                onchange="this.form.submit()">
+                        </div>
                     </div>
                 </div>
+
+                <!-- Clear Button -->
                 <div class="row">
-                    {{-- <button type="submit" class="btn btn-primary ml-3"
-                        style="background-color: #007bff;
-                     height: 40px;
-                        font-size: 14px; 
-                        width: 120px;
-                        font-family: 'Khmer OS Siemreap', sans-serif; 
-                        transition: background-color 0.3s ease, transform 0.3s ease; 
-                        box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);" >
-                        ស្វែងរក
-                    </button> --}}
-                    <!-- Clear Button -->
                     <button type="button" class="btn btn-secondary ml-3" onclick="clearSearch()"
-                        style="
-                        font-size: 14px;
-                           height: 40px;
-                        width: 120px;
-                        font-family: 'Khmer OS Siemreap', sans-serif;
-                        background-color: #6c757d;
-                        transition: background-color 0.3s ease;">
-                        សម្អាតទិន្នន័យ
-                    </button>
-                    <!-- Report Mission -->
-                    {{-- <button type="button" class="btn btn-secondary ml-3"
-                        onclick="window.location.href='{{ route('reports-missions.index') }}'"
-                        style="
-                        font-size: 14px; 
-                           height: 40px;
-                        font-family: 'Khmer OS Siemreap', sans-serif;
-                        background-color: #df5bad;
-                        width: 120px;
-                        transition: background-color 0.3s ease;">
-                        តារាងទូទាត់
-                    </button> --}}
+                        style="font-size: 14px; height: 40px; width: 120px; font-family: 'Khmer OS Siemreap', sans-serif;">សម្អាតទិន្នន័យ</button>
                 </div>
 
                 <div class="d-flex justify-content-end">
@@ -134,34 +76,59 @@
                         @endif
                     </div>
                 </div>
+            </form> --}}
 
-                {{-- <div class="d-flex justify-content-end">
-                    <div class="btn-group mb-3" role="group" aria-label="Program Format Filter">
-                        <!-- Show 'All Programs' Button -->
-                        <a href="{{ route('mission-cam.index') }}" 
-                           class="btn btn-outline-primary {{ request('p_format') ? '' : 'active' }}">
-                            ទាំងអស់
-                        </a>
-                
-                        <!-- Program Format Buttons -->
-                        @php
-                            $programs = [
-                                'P_1' => 'កម្មវិធីទី ១',
-                                'P_2' => 'កម្មវិធីទី ២',
-                                'P_3' => 'កម្មវិធីទី ៣',
-                                'P_4' => 'កម្មវិធីទី ៤'
-                            ];
-                        @endphp
-                
-                        @foreach ($programs as $key => $label)
-                            <a href="{{ route('mission-cam.index', ['p_format' => $key]) }}" 
-                               class="btn btn-outline-primary {{ request('p_format') == $key ? 'active' : '' }}">
-                                {{ $label }}
-                            </a>
-                        @endforeach
+            <form id="filterForm" class="max-w-md mx-auto mt-3" method="GET" action="{{ route('mission-cam.index') }}"
+                onsubmit="return validateDateField()">
+                <div class="row mb-3">
+                    <div class="col-md-12 d-flex">
+                        <!-- Search Field -->
+                        <input type="text" name="search" value="{{ request('search') }}" class="form-control mb-2"
+                            placeholder="Search by Name or Location" style="width: 240px; height: 40px;">
+                        &nbsp;
+
+                        <!-- Start Date -->
+                        <input type="date" name="start_date" id="start_date" value="{{ request('start_date') }}"
+                            class="form-control" style="height: 40px; width: 200px;">
+                        &nbsp;
+
+                        <!-- End Date -->
+                        <input type="date" name="end_date" id="end_date" value="{{ request('end_date') }}"
+                            class="form-control" style="height: 40px; width: 200px;">
                     </div>
-                </div> --}}
+
+                    <div class="col-md-12">
+                        <div class="input-group">
+                            <!-- Search Button -->
+                            <button type="submit" class="btn btn-primary" style="width: 120px; height: 40px;">
+                                <i class="fas fa-search"></i> ស្វែងរក
+                            </button>
+                            &nbsp;
+
+                            <!-- Reset Button -->
+                            <button type="button" id="resetBtn" class="btn btn-danger" style="width: 120px; height: 40px;"
+                                onclick="resetForm()">
+                                <i class="fas fa-times-circle"></i> កំណត់ឡើងវិញ
+                            </button>
+                            &nbsp;
+
+                            <!-- Export to Excel -->
+                            {{-- <a href=""
+                                        class="btn btn-secondary d-flex align-items-center justify-content-center"
+                                        style="width: 120px; height: 40px; text-align: center; font-size: 14px;">
+                                        <i class="fas fa-file-excel fa-1x"></i> <span class="ml-2">បម្លែង xls</span>
+                                    </a> --}}
+                        </div>
+                    </div>
+                </div>
             </form>
+
+            <script>
+                function clearSearch() {
+                    window.location.href = "{{ route('mission-cam.index') }}";
+                }
+            </script>
+
         </div>
     </div>
 
@@ -355,32 +322,31 @@
 
                                 <!-- Display the total row for this letter_number group -->
                                 <tr>
-                                    <td colspan="12"
-                                        >
+                                    <td colspan="12">
                                         <strong>{{ 'សរុប' }} {{ $totalIndexCounter }}</strong>
                                     </td>
 
-                                    <td >
+                                    <td>
                                         <strong>{{ number_format($group->sum('travel_allowance'), 0, '.', ',') }}</strong>
                                     </td>
 
-                                    <td ></td>
-                                    <td >
+                                    <td></td>
+                                    <td>
                                         <strong>{{ number_format($group->sum('total_pocket_money'), 0, '.', ',') }}</strong>
                                     </td>
 
-                                    <td ></td>
+                                    <td></td>
                                     <td style="border:   1px solid black;">
                                         <strong>{{ number_format($group->sum('total_meal_money'), 0, '.', ',') }}</strong>
                                     </td>
 
-                                    <td ></td>
-                                    <td >
+                                    <td></td>
+                                    <td>
                                         <strong>{{ number_format($group->sum('total_accommodation_money'), 0, '.', ',') }}</strong>
                                     </td>
-                                    <td ></td>
+                                    <td></td>
 
-                                    <td >
+                                    <td>
                                         <strong>{{ number_format($group->sum('final_total'), 0, '.', ',') }}</strong>
                                     </td>
                                     <td></td>
